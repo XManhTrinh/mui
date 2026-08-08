@@ -210,7 +210,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   isFloating && [
                     "text-[12px] leading-4 tracking-[0.4px]",
                     isOutlined
-                      ? "-top-2 left-3 px-1 bg-[var(--text-field-label-bg,hsl(var(--surface)))]"
+                      ? "-top-2 left-3 px-1 bg-surface"
                       : "top-2 left-4",
                   ],
                   // Resting position
