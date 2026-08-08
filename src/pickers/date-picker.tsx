@@ -213,7 +213,7 @@ export function DatePicker({
                 // Base states
                 !isSelected &&
                   !isOutside &&
-                  "text-surface-foreground hover:bg-surface-foreground/[0.08] focus:bg-surface-foreground/[0.10] active:bg-surface-foreground/[0.10]",
+                  "text-surface-foreground hover:bg-[hsl(var(--on-surface)/0.08)] focus:bg-[hsl(var(--on-surface)/0.10)] active:bg-[hsl(var(--on-surface)/0.10)]",
                 // Outside month
                 isOutside && "text-surface-variant-foreground/50",
                 // Today (not selected)

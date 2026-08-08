@@ -184,7 +184,7 @@ function SnackbarItem({ item, onDismiss }: SnackbarItemProps) {
           className={cn(
             "shrink-0 flex items-center justify-center w-8 h-8 rounded-full",
             "text-inverse-on-surface",
-            "hover:bg-inverse-on-surface/[0.08] transition-colors",
+            "hover:bg-[hsl(var(--inverse-on-surface)/0.08)] transition-colors",
             "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-inverse-on-surface",
             "mr-1"
           )}

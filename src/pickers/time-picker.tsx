@@ -186,7 +186,7 @@ export function TimePicker({
               "flex h-[36px] flex-1 items-center justify-center text-[14px] font-medium transition-colors duration-100",
               period === "AM"
                 ? "bg-tertiary-container text-tertiary-container-foreground"
-                : "bg-transparent text-surface-variant-foreground hover:bg-surface-variant-foreground/[0.08]"
+                : "bg-transparent text-surface-variant-foreground hover:bg-[hsl(var(--on-surface-variant)/0.08)]"
             )}
           >
             AM
@@ -202,7 +202,7 @@ export function TimePicker({
               "flex h-[36px] flex-1 items-center justify-center text-[14px] font-medium transition-colors duration-100",
               period === "PM"
                 ? "bg-tertiary-container text-tertiary-container-foreground"
-                : "bg-transparent text-surface-variant-foreground hover:bg-surface-variant-foreground/[0.08]"
+                : "bg-transparent text-surface-variant-foreground hover:bg-[hsl(var(--on-surface-variant)/0.08)]"
             )}
           >
             PM

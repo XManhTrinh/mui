@@ -114,8 +114,8 @@ const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
             "absolute w-10 h-10 rounded-full transition-colors duration-200 pointer-events-none",
             !disabled &&
               !active &&
-              "group-hover:bg-surface-foreground/[0.08]",
-            !disabled && active && "group-hover:bg-primary/[0.08]"
+              "group-hover:bg-[hsl(var(--on-surface)/0.08)]",
+            !disabled && active && "group-hover:bg-[hsl(var(--primary)/0.08)]"
           )}
         />
 

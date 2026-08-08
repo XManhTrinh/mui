@@ -95,7 +95,7 @@ const Radio = React.forwardRef<HTMLButtonElement, RadioProps>(
           className={cn(
             "absolute w-10 h-10 rounded-full transition-colors duration-200 pointer-events-none",
             !disabled && !isChecked && "group-hover:bg-[hsl(var(--on-surface)/0.08)]",
-            !disabled && isChecked && "group-hover:bg-primary/[0.08]"
+            !disabled && isChecked && "group-hover:bg-[hsl(var(--primary)/0.08)]"
           )}
         />
 

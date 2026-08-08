@@ -107,8 +107,8 @@ const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
           chipVariants({ variant, selected, elevated }),
           // State layer on hover/focus/press
           "before:absolute before:inset-0 before:rounded-lg before:transition-colors before:duration-200 before:pointer-events-none",
-          !selected && "hover:before:bg-surface-foreground/[0.08] focus-visible:before:bg-surface-foreground/[0.10] active:before:bg-surface-foreground/[0.10]",
-          selected && "hover:before:bg-secondary-container-foreground/[0.08] focus-visible:before:bg-secondary-container-foreground/[0.10] active:before:bg-secondary-container-foreground/[0.10]",
+          !selected && "hover:before:bg-[hsl(var(--on-surface)/0.08)] focus-visible:before:bg-[hsl(var(--on-surface)/0.10)] active:before:bg-[hsl(var(--on-surface)/0.10)]",
+          selected && "hover:before:bg-[hsl(var(--on-secondary-container)/0.08)] focus-visible:before:bg-[hsl(var(--on-secondary-container)/0.10)] active:before:bg-[hsl(var(--on-secondary-container)/0.10)]",
           // Adjust padding when icons present
           hasLeading && "pl-2",
           hasTrailing && "pr-2",

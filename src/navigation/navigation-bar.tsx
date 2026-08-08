@@ -91,8 +91,8 @@ export function NavigationBar({ items, activeValue, onValueChange, className }: 
                     className={cn(
                       "absolute inset-0 rounded-full transition-colors duration-200",
                       isActive
-                        ? "group-hover:bg-secondary-container-foreground/[0.08] group-focus-visible:bg-secondary-container-foreground/[0.10] group-active:bg-secondary-container-foreground/[0.10]"
-                        : "group-hover:bg-surface-variant-foreground/[0.08] group-focus-visible:bg-surface-variant-foreground/[0.10] group-active:bg-surface-variant-foreground/[0.10]"
+                        ? "group-hover:bg-[hsl(var(--on-secondary-container)/0.08)] group-focus-visible:bg-[hsl(var(--on-secondary-container)/0.10)] group-active:bg-[hsl(var(--on-secondary-container)/0.10)]"
+                        : "group-hover:bg-[hsl(var(--on-surface-variant)/0.08)] group-focus-visible:bg-[hsl(var(--on-surface-variant)/0.10)] group-active:bg-[hsl(var(--on-surface-variant)/0.10)]"
                     )}
                   />
                   {/* Active pill background */}

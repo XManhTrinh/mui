@@ -65,7 +65,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       className={cn(
         cardVariants({ variant, interactive }),
         interactive &&
-          "before:absolute before:inset-0 before:rounded-xl before:transition-colors before:duration-200 before:pointer-events-none hover:before:bg-surface-foreground/[0.08] focus-visible:before:bg-surface-foreground/[0.10] active:before:bg-surface-foreground/[0.10]",
+          "before:absolute before:inset-0 before:rounded-xl before:transition-colors before:duration-200 before:pointer-events-none hover:before:bg-[hsl(var(--on-surface)/0.08)] focus-visible:before:bg-[hsl(var(--on-surface)/0.10)] active:before:bg-[hsl(var(--on-surface)/0.10)]",
         className
       )}
       tabIndex={interactive ? 0 : undefined}

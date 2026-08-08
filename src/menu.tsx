@@ -99,7 +99,7 @@ const MenuItem = React.forwardRef<
       className={cn(
         "flex items-center gap-3 h-12 px-3 text-[14px] leading-5 font-medium text-surface-foreground cursor-pointer select-none outline-none transition-colors",
         // State layers
-        "focus:bg-surface-foreground/[0.08] active:bg-surface-foreground/[0.10]",
+        "focus:bg-[hsl(var(--on-surface)/0.08)] active:bg-[hsl(var(--on-surface)/0.10)]",
         // Selected state
         selected && "bg-surface-container-highest",
         // Disabled

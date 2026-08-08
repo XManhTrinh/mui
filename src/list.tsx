@@ -120,11 +120,11 @@ const ListItem = React.forwardRef<HTMLLIElement, ListItemProps>(
           interactive &&
             !disabled &&
             !selected &&
-            "hover:bg-surface-foreground/[0.08] focus-visible:bg-surface-foreground/[0.10] active:bg-surface-foreground/[0.10]",
+            "hover:bg-[hsl(var(--on-surface)/0.08)] focus-visible:bg-[hsl(var(--on-surface)/0.10)] active:bg-[hsl(var(--on-surface)/0.10)]",
           interactive &&
             !disabled &&
             selected &&
-            "hover:bg-primary-container-foreground/[0.08] focus-visible:bg-primary-container-foreground/[0.10] active:bg-primary-container-foreground/[0.10]",
+            "hover:bg-[hsl(var(--on-primary-container)/0.08)] focus-visible:bg-[hsl(var(--on-primary-container)/0.10)] active:bg-[hsl(var(--on-primary-container)/0.10)]",
           // Disabled
           disabled && "opacity-[0.38] pointer-events-none",
           // Transition
