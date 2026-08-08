@@ -12,28 +12,37 @@ import { cn } from "./lib/utils";
  * Variants: Filled and Outlined.
  *
  * Filled:
- * - Container: surface-container-highest bg, 56dp height
- * - Rounded top corners (4dp), flat bottom
- * - Active indicator: bottom line, 1dp → 2dp on focus
+ * - Container: surface-container-highest, 56dp height
+ * - Top corners: 4dp radius, bottom flat
+ * - Active indicator: 1dp → 2dp on focus (bottom line)
+ * - Label: on-surface-variant → primary on focus
  *
  * Outlined:
- * - Container: transparent bg, 56dp height
- * - Border: 1dp outline → 2dp primary on focus, 4dp radius all corners
- * - Label notch: floating label sits on top border with matching bg
+ * - Container: transparent, 56dp height
+ * - All corners: 4dp radius
+ * - Border: 1dp outline → 2dp primary on focus
+ * - Floating label: sits on top border with background notch
+ *
+ * Measurements:
+ * - Height: 56dp
+ * - L/R padding (no icons): 16dp
+ * - L/R padding (with icons): 12dp
+ * - Padding between icon and text: 16dp
+ * - Top/bottom padding: 8dp
+ * - Floating label L/R padding: 4dp
+ * - Supporting text top padding: 4dp
  *
  * Typography:
- * - Label: Body Large (16px) resting, Body Small (12px) floating
+ * - Label resting: Body Large (16px/400/24px/0.5px)
+ * - Label floating: Body Small (12px/400/16px/0.4px)
  * - Input: Body Large (16px/400/24px/0.5px)
- * - Supporting text: Body Small (12px/400/16px/0.4px)
+ * - Supporting: Body Small (12px/400/16px/0.4px)
  */
 
 export interface TextFieldProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
   variant?: "filled" | "outlined";
   label?: string;
-  /** Background class for the floating label notch (outlined variant).
-   *  Auto-detected from parent surface. Override only if needed. */
-  labelBg?: string;
   leadingIcon?: React.ReactNode;
   trailingIcon?: React.ReactNode;
   supportingText?: string;
@@ -53,7 +62,6 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       className,
       variant = "outlined",
       label,
-      labelBg = "bg-[var(--m3-surface-bg)]",
       leadingIcon,
       trailingIcon,
       supportingText,
@@ -121,6 +129,17 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     const isFilled = variant === "filled";
     const isOutlined = variant === "outlined";
 
+    // Border color for outlined
+    const borderColor = disabled
+      ? "border-[hsl(var(--on-surface)/0.12)]"
+      : error
+        ? "border-error"
+        : isFocused
+          ? "border-primary"
+          : "border-outline";
+
+    const borderWidth = isFocused || error ? "border-2" : "border";
+
     return (
       <div className={cn("w-full", className)}>
         {/* Field container */}
@@ -128,28 +147,22 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           className={cn(
             "group relative flex items-center h-14",
             isFilled && [
-              "rounded-t-sm rounded-b-none",
+              "rounded-t-[4px] rounded-b-none",
               disabled
                 ? "bg-[hsl(var(--on-surface)/0.04)]"
                 : "bg-surface-container-highest",
               !disabled && "hover:bg-[hsl(var(--on-surface)/0.08)]",
             ],
             isOutlined && [
-              "rounded-sm",
-              disabled
-                ? "border border-[hsl(var(--on-surface)/0.12)]"
-                : error
-                  ? isFocused
-                    ? "border-2 border-error"
-                    : "border border-error"
-                  : isFocused
-                    ? "border-2 border-primary"
-                    : "border border-outline hover:border-[hsl(var(--on-surface))]",
+              "rounded-[4px]",
+              borderWidth,
+              borderColor,
+              !disabled && !isFocused && !error && "hover:border-[hsl(var(--on-surface))]",
             ],
             disabled && "pointer-events-none"
           )}
         >
-          {/* Filled: bottom indicator */}
+          {/* Filled: bottom active indicator */}
           {isFilled && (
             <span
               className={cn(
@@ -172,11 +185,11 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             </div>
           )}
 
-          {/* Input area */}
+          {/* Content area */}
           <div
             className={cn(
               "relative flex-1 flex items-center h-full",
-              "pl-4",
+              leadingIcon ? "pl-4" : "pl-4",
               trailingIcon ? "pr-0" : "pr-4"
             )}
           >
@@ -185,14 +198,14 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               <label
                 htmlFor={fieldId}
                 className={cn(
-                  "absolute pointer-events-none origin-top-left z-10",
+                  "absolute pointer-events-none z-10",
                   "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
                   labelColor,
                   isFloating
                     ? [
                         "text-[12px] leading-4 tracking-[0.4px]",
                         isOutlined
-                          ? cn("-top-2 left-3 px-1", labelBg)
+                          ? "top-0 -translate-y-1/2 left-3 px-1 bg-[var(--m3-surface-bg,hsl(var(--surface)))]"
                           : "top-2 left-0",
                       ]
                     : "top-1/2 -translate-y-1/2 left-0 text-[16px] leading-6 tracking-[0.5px]"
