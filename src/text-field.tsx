@@ -15,30 +15,25 @@ import { cn } from "./lib/utils";
  * - Container: surface-container-highest bg, 56dp height
  * - Rounded top corners (4dp), flat bottom
  * - Active indicator: bottom line, 1dp → 2dp on focus
- * - Active indicator color: on-surface → primary on focus
  *
  * Outlined:
  * - Container: transparent bg, 56dp height
  * - Border: 1dp outline → 2dp primary on focus, 4dp radius all corners
- * - Label notch: floating label creates gap in top border
+ * - Label notch: floating label sits on top border with matching bg
  *
  * Typography:
- * - Label: Body Large (16px/400/24px/0.5px) resting, Body Small (12px/400/16px/0.4px) floating
+ * - Label: Body Large (16px) resting, Body Small (12px) floating
  * - Input: Body Large (16px/400/24px/0.5px)
  * - Supporting text: Body Small (12px/400/16px/0.4px)
- *
- * States: Enabled, Focused, Hovered, Disabled, Error
- * - Hover: 8% state layer on container (filled only)
- * - Focus: primary on indicator/border + label
- * - Disabled: 38% text, 12% container/border opacity
- *
- * Animation: label float 200ms M3 standard easing
  */
 
 export interface TextFieldProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
   variant?: "filled" | "outlined";
   label?: string;
+  /** Background class for the floating label notch (outlined variant).
+   *  Defaults to "bg-surface". Use "bg-surface-container-high" inside dialogs. */
+  labelBg?: string;
   leadingIcon?: React.ReactNode;
   trailingIcon?: React.ReactNode;
   supportingText?: string;
@@ -58,6 +53,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       className,
       variant = "outlined",
       label,
+      labelBg = "bg-surface",
       leadingIcon,
       trailingIcon,
       supportingText,
@@ -110,7 +106,6 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
     const helperText = error && errorText ? errorText : supportingText;
 
-    // Label color
     const labelColor = disabled
       ? "text-[hsl(var(--on-surface)/0.38)]"
       : error
@@ -119,7 +114,6 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           ? "text-primary"
           : "text-surface-variant-foreground";
 
-    // Icon color
     const iconColor = error
       ? "text-error"
       : "text-surface-variant-foreground";
@@ -133,7 +127,6 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
         <div
           className={cn(
             "group relative flex items-center h-14",
-            // Filled variant
             isFilled && [
               "rounded-t-sm rounded-b-none",
               disabled
@@ -141,41 +134,22 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 : "bg-surface-container-highest",
               !disabled && "hover:bg-[hsl(var(--on-surface)/0.08)]",
             ],
-            // Outlined variant — no border here, fieldset handles it
-            isOutlined && "rounded-sm bg-transparent",
-            // Disabled state
+            isOutlined && [
+              "rounded-sm bg-transparent",
+              disabled
+                ? "border border-[hsl(var(--on-surface)/0.12)]"
+                : error
+                  ? isFocused
+                    ? "border-2 border-error"
+                    : "border border-error"
+                  : isFocused
+                    ? "border-2 border-primary"
+                    : "border border-outline hover:border-[hsl(var(--on-surface))]",
+            ],
             disabled && "pointer-events-none"
           )}
         >
-          {/* Outlined variant: fieldset + legend for border notch */}
-          {isOutlined && (
-            <fieldset
-              className={cn(
-                "absolute inset-0 pointer-events-none rounded-sm",
-                "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
-                disabled
-                  ? "border border-[hsl(var(--on-surface)/0.12)]"
-                  : error
-                    ? isFocused
-                      ? "border-2 border-error"
-                      : "border border-error"
-                    : isFocused
-                      ? "border-2 border-primary"
-                      : "border border-outline group-hover:border-[hsl(var(--on-surface))]"
-              )}
-              aria-hidden="true"
-            >
-              <legend
-                className={cn(
-                  "invisible h-0 text-[12px] leading-0 whitespace-nowrap overflow-hidden transition-all duration-200 ml-3",
-                  isFloating && label ? "px-1 max-w-full" : "max-w-[0.01px] px-0"
-                )}
-              >
-                {label || ""}
-              </legend>
-            </fieldset>
-          )}
-          {/* Filled variant: active indicator (bottom line) */}
+          {/* Filled: bottom indicator */}
           {isFilled && (
             <span
               className={cn(
@@ -183,9 +157,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 disabled
                   ? "h-px bg-[hsl(var(--on-surface)/0.38)]"
                   : error
-                    ? isFocused
-                      ? "h-0.5 bg-error"
-                      : "h-px bg-error"
+                    ? isFocused ? "h-0.5 bg-error" : "h-px bg-error"
                     : isFocused
                       ? "h-0.5 bg-primary"
                       : "h-px bg-[hsl(var(--on-surface-variant))]"
@@ -195,13 +167,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
           {/* Leading icon */}
           {leadingIcon && (
-            <div
-              className={cn(
-                "flex items-center justify-center w-12 h-12 shrink-0 ml-0",
-                "pl-3",
-                iconColor
-              )}
-            >
+            <div className={cn("flex items-center justify-center w-12 h-12 shrink-0 pl-3", iconColor)}>
               {leadingIcon}
             </div>
           )}
@@ -210,11 +176,11 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           <div
             className={cn(
               "relative flex-1 flex items-center h-full",
-              leadingIcon ? "pl-4" : "pl-4",
+              "pl-4",
               trailingIcon ? "pr-0" : "pr-4"
             )}
           >
-            {/* Floating label */}
+            {/* Label */}
             {label && (
               <label
                 htmlFor={fieldId}
@@ -222,18 +188,14 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   "absolute pointer-events-none origin-top-left z-10",
                   "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
                   labelColor,
-                  // Floating position
-                  isFloating && [
-                    "text-[12px] leading-4 tracking-[0.4px]",
-                    isOutlined
-                      ? "top-0 -translate-y-1/2 left-0 px-1"
-                      : "top-2 left-0",
-                  ],
-                  // Resting position
-                  !isFloating && [
-                    "top-1/2 -translate-y-1/2 left-0",
-                    "text-[16px] leading-6 tracking-[0.5px]",
-                  ]
+                  isFloating
+                    ? [
+                        "text-[12px] leading-4 tracking-[0.4px]",
+                        isOutlined
+                          ? cn("-top-2 left-3 px-1", labelBg)
+                          : "top-2 left-0",
+                      ]
+                    : "top-1/2 -translate-y-1/2 left-0 text-[16px] leading-6 tracking-[0.5px]"
                 )}
               >
                 {label}
@@ -247,7 +209,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               </span>
             )}
 
-            {/* Input / Textarea */}
+            {/* Input */}
             {multiline ? (
               <textarea
                 ref={ref as React.Ref<HTMLTextAreaElement>}
@@ -265,7 +227,6 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   "w-full bg-transparent resize-none outline-none",
                   "text-[16px] leading-6 tracking-[0.5px] text-surface-foreground",
                   "caret-primary placeholder:text-surface-variant-foreground",
-                  // Autofill: override browser forced background
                   "[&:-webkit-autofill]:bg-transparent [&:-webkit-autofill]:[-webkit-text-fill-color:hsl(var(--on-surface))] [&:-webkit-autofill]:[transition:background-color_9999s_ease-in-out_0s]",
                   disabled && "text-[hsl(var(--on-surface)/0.38)]",
                   label && isFloating && "pt-5",
@@ -290,7 +251,6 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   "w-full h-full bg-transparent outline-none",
                   "text-[16px] leading-6 tracking-[0.5px] text-surface-foreground",
                   "caret-primary placeholder:text-surface-variant-foreground",
-                  // Autofill: override browser forced background
                   "[&:-webkit-autofill]:bg-transparent [&:-webkit-autofill]:[-webkit-text-fill-color:hsl(var(--on-surface))] [&:-webkit-autofill]:[transition:background-color_9999s_ease-in-out_0s]",
                   disabled && "text-[hsl(var(--on-surface)/0.38)]",
                   label && isFloating && "pt-4",
@@ -310,18 +270,13 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
           {/* Trailing icon */}
           {trailingIcon && (
-            <div
-              className={cn(
-                "flex items-center justify-center w-12 h-12 shrink-0 pr-3",
-                iconColor
-              )}
-            >
+            <div className={cn("flex items-center justify-center w-12 h-12 shrink-0 pr-3", iconColor)}>
               {trailingIcon}
             </div>
           )}
         </div>
 
-        {/* Supporting text + character count row */}
+        {/* Supporting text */}
         {(helperText || characterCount) && (
           <div className="flex items-start mt-1 px-4 gap-4">
             {helperText && (
