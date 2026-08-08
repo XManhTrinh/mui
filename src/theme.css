@@ -123,6 +123,9 @@
   --state-hover: 0.08;
   --state-focus: 0.10;
   --state-press: 0.10;
+
+  /* Text field label background (auto-inherited by surface containers) */
+  --m3-surface-bg: hsl(var(--surface));
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
@@ -170,6 +173,16 @@
   --elevation-4: 0 0% 100% / 0.10;
   --elevation-5: 0 0% 100% / 0.12;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   3b. AUTO SURFACE BACKGROUND — propagates to text-field label
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.bg-surface { --m3-surface-bg: hsl(var(--surface)); }
+.bg-surface-container-low { --m3-surface-bg: hsl(var(--surface-container-low)); }
+.bg-surface-container { --m3-surface-bg: hsl(var(--surface-container)); }
+.bg-surface-container-high { --m3-surface-bg: hsl(var(--surface-container-high)); }
+.bg-surface-container-highest { --m3-surface-bg: hsl(var(--surface-container-highest)); }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
    4. REDUCED MOTION — disable animations for a11y

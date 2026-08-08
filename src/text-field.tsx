@@ -32,7 +32,7 @@ export interface TextFieldProps
   variant?: "filled" | "outlined";
   label?: string;
   /** Background class for the floating label notch (outlined variant).
-   *  Defaults to "bg-surface". Use "bg-surface-container-high" inside dialogs. */
+   *  Auto-detected from parent surface. Override only if needed. */
   labelBg?: string;
   leadingIcon?: React.ReactNode;
   trailingIcon?: React.ReactNode;
@@ -53,7 +53,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       className,
       variant = "outlined",
       label,
-      labelBg = "bg-surface",
+      labelBg = "bg-[var(--m3-surface-bg)]",
       leadingIcon,
       trailingIcon,
       supportingText,
