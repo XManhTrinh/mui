@@ -153,7 +153,7 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
         {/* Track — 52×32dp pill shape */}
         <span
           className={cn(
-            "relative w-[52px] h-8 rounded-full transition-colors duration-200",
+            "relative w-13 h-8 rounded-full transition-colors duration-200",
             // Selected
             isChecked && !disabled && "bg-primary",
             // Unselected

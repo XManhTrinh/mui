@@ -140,7 +140,7 @@ function SnackbarItem({ item, onDismiss }: SnackbarItemProps) {
       role={role}
       aria-live={ariaLive}
       className={cn(
-        "flex items-center min-h-12 gap-2 rounded-[4px]",
+        "flex items-center min-h-12 gap-2 rounded-sm",
         "bg-inverse-surface text-inverse-on-surface",
         "shadow-[0_3px_5px_-1px_hsl(var(--elevation-3)),0_6px_10px_0_hsl(var(--elevation-3)),0_1px_18px_0_hsl(var(--elevation-3))]",
         // Padding
@@ -167,7 +167,7 @@ function SnackbarItem({ item, onDismiss }: SnackbarItemProps) {
             "shrink-0 text-[14px] font-medium leading-5 tracking-[0.1px]",
             "text-[hsl(var(--inverse-primary,var(--primary)))]",
             "hover:opacity-80 transition-opacity",
-            "px-2 py-1.5 rounded-[4px]",
+            "px-2 py-1.5 rounded-sm",
             "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--inverse-primary,var(--primary)))]",
             showClose ? "mr-0" : "mr-2"
           )}
@@ -241,7 +241,7 @@ export function SnackbarProvider({
       {/* Snackbar container — fixed at bottom */}
       <div
         className={cn(
-          "fixed bottom-4 z-50 flex flex-col gap-2 w-full max-w-[560px] pointer-events-none",
+          "fixed bottom-4 z-50 flex flex-col gap-2 w-full max-w-140 pointer-events-none",
           // Mobile: 16dp margins, centered
           "max-sm:left-4 max-sm:right-4 max-sm:w-[calc(100%-32px)]",
           // Above mobile nav (bottom-20 ~ 80px for nav bar clearance)

@@ -121,7 +121,7 @@ export function TimePicker({
   return (
     <div
       className={cn(
-        "inline-flex items-center gap-0 rounded-[28px] bg-surface-container-high p-6",
+        "inline-flex items-center gap-0 rounded-3xl bg-surface-container-high p-6",
         disabled && "opacity-[0.38] pointer-events-none",
         className
       )}
@@ -140,7 +140,7 @@ export function TimePicker({
           disabled={disabled}
           aria-label="Hour"
           className={cn(
-            "h-[72px] w-[96px] rounded-[16px] bg-surface-container-highest text-center text-[24px] font-normal text-surface-foreground",
+            "h-18 w-24 rounded-2xl bg-surface-container-highest text-center text-[24px] font-normal text-surface-foreground",
             "outline-none focus:ring-2 focus:ring-primary",
             "transition-colors duration-100"
           )}
@@ -166,7 +166,7 @@ export function TimePicker({
           disabled={disabled}
           aria-label="Minute"
           className={cn(
-            "h-[72px] w-[96px] rounded-[16px] bg-surface-container-highest text-center text-[24px] font-normal text-surface-foreground",
+            "h-18 w-24 rounded-2xl bg-surface-container-highest text-center text-[24px] font-normal text-surface-foreground",
             "outline-none focus:ring-2 focus:ring-primary",
             "transition-colors duration-100"
           )}
@@ -175,7 +175,7 @@ export function TimePicker({
 
       {/* AM/PM selector (12h only) */}
       {is12h && (
-        <div className="ml-3 mt-5 flex h-[72px] w-[52px] flex-col overflow-hidden rounded-[16px] border border-outline">
+        <div className="ml-3 mt-5 flex h-18 w-13 flex-col overflow-hidden rounded-2xl border border-outline">
           <button
             type="button"
             disabled={disabled}

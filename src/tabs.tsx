@@ -242,7 +242,7 @@ function Tab({ value: tabValue, icon, label, disabled = false, className }: TabP
       data-tab-value={tabValue}
       onClick={handleClick}
       className={cn(
-        "relative flex-1 flex flex-col items-center justify-center gap-1 min-w-[48px] px-4",
+        "relative flex-1 flex flex-col items-center justify-center gap-1 min-w-12 px-4",
         "select-none transition-colors duration-200",
         "focus-visible:outline-none",
         // Hover state

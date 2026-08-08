@@ -230,7 +230,7 @@ const FABMenu: React.FC<FABMenuProps> = ({
                 type="button"
                 role="menuitem"
                 className={cn(
-                  "relative h-12 min-w-[160px] inline-flex items-center gap-3 px-4 rounded-[16px]",
+                  "relative h-12 min-w-40 inline-flex items-center gap-3 px-4 rounded-2xl",
                   "cursor-pointer select-none",
                   "text-[14px] font-medium leading-[20px] tracking-[0.1px]",
                   // State layer
@@ -246,7 +246,7 @@ const FABMenu: React.FC<FABMenuProps> = ({
                   // Elevation
                   "shadow-[0_2px_4px_var(--elevation-2),0_1px_2px_var(--elevation-1)]",
                   // Icon sizing
-                  "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-[24px]",
+                  "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-6",
                   "[&_.material-symbols-rounded]:pointer-events-none [&_.material-symbols-rounded]:text-[24px]",
                   menuItemColors[colorSet]
                 )}
@@ -300,7 +300,7 @@ const FABMenu: React.FC<FABMenuProps> = ({
             // Elevation
             "shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
             // Icon sizing
-            "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-[24px]",
+            "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-6",
             "[&_.material-symbols-rounded]:pointer-events-none [&_.material-symbols-rounded]:text-[24px]",
             closeButtonColors[colorSet]
           )}
@@ -341,7 +341,7 @@ const FABMenu: React.FC<FABMenuProps> = ({
           ref={triggerRef}
           type="button"
           className={cn(
-            "relative h-14 w-14 rounded-[16px] inline-flex items-center justify-center",
+            "relative h-14 w-14 rounded-2xl inline-flex items-center justify-center",
             "cursor-pointer select-none",
             // Transition for shape morph
             "transition-[border-radius,box-shadow] duration-100 [transition-timing-function:cubic-bezier(0.2,0,0,1)]",
@@ -354,14 +354,14 @@ const FABMenu: React.FC<FABMenuProps> = ({
             "focus-visible:before:opacity-[0.10]",
             "active:before:opacity-[0.10]",
             // Shape morph on press
-            "active:rounded-[12px]",
+            "active:rounded-xl",
             // Focus ring
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
             // Elevation
             "shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
             "hover:shadow-[0_6px_12px_var(--elevation-4),0_2px_4px_var(--elevation-4)]",
             // Icon sizing
-            "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-[24px]",
+            "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-6",
             "[&_.material-symbols-rounded]:pointer-events-none [&_.material-symbols-rounded]:text-[24px]",
             closeButtonColors[colorSet]
           )}

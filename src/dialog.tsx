@@ -83,15 +83,15 @@ const DialogContent = React.forwardRef<
             "m3-animate-dialog-fullscreen",
             // Desktop: fall back to centered dialog
             "sm:inset-auto sm:left-[50%] sm:top-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%]",
-            "sm:w-full sm:max-w-[560px] sm:max-h-[90vh] sm:rounded-[28px]",
+            "sm:w-full sm:max-w-140 sm:max-h-[90vh] sm:rounded-3xl",
           ],
 
           // ── Basic / Icon ──
           !fullScreen && [
             "left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]",
             "w-[calc(100%-2rem)] sm:w-full",
-            "min-w-[280px] max-w-[560px]",
-            "rounded-[28px] bg-surface-container-high p-6",
+            "min-w-70 max-w-140",
+            "rounded-3xl bg-surface-container-high p-6",
             "shadow-[0_6px_12px_var(--elevation-4),0_2px_4px_var(--elevation-4)]",
             "m3-animate-dialog",
           ],

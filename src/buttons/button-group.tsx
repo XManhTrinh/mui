@@ -220,11 +220,11 @@ const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>(
 
     // Standard variant gap per size
     const standardGapMap = {
-      xs: "gap-[18px]",
-      s: "gap-[12px]",
-      m: "gap-[8px]",
-      l: "gap-[8px]",
-      xl: "gap-[8px]",
+      xs: "gap-4.5",
+      s: "gap-3",
+      m: "gap-2",
+      l: "gap-2",
+      xl: "gap-2",
     } as const;
 
     const containerGap = variant === "standard" ? standardGapMap[size] : "";
@@ -293,8 +293,8 @@ const sizeHeightMap = {
 
 /** Minimum width for accessibility (XS and S need 48dp min) */
 const minWidthMap = {
-  xs: "min-w-[48px]",
-  s: "min-w-[48px]",
+  xs: "min-w-12",
+  s: "min-w-12",
   m: "",
   l: "",
   xl: "",

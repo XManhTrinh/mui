@@ -51,7 +51,7 @@ function Menu({ trigger, children, align = "start", side = "bottom", className }
           side={side}
           sideOffset={4}
           className={cn(
-            "z-50 min-w-[112px] max-w-[280px] overflow-hidden rounded-[4px] bg-surface-container py-2 shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
+            "z-50 min-w-28 max-w-70 overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
             "m3-animate-menu",
             className
           )}
@@ -103,7 +103,7 @@ const MenuItem = React.forwardRef<
         // Selected state
         selected && "bg-surface-container-highest",
         // Disabled
-        "data-[disabled]:pointer-events-none data-[disabled]:opacity-[0.38]",
+        "data-disabled:pointer-events-none data-disabled:opacity-[0.38]",
         className
       )}
     >

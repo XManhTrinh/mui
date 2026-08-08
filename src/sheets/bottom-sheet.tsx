@@ -140,13 +140,13 @@ export function BottomSheet({
             }}
             className={cn(
               "fixed bottom-0 left-0 right-0 z-50",
-              "mx-0 max-w-[640px]",
-              "mt-[72px]",
+              "mx-0 max-w-160",
+              "mt-18",
               "rounded-t-[28px]",
               "bg-surface-container-low",
               "shadow-[0_-4px_16px_var(--elevation-3)]",
               // Responsive: wider viewport adjustments
-              "min-[640px]:mx-auto min-[640px]:mt-[56px]",
+              "min-[640px]:mx-auto min-[640px]:mt-14",
               className
             )}
           >

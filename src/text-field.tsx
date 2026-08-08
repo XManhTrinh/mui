@@ -135,7 +135,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             "group relative flex items-center h-14",
             // Filled variant
             isFilled && [
-              "rounded-t-[4px] rounded-b-none",
+              "rounded-t-sm rounded-b-none",
               disabled
                 ? "bg-[hsl(var(--on-surface)/0.04)]"
                 : "bg-surface-container-highest",
@@ -143,7 +143,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             ],
             // Outlined variant
             isOutlined && [
-              "rounded-[4px] bg-transparent",
+              "rounded-sm bg-transparent",
               // Border
               disabled
                 ? "border border-[hsl(var(--on-surface)/0.12)]"

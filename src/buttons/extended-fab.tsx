@@ -43,11 +43,11 @@ const extendedFabVariants = cva(
     "focus-visible:before:opacity-[0.10]",
     "active:before:opacity-[0.10]",
     // Shape: 16dp corner radius, morph to 12dp on press
-    "rounded-[16px] active:rounded-[12px]",
+    "rounded-2xl active:rounded-xl",
     // Min width
-    "min-w-[80px]",
+    "min-w-20",
     // Icon sizing: 24dp for all sizes
-    "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-[24px]",
+    "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-6",
     "[&_.material-symbols-rounded]:pointer-events-none [&_.material-symbols-rounded]:text-[24px]",
     // Disabled
     "disabled:opacity-[0.38] disabled:pointer-events-none",
@@ -78,7 +78,7 @@ const extendedFabVariants = cva(
 function ExtendedFABSpinner({ className }: { className?: string }) {
   return (
     <svg
-      className={cn("animate-spin size-[24px]", className)}
+      className={cn("animate-spin size-6", className)}
       viewBox="0 0 24 24"
       fill="none"
       aria-hidden="true"

@@ -156,7 +156,7 @@ export function SideSheet({
             className={cn(
               "fixed top-0 bottom-0 z-50",
               "flex flex-col",
-              "w-full max-w-[400px]",
+              "w-full max-w-100",
               side === "right" ? "right-0" : "left-0",
               isModal
                 ? "bg-surface-container-low"
@@ -197,7 +197,7 @@ export function SideSheet({
 
             {/* Actions (bottom bar) */}
             {actions && (
-              <div className="flex items-center justify-end gap-2 h-[72px] px-6 pt-4 pb-6 border-t border-outline-variant">
+              <div className="flex items-center justify-end gap-2 h-18 px-6 pt-4 pb-6 border-t border-outline-variant">
                 {actions}
               </div>
             )}

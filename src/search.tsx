@@ -79,7 +79,7 @@ const Search = React.forwardRef<HTMLInputElement, SearchProps>(
     return (
       <div
         className={cn(
-          "relative flex items-center h-14 min-w-[360px] max-w-[720px] rounded-full",
+          "relative flex items-center h-14 min-w-90 max-w-180 rounded-full",
           "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
           // Background color
           isFocused

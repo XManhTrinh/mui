@@ -20,7 +20,7 @@ import { cn } from "./lib/utils";
  * - Dragged: 16% state layer + elevated shadow
  */
 const cardVariants = cva(
-  "relative rounded-[12px] text-surface-foreground transition-all duration-200",
+  "relative rounded-xl text-surface-foreground transition-all duration-200",
   {
     variants: {
       variant: {
@@ -65,7 +65,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       className={cn(
         cardVariants({ variant, interactive }),
         interactive &&
-          "before:absolute before:inset-0 before:rounded-[12px] before:transition-colors before:duration-200 before:pointer-events-none hover:before:bg-surface-foreground/[0.08] focus-visible:before:bg-surface-foreground/[0.10] active:before:bg-surface-foreground/[0.10]",
+          "before:absolute before:inset-0 before:rounded-xl before:transition-colors before:duration-200 before:pointer-events-none hover:before:bg-surface-foreground/[0.08] focus-visible:before:bg-surface-foreground/[0.10] active:before:bg-surface-foreground/[0.10]",
         className
       )}
       tabIndex={interactive ? 0 : undefined}

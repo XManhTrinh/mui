@@ -50,10 +50,10 @@ const iconButtonVariants = cva(
           "bg-transparent border border-outline text-surface-variant-foreground",
       },
       size: {
-        xs: "size-8 [&_svg]:size-[20px] [&_.material-symbols-rounded]:text-[20px]",
-        s: "size-10 [&_svg]:size-[20px] [&_.material-symbols-rounded]:text-[20px]",
-        m: "size-12 [&_svg]:size-[24px] [&_.material-symbols-rounded]:text-[24px]",
-        l: "size-14 [&_svg]:size-[24px] [&_.material-symbols-rounded]:text-[24px]",
+        xs: "size-8 [&_svg]:size-5 [&_.material-symbols-rounded]:text-[20px]",
+        s: "size-10 [&_svg]:size-5 [&_.material-symbols-rounded]:text-[20px]",
+        m: "size-12 [&_svg]:size-6 [&_.material-symbols-rounded]:text-[24px]",
+        l: "size-14 [&_svg]:size-6 [&_.material-symbols-rounded]:text-[24px]",
         xl: "size-16 [&_svg]:size-[28px] [&_.material-symbols-rounded]:text-[28px]",
       },
     },
@@ -71,18 +71,18 @@ const iconButtonVariants = cva(
  */
 const shapeClasses = {
   round: {
-    xs: "rounded-full active:rounded-[8px]",
-    s: "rounded-full active:rounded-[8px]",
-    m: "rounded-full active:rounded-[12px]",
-    l: "rounded-full active:rounded-[16px]",
-    xl: "rounded-full active:rounded-[16px]",
+    xs: "rounded-full active:rounded-lg",
+    s: "rounded-full active:rounded-lg",
+    m: "rounded-full active:rounded-xl",
+    l: "rounded-full active:rounded-2xl",
+    xl: "rounded-full active:rounded-2xl",
   },
   square: {
-    xs: "rounded-[12px] active:rounded-[8px]",
-    s: "rounded-[12px] active:rounded-[8px]",
-    m: "rounded-[16px] active:rounded-[12px]",
-    l: "rounded-[28px] active:rounded-[16px]",
-    xl: "rounded-[28px] active:rounded-[16px]",
+    xs: "rounded-xl active:rounded-lg",
+    s: "rounded-xl active:rounded-lg",
+    m: "rounded-2xl active:rounded-xl",
+    l: "rounded-3xl active:rounded-2xl",
+    xl: "rounded-3xl active:rounded-2xl",
   },
 } as const;
 

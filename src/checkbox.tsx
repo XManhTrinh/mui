@@ -138,7 +138,7 @@ const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
           {active && (
             <svg
               className={cn(
-                "w-[12px] h-[12px] transition-all duration-100 ease-[cubic-bezier(0.2,0,0,1)]",
+                "w-3 h-3 transition-all duration-100 ease-[cubic-bezier(0.2,0,0,1)]",
                 !disabled ? "text-primary-foreground" : "text-surface"
               )}
               viewBox="0 0 12 12"

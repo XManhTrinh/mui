@@ -58,11 +58,11 @@ const buttonVariants = cva(
           "bg-secondary-container text-secondary-container-foreground hover:shadow-[0_1px_3px_var(--elevation-1)]",
       },
       size: {
-        xs: "h-8 px-3 gap-1.5 [&_svg]:size-[20px] active:rounded-[8px]",
-        s: "h-10 px-4 gap-2 [&_svg]:size-[20px] active:rounded-[8px]",
-        m: "h-12 px-6 gap-2 [&_svg]:size-[20px] active:rounded-[12px]",
-        l: "h-14 px-7 gap-2 [&_svg]:size-[20px] active:rounded-[16px]",
-        xl: "h-16 px-8 gap-2 [&_svg]:size-[20px] active:rounded-[16px]",
+        xs: "h-8 px-3 gap-1.5 [&_svg]:size-5 active:rounded-lg",
+        s: "h-10 px-4 gap-2 [&_svg]:size-5 active:rounded-lg",
+        m: "h-12 px-6 gap-2 [&_svg]:size-5 active:rounded-xl",
+        l: "h-14 px-7 gap-2 [&_svg]:size-5 active:rounded-2xl",
+        xl: "h-16 px-8 gap-2 [&_svg]:size-5 active:rounded-2xl",
       },
     },
     defaultVariants: {
@@ -73,7 +73,7 @@ const buttonVariants = cva(
 );
 
 // Touch target padding for small size (34px visual → 48px touch)
-const touchTargetClass = "min-h-[48px]";
+const touchTargetClass = "min-h-12";
 
 // Asymmetric padding when icon is present (icon-side gets less padding)
 const iconPaddingMap = {

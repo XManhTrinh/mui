@@ -52,11 +52,11 @@ const fabVariants = cva(
         tertiary: "bg-tertiary-container text-tertiary-container-foreground",
       },
       size: {
-        m: "size-12 [&_svg]:size-[24px] [&_.material-symbols-rounded]:text-[24px]",
-        l: "size-14 [&_svg]:size-[24px] [&_.material-symbols-rounded]:text-[24px]",
-        xl: "size-24 [&_svg]:size-[36px] [&_.material-symbols-rounded]:text-[36px]",
+        m: "size-12 [&_svg]:size-6 [&_.material-symbols-rounded]:text-[24px]",
+        l: "size-14 [&_svg]:size-6 [&_.material-symbols-rounded]:text-[24px]",
+        xl: "size-24 [&_svg]:size-9 [&_.material-symbols-rounded]:text-[36px]",
         extended:
-          "h-14 w-auto pl-4 pr-5 gap-2 [&_svg]:size-[24px] [&_.material-symbols-rounded]:text-[24px]",
+          "h-14 w-auto pl-4 pr-5 gap-2 [&_svg]:size-6 [&_.material-symbols-rounded]:text-[24px]",
       },
     },
     defaultVariants: {
@@ -73,16 +73,16 @@ const fabVariants = cva(
  */
 const shapeClasses = {
   rounded: {
-    m: "rounded-[12px] active:rounded-[8px]",
-    l: "rounded-[16px] active:rounded-[12px]",
-    xl: "rounded-[28px] active:rounded-[20px]",
-    extended: "rounded-[16px] active:rounded-[12px]",
+    m: "rounded-xl active:rounded-lg",
+    l: "rounded-2xl active:rounded-xl",
+    xl: "rounded-3xl active:rounded-[20px]",
+    extended: "rounded-2xl active:rounded-xl",
   },
   round: {
-    m: "rounded-full active:rounded-[12px]",
-    l: "rounded-full active:rounded-[16px]",
-    xl: "rounded-full active:rounded-[28px]",
-    extended: "rounded-full active:rounded-[16px]",
+    m: "rounded-full active:rounded-xl",
+    l: "rounded-full active:rounded-2xl",
+    xl: "rounded-full active:rounded-3xl",
+    extended: "rounded-full active:rounded-2xl",
   },
 } as const;
 
@@ -177,7 +177,7 @@ const FAB = React.forwardRef<HTMLButtonElement, FABProps>(
       >
         {loading ? (
           <FABSpinner
-            className={resolvedSize === "xl" ? "size-[36px]" : "size-[24px]"}
+            className={resolvedSize === "xl" ? "size-9" : "size-6"}
           />
         ) : (
           icon

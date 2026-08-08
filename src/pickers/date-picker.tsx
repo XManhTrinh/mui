@@ -141,7 +141,7 @@ export function DatePicker({
   return (
     <div
       className={cn(
-        "w-[320px] rounded-[28px] bg-surface-container-high px-4 py-3",
+        "w-[320px] rounded-3xl bg-surface-container-high px-4 py-3",
         disabled && "opacity-[0.38] pointer-events-none",
         className
       )}

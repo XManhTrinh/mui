@@ -89,7 +89,7 @@ const ListItem = React.forwardRef<HTMLLIElement, ListItemProps>(
     ref
   ) => {
     const heightClass =
-      lines === 3 ? "min-h-[88px]" : lines === 2 ? "min-h-[72px]" : "min-h-[56px]";
+      lines === 3 ? "min-h-22" : lines === 2 ? "min-h-18" : "min-h-14";
 
     const isThreeLine = lines === 3;
 
