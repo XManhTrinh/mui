@@ -9,34 +9,17 @@ import { cn } from "./lib/utils";
  *
  * @see https://m3.material.io/components/text-fields/specs
  *
- * Variants: Filled and Outlined.
- *
- * Filled:
- * - Container: surface-container-highest, 56dp height
- * - Top corners: 4dp radius, bottom flat
- * - Active indicator: 1dp → 2dp on focus (bottom line)
- * - Label: on-surface-variant → primary on focus
- *
- * Outlined:
- * - Container: transparent, 56dp height
- * - All corners: 4dp radius
- * - Border: 1dp outline → 2dp primary on focus
- * - Floating label: sits on top border with background notch
+ * Uses the MDC-Web notched outline approach for the outlined variant:
+ * Three border segments (leading, notch, trailing) where the notch
+ * removes its top border when the label floats, creating a clean gap.
  *
  * Measurements:
  * - Height: 56dp
  * - L/R padding (no icons): 16dp
  * - L/R padding (with icons): 12dp
- * - Padding between icon and text: 16dp
- * - Top/bottom padding: 8dp
  * - Floating label L/R padding: 4dp
+ * - Corner radius: 4dp
  * - Supporting text top padding: 4dp
- *
- * Typography:
- * - Label resting: Body Large (16px/400/24px/0.5px)
- * - Label floating: Body Small (12px/400/16px/0.4px)
- * - Input: Body Large (16px/400/24px/0.5px)
- * - Supporting: Body Small (12px/400/16px/0.4px)
  */
 
 export interface TextFieldProps
@@ -92,6 +75,8 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     const supportingId = `${fieldId}-supporting`;
 
     const isFloating = isFocused || hasValue;
+    const isFilled = variant === "filled";
+    const isOutlined = variant === "outlined";
 
     const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
       setIsFocused(true);
@@ -114,6 +99,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
     const helperText = error && errorText ? errorText : supportingText;
 
+    // Colors
     const labelColor = disabled
       ? "text-[hsl(var(--on-surface)/0.38)]"
       : error
@@ -122,14 +108,8 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           ? "text-primary"
           : "text-surface-variant-foreground";
 
-    const iconColor = error
-      ? "text-error"
-      : "text-surface-variant-foreground";
+    const iconColor = error ? "text-error" : "text-surface-variant-foreground";
 
-    const isFilled = variant === "filled";
-    const isOutlined = variant === "outlined";
-
-    // Border color for outlined
     const borderColor = disabled
       ? "border-[hsl(var(--on-surface)/0.12)]"
       : error
@@ -138,7 +118,17 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           ? "border-primary"
           : "border-outline";
 
-    const borderWidth = isFocused || error ? "border-2" : "border";
+    const borderWidth = isFocused ? "border-2" : "border";
+
+    // Input classes shared between input and textarea
+    const inputClasses = cn(
+      "w-full bg-transparent outline-none",
+      "text-[16px] leading-6 tracking-[0.5px] text-surface-foreground",
+      "caret-primary placeholder:text-surface-variant-foreground",
+      "[&:-webkit-autofill]:bg-transparent [&:-webkit-autofill]:[-webkit-text-fill-color:hsl(var(--on-surface))] [&:-webkit-autofill]:[transition:background-color_9999s_ease-in-out_0s]",
+      disabled && "text-[hsl(var(--on-surface)/0.38)]",
+      label && !isFloating && "placeholder:text-transparent"
+    );
 
     return (
       <div className={cn("w-full", className)}>
@@ -153,16 +143,55 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 : "bg-surface-container-highest",
               !disabled && "hover:bg-[hsl(var(--on-surface)/0.08)]",
             ],
-            isOutlined && [
-              "rounded-[4px] overflow-visible",
-              borderWidth,
-              borderColor,
-              !disabled && !isFocused && !error && "hover:border-[hsl(var(--on-surface))]",
-            ],
             disabled && "pointer-events-none"
           )}
         >
-          {/* Filled: bottom active indicator */}
+          {/* ─── Outlined variant: notched border ─── */}
+          {isOutlined && (
+            <div className="absolute inset-0 pointer-events-none flex rounded-[4px]">
+              {/* Leading edge */}
+              <div
+                className={cn(
+                  "w-3 rounded-l-[4px] border-t border-b border-l transition-colors duration-200",
+                  borderWidth === "border-2" && "[border-width:2px]",
+                  borderColor
+                )}
+              />
+              {/* Notch (contains label space) */}
+              <div
+                className={cn(
+                  "flex items-center border-b transition-colors duration-200",
+                  borderWidth === "border-2" && "[border-bottom-width:2px]",
+                  // Top border: hidden when label floats (creates the notch)
+                  isFloating && label ? "border-t-0" : cn("border-t", borderWidth === "border-2" && "[border-top-width:2px]"),
+                  borderColor
+                )}
+              >
+                {/* Invisible label spacer to size the notch */}
+                {label && (
+                  <span
+                    className={cn(
+                      "inline-block px-1 text-[12px] leading-4 tracking-[0.4px]",
+                      isFloating ? "visible" : "invisible w-0 px-0"
+                    )}
+                    aria-hidden="true"
+                  >
+                    {label}
+                  </span>
+                )}
+              </div>
+              {/* Trailing edge */}
+              <div
+                className={cn(
+                  "flex-1 rounded-r-[4px] border-t border-b border-r transition-colors duration-200",
+                  borderWidth === "border-2" && "[border-width:2px]",
+                  borderColor
+                )}
+              />
+            </div>
+          )}
+
+          {/* ─── Filled variant: bottom indicator ─── */}
           {isFilled && (
             <span
               className={cn(
@@ -189,11 +218,11 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           <div
             className={cn(
               "relative flex-1 flex items-center h-full",
-              leadingIcon ? "pl-4" : "pl-4",
+              "pl-4",
               trailingIcon ? "pr-0" : "pr-4"
             )}
           >
-            {/* Label */}
+            {/* Floating label (visual) */}
             {label && (
               <label
                 htmlFor={fieldId}
@@ -204,9 +233,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   isFloating
                     ? [
                         "text-[12px] leading-4 tracking-[0.4px]",
-                        isOutlined
-                          ? "top-0 -translate-y-1/2 left-3 px-1 bg-[var(--m3-surface-bg,hsl(var(--surface)))]"
-                          : "top-2 left-0",
+                        isOutlined ? "-top-2 left-3" : "top-1 left-0",
                       ]
                     : "top-1/2 -translate-y-1/2 left-0 text-[16px] leading-6 tracking-[0.5px]"
                 )}
@@ -236,15 +263,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 rows={rows}
                 aria-invalid={error || undefined}
                 aria-describedby={helperText ? supportingId : undefined}
-                className={cn(
-                  "w-full bg-transparent resize-none outline-none",
-                  "text-[16px] leading-6 tracking-[0.5px] text-surface-foreground",
-                  "caret-primary placeholder:text-surface-variant-foreground",
-                  "[&:-webkit-autofill]:bg-transparent [&:-webkit-autofill]:[-webkit-text-fill-color:hsl(var(--on-surface))] [&:-webkit-autofill]:[transition:background-color_9999s_ease-in-out_0s]",
-                  disabled && "text-[hsl(var(--on-surface)/0.38)]",
-                  label && isFloating && "pt-5",
-                  label && !isFloating && "placeholder:text-transparent"
-                )}
+                className={cn(inputClasses, "resize-none h-full", label && isFloating && "pt-5")}
                 {...(props as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
               />
             ) : (
@@ -260,15 +279,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 disabled={disabled}
                 aria-invalid={error || undefined}
                 aria-describedby={helperText ? supportingId : undefined}
-                className={cn(
-                  "w-full h-full bg-transparent outline-none",
-                  "text-[16px] leading-6 tracking-[0.5px] text-surface-foreground",
-                  "caret-primary placeholder:text-surface-variant-foreground",
-                  "[&:-webkit-autofill]:bg-transparent [&:-webkit-autofill]:[-webkit-text-fill-color:hsl(var(--on-surface))] [&:-webkit-autofill]:[transition:background-color_9999s_ease-in-out_0s]",
-                  disabled && "text-[hsl(var(--on-surface)/0.38)]",
-                  label && isFloating && "pt-4",
-                  label && !isFloating && "placeholder:text-transparent"
-                )}
+                className={cn(inputClasses, "h-full", label && isFloating && "pt-4")}
                 {...props}
               />
             )}
