@@ -135,7 +135,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               !disabled && "hover:bg-[hsl(var(--on-surface)/0.08)]",
             ],
             isOutlined && [
-              "rounded-sm bg-transparent",
+              "rounded-sm",
               disabled
                 ? "border border-[hsl(var(--on-surface)/0.12)]"
                 : error
