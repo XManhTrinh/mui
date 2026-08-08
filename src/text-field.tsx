@@ -141,24 +141,40 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 : "bg-surface-container-highest",
               !disabled && "hover:bg-[hsl(var(--on-surface)/0.08)]",
             ],
-            // Outlined variant
-            isOutlined && [
-              "rounded-sm bg-transparent",
-              // Border
-              disabled
-                ? "border border-[hsl(var(--on-surface)/0.12)]"
-                : error
-                  ? isFocused
-                    ? "border-2 border-error"
-                    : "border border-error"
-                  : isFocused
-                    ? "border-2 border-primary"
-                    : "border border-outline hover:border-[hsl(var(--on-surface))]",
-            ],
+            // Outlined variant — no border here, fieldset handles it
+            isOutlined && "rounded-sm bg-transparent",
             // Disabled state
             disabled && "pointer-events-none"
           )}
         >
+          {/* Outlined variant: fieldset + legend for border notch */}
+          {isOutlined && (
+            <fieldset
+              className={cn(
+                "absolute inset-0 pointer-events-none rounded-sm px-2.5",
+                "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
+                disabled
+                  ? "border border-[hsl(var(--on-surface)/0.12)]"
+                  : error
+                    ? isFocused
+                      ? "border-2 border-error"
+                      : "border border-error"
+                    : isFocused
+                      ? "border-2 border-primary"
+                      : "border border-outline group-hover:border-[hsl(var(--on-surface))]"
+              )}
+              aria-hidden="true"
+            >
+              <legend
+                className={cn(
+                  "invisible h-0 text-[12px] leading-0 whitespace-nowrap overflow-hidden transition-all duration-200",
+                  isFloating && label ? "px-0.5 max-w-full" : "max-w-[0.01px]"
+                )}
+              >
+                {label || ""}
+              </legend>
+            </fieldset>
+          )}
           {/* Filled variant: active indicator (bottom line) */}
           {isFilled && (
             <span
@@ -210,7 +226,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   isFloating && [
                     "text-[12px] leading-4 tracking-[0.4px]",
                     isOutlined
-                      ? "-top-2 left-3 px-1 [background-color:inherit]"
+                      ? "-top-[9px] left-3 px-1"
                       : "top-2 left-4",
                   ],
                   // Resting position
