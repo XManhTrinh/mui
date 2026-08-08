@@ -121,7 +121,7 @@ export function TimePicker({
   return (
     <div
       className={cn(
-        "inline-flex items-center gap-0 rounded-3xl bg-surface-container-high p-6",
+        "inline-flex items-center gap-0 rounded-[28px] bg-surface-container-high p-6",
         disabled && "opacity-[0.38] pointer-events-none",
         className
       )}

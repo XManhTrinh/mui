@@ -24,7 +24,7 @@ import { Icon } from "./icon";
  */
 const chipVariants = cva(
   [
-    "relative inline-flex items-center justify-center h-8 rounded-[8px]",
+    "relative inline-flex items-center justify-center h-8 rounded-lg",
     "text-[14px] leading-5 font-medium tracking-[0.1px]",
     "transition-all duration-200 select-none cursor-pointer",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
@@ -106,7 +106,7 @@ const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
         className={cn(
           chipVariants({ variant, selected, elevated }),
           // State layer on hover/focus/press
-          "before:absolute before:inset-0 before:rounded-[8px] before:transition-colors before:duration-200 before:pointer-events-none",
+          "before:absolute before:inset-0 before:rounded-lg before:transition-colors before:duration-200 before:pointer-events-none",
           !selected && "hover:before:bg-surface-foreground/[0.08] focus-visible:before:bg-surface-foreground/[0.10] active:before:bg-surface-foreground/[0.10]",
           selected && "hover:before:bg-secondary-container-foreground/[0.08] focus-visible:before:bg-secondary-container-foreground/[0.10] active:before:bg-secondary-container-foreground/[0.10]",
           // Adjust padding when icons present

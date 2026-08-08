@@ -69,7 +69,7 @@ function Badge({
           className={cn(
             // M3 spec: large badge 14×12dp from top-trailing icon corner to bottom-leading badge corner
             "absolute top-0 right-0 translate-x-[6px] -translate-y-[6px]",
-            "h-4 min-w-4 rounded-[8px] px-1",
+            "h-4 min-w-4 rounded-lg px-1",
             "bg-error text-error-foreground",
             "text-[11px] leading-4 font-medium",
             "inline-flex items-center justify-center",

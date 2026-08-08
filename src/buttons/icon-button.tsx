@@ -81,8 +81,8 @@ const shapeClasses = {
     xs: "rounded-xl active:rounded-lg",
     s: "rounded-xl active:rounded-lg",
     m: "rounded-2xl active:rounded-xl",
-    l: "rounded-3xl active:rounded-2xl",
-    xl: "rounded-3xl active:rounded-2xl",
+    l: "rounded-[28px] active:rounded-2xl",
+    xl: "rounded-[28px] active:rounded-2xl",
   },
 } as const;
 

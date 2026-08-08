@@ -135,11 +135,11 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
         )}
 
         {/* Track container — 16dp height, fully rounded */}
-        <div className="relative w-full h-4 rounded-[8px] overflow-hidden">
+        <div className="relative w-full h-4 rounded-lg overflow-hidden">
           {/* Inactive track */}
           <div
             className={cn(
-              "absolute inset-0 rounded-[8px]",
+              "absolute inset-0 rounded-lg",
               disabled
                 ? "bg-[hsl(var(--on-surface)/0.12)]"
                 : "bg-secondary-container"
@@ -149,7 +149,7 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
           {/* Active track */}
           <div
             className={cn(
-              "absolute inset-y-0 left-0 rounded-[8px]",
+              "absolute inset-y-0 left-0 rounded-lg",
               disabled
                 ? "bg-[hsl(var(--on-surface)/0.38)]"
                 : "bg-primary"
