@@ -167,12 +167,12 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   borderColor
                 )}
               >
-                {/* Invisible label spacer to size the notch */}
+                {/* Invisible spacer to size the notch gap */}
                 {label && (
                   <span
                     className={cn(
-                      "inline-block px-1 text-[12px] leading-4 tracking-[0.4px]",
-                      isFloating ? "visible" : "invisible w-0 px-0"
+                      "inline-block h-0 text-[12px] tracking-[0.4px] invisible",
+                      isFloating ? "px-1" : "w-0 px-0"
                     )}
                     aria-hidden="true"
                   >
@@ -214,33 +214,37 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             </div>
           )}
 
+          {/* Label — positioned on container for correct alignment */}
+          {label && (
+            <label
+              htmlFor={fieldId}
+              className={cn(
+                "absolute pointer-events-none z-10",
+                "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
+                labelColor,
+                isFloating
+                  ? [
+                      "text-[12px] leading-4 tracking-[0.4px]",
+                      isOutlined ? "top-0 -translate-y-1/2 left-[13px]" : "top-2 left-4",
+                    ]
+                  : cn(
+                      "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
+                      leadingIcon ? "left-[52px]" : "left-4"
+                    )
+              )}
+            >
+              {label}
+            </label>
+          )}
+
           {/* Content area */}
           <div
             className={cn(
               "relative flex-1 flex items-center h-full",
-              "pl-4",
+              leadingIcon ? "pl-0" : "pl-4",
               trailingIcon ? "pr-0" : "pr-4"
             )}
           >
-            {/* Floating label (visual) */}
-            {label && (
-              <label
-                htmlFor={fieldId}
-                className={cn(
-                  "absolute pointer-events-none z-10",
-                  "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
-                  labelColor,
-                  isFloating
-                    ? [
-                        "text-[12px] leading-4 tracking-[0.4px]",
-                        isOutlined ? "-top-2 left-3" : "top-1 left-0",
-                      ]
-                    : "top-1/2 -translate-y-1/2 left-0 text-[16px] leading-6 tracking-[0.5px]"
-                )}
-              >
-                {label}
-              </label>
-            )}
 
             {/* Prefix */}
             {prefix && isFloating && (
