@@ -126,7 +126,7 @@ const ListItem = React.forwardRef<HTMLLIElement, ListItemProps>(
             selected &&
             "hover:bg-primary-container-foreground/[0.08] focus-visible:bg-primary-container-foreground/[0.10] active:bg-primary-container-foreground/[0.10]",
           // Disabled
-          disabled && "opacity-38 pointer-events-none",
+          disabled && "opacity-[0.38] pointer-events-none",
           // Transition
           "transition-colors outline-none",
           className

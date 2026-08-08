@@ -24,12 +24,14 @@ const tooltipVariants = cva("absolute z-50 pointer-events-none", {
   variants: {
     variant: {
       plain: [
-        "h-6 max-w-[200px] px-2 py-1 rounded-[4px]",
+        // M3 spec: container height 24dp, padding 8dp, 4dp corner radius
+        "h-6 max-w-[200px] px-2 rounded-[4px]",
         "bg-inverse-surface text-inverse-on-surface",
         "text-[12px] leading-4 font-normal whitespace-nowrap",
         "flex items-center",
       ].join(" "),
       rich: [
+        // M3 spec: top 12dp, bottom 8dp, left/right 16dp, 12dp corner radius
         "max-w-[320px] pt-3 pb-2 px-4 rounded-[12px]",
         "bg-surface-container text-surface-variant-foreground",
         "text-[14px] leading-5 font-normal whitespace-normal",

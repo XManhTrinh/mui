@@ -56,7 +56,8 @@ function Badge({
       {variant === "dot" && (
         <span
           className={cn(
-            "absolute top-[5px] right-[5px]",
+            // M3 spec: small badge 6×6dp from top-trailing icon corner to bottom-leading badge corner
+            "absolute top-0 right-0 translate-x-[3px] -translate-y-[3px]",
             "h-1.5 w-1.5 rounded-[3px] bg-error",
             className
           )}
@@ -66,7 +67,8 @@ function Badge({
       {variant === "count" && displayText && (
         <span
           className={cn(
-            "absolute top-0 right-0 -translate-y-[2px] translate-x-[2px]",
+            // M3 spec: large badge 14×12dp from top-trailing icon corner to bottom-leading badge corner
+            "absolute top-0 right-0 translate-x-[6px] -translate-y-[6px]",
             "h-4 min-w-4 rounded-[8px] px-1",
             "bg-error text-error-foreground",
             "text-[11px] leading-4 font-medium",

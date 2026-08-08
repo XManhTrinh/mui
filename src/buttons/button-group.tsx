@@ -446,7 +446,7 @@ const ButtonGroupItem = React.forwardRef<HTMLButtonElement, ButtonGroupItemProps
           "focus-visible:before:opacity-[0.10]",
           "active:before:opacity-[0.10]",
           // Focus ring
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0",
           // Size
           sizeHeightMap[ctx.size],
           // Min width for accessibility

@@ -169,9 +169,9 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
             className={cn(
               "absolute top-1/2 -translate-y-1/2 w-10 h-10 rounded-full transition-all duration-200 pointer-events-none",
               !disabled && !isChecked && "group-hover:bg-[hsl(var(--on-surface)/0.08)] group-focus-visible:bg-[hsl(var(--on-surface)/0.10)]",
-              !disabled && isChecked && "group-hover:bg-primary/8 group-focus-visible:bg-primary/10",
+              !disabled && isChecked && "group-hover:bg-primary/[0.08] group-focus-visible:bg-primary/[0.10]",
               isPressed && !isChecked && !disabled && "bg-[hsl(var(--on-surface)/0.10)]",
-              isPressed && isChecked && !disabled && "bg-primary/10"
+              isPressed && isChecked && !disabled && "bg-primary/[0.10]"
             )}
             style={{
               left: `${computedLeft + handleSize / 2 - 20}px`,

@@ -88,7 +88,7 @@ const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
         disabled={disabled}
         onClick={handleClick}
         className={cn(
-          "relative inline-flex items-center justify-center w-12 h-12 select-none",
+          "group relative inline-flex items-center justify-center w-12 h-12 select-none",
           "focus-visible:outline-none",
           disabled ? "cursor-not-allowed" : "cursor-pointer",
           className
@@ -116,23 +116,6 @@ const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
               !active &&
               "group-hover:bg-surface-foreground/[0.08]",
             !disabled && active && "group-hover:bg-primary/[0.08]"
-          )}
-          style={{
-            backgroundColor: disabled
-              ? undefined
-              : undefined,
-          }}
-        />
-        {/* Hover/focus state layer via pseudo approach */}
-        <span
-          className={cn(
-            "absolute w-10 h-10 rounded-full transition-colors duration-200 pointer-events-none",
-            !disabled && !active && [
-              "hover:bg-[hsl(var(--on-surface)/0.08)]",
-            ],
-            !disabled && active && [
-              "hover:bg-primary/[0.08]",
-            ]
           )}
         />
 

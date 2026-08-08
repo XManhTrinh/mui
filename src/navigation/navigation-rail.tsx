@@ -69,7 +69,7 @@ export function NavigationRail({
     <aside
       className={cn(
         "fixed left-0 top-0 bottom-0 z-40 flex flex-col items-center bg-surface-container transition-[width] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
-        isCollapsed ? "w-20" : "w-90",
+        isCollapsed ? "w-24" : "w-90",
         className
       )}
       aria-label="Main navigation"
@@ -152,7 +152,7 @@ function CollapsedRailItem({
         aria-selected={isActive}
         aria-label={item.label}
         onClick={() => onSelect(item.value)}
-        className="group relative flex flex-col items-center justify-center gap-1 w-20 min-h-12 py-1 outline-none"
+        className="group relative flex flex-col items-center justify-center gap-1 w-24 min-h-12 py-1 outline-none"
       >
         {/* Indicator container */}
         <div className="relative flex items-center justify-center w-14 h-8">
@@ -161,8 +161,8 @@ function CollapsedRailItem({
             className={cn(
               "absolute inset-0 rounded-full transition-colors duration-200",
               isActive
-                ? "group-hover:bg-secondary-container-foreground/8 group-focus-visible:bg-secondary-container-foreground/10 group-active:bg-secondary-container-foreground/10"
-                : "group-hover:bg-surface-variant-foreground/8 group-focus-visible:bg-surface-variant-foreground/10 group-active:bg-surface-variant-foreground/10"
+                ? "group-hover:bg-secondary-container-foreground/[0.08] group-focus-visible:bg-secondary-container-foreground/[0.10] group-active:bg-secondary-container-foreground/[0.10]"
+                : "group-hover:bg-surface-variant-foreground/[0.08] group-focus-visible:bg-surface-variant-foreground/[0.10] group-active:bg-surface-variant-foreground/[0.10]"
             )}
           />
           {/* Active indicator pill */}
@@ -242,8 +242,8 @@ function ExpandedRailItem({
           className={cn(
             "absolute inset-0 rounded-full transition-colors duration-200",
             isActive
-              ? "group-hover:bg-secondary-container-foreground/8 group-focus-visible:bg-secondary-container-foreground/10 group-active:bg-secondary-container-foreground/10"
-              : "group-hover:bg-surface-variant-foreground/8 group-focus-visible:bg-surface-variant-foreground/10 group-active:bg-surface-variant-foreground/10"
+              ? "group-hover:bg-secondary-container-foreground/[0.08] group-focus-visible:bg-secondary-container-foreground/[0.10] group-active:bg-secondary-container-foreground/[0.10]"
+              : "group-hover:bg-surface-variant-foreground/[0.08] group-focus-visible:bg-surface-variant-foreground/[0.10] group-active:bg-surface-variant-foreground/[0.10]"
           )}
         />
 

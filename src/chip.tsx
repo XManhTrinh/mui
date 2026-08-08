@@ -27,7 +27,7 @@ const chipVariants = cva(
     "relative inline-flex items-center justify-center h-8 rounded-[8px]",
     "text-[14px] leading-5 font-medium tracking-[0.1px]",
     "transition-all duration-200 select-none cursor-pointer",
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
     "disabled:pointer-events-none disabled:opacity-[0.38]",
   ].join(" "),
   {

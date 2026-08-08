@@ -252,6 +252,8 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   "w-full bg-transparent resize-none outline-none",
                   "text-[16px] leading-6 tracking-[0.5px] text-surface-foreground",
                   "caret-primary placeholder:text-surface-variant-foreground",
+                  // Autofill: override browser forced background
+                  "[&:-webkit-autofill]:bg-transparent [&:-webkit-autofill]:[-webkit-text-fill-color:hsl(var(--on-surface))] [&:-webkit-autofill]:[transition:background-color_9999s_ease-in-out_0s]",
                   disabled && "text-[hsl(var(--on-surface)/0.38)]",
                   label && isFloating && "pt-5",
                   label && !isFloating && "placeholder:text-transparent"
@@ -275,6 +277,8 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   "w-full h-full bg-transparent outline-none",
                   "text-[16px] leading-6 tracking-[0.5px] text-surface-foreground",
                   "caret-primary placeholder:text-surface-variant-foreground",
+                  // Autofill: override browser forced background
+                  "[&:-webkit-autofill]:bg-transparent [&:-webkit-autofill]:[-webkit-text-fill-color:hsl(var(--on-surface))] [&:-webkit-autofill]:[transition:background-color_9999s_ease-in-out_0s]",
                   disabled && "text-[hsl(var(--on-surface)/0.38)]",
                   label && isFloating && "pt-4",
                   label && !isFloating && "placeholder:text-transparent"

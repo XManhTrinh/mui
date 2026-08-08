@@ -44,8 +44,7 @@ const DialogOverlay = React.forwardRef<
     ref={ref}
     className={cn(
       "fixed inset-0 z-50 bg-[hsl(var(--on-surface)/0.32)]",
-      "data-[state=open]:animate-in data-[state=closed]:animate-out",
-      "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "m3-animate-overlay",
       className
     )}
     {...props}
@@ -75,14 +74,13 @@ const DialogContent = React.forwardRef<
         ref={ref}
         className={cn(
           "fixed z-50",
-          "duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out",
-          "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+          "duration-200",
 
           // ── Full-screen ──
           fullScreen && [
             "inset-0 rounded-none flex flex-col",
             "bg-surface-container-high",
-            "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
+            "m3-animate-dialog-fullscreen",
             // Desktop: fall back to centered dialog
             "sm:inset-auto sm:left-[50%] sm:top-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%]",
             "sm:w-full sm:max-w-[560px] sm:max-h-[90vh] sm:rounded-[28px]",
@@ -95,7 +93,7 @@ const DialogContent = React.forwardRef<
             "min-w-[280px] max-w-[560px]",
             "rounded-[28px] bg-surface-container-high p-6",
             "shadow-[0_6px_12px_var(--elevation-4),0_2px_4px_var(--elevation-4)]",
-            "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+            "m3-animate-dialog",
           ],
 
           className
@@ -105,7 +103,7 @@ const DialogContent = React.forwardRef<
         {/* ── Full-screen header: 56dp, close icon, start-aligned ── */}
         {fullScreen && (
           <div className="flex items-center h-14 px-6 shrink-0 border-b border-outline-variant sm:hidden">
-            <DialogPrimitive.Close className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-foreground/8 transition-colors -ml-2 mr-3">
+            <DialogPrimitive.Close className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-foreground/[0.08] transition-colors -ml-2 mr-3">
               <Icon name="close" size={24} className="text-foreground" />
             </DialogPrimitive.Close>
           </div>
@@ -134,7 +132,7 @@ const DialogContent = React.forwardRef<
 
         {/* ── Close button (opt-in for basic, auto for fullscreen desktop) ── */}
         {showClose && !fullScreen && (
-          <DialogPrimitive.Close className="absolute right-4 top-4 flex items-center justify-center w-10 h-10 rounded-full text-surface-variant-foreground hover:bg-surface-foreground/8 transition-colors focus:outline-none focus:ring-2 focus:ring-ring">
+          <DialogPrimitive.Close className="absolute right-4 top-4 flex items-center justify-center w-10 h-10 rounded-full text-surface-variant-foreground hover:bg-surface-foreground/[0.08] transition-colors focus:outline-none focus:ring-2 focus:ring-primary">
             <Icon name="close" size={20} />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>

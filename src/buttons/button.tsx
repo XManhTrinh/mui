@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -27,7 +29,7 @@ const buttonVariants = cva(
     // Transition (M3 standard easing)
     "transition-all duration-200 [transition-timing-function:cubic-bezier(0.2,0,0,1)]",
     // Focus ring
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
     // Disabled
     "disabled:opacity-[0.38] disabled:pointer-events-none",
     // State layer via ::before pseudo-element
@@ -71,7 +73,7 @@ const buttonVariants = cva(
 );
 
 // Touch target padding for small size (34px visual → 48px touch)
-const touchTargetClass = "before:content-[''] after:content-[''] min-h-[48px]";
+const touchTargetClass = "min-h-[48px]";
 
 // Asymmetric padding when icon is present (icon-side gets less padding)
 const iconPaddingMap = {

@@ -1,16 +1,67 @@
 /**
- * M3 Expressive Theme Tokens
+ * @strata/mui — M3 Expressive Theme
  *
- * Import this file in your project to use M3 components.
- * Customize by overriding CSS custom properties in :root or .dark.
+ * Single-file import that provides all M3 tokens, Tailwind v4 color mappings,
+ * keyframes, and animation utilities needed by the component library.
  *
- * Usage:
- *   import "@your-package/mui/theme.css";
+ * Usage in your project's globals.css:
  *
- * Required peer dependencies:
- *   - tailwindcss v4+
- *   - @tailwindcss/postcss
+ *   @import "tailwindcss";
+ *   @import "@strata/mui/theme.css";
+ *
+ * Dark mode: add class="dark" to <html>.
+ * Custom brand: override :root CSS variables.
  */
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   1. TAILWIND v4 COLOR THEME — maps CSS variables to utility classes
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* Primary */
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--on-primary));
+  --color-primary-container: hsl(var(--primary-container));
+  --color-primary-container-foreground: hsl(var(--on-primary-container));
+
+  /* Secondary */
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--on-secondary));
+  --color-secondary-container: hsl(var(--secondary-container));
+  --color-secondary-container-foreground: hsl(var(--on-secondary-container));
+
+  /* Tertiary */
+  --color-tertiary: hsl(var(--tertiary));
+  --color-tertiary-foreground: hsl(var(--on-tertiary));
+  --color-tertiary-container: hsl(var(--tertiary-container));
+  --color-tertiary-container-foreground: hsl(var(--on-tertiary-container));
+
+  /* Surface */
+  --color-surface: hsl(var(--surface));
+  --color-surface-foreground: hsl(var(--on-surface));
+  --color-surface-variant: hsl(var(--surface-variant));
+  --color-surface-variant-foreground: hsl(var(--on-surface-variant));
+  --color-surface-container-low: hsl(var(--surface-container-low));
+  --color-surface-container: hsl(var(--surface-container));
+  --color-surface-container-high: hsl(var(--surface-container-high));
+  --color-surface-container-highest: hsl(var(--surface-container-highest));
+
+  /* Inverse */
+  --color-inverse-surface: hsl(var(--inverse-surface));
+  --color-inverse-on-surface: hsl(var(--inverse-on-surface));
+
+  /* Outline */
+  --color-outline: hsl(var(--outline));
+  --color-outline-variant: hsl(var(--outline-variant));
+
+  /* Error */
+  --color-error: hsl(var(--error));
+  --color-error-foreground: hsl(var(--on-error));
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   2. M3 COLOR TOKENS — Light theme (default)
+   ═══════════════════════════════════════════════════════════════════════════════ */
 
 :root {
   /* Primary */
@@ -54,25 +105,29 @@
   --error: 0 75% 42%;
   --on-error: 0 0% 100%;
 
-  /* Elevation */
+  /* Elevation (shadow opacity layers) */
   --elevation-1: 0 0% 0% / 0.04;
   --elevation-2: 0 0% 0% / 0.06;
   --elevation-3: 0 0% 0% / 0.08;
   --elevation-4: 0 0% 0% / 0.10;
   --elevation-5: 0 0% 0% / 0.12;
 
-  /* Shape */
+  /* Shape scale */
   --shape-full: 9999px;
   --shape-xl: 28px;
   --shape-lg: 16px;
   --shape-md: 12px;
   --shape-sm: 8px;
 
-  /* State layers */
+  /* State layer opacity values */
   --state-hover: 0.08;
   --state-focus: 0.10;
   --state-press: 0.10;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   3. M3 COLOR TOKENS — Dark theme
+   ═══════════════════════════════════════════════════════════════════════════════ */
 
 .dark {
   --primary: 214 100% 66%;
@@ -116,7 +171,64 @@
   --elevation-5: 0 0% 100% / 0.12;
 }
 
-/* M3 Progress indicator keyframes */
+/* ═══════════════════════════════════════════════════════════════════════════════
+   4. REDUCED MOTION — disable animations for a11y
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   5. BROWSER AUTOFILL — override forced background to match M3 theme
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+textarea:-webkit-autofill:active,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+select:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px hsl(var(--surface)) inset !important;
+  -webkit-text-fill-color: hsl(var(--on-surface)) !important;
+  caret-color: hsl(var(--primary));
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark input:-webkit-autofill:active,
+.dark textarea:-webkit-autofill,
+.dark textarea:-webkit-autofill:hover,
+.dark textarea:-webkit-autofill:focus,
+.dark textarea:-webkit-autofill:active,
+.dark select:-webkit-autofill,
+.dark select:-webkit-autofill:hover,
+.dark select:-webkit-autofill:focus,
+.dark select:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px hsl(var(--surface)) inset !important;
+  -webkit-text-fill-color: hsl(var(--on-surface)) !important;
+  caret-color: hsl(var(--primary));
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   5. KEYFRAMES — Progress indicators
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
 @keyframes m3-linear-indeterminate-1 {
   0% { left: -35%; width: 35%; }
   60% { left: 100%; width: 35%; }
@@ -137,4 +249,102 @@
   0% { stroke-dasharray: 1, 150; stroke-dashoffset: 0; }
   50% { stroke-dasharray: 90, 150; stroke-dashoffset: -35; }
   100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   6. KEYFRAMES — Radix UI component animations
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes m3-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes m3-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes m3-zoom-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes m3-zoom-out {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); }
+}
+
+@keyframes m3-slide-in-from-top {
+  from { transform: translateY(-0.5rem); }
+  to { transform: translateY(0); }
+}
+
+@keyframes m3-slide-in-from-bottom {
+  from { transform: translateY(0.5rem); }
+  to { transform: translateY(0); }
+}
+
+@keyframes m3-slide-in-from-left {
+  from { transform: translateX(-0.25rem); }
+  to { transform: translateX(0); }
+}
+
+@keyframes m3-slide-in-from-right {
+  from { transform: translateX(0.25rem); }
+  to { transform: translateX(0); }
+}
+
+@keyframes m3-slide-out-to-bottom {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   7. ANIMATION UTILITIES — data-state driven (Dialog, Menu, Overlay)
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Overlay (scrim) */
+[data-state="open"].m3-animate-overlay {
+  animation: m3-fade-in 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+[data-state="closed"].m3-animate-overlay {
+  animation: m3-fade-out 100ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* Dialog (basic — zoom in/out) */
+[data-state="open"].m3-animate-dialog {
+  animation: m3-zoom-in 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+[data-state="closed"].m3-animate-dialog {
+  animation: m3-zoom-out 100ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* Dialog (full-screen — slide from bottom) */
+[data-state="open"].m3-animate-dialog-fullscreen {
+  animation: m3-slide-in-from-bottom 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+[data-state="closed"].m3-animate-dialog-fullscreen {
+  animation: m3-slide-out-to-bottom 150ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* Menu (zoom + fade, directional slide) */
+[data-state="open"].m3-animate-menu {
+  animation: m3-zoom-in 150ms ease-out, m3-fade-in 150ms ease-out;
+}
+[data-state="closed"].m3-animate-menu {
+  animation: m3-zoom-out 75ms linear, m3-fade-out 75ms linear;
+}
+
+[data-state="open"].m3-animate-menu[data-side="bottom"] {
+  animation: m3-zoom-in 150ms ease-out, m3-fade-in 150ms ease-out, m3-slide-in-from-top 150ms ease-out;
+}
+[data-state="open"].m3-animate-menu[data-side="top"] {
+  animation: m3-zoom-in 150ms ease-out, m3-fade-in 150ms ease-out, m3-slide-in-from-bottom 150ms ease-out;
+}
+[data-state="open"].m3-animate-menu[data-side="left"] {
+  animation: m3-zoom-in 150ms ease-out, m3-fade-in 150ms ease-out, m3-slide-in-from-right 150ms ease-out;
+}
+[data-state="open"].m3-animate-menu[data-side="right"] {
+  animation: m3-zoom-in 150ms ease-out, m3-fade-in 150ms ease-out, m3-slide-in-from-left 150ms ease-out;
 }

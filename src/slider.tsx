@@ -192,8 +192,8 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
             className={cn(
               "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full",
               "transition-colors duration-200 pointer-events-none",
-              !disabled && isInteracting && "bg-primary/10",
-              !disabled && isHovered && !isInteracting && "bg-primary/8"
+              !disabled && isInteracting && "bg-primary/[0.10]",
+              !disabled && isHovered && !isInteracting && "bg-primary/[0.08]"
             )}
           />
         </div>

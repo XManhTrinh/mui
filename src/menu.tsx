@@ -52,12 +52,7 @@ function Menu({ trigger, children, align = "start", side = "bottom", className }
           sideOffset={4}
           className={cn(
             "z-50 min-w-[112px] max-w-[280px] overflow-hidden rounded-[4px] bg-surface-container py-2 shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
-            // Enter animation: 150ms fade-in + scale, ease-out
-            "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:duration-150 data-[state=open]:ease-out",
-            // Exit animation: 75ms fade-out, linear
-            "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=closed]:duration-75",
-            // Slide from side
-            "data-[side=bottom]:slide-in-from-top-1 data-[side=top]:slide-in-from-bottom-1 data-[side=left]:slide-in-from-right-1 data-[side=right]:slide-in-from-left-1",
+            "m3-animate-menu",
             className
           )}
         >
@@ -108,7 +103,7 @@ const MenuItem = React.forwardRef<
         // Selected state
         selected && "bg-surface-container-highest",
         // Disabled
-        "data-[disabled]:pointer-events-none data-[disabled]:opacity-38",
+        "data-[disabled]:pointer-events-none data-[disabled]:opacity-[0.38]",
         className
       )}
     >

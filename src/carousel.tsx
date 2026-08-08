@@ -113,7 +113,7 @@ function Carousel({
         className={cn(
           "flex overflow-x-auto",
           "scroll-smooth snap-x snap-mandatory",
-          "scrollbar-none [-webkit-overflow-scrolling:touch]",
+          "[-webkit-overflow-scrolling:touch] [scrollbar-width:none]",
           "[&::-webkit-scrollbar]:hidden",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-[28px]",
           variant === "uncontained" && "pl-4",
@@ -191,9 +191,9 @@ function CarouselItem({
         "snap-start",
         "bg-surface",
         // Size variants
-        size === "large" && "w-[calc(100%-48px)] min-w-50",
-        size === "medium" && "w-[calc(50%-12px)] min-w-37.5",
-        size === "small" && "w-14 min-w-10 max-w-14",
+        size === "large" && "w-[calc(100%-48px)] min-w-[200px]",
+        size === "medium" && "w-[calc(50%-12px)] min-w-[150px]",
+        size === "small" && "w-14 min-w-[40px] max-w-14",
         // State layer via pseudo-element
         "before:absolute before:inset-0 before:z-10 before:rounded-[28px] before:pointer-events-none",
         "before:bg-on-surface before:opacity-0 before:transition-opacity",

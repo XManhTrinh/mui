@@ -204,7 +204,7 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
               "focus-visible:before:opacity-[0.10]",
               "active:before:opacity-[0.10]",
               // Focus ring
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
               // Icon sizing
               "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-[20px]",
               "[&_.material-symbols-rounded]:pointer-events-none [&_.material-symbols-rounded]:text-[20px]",
@@ -271,7 +271,7 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
                 "focus-visible:before:opacity-[0.10]",
                 "active:before:opacity-[0.10]",
                 // Focus ring
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
                 // Disabled
                 isTrailingDisabled && "opacity-[0.38] pointer-events-none"
               )}
@@ -338,10 +338,7 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
               "z-50 min-w-[160px] rounded-[12px] p-1",
               "bg-surface-container-high text-surface-foreground",
               "shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
-              "animate-in fade-in-0 zoom-in-95",
-              "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
-              "data-[side=bottom]:slide-in-from-top-2",
-              "data-[side=top]:slide-in-from-bottom-2"
+              "m3-animate-menu"
             )}
           >
             {menuContent}

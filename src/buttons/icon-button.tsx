@@ -25,7 +25,7 @@ const iconButtonVariants = cva(
     // Transition for shape morph
     "transition-[border-radius] duration-100 [transition-timing-function:cubic-bezier(0.2,0,0,1)]",
     // Focus ring
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
     // State layer via ::before pseudo-element
     "overflow-hidden",
     "before:absolute before:inset-0 before:rounded-[inherit]",
@@ -58,7 +58,7 @@ const iconButtonVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "filled",
+      variant: "standard",
       size: "s",
     },
   }
@@ -91,6 +91,10 @@ export interface IconButtonProps
     VariantProps<typeof iconButtonVariants> {
   /** Render as child element (Radix Slot pattern) */
   asChild?: boolean;
+  /** Icon button style */
+  variant?: "standard" | "filled" | "filled-tonal" | "outlined";
+  /** Size */
+  size?: "xs" | "s" | "m" | "l" | "xl";
   /** Shape: round (circle) or square (rounded square) */
   shape?: "round" | "square";
   /** Enable toggle behavior */
@@ -129,7 +133,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
   ) => {
     const Comp = asChild ? Slot : "button";
     const resolvedSize = size ?? "s";
-    const resolvedVariant = variant ?? "filled";
+    const resolvedVariant = variant ?? "standard";
 
     // Toggle state management
     const isControlled = pressedProp !== undefined;
@@ -171,15 +175,6 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     // Touch target: need extra padding for xs (32px) and s (40px) to reach 48px
     const needsTouchTarget =
       !compact && (resolvedSize === "xs" || resolvedSize === "s");
-
-    // Dev warning for compact mode
-    React.useEffect(() => {
-      if (compact && process.env.NODE_ENV === "development") {
-        console.warn(
-          "IconButton compact mode: touch target is below 48px minimum. Ensure adequate spacing between adjacent targets."
-        );
-      }
-    }, [compact]);
 
     // Shape classes for resting + active morph
     const shapeClass = shapeClasses[shape][resolvedSize];

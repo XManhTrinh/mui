@@ -88,7 +88,7 @@ const Search = React.forwardRef<HTMLInputElement, SearchProps>(
           // Hover state
           !disabled && !isFocused && "hover:bg-surface-container-high/92",
           // Disabled state
-          disabled && "opacity-38 cursor-not-allowed",
+          disabled && "opacity-[0.38] cursor-not-allowed",
           // Margin change on focus (container expands)
           isFocused ? "mx-3" : "mx-6",
           className

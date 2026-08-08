@@ -248,7 +248,7 @@ function Tab({ value: tabValue, icon, label, disabled = false, className }: TabP
         // Hover state
         !disabled && "hover:bg-[hsl(var(--on-surface)/0.08)]",
         // Disabled
-        disabled && "opacity-38 cursor-not-allowed",
+        disabled && "opacity-[0.38] cursor-not-allowed",
         !disabled && "cursor-pointer",
         className
       )}
