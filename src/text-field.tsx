@@ -151,7 +151,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           {isOutlined && (
             <fieldset
               className={cn(
-                "absolute inset-0 pointer-events-none rounded-sm px-2.5",
+                "absolute inset-0 pointer-events-none rounded-sm",
                 "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
                 disabled
                   ? "border border-[hsl(var(--on-surface)/0.12)]"
@@ -167,8 +167,8 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             >
               <legend
                 className={cn(
-                  "invisible h-0 text-[12px] leading-0 whitespace-nowrap overflow-hidden transition-all duration-200",
-                  isFloating && label ? "px-0.5 max-w-full" : "max-w-[0.01px]"
+                  "invisible h-0 text-[12px] leading-0 whitespace-nowrap overflow-hidden transition-all duration-200 ml-3",
+                  isFloating && label ? "px-1 max-w-full" : "max-w-[0.01px] px-0"
                 )}
               >
                 {label || ""}
@@ -219,24 +219,21 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               <label
                 htmlFor={fieldId}
                 className={cn(
-                  "absolute pointer-events-none origin-top-left",
+                  "absolute pointer-events-none origin-top-left z-10",
                   "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
                   labelColor,
                   // Floating position
                   isFloating && [
                     "text-[12px] leading-4 tracking-[0.4px]",
                     isOutlined
-                      ? "-top-[9px] left-3 px-1"
-                      : "top-2 left-4",
+                      ? "top-0 -translate-y-1/2 left-0 px-1"
+                      : "top-2 left-0",
                   ],
                   // Resting position
                   !isFloating && [
-                    "top-1/2 -translate-y-1/2 left-4",
+                    "top-1/2 -translate-y-1/2 left-0",
                     "text-[16px] leading-6 tracking-[0.5px]",
-                  ],
-                  // Adjust label left position for leading icon
-                  leadingIcon && !isFloating && "left-0",
-                  leadingIcon && isFloating && isOutlined && "left-3"
+                  ]
                 )}
               >
                 {label}
