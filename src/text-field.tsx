@@ -149,10 +149,10 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           {/* ─── Outlined variant: notched border ─── */}
           {isOutlined && (
             <div className="absolute inset-0 pointer-events-none flex rounded-[4px]">
-              {/* Leading edge */}
+              {/* Leading edge — 16dp matches left padding */}
               <div
                 className={cn(
-                  "w-3 rounded-l-[4px] border-t border-b border-l transition-colors duration-200",
+                  "w-[14px] rounded-l-[4px] border-t border-b border-l transition-colors duration-200",
                   borderWidth === "border-2" && "[border-width:2px]",
                   borderColor
                 )}
@@ -225,7 +225,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 isFloating
                   ? [
                       "text-[12px] leading-4 tracking-[0.4px]",
-                      isOutlined ? "top-0 -translate-y-1/2 left-[13px]" : "top-2 left-4",
+                      isOutlined ? "top-0 -translate-y-1/2 left-4" : "top-2 left-4",
                     ]
                   : cn(
                       "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
@@ -241,7 +241,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           <div
             className={cn(
               "relative flex-1 flex items-center h-full",
-              leadingIcon ? "pl-0" : "pl-4",
+              "pl-4",
               trailingIcon ? "pr-0" : "pr-4"
             )}
           >
