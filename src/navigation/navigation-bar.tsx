@@ -84,17 +84,24 @@ export function NavigationBar({ items, activeValue, onValueChange, className }: 
                 onClick={() => handleChange(item.value)}
                 className="group relative flex w-full flex-col items-center justify-center gap-1 h-16 min-h-12 outline-none cursor-pointer"
               >
-                {/* Indicator container with state layer via ::after */}
-                <div
-                  className={cn(
-                    "relative flex items-center justify-center w-16 h-8 rounded-full overflow-hidden",
-                    isActive && "bg-secondary-container",
-                    "after:absolute after:inset-0 after:rounded-full after:transition-colors after:duration-200",
-                    isActive
-                      ? "group-hover:after:bg-[hsl(var(--on-secondary-container)/0.08)] group-focus-visible:after:bg-[hsl(var(--on-secondary-container)/0.10)] group-active:after:bg-[hsl(var(--on-secondary-container)/0.10)]"
-                      : "group-hover:after:bg-[hsl(var(--on-surface-variant)/0.08)] group-focus-visible:after:bg-[hsl(var(--on-surface-variant)/0.10)] group-active:after:bg-[hsl(var(--on-surface-variant)/0.10)]"
-                  )}
-                >
+                {/* Indicator container */}
+                <div className="relative flex items-center justify-center w-16 h-8">
+                  {/* Active indicator pill — animates from center outward */}
+                  <div
+                    className={cn(
+                      "absolute inset-0 rounded-full bg-secondary-container transition-transform duration-200 ease-[cubic-bezier(0.2,0,0,1)] origin-center",
+                      isActive ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
+                    )}
+                  />
+                  {/* State layer */}
+                  <div
+                    className={cn(
+                      "absolute inset-0 z-10 rounded-full transition-colors duration-200",
+                      isActive
+                        ? "group-hover:bg-[hsl(var(--on-secondary-container)/0.08)] group-focus-visible:bg-[hsl(var(--on-secondary-container)/0.10)] group-active:bg-[hsl(var(--on-secondary-container)/0.10)]"
+                        : "group-hover:bg-[hsl(var(--on-surface-variant)/0.08)] group-focus-visible:bg-[hsl(var(--on-surface-variant)/0.10)] group-active:bg-[hsl(var(--on-surface-variant)/0.10)]"
+                    )}
+                  />
                   {/* Icon with optional badge */}
                   {item.badge !== undefined ? (
                     <Badge

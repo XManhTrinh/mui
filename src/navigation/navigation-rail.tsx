@@ -156,17 +156,24 @@ function CollapsedRailItem({
       >
         {/* Indicator container with state layer via ::after */}
         <div
-          className={cn(
-            "relative flex items-center justify-center w-14 h-8 rounded-full overflow-hidden",
-            // Active indicator background
-            isActive && "bg-secondary-container",
-            // State layer via ::after pseudo-element
-            "after:absolute after:inset-0 after:rounded-full after:transition-colors after:duration-200",
-            isActive
-              ? "group-hover:after:bg-[hsl(var(--on-secondary-container)/0.08)] group-focus-visible:after:bg-[hsl(var(--on-secondary-container)/0.10)] group-active:after:bg-[hsl(var(--on-secondary-container)/0.10)]"
-              : "group-hover:after:bg-[hsl(var(--on-surface-variant)/0.08)] group-focus-visible:after:bg-[hsl(var(--on-surface-variant)/0.10)] group-active:after:bg-[hsl(var(--on-surface-variant)/0.10)]"
-          )}
+          className="relative flex items-center justify-center w-14 h-8"
         >
+          {/* Active indicator pill — animates from center outward */}
+          <div
+            className={cn(
+              "absolute inset-0 rounded-full bg-secondary-container transition-transform duration-200 ease-[cubic-bezier(0.2,0,0,1)] origin-center",
+              isActive ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
+            )}
+          />
+          {/* State layer via ::after */}
+          <div
+            className={cn(
+              "absolute inset-0 z-10 rounded-full transition-colors duration-200",
+              isActive
+                ? "group-hover:bg-[hsl(var(--on-secondary-container)/0.08)] group-focus-visible:bg-[hsl(var(--on-secondary-container)/0.10)] group-active:bg-[hsl(var(--on-secondary-container)/0.10)]"
+                : "group-hover:bg-[hsl(var(--on-surface-variant)/0.08)] group-focus-visible:bg-[hsl(var(--on-surface-variant)/0.10)] group-active:bg-[hsl(var(--on-surface-variant)/0.10)]"
+            )}
+          />
           {/* Icon with optional badge */}
           {item.badge !== undefined ? (
             <Badge
