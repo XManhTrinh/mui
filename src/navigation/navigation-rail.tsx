@@ -29,7 +29,7 @@ export interface NavigationRailProps {
  * @see https://m3.material.io/components/navigation-rail/specs
  *
  * Specs (Collapsed):
- * - Container width: 80dp (collapsed), 360dp (expanded)
+ * - Container width: 96dp (collapsed), 360dp (expanded)
  * - Container height: 100%
  * - Container bg: surface-container (optional, can be transparent)
  * - Active indicator: 56×32dp pill (collapsed), full-width - padding (expanded)
