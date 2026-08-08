@@ -187,6 +187,29 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             </div>
           )}
 
+          {/* Label — positioned on container */}
+          {label && (
+            <label
+              htmlFor={fieldId}
+              className={cn(
+                "absolute pointer-events-none z-10",
+                "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
+                labelColor,
+                isFloating
+                  ? [
+                      "text-[12px] leading-4 tracking-[0.4px]",
+                      isOutlined ? "top-[-8px] left-[16px]" : "top-2 left-4",
+                    ]
+                  : cn(
+                      "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
+                      leadingIcon ? "left-[52px]" : "left-4"
+                    )
+              )}
+            >
+              {label}
+            </label>
+          )}
+
           {/* Content */}
           <div
             className={cn(
@@ -195,27 +218,6 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               trailingIcon ? "pr-0" : "pr-4"
             )}
           >
-            {/* Label */}
-            {label && (
-              <label
-                htmlFor={fieldId}
-                className={cn(
-                  "absolute pointer-events-none z-10 left-4",
-                  "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
-                  labelColor,
-                  isFloating
-                    ? [
-                        "text-[12px] leading-4 tracking-[0.4px]",
-                        isOutlined ? "-top-2" : "top-1",
-                      ]
-                    : "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
-                  leadingIcon && !isFloating && "left-1"
-                )}
-              >
-                {label}
-              </label>
-            )}
-
             {/* Prefix */}
             {prefix && isFloating && (
               <span className="text-[16px] leading-6 tracking-[0.5px] text-surface-variant-foreground mr-0.5 shrink-0">
