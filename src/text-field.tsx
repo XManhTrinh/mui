@@ -154,7 +154,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               !disabled && "hover:bg-[hsl(var(--on-surface)/0.08)]",
             ],
             isOutlined && [
-              "rounded-[4px]",
+              "rounded-[4px] overflow-visible",
               borderWidth,
               borderColor,
               !disabled && !isFocused && !error && "hover:border-[hsl(var(--on-surface))]",
