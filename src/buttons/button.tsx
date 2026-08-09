@@ -24,8 +24,8 @@ const buttonVariants = cva(
     "text-[14px] font-medium leading-[20px] tracking-[0.1px]",
     // Cursor & interaction
     "cursor-pointer select-none",
-    // Transition (M3 standard easing)
-    "transition-all duration-200 [transition-timing-function:cubic-bezier(0.2,0,0,1)]",
+    // Transition: fast spring-like for shape morph (M3: motionSpringFastSpatial)
+    "transition-[border-radius,box-shadow] duration-100 ease-out",
     // Focus ring
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
     // Disabled
