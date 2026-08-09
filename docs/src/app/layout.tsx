@@ -6,141 +6,73 @@ import "./globals.css";
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { NavigationRail, Icon, IconButton } from "@mui/index";
-import type { NavigationRailItem } from "@mui/index";
+import { Icon, IconButton } from "@mui/index";
 
-const navItems: (NavigationRailItem & { href: string })[] = [
-  { value: "/", icon: "home", activeIcon: "home", label: "Home", href: "/" },
+type NavCategory = {
+  label: string;
+  links: { href: string; label: string }[];
+};
+
+const navCategories: NavCategory[] = [
   {
-    value: "/buttons",
-    icon: "buttons_alt",
-    activeIcon: "buttons_alt",
-    label: "Buttons",
-    href: "/buttons",
+    label: "Action",
+    links: [{ href: "/buttons", label: "Buttons" }],
   },
   {
-    value: "/inputs",
-    icon: "input",
-    activeIcon: "input",
     label: "Inputs",
-    href: "/inputs",
+    links: [{ href: "/inputs", label: "Inputs & Selection" }],
   },
   {
-    value: "/data-display",
-    icon: "dashboard",
-    activeIcon: "dashboard",
     label: "Data Display",
-    href: "/data-display",
+    links: [{ href: "/data-display", label: "Data Display" }],
   },
   {
-    value: "/feedback",
-    icon: "feedback",
-    activeIcon: "feedback",
     label: "Feedback",
-    href: "/feedback",
+    links: [{ href: "/feedback", label: "Feedback & Communication" }],
   },
   {
-    value: "/navigation",
-    icon: "menu",
-    activeIcon: "menu",
     label: "Navigation",
-    href: "/navigation",
+    links: [{ href: "/navigation", label: "Navigation" }],
   },
   {
-    value: "/layout-components",
-    icon: "view_sidebar",
-    activeIcon: "view_sidebar",
     label: "Layout",
-    href: "/layout-components",
+    links: [{ href: "/layout-components", label: "Layout & Containment" }],
   },
 ];
-
-function Sidebar() {
-  const pathname = usePathname();
-
-  return (
-    <NavigationRail
-      variant="expanded"
-      items={navItems}
-      activeValue={pathname}
-      onValueChange={() => {}}
-      header={
-        <Link href="/" className="flex items-center gap-2 px-4">
-          <Icon name="palette" size={24} filled className="text-primary" />
-          <span className="text-sm font-semibold text-surface-foreground">
-            M3 Components
-          </span>
-        </Link>
-      }
-    />
-  );
-}
-
-function ThemeToggle() {
-  const [dark, setDark] = React.useState(false);
-
-  React.useEffect(() => {
-    const isDark = document.documentElement.classList.contains("dark");
-    setDark(isDark);
-  }, []);
-
-  const toggle = () => {
-    const next = !dark;
-    setDark(next);
-    document.documentElement.classList.toggle("dark", next);
-  };
-
-  return (
-    <div className="flex items-center gap-3 px-5 py-3 border-t border-outline-variant">
-      <IconButton variant="standard" aria-label="Toggle theme" onClick={toggle}>
-        <Icon name={dark ? "light_mode" : "dark_mode"} />
-      </IconButton>
-      <span className="text-sm text-surface-variant-foreground">
-        {dark ? "Light mode" : "Dark mode"}
-      </span>
-    </div>
-  );
-}
 
 function SidebarLink() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed left-0 top-0 bottom-0 z-40 w-64 bg-surface-container border-r border-outline-variant flex flex-col">
-      <div className="flex items-center gap-2 px-5 py-4 border-b border-outline-variant">
-        <Icon name="palette" size={24} filled className="text-primary" />
-        <span className="text-base font-semibold text-surface-foreground">
-          M3 Components
-        </span>
-      </div>
-      <nav className="flex-1 overflow-y-auto py-2">
-        <ul className="flex flex-col gap-0.5 px-2">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <li key={item.value}>
-                <Link
-                  href={item.href}
-                  className={`flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-medium transition-colors ${
-                    isActive
-                      ? "bg-secondary-container text-secondary-container-foreground"
-                      : "text-surface-variant-foreground hover:bg-surface-container-high"
-                  }`}
-                >
-                  <Icon
-                    name={isActive ? (item.activeIcon ?? item.icon) : item.icon}
-                    size={24}
-                    filled={isActive}
-                  />
-                  {item.label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+    <aside className="fixed left-0 top-16 bottom-0 z-30 w-70 bg-surface overflow-y-auto">
+      <nav className="py-4 px-3">
+        {navCategories.map((category) => (
+          <div key={category.label} className="mt-6 first:mt-0">
+            <h3 className="px-4 mb-1 text-[11px] font-medium uppercase tracking-wider text-on-surface-variant">
+              {category.label}
+            </h3>
+            <ul className="flex flex-col">
+              {category.links.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className={`block px-4 py-2 rounded-lg text-sm transition-colors ${
+                        isActive
+                          ? "text-primary bg-primary/8"
+                          : "text-on-surface hover:bg-surface-container"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
       </nav>
-      {/* Theme switcher */}
-      <ThemeToggle />
     </aside>
   );
 }
@@ -150,11 +82,43 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const [dark, setDark] = React.useState(false);
+
+  React.useEffect(() => {
+    const isDark = document.documentElement.classList.contains("dark");
+    setDark(isDark);
+  }, []);
+
+  const toggleTheme = () => {
+    const next = !dark;
+    setDark(next);
+    document.documentElement.classList.toggle("dark", next);
+  };
+
   return (
-    <html lang="en">
-      <body className="bg-surface text-surface-foreground min-h-screen">
+    <html lang="en" className={dark ? "dark" : ""}>
+      <body className="bg-surface text-on-surface min-h-screen">
+        {/* Header */}
+        <header className="fixed top-0 left-0 right-0 z-40 h-16 bg-surface border-b border-outline-variant flex items-center justify-between px-6">
+          <Link href="/" className="text-base font-semibold text-on-surface">
+            M3 Components
+          </Link>
+          <IconButton
+            variant="standard"
+            aria-label="Toggle theme"
+            onClick={toggleTheme}
+          >
+            <Icon name={dark ? "light_mode" : "dark_mode"} />
+          </IconButton>
+        </header>
+
+        {/* Sidebar */}
         <SidebarLink />
-        <main className="ml-64 p-8">{children}</main>
+
+        {/* Main content */}
+        <main className="ml-70 mt-16 p-8 max-w-240">
+          {children}
+        </main>
       </body>
     </html>
   );
