@@ -183,7 +183,7 @@ export function TimePicker({
             aria-label="AM"
             aria-pressed={period === "AM"}
             className={cn(
-              "flex h-[36px] flex-1 items-center justify-center text-[14px] font-medium transition-colors duration-100",
+              "flex h-9 flex-1 items-center justify-center text-[14px] font-medium transition-colors duration-100",
               period === "AM"
                 ? "bg-tertiary-container text-tertiary-container-foreground"
                 : "bg-transparent text-surface-variant-foreground hover:bg-[hsl(var(--on-surface-variant)/0.08)]"
@@ -199,7 +199,7 @@ export function TimePicker({
             aria-label="PM"
             aria-pressed={period === "PM"}
             className={cn(
-              "flex h-[36px] flex-1 items-center justify-center text-[14px] font-medium transition-colors duration-100",
+              "flex h-9 flex-1 items-center justify-center text-[14px] font-medium transition-colors duration-100",
               period === "PM"
                 ? "bg-tertiary-container text-tertiary-container-foreground"
                 : "bg-transparent text-surface-variant-foreground hover:bg-[hsl(var(--on-surface-variant)/0.08)]"

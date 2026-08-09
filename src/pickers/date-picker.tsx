@@ -148,7 +148,7 @@ export function DatePicker({
     >
       {/* Header with month/year and navigation */}
       <div className="flex h-12 items-center justify-between">
-        <span className="text-[14px] font-medium leading-[20px] text-surface-foreground">
+        <span className="text-[14px] font-medium leading-5 text-surface-foreground">
           {MONTH_NAMES[viewMonth]} {viewYear}
         </span>
         <div className="flex items-center gap-1">

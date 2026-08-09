@@ -103,7 +103,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     // Shared input classes
     const inputClasses = cn(
       "w-full bg-transparent outline-none",
-      "text-[16px] leading-[24px] font-normal tracking-[0.5px]",
+      "text-[16px] leading-6 font-normal tracking-[0.5px]",
       "text-[hsl(var(--on-surface))]",
       "placeholder:text-[hsl(var(--on-surface-variant))]",
       disabled && "text-[hsl(var(--on-surface)/0.38)] cursor-not-allowed",
@@ -121,7 +121,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             className={cn(
               "group relative flex items-center",
               multiline ? "min-h-14" : "h-14",
-              "rounded-t-[4px] rounded-b-none",
+              "rounded-t-sm rounded-b-none",
               "bg-[hsl(var(--surface-container-highest))]",
               !disabled && "hover:bg-[hsl(var(--on-surface)/0.08)]",
               disabled && "pointer-events-none bg-[hsl(var(--on-surface)/0.04)]",
@@ -160,14 +160,14 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                     isFloating
                       ? [
                           "top-2 left-0",
-                          "text-[12px] leading-[16px] tracking-[0.4px]",
+                          "text-[12px] leading-4 tracking-[0.4px]",
                           focused && !error && "text-[hsl(var(--primary))]",
                           !focused && !error && "text-[hsl(var(--on-surface-variant))]",
                           error && "text-[hsl(var(--error))]",
                         ]
                       : [
                           "top-1/2 left-0 -translate-y-1/2",
-                          "text-[16px] leading-[24px] tracking-[0.5px]",
+                          "text-[16px] leading-6 tracking-[0.5px]",
                           !error
                             ? "text-[hsl(var(--on-surface-variant))]"
                             : "text-[hsl(var(--error))]",
@@ -181,7 +181,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
               {/* Prefix */}
               {prefix && isFloating && (
-                <span className="text-[16px] leading-[24px] tracking-[0.5px] text-[hsl(var(--on-surface-variant))] mr-0.5 mt-3">
+                <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] mr-0.5 mt-3">
                   {prefix}
                 </span>
               )}
@@ -227,7 +227,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
               {/* Suffix */}
               {suffix && isFloating && (
-                <span className="text-[16px] leading-[24px] tracking-[0.5px] text-[hsl(var(--on-surface-variant))] ml-0.5 mt-3">
+                <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] ml-0.5 mt-3">
                   {suffix}
                 </span>
               )}
@@ -255,8 +255,8 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 "transition-all duration-200",
                 focused
                   ? error
-                    ? "h-[2px] bg-[hsl(var(--error))]"
-                    : "h-[2px] bg-[hsl(var(--primary))]"
+                    ? "h-0.5 bg-[hsl(var(--error))]"
+                    : "h-0.5 bg-[hsl(var(--primary))]"
                   : error
                     ? "h-px bg-[hsl(var(--error))]"
                     : "h-px bg-[hsl(var(--on-surface-variant))]",
@@ -272,7 +272,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 <span
                   id={`${inputId}-supporting`}
                   className={cn(
-                    "text-[12px] leading-[16px] tracking-[0.4px]",
+                    "text-[12px] leading-4 tracking-[0.4px]",
                     error
                       ? "text-[hsl(var(--error))]"
                       : "text-[hsl(var(--on-surface-variant))]",
@@ -285,7 +285,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               {characterCount && (
                 <span
                   className={cn(
-                    "text-[12px] leading-[16px] tracking-[0.4px] ml-auto",
+                    "text-[12px] leading-4 tracking-[0.4px] ml-auto",
                     "text-[hsl(var(--on-surface-variant))]",
                     disabled && "text-[hsl(var(--on-surface)/0.38)]"
                   )}
@@ -314,7 +314,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           <fieldset
             aria-hidden="true"
             className={cn(
-              "absolute inset-0 rounded-[4px] pointer-events-none",
+              "absolute inset-0 rounded-sm pointer-events-none",
               "px-3",
               "transition-all duration-200",
               // Border styles
@@ -335,7 +335,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             <legend
               className={cn(
                 "invisible h-0 overflow-hidden",
-                "text-[12px] leading-[0]",
+                "text-[12px] leading-0",
                 "transition-all duration-200",
                 isFloating ? "px-1 max-w-full" : "px-0 max-w-[0.01px]"
               )}
@@ -355,14 +355,14 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 "origin-top-left",
                 isFloating
                   ? [
-                      "text-[12px] leading-[16px] tracking-[0.4px]",
+                      "text-[12px] leading-4 tracking-[0.4px]",
                       focused && !error && "text-[hsl(var(--primary))]",
                       !focused && !error && "text-[hsl(var(--on-surface-variant))]",
                       error && "text-[hsl(var(--error))]",
                     ]
                   : [
                       "top-1/2 -translate-y-1/2",
-                      "text-[16px] leading-[24px] tracking-[0.5px]",
+                      "text-[16px] leading-6 tracking-[0.5px]",
                       !error
                         ? "text-[hsl(var(--on-surface-variant))]"
                         : "text-[hsl(var(--error))]",
@@ -402,7 +402,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           >
             {/* Prefix */}
             {prefix && isFloating && (
-              <span className="text-[16px] leading-[24px] tracking-[0.5px] text-[hsl(var(--on-surface-variant))] mr-0.5">
+              <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] mr-0.5">
                 {prefix}
               </span>
             )}
@@ -448,7 +448,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
             {/* Suffix */}
             {suffix && isFloating && (
-              <span className="text-[16px] leading-[24px] tracking-[0.5px] text-[hsl(var(--on-surface-variant))] ml-0.5">
+              <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] ml-0.5">
                 {suffix}
               </span>
             )}
@@ -477,7 +477,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               <span
                 id={`${inputId}-supporting`}
                 className={cn(
-                  "text-[12px] leading-[16px] tracking-[0.4px]",
+                  "text-[12px] leading-4 tracking-[0.4px]",
                   error
                     ? "text-[hsl(var(--error))]"
                     : "text-[hsl(var(--on-surface-variant))]",
@@ -490,7 +490,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             {characterCount && (
               <span
                 className={cn(
-                  "text-[12px] leading-[16px] tracking-[0.4px] ml-auto",
+                  "text-[12px] leading-4 tracking-[0.4px] ml-auto",
                   "text-[hsl(var(--on-surface-variant))]",
                   disabled && "text-[hsl(var(--on-surface)/0.38)]"
                 )}

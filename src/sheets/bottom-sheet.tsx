@@ -152,7 +152,7 @@ export function BottomSheet({
           >
             {/* Drag handle */}
             {showDragHandle && (
-              <div className="flex items-center justify-center py-[22px]">
+              <div className="flex items-center justify-center py-5.5">
                 <div className="h-1 w-8 rounded-full bg-[hsl(var(--on-surface-variant)/0.4)]" />
               </div>
             )}
