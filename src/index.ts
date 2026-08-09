@@ -132,14 +132,12 @@ export {
   ToolbarLeading,
   ToolbarHeadline,
   ToolbarActions,
-  ToolbarAction,
 } from "./toolbar";
 export type {
   ToolbarProps,
   ToolbarLeadingProps,
   ToolbarHeadlineProps,
   ToolbarActionsProps,
-  ToolbarActionProps,
 } from "./toolbar";
 
 // ─── Slider ───────────────────────────────────────────────────────────────────

@@ -34,33 +34,43 @@ export default function ButtonsPage() {
         <h2 className="text-xl font-semibold">Button Variants</h2>
 
         <Showcase title="Filled Button">
+          <Button variant="filled" size="xs">XS</Button>
           <Button variant="filled" size="s">Small</Button>
           <Button variant="filled" size="m">Medium</Button>
           <Button variant="filled" size="l">Large</Button>
+          <Button variant="filled" size="xl">XL</Button>
         </Showcase>
 
         <Showcase title="Outlined Button">
+          <Button variant="outlined" size="xs">XS</Button>
           <Button variant="outlined" size="s">Small</Button>
           <Button variant="outlined" size="m">Medium</Button>
           <Button variant="outlined" size="l">Large</Button>
+          <Button variant="outlined" size="xl">XL</Button>
         </Showcase>
 
         <Showcase title="Text Button">
+          <Button variant="text" size="xs">XS</Button>
           <Button variant="text" size="s">Small</Button>
           <Button variant="text" size="m">Medium</Button>
           <Button variant="text" size="l">Large</Button>
+          <Button variant="text" size="xl">XL</Button>
         </Showcase>
 
         <Showcase title="Elevated Button">
+          <Button variant="elevated" size="xs">XS</Button>
           <Button variant="elevated" size="s">Small</Button>
           <Button variant="elevated" size="m">Medium</Button>
           <Button variant="elevated" size="l">Large</Button>
+          <Button variant="elevated" size="xl">XL</Button>
         </Showcase>
 
         <Showcase title="Tonal Button">
+          <Button variant="tonal" size="xs">XS</Button>
           <Button variant="tonal" size="s">Small</Button>
           <Button variant="tonal" size="m">Medium</Button>
           <Button variant="tonal" size="l">Large</Button>
+          <Button variant="tonal" size="xl">XL</Button>
         </Showcase>
       </section>
 
@@ -125,14 +135,20 @@ export default function ButtonsPage() {
         <h2 className="text-xl font-semibold">Icon Buttons</h2>
 
         <Showcase title="Standard">
-          <IconButton variant="standard" aria-label="Settings">
+          <IconButton variant="standard" size="xs" aria-label="Settings">
             <Icon name="settings" />
           </IconButton>
-          <IconButton variant="standard" aria-label="Search">
+          <IconButton variant="standard" size="s" aria-label="Search">
             <Icon name="search" />
           </IconButton>
-          <IconButton variant="standard" aria-label="Close">
+          <IconButton variant="standard" size="m" aria-label="Close">
             <Icon name="close" />
+          </IconButton>
+          <IconButton variant="standard" size="l" aria-label="Menu">
+            <Icon name="menu" />
+          </IconButton>
+          <IconButton variant="standard" size="xl" aria-label="Home">
+            <Icon name="home" />
           </IconButton>
         </Showcase>
 

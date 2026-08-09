@@ -3,29 +3,41 @@
 import * as React from "react";
 
 import { cn } from "./lib/utils";
-import { Icon } from "./icon";
 
 /**
- * Material Design 3 Toolbar (Contextual Action Bar)
+ * Material Design 3 Toolbar (Docked variant)
  *
- * M3 Specs:
- * - Height: 64px
- * - Background: surface
- * - Used for selection mode, formatting actions, etc.
- * - Leading: close/back icon
- * - Headline: context text (e.g., "3 selected")
- * - Trailing: action icons
+ * M3 Expressive Specs (m3.material.io/components/toolbars/specs):
+ * - Replaces the old Bottom App Bar
+ * - Container for frequently used actions (icon buttons, FABs, text fields)
+ * - Two variants: docked (fixed bar) and floating (pill-shaped)
+ * - Height: 64dp (docked), auto (floating)
+ * - Background: surface-container (standard) or primary-container (vibrant)
+ * - No elevation shadow (M3 Expressive update)
+ * - Shape: square corners (docked), rounded-full (floating)
+ *
+ * Usage: Toolbar is a simple container — place IconButtons, FABs,
+ * or any other M3 components inside as children.
  */
 
-export interface ToolbarProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface ToolbarProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Toolbar style variant */
+  variant?: "docked" | "floating";
+  /** Color scheme */
+  color?: "standard" | "vibrant";
+}
 
 const Toolbar = React.forwardRef<HTMLDivElement, ToolbarProps>(
-  ({ className, children, ...props }, ref) => (
+  ({ className, variant = "docked", color = "standard", children, ...props }, ref) => (
     <div
       ref={ref}
       role="toolbar"
       className={cn(
-        "flex items-center h-16 px-1 bg-surface",
+        "flex items-center gap-1 px-2",
+        variant === "docked" && "h-16 w-full",
+        variant === "floating" && "h-14 w-auto rounded-full px-3",
+        color === "standard" && "bg-surface-container",
+        color === "vibrant" && "bg-primary-container",
         className
       )}
       {...props}
@@ -36,24 +48,16 @@ const Toolbar = React.forwardRef<HTMLDivElement, ToolbarProps>(
 );
 Toolbar.displayName = "Toolbar";
 
-export interface ToolbarLeadingProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** Icon name for the leading button (e.g., "close", "arrow_back") */
-  icon?: string;
-  /** Callback when leading icon is pressed */
-  onPress?: () => void;
-}
+export interface ToolbarLeadingProps extends React.HTMLAttributes<HTMLDivElement> {}
 
+/**
+ * Leading slot — typically contains a navigation icon or close button.
+ * Place an IconButton here.
+ */
 const ToolbarLeading = React.forwardRef<HTMLDivElement, ToolbarLeadingProps>(
-  ({ className, icon = "close", onPress, ...props }, ref) => (
+  ({ className, children, ...props }, ref) => (
     <div ref={ref} className={cn("shrink-0", className)} {...props}>
-      <button
-        type="button"
-        onClick={onPress}
-        className="flex items-center justify-center w-12 h-12 rounded-full cursor-pointer hover:bg-[hsl(var(--on-surface)/0.08)] focus-visible:bg-[hsl(var(--on-surface)/0.10)] active:bg-[hsl(var(--on-surface)/0.10)] transition-colors"
-        aria-label={icon === "close" ? "Close" : "Back"}
-      >
-        <Icon name={icon} size={24} className="text-surface-foreground" />
-      </button>
+      {children}
     </div>
   )
 );
@@ -61,12 +65,15 @@ ToolbarLeading.displayName = "ToolbarLeading";
 
 export interface ToolbarHeadlineProps extends React.HTMLAttributes<HTMLDivElement> {}
 
+/**
+ * Headline slot — optional title text in the toolbar.
+ */
 const ToolbarHeadline = React.forwardRef<HTMLDivElement, ToolbarHeadlineProps>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
       className={cn(
-        "flex-1 px-4 text-[16px] leading-6 font-medium text-surface-foreground truncate",
+        "flex-1 px-3 text-[16px] leading-6 font-medium text-surface-foreground truncate",
         className
       )}
       {...props}
@@ -77,6 +84,10 @@ ToolbarHeadline.displayName = "ToolbarHeadline";
 
 export interface ToolbarActionsProps extends React.HTMLAttributes<HTMLDivElement> {}
 
+/**
+ * Actions slot — contains trailing IconButtons or other controls.
+ * Place IconButtons, Chips, or other M3 components here.
+ */
 const ToolbarActions = React.forwardRef<HTMLDivElement, ToolbarActionsProps>(
   ({ className, ...props }, ref) => (
     <div
@@ -88,29 +99,5 @@ const ToolbarActions = React.forwardRef<HTMLDivElement, ToolbarActionsProps>(
 );
 ToolbarActions.displayName = "ToolbarActions";
 
-export interface ToolbarActionProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /** Icon name */
-  icon: string;
-  /** Accessible label */
-  label: string;
-}
-
-const ToolbarAction = React.forwardRef<HTMLButtonElement, ToolbarActionProps>(
-  ({ className, icon, label, ...props }, ref) => (
-    <button
-      ref={ref}
-      type="button"
-      aria-label={label}
-      className={cn(
-        "flex items-center justify-center w-12 h-12 rounded-full cursor-pointer hover:bg-[hsl(var(--on-surface)/0.08)] focus-visible:bg-[hsl(var(--on-surface)/0.10)] active:bg-[hsl(var(--on-surface)/0.10)] transition-colors",
-        className
-      )}
-      {...props}
-    >
-      <Icon name={icon} size={24} className="text-surface-foreground" />
-    </button>
-  )
-);
-ToolbarAction.displayName = "ToolbarAction";
-
-export { Toolbar, ToolbarLeading, ToolbarHeadline, ToolbarActions, ToolbarAction };
+export { Toolbar, ToolbarLeading, ToolbarHeadline, ToolbarActions };
+export type { ToolbarProps as ToolbarComponentProps };

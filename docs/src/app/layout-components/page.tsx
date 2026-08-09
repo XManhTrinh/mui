@@ -13,7 +13,6 @@ import {
   ToolbarLeading,
   ToolbarHeadline,
   ToolbarActions,
-  ToolbarAction,
   Carousel,
   CarouselItem,
   Icon,
@@ -218,18 +217,69 @@ export default function LayoutComponentsPage() {
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">Toolbar</h2>
 
-        <Showcase title="Toolbar" className="flex-col items-stretch">
+        <Showcase title="Docked Toolbar (Standard)" className="flex-col items-stretch">
           <div className="rounded-xl overflow-hidden border border-outline-variant">
-            <Toolbar>
-              <ToolbarLeading icon="menu" />
+            <Toolbar variant="docked" color="standard">
+              <ToolbarLeading>
+                <IconButton variant="standard" aria-label="Menu">
+                  <Icon name="menu" />
+                </IconButton>
+              </ToolbarLeading>
               <ToolbarHeadline>Documents</ToolbarHeadline>
               <ToolbarActions>
-                <ToolbarAction icon="search" label="Search" />
-                <ToolbarAction icon="filter_list" label="Filter" />
-                <ToolbarAction icon="more_vert" label="More" />
+                <IconButton variant="standard" aria-label="Search">
+                  <Icon name="search" />
+                </IconButton>
+                <IconButton variant="standard" aria-label="Filter">
+                  <Icon name="filter_list" />
+                </IconButton>
+                <IconButton variant="standard" aria-label="More">
+                  <Icon name="more_vert" />
+                </IconButton>
               </ToolbarActions>
             </Toolbar>
           </div>
+        </Showcase>
+
+        <Showcase title="Docked Toolbar (Vibrant)" className="flex-col items-stretch">
+          <div className="rounded-xl overflow-hidden border border-outline-variant">
+            <Toolbar variant="docked" color="vibrant">
+              <ToolbarLeading>
+                <IconButton variant="standard" aria-label="Back">
+                  <Icon name="arrow_back" />
+                </IconButton>
+              </ToolbarLeading>
+              <ToolbarHeadline>Editing</ToolbarHeadline>
+              <ToolbarActions>
+                <IconButton variant="standard" aria-label="Undo">
+                  <Icon name="undo" />
+                </IconButton>
+                <IconButton variant="standard" aria-label="Redo">
+                  <Icon name="redo" />
+                </IconButton>
+                <IconButton variant="standard" aria-label="Save">
+                  <Icon name="save" />
+                </IconButton>
+              </ToolbarActions>
+            </Toolbar>
+          </div>
+        </Showcase>
+
+        <Showcase title="Floating Toolbar">
+          <Toolbar variant="floating" color="standard">
+            <IconButton variant="standard" size="s" aria-label="Bold">
+              <Icon name="format_bold" />
+            </IconButton>
+            <IconButton variant="standard" size="s" aria-label="Italic">
+              <Icon name="format_italic" />
+            </IconButton>
+            <IconButton variant="standard" size="s" aria-label="Underline">
+              <Icon name="format_underlined" />
+            </IconButton>
+            <IconButton variant="standard" size="s" aria-label="Link">
+              <Icon name="link" />
+            </IconButton>
+          </Toolbar>
         </Showcase>
       </section>
 
