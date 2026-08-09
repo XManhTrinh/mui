@@ -72,8 +72,8 @@ const buttonVariants = cva(
   }
 );
 
-// Touch target padding for small size (34px visual → 48px touch)
-const touchTargetClass = "min-h-12";
+// Touch target note: xs (32dp) and s (40dp) are below the 48dp minimum.
+// Use adequate spacing between adjacent buttons in dense layouts.
 
 // Asymmetric padding when icon is present (icon-side gets less padding)
 const iconPaddingMap = {
@@ -155,15 +155,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       paddingOverride = `${iconPaddingMap[resolvedSize].icon.split(" ")[0]} ${iconPaddingMap[resolvedSize].trailing.split(" ")[1]}`;
     }
 
-    // Touch target for sizes below 48px
-    const needsTouchTarget = resolvedSize === "xs" || resolvedSize === "s";
-
     return (
       <Comp
         className={cn(
           buttonVariants({ variant, size, className: undefined }),
           paddingOverride,
-          needsTouchTarget && touchTargetClass,
           loading && "pointer-events-none",
           className
         )}
