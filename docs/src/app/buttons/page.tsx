@@ -10,6 +10,8 @@ import {
   ButtonGroup,
   ButtonGroupItem,
   Icon,
+  Chip,
+  Switch,
 } from "@mui/index";
 import { Showcase, Playground } from "@/components/showcase";
 
@@ -47,55 +49,51 @@ export default function ButtonsPage() {
           <>
             {/* Variant */}
             <div>
-              <label className="text-[12px] font-medium text-surface-variant-foreground block mb-1.5">Variant</label>
+              <span className="text-[12px] font-medium text-surface-variant-foreground block mb-1.5">Variant</span>
               <div className="flex flex-wrap gap-1">
                 {(["filled", "outlined", "text", "elevated", "tonal"] as const).map((v) => (
-                  <button
+                  <Chip
                     key={v}
+                    variant="filter"
+                    selected={pgVariant === v}
                     onClick={() => setPgVariant(v)}
-                    className={`px-2 py-1 rounded-lg text-[12px] font-medium transition-colors ${
-                      pgVariant === v
-                        ? "bg-secondary-container text-secondary-container-foreground"
-                        : "text-surface-variant-foreground hover:bg-[hsl(var(--on-surface)/0.08)]"
-                    }`}
                   >
                     {v}
-                  </button>
+                  </Chip>
                 ))}
               </div>
             </div>
             {/* Size */}
             <div>
-              <label className="text-[12px] font-medium text-surface-variant-foreground block mb-1.5">Size</label>
+              <span className="text-[12px] font-medium text-surface-variant-foreground block mb-1.5">Size</span>
               <div className="flex gap-1">
                 {(["xs", "s", "m", "l", "xl"] as const).map((s) => (
-                  <button
+                  <Chip
                     key={s}
+                    variant="filter"
+                    selected={pgSize === s}
                     onClick={() => setPgSize(s)}
-                    className={`px-2 py-1 rounded-lg text-[12px] font-medium transition-colors ${
-                      pgSize === s
-                        ? "bg-secondary-container text-secondary-container-foreground"
-                        : "text-surface-variant-foreground hover:bg-[hsl(var(--on-surface)/0.08)]"
-                    }`}
                   >
                     {s}
-                  </button>
+                  </Chip>
                 ))}
               </div>
             </div>
-            {/* Toggles */}
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={pgSquare} onChange={(e) => setPgSquare(e.target.checked)} className="accent-primary" />
-              <span className="text-[13px] text-surface-foreground">Square</span>
-            </label>
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={pgIcon} onChange={(e) => setPgIcon(e.target.checked)} className="accent-primary" />
-              <span className="text-[13px] text-surface-foreground">With icon</span>
-            </label>
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={pgDisabled} onChange={(e) => setPgDisabled(e.target.checked)} className="accent-primary" />
-              <span className="text-[13px] text-surface-foreground">Disabled</span>
-            </label>
+            {/* Boolean toggles */}
+            <div className="space-y-3 pt-1">
+              <label className="flex items-center justify-between cursor-pointer">
+                <span className="text-[13px] text-surface-foreground">Square</span>
+                <Switch checked={pgSquare} onCheckedChange={setPgSquare} />
+              </label>
+              <label className="flex items-center justify-between cursor-pointer">
+                <span className="text-[13px] text-surface-foreground">With icon</span>
+                <Switch checked={pgIcon} onCheckedChange={setPgIcon} />
+              </label>
+              <label className="flex items-center justify-between cursor-pointer">
+                <span className="text-[13px] text-surface-foreground">Disabled</span>
+                <Switch checked={pgDisabled} onCheckedChange={setPgDisabled} />
+              </label>
+            </div>
           </>
         }
       >
