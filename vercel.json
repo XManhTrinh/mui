@@ -1,0 +1,6 @@
+{
+  "installCommand": "npm install --production=false && cd docs && npm install",
+  "buildCommand": "cd docs && npm run build",
+  "outputDirectory": "docs/.next",
+  "framework": "nextjs"
+}
