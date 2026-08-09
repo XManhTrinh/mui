@@ -15,57 +15,60 @@ export default function NavigationRailPage() {
         </h1>
         <p className="text-[16px] leading-6 text-surface-variant-foreground">
           Navigation rails provide access to primary destinations in apps when
-          using tablet and desktop screens. They can be collapsed to show only
-          icons or expanded to display labels.
+          using tablet and desktop screens.
         </p>
       </div>
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Collapsed</h2>
-        <Showcase title="Collapsed Rail" className="justify-start min-h-[400px]">
+        <Showcase title="Collapsed Rail" className="justify-start min-h-80">
           <NavigationRail
-            activeItem={activeItem}
-            onActiveItemChange={setActiveItem}
+            variant="collapsed"
+            activeValue={activeItem}
+            onValueChange={setActiveItem}
             items={[
-              { id: "home", icon: "home", label: "Home" },
-              { id: "explore", icon: "explore", label: "Explore" },
-              { id: "library", icon: "video_library", label: "Library" },
-              { id: "settings", icon: "settings", label: "Settings" },
+              { value: "home", icon: "home", label: "Home" },
+              { value: "explore", icon: "explore", label: "Explore" },
+              { value: "library", icon: "video_library", label: "Library" },
+              { value: "settings", icon: "settings", label: "Settings" },
             ]}
+            className="!static !relative"
           />
         </Showcase>
       </section>
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Expanded</h2>
-        <Showcase title="Expanded Rail with Labels" className="justify-start min-h-[400px]">
+        <Showcase title="Expanded Rail with Labels" className="justify-start min-h-80">
           <NavigationRail
-            expanded
-            activeItem={activeItem}
-            onActiveItemChange={setActiveItem}
+            variant="expanded"
+            activeValue={activeItem}
+            onValueChange={setActiveItem}
             items={[
-              { id: "home", icon: "home", label: "Home" },
-              { id: "explore", icon: "explore", label: "Explore" },
-              { id: "library", icon: "video_library", label: "Library" },
-              { id: "settings", icon: "settings", label: "Settings" },
+              { value: "home", icon: "home", label: "Home" },
+              { value: "explore", icon: "explore", label: "Explore" },
+              { value: "library", icon: "video_library", label: "Library" },
+              { value: "settings", icon: "settings", label: "Settings" },
             ]}
+            className="!static !relative !w-64"
           />
         </Showcase>
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-[22px] leading-7 font-normal">With FAB</h2>
-        <Showcase title="Rail with Floating Action Button" className="justify-start min-h-[400px]">
+        <h2 className="text-[22px] leading-7 font-normal">With Badges</h2>
+        <Showcase title="Rail with Badges" className="justify-start min-h-80">
           <NavigationRail
-            activeItem="inbox"
-            onActiveItemChange={setActiveItem}
-            fab={<FAB size="m" icon={<Icon name="edit" />} aria-label="Compose" />}
+            variant="collapsed"
+            activeValue="inbox"
+            onValueChange={setActiveItem}
             items={[
-              { id: "inbox", icon: "inbox", label: "Inbox" },
-              { id: "sent", icon: "send", label: "Sent" },
-              { id: "drafts", icon: "drafts", label: "Drafts" },
-              { id: "trash", icon: "delete", label: "Trash" },
+              { value: "inbox", icon: "inbox", label: "Inbox", badge: 12 },
+              { value: "sent", icon: "send", label: "Sent" },
+              { value: "drafts", icon: "drafts", label: "Drafts", badge: "dot" },
+              { value: "trash", icon: "delete", label: "Trash" },
             ]}
+            className="!static !relative"
           />
         </Showcase>
       </section>

@@ -5,7 +5,7 @@ import { TimePicker } from "@mui/index";
 import { Showcase } from "@/components/showcase";
 
 export default function TimePickerPage() {
-  const [time, setTime] = React.useState<string | undefined>(undefined);
+  const [time, setTime] = React.useState<{ hours: number; minutes: number } | null>(null);
 
   return (
     <div className="max-w-4xl space-y-8">
@@ -14,55 +14,36 @@ export default function TimePickerPage() {
           Time Picker
         </h1>
         <p className="text-[16px] leading-6 text-surface-variant-foreground">
-          Time pickers help users select and set a specific time. They can
-          display in 12-hour or 24-hour format.
+          Time pickers help users select and set a specific time.
         </p>
       </div>
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">12-Hour Format</h2>
-        <Showcase title="AM/PM Time Picker">
-          <TimePicker
-            value={time}
-            onValueChange={setTime}
-            format="12h"
-            placeholder="Select time"
-          />
+        <Showcase title="AM/PM">
+          <TimePicker format="12h" value={time} onChange={setTime} />
         </Showcase>
       </section>
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">24-Hour Format</h2>
-        <Showcase title="24-Hour Time Picker">
-          <TimePicker
-            format="24h"
-            placeholder="Select time"
-          />
+        <Showcase title="24h">
+          <TimePicker format="24h" />
         </Showcase>
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-[22px] leading-7 font-normal">With Default Value</h2>
+        <h2 className="text-[22px] leading-7 font-normal">With Value</h2>
         <Showcase title="Pre-selected Time">
-          <TimePicker
-            defaultValue="09:30"
-            format="12h"
-          />
-          <TimePicker
-            defaultValue="14:45"
-            format="24h"
-          />
+          <TimePicker format="12h" value={{ hours: 9, minutes: 30 }} />
+          <TimePicker format="24h" value={{ hours: 14, minutes: 45 }} />
         </Showcase>
       </section>
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Disabled</h2>
         <Showcase title="Disabled State">
-          <TimePicker
-            defaultValue="10:00"
-            format="12h"
-            disabled
-          />
+          <TimePicker format="12h" value={{ hours: 10, minutes: 0 }} disabled />
         </Showcase>
       </section>
     </div>

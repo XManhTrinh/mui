@@ -1,11 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { NavigationBar, Badge, Icon } from "@mui/index";
+import { NavigationBar } from "@mui/index";
 import { Showcase } from "@/components/showcase";
 
 export default function NavigationBarPage() {
-  const [activeItem, setActiveItem] = React.useState("home");
+  const [active, setActive] = React.useState("home");
 
   return (
     <div className="max-w-4xl space-y-8">
@@ -15,52 +15,62 @@ export default function NavigationBarPage() {
         </h1>
         <p className="text-[16px] leading-6 text-surface-variant-foreground">
           Navigation bars let people switch between UI views on smaller devices.
-          They should be used for three to five destinations.
+          Use for 3–5 destinations.
         </p>
       </div>
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Basic</h2>
         <Showcase title="Standard Navigation Bar" className="flex-col items-stretch">
-          <NavigationBar
-            activeItem={activeItem}
-            onActiveItemChange={setActiveItem}
-            items={[
-              { id: "home", icon: "home", label: "Home" },
-              { id: "explore", icon: "explore", label: "Explore" },
-              { id: "library", icon: "video_library", label: "Library" },
-              { id: "profile", icon: "person", label: "Profile" },
-            ]}
-          />
+          <div className="relative h-20">
+            <NavigationBar
+              activeValue={active}
+              onValueChange={setActive}
+              items={[
+                { value: "home", icon: "home", label: "Home" },
+                { value: "explore", icon: "explore", label: "Explore" },
+                { value: "library", icon: "video_library", label: "Library" },
+                { value: "profile", icon: "person", label: "Profile" },
+              ]}
+              className="!static !relative"
+            />
+          </div>
         </Showcase>
       </section>
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Badges</h2>
-        <Showcase title="Navigation Bar with Badges" className="flex-col items-stretch">
-          <NavigationBar
-            activeItem="inbox"
-            items={[
-              { id: "inbox", icon: "inbox", label: "Inbox", badge: 12 },
-              { id: "articles", icon: "article", label: "Articles", badge: "dot" },
-              { id: "messages", icon: "chat", label: "Messages", badge: 3 },
-              { id: "videos", icon: "play_circle", label: "Videos" },
-            ]}
-          />
+        <Showcase title="Badges" className="flex-col items-stretch">
+          <div className="relative h-20">
+            <NavigationBar
+              activeValue="inbox"
+              onValueChange={setActive}
+              items={[
+                { value: "inbox", icon: "inbox", label: "Inbox", badge: 12 },
+                { value: "articles", icon: "article", label: "Articles", badge: "dot" },
+                { value: "messages", icon: "chat", label: "Messages", badge: 3 },
+                { value: "videos", icon: "play_circle", label: "Videos" },
+              ]}
+              className="!static !relative"
+            />
+          </div>
         </Showcase>
       </section>
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Three Items</h2>
-        <Showcase title="Minimal Navigation" className="flex-col items-stretch">
-          <NavigationBar
-            activeItem="feed"
-            items={[
-              { id: "feed", icon: "dynamic_feed", label: "Feed" },
-              { id: "search", icon: "search", label: "Search" },
-              { id: "settings", icon: "settings", label: "Settings" },
-            ]}
-          />
+        <Showcase title="Minimal" className="flex-col items-stretch">
+          <div className="relative h-20">
+            <NavigationBar
+              activeValue="feed"
+              items={[
+                { value: "feed", icon: "dynamic_feed", label: "Feed" },
+                { value: "search", icon: "search", label: "Search" },
+                { value: "settings", icon: "settings", label: "Settings" },
+              ]}
+              className="!static !relative"
+            />
+          </div>
         </Showcase>
       </section>
     </div>
