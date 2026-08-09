@@ -27,7 +27,7 @@ const extendedFabVariants = cva(
     // Cursor & interaction
     "cursor-pointer select-none",
     // Transition for elevation + shape morph
-    "transition-[border-radius,box-shadow] duration-200 [transition-timing-function:cubic-bezier(0.2,0,0,1)]",
+    "transition-[border-radius,box-shadow] duration-100 ease-out",
     // Focus ring
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
     // Elevation Level 3 rest, Level 4 hover

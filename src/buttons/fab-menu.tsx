@@ -344,7 +344,7 @@ const FABMenu: React.FC<FABMenuProps> = ({
             "relative h-14 w-14 rounded-2xl inline-flex items-center justify-center",
             "cursor-pointer select-none",
             // Transition for shape morph
-            "transition-[border-radius,box-shadow] duration-100 [transition-timing-function:cubic-bezier(0.2,0,0,1)]",
+            "transition-[border-radius,box-shadow] duration-100 ease-out",
             // State layer
             "overflow-hidden",
             "before:absolute before:inset-0 before:rounded-[inherit]",

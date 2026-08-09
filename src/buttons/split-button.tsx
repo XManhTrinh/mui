@@ -194,7 +194,7 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
               // Outer corners: full pill on left, inner radius on right
               "rounded-l-full",
               // Transition
-              "transition-[border-radius,box-shadow] duration-200 [transition-timing-function:cubic-bezier(0.2,0,0,1)]",
+              "transition-[border-radius,box-shadow] duration-100 ease-out",
               // State layer
               "overflow-hidden",
               "before:absolute before:inset-0 before:rounded-[inherit]",
@@ -261,7 +261,7 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
                 // Outer corners: full pill on right, inner radius on left
                 "rounded-r-full",
                 // Transition
-                "transition-[border-radius,box-shadow] duration-200 [transition-timing-function:cubic-bezier(0.2,0,0,1)]",
+                "transition-[border-radius,box-shadow] duration-100 ease-out",
                 // State layer
                 "overflow-hidden",
                 "before:absolute before:inset-0 before:rounded-[inherit]",
