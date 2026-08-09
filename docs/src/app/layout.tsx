@@ -103,19 +103,23 @@ function Sidebar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`flex items-center gap-3 mx-2 px-4 py-2.5 rounded-full text-[14px] leading-5 font-medium transition-colors ${
-                    isActive
-                      ? "bg-secondary-container text-secondary-container-foreground"
-                      : "text-surface-variant-foreground hover:bg-[hsl(var(--on-surface)/0.08)]"
-                  }`}
+                  className="relative flex items-center gap-3 mx-2 px-4 py-2.5 rounded-full text-[14px] leading-5 font-medium transition-colors text-surface-variant-foreground hover:bg-[hsl(var(--on-surface)/0.08)]"
                 >
+                  {/* Active indicator — expands from center */}
+                  <span
+                    className={`absolute inset-0 rounded-full bg-secondary-container transition-transform duration-200 ease-[cubic-bezier(0.2,0,0,1)] origin-center ${
+                      isActive ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
+                    }`}
+                  />
                   <Icon
                     name={link.icon}
                     size={24}
                     filled={isActive}
-                    className={isActive ? "text-secondary-container-foreground" : "text-surface-variant-foreground"}
+                    className={`relative z-10 ${isActive ? "text-secondary-container-foreground" : "text-surface-variant-foreground"}`}
                   />
-                  <span className="truncate">{link.label}</span>
+                  <span className={`relative z-10 truncate ${isActive ? "text-secondary-container-foreground" : ""}`}>
+                    {link.label}
+                  </span>
                 </Link>
               );
             })}
