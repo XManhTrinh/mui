@@ -27,6 +27,15 @@ export interface IconProps {
  *
  * @see https://fonts.google.com/icons for available icon names
  */
+
+const sizeClasses: Record<number, string> = {
+  18: "text-[18px]",
+  20: "text-[20px]",
+  24: "text-[24px]",
+  40: "text-[40px]",
+  48: "text-[48px]",
+};
+
 export function Icon({
   name,
   size = 24,
@@ -37,9 +46,12 @@ export function Icon({
 }: IconProps) {
   return (
     <span
-      className={cn("material-symbols-rounded select-none", className)}
+      className={cn(
+        "material-symbols-rounded select-none",
+        sizeClasses[size],
+        className
+      )}
       style={{
-        fontSize: `${size}px`,
         fontVariationSettings: `'FILL' ${filled ? 1 : 0}, 'wght' ${weight}, 'GRAD' ${grade}, 'opsz' ${size}`,
       }}
       aria-hidden="true"
