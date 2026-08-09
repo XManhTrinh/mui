@@ -88,12 +88,32 @@ export function NavigationRail({
   const [internalExpanded, setInternalExpanded] = React.useState(variant === "expanded");
   const active = activeValue ?? internalValue;
 
+  // When sections are provided, derive collapsed items from section headers
+  const collapsedItems: NavigationRailItem[] = React.useMemo(() => {
+    if (effectiveItems.length > 0) return effectiveItems;
+    if (!sections) return [];
+    return sections.map((section) => ({
+      value: section.links[0]?.value ?? section.label,
+      icon: section.icon,
+      label: section.label,
+    }));
+  }, [effectiveItems, sections]);
+
   // Determine expanded state from controlled or internal
   const isExpanded = collapsible
     ? (controlledExpanded ?? internalExpanded)
     : variant === "expanded";
 
   const handleChange = (value: string) => {
+    // If sections are provided and rail is collapsed, expand on click
+    if (sections && !isExpanded && collapsible) {
+      const next = true;
+      if (controlledExpanded === undefined) {
+        setInternalExpanded(next);
+      }
+      onExpandedChange?.(next);
+      return;
+    }
     if (!activeValue) setInternalValue(value);
     onValueChange?.(value);
   };
@@ -181,8 +201,15 @@ export function NavigationRail({
           role="tablist"
           aria-orientation="vertical"
         >
-          {effectiveItems.map((item) => {
-            const isActive = active === item.value;
+          {collapsedItems.map((item) => {
+            // For section-derived items, check if active is in any link of that section
+            let isActive = active === item.value;
+            if (!isActive && sections) {
+              const section = sections.find((s) => s.links[0]?.value === item.value);
+              if (section) {
+                isActive = section.links.some((link) => link.value === active);
+              }
+            }
 
             if (!isExpanded) {
               return (
