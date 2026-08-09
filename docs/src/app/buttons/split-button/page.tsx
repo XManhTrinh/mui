@@ -8,10 +8,10 @@ export default function SplitButtonPage() {
   return (
     <div className="max-w-5xl space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-surface-foreground mb-1">
+        <h1 className="text-[28px] leading-9 font-normal text-surface-foreground mb-2">
           Split Button
         </h1>
-        <p className="text-surface-variant-foreground">
+        <p className="text-[16px] leading-6 text-surface-variant-foreground">
           Split buttons let users take a primary action while also providing
           access to related secondary actions through a dropdown menu.
         </p>
@@ -71,7 +71,7 @@ export default function SplitButtonPage() {
 
       {/* Props Table */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Props</h2>
+        <h2 className="text-[22px] leading-7 font-normal">Props</h2>
         <div className="overflow-x-auto rounded-xl border border-outline-variant">
           <table className="w-full text-sm">
             <thead className="bg-surface-container">

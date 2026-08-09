@@ -8,10 +8,10 @@ export default function FABsPage() {
   return (
     <div className="max-w-5xl space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-surface-foreground mb-1">
+        <h1 className="text-[28px] leading-9 font-normal text-surface-foreground mb-2">
           Floating Action Buttons
         </h1>
-        <p className="text-surface-variant-foreground">
+        <p className="text-[16px] leading-6 text-surface-variant-foreground">
           FABs represent the most important action on a screen. They come in
           standard and extended variants with multiple sizes and colors.
         </p>
@@ -53,7 +53,7 @@ export default function FABsPage() {
 
       {/* Props Table */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">FAB Props</h2>
+        <h2 className="text-[22px] leading-7 font-normal">FAB Props</h2>
         <div className="overflow-x-auto rounded-xl border border-outline-variant">
           <table className="w-full text-sm">
             <thead className="bg-surface-container">
@@ -93,7 +93,7 @@ export default function FABsPage() {
           </table>
         </div>
 
-        <h2 className="text-xl font-semibold">ExtendedFAB Props</h2>
+        <h2 className="text-[22px] leading-7 font-normal">ExtendedFAB Props</h2>
         <div className="overflow-x-auto rounded-xl border border-outline-variant">
           <table className="w-full text-sm">
             <thead className="bg-surface-container">

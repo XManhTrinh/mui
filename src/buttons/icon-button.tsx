@@ -50,11 +50,11 @@ const iconButtonVariants = cva(
           "bg-transparent border border-outline text-surface-variant-foreground",
       },
       size: {
-        xs: "size-8 [&_svg]:size-5 [&_.material-symbols-rounded]:text-[20px]",
-        s: "size-10 [&_svg]:size-5 [&_.material-symbols-rounded]:text-[20px]",
-        m: "size-12 [&_svg]:size-6 [&_.material-symbols-rounded]:text-[24px]",
+        xs: "size-8 [&_svg]:size-[18px] [&_.material-symbols-rounded]:text-[18px]",
+        s: "size-10 [&_svg]:size-[18px] [&_.material-symbols-rounded]:text-[18px]",
+        m: "size-12 [&_svg]:size-5 [&_.material-symbols-rounded]:text-[20px]",
         l: "size-14 [&_svg]:size-6 [&_.material-symbols-rounded]:text-[24px]",
-        xl: "size-16 [&_svg]:size-[28px] [&_.material-symbols-rounded]:text-[28px]",
+        xl: "size-16 [&_svg]:size-6 [&_.material-symbols-rounded]:text-[24px]",
       },
     },
     defaultVariants: {
@@ -184,7 +184,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         className={cn(
           iconButtonVariants({ variant: effectiveVariant, size }),
           shapeClass,
-          disabled && "opacity-[0.38] pointer-events-none",
+          disabled && "opacity-[0.38] pointer-events-none cursor-not-allowed",
           className
         )}
         ref={ref}

@@ -232,7 +232,7 @@ const FABMenu: React.FC<FABMenuProps> = ({
                 className={cn(
                   "relative h-12 min-w-40 inline-flex items-center gap-3 px-4 rounded-2xl",
                   "cursor-pointer select-none",
-                  "text-[14px] font-medium leading-[20px] tracking-[0.1px]",
+                  "text-[14px] font-medium leading-5 tracking-[0.1px]",
                   // State layer
                   "overflow-hidden",
                   "before:absolute before:inset-0 before:rounded-[inherit]",

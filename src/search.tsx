@@ -80,10 +80,10 @@ const Search = React.forwardRef<HTMLInputElement, SearchProps>(
       <div
         className={cn(
           "relative flex items-center h-14 min-w-90 max-w-180 rounded-full",
-          "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
+          "transition-[background-color,margin] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
           // Background color
           isFocused
-            ? "bg-surface-container-low"
+            ? "bg-surface-container-low ring-2 ring-primary"
             : "bg-surface-container-high",
           // Hover state
           !disabled && !isFocused && "hover:bg-surface-container-high/92",
@@ -115,7 +115,7 @@ const Search = React.forwardRef<HTMLInputElement, SearchProps>(
           disabled={disabled}
           aria-label={ariaLabel || placeholder}
           className={cn(
-            "flex-1 h-full bg-transparent outline-none",
+            "flex-1 h-full bg-transparent outline-none cursor-text",
             "text-base leading-6 text-surface-foreground",
             "placeholder:text-[hsl(var(--on-surface-variant))]",
             disabled && "cursor-not-allowed"

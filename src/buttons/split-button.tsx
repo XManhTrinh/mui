@@ -29,10 +29,10 @@ const splitButtonVariants = cva(
       },
       size: {
         xs: "h-8",
-        s: "h-10",
-        m: "h-12",
-        l: "h-14",
-        xl: "h-16",
+        s: "h-9",
+        m: "h-10",
+        l: "h-12",
+        xl: "h-14",
       },
     },
     defaultVariants: {
@@ -80,10 +80,10 @@ const segmentHoverElevation = {
 // Height classes per size
 const heightClasses = {
   xs: "h-8",
-  s: "h-10",
-  m: "h-12",
-  l: "h-14",
-  xl: "h-16",
+  s: "h-9",
+  m: "h-10",
+  l: "h-12",
+  xl: "h-14",
 } as const;
 
 // Padding per size for leading segment
@@ -98,10 +98,10 @@ const leadingPadding = {
 // Trailing segment width per size
 const trailingWidth = {
   xs: "w-8",
-  s: "w-10",
-  m: "w-12",
-  l: "w-14",
-  xl: "w-16",
+  s: "w-9",
+  m: "w-10",
+  l: "w-12",
+  xl: "w-14",
 } as const;
 
 export interface SplitButtonProps
@@ -209,7 +209,7 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
               "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-5",
               "[&_.material-symbols-rounded]:pointer-events-none [&_.material-symbols-rounded]:text-[20px]",
               // Disabled
-              isLeadingDisabled && "opacity-[0.38] pointer-events-none"
+              isLeadingDisabled && "opacity-[0.38] pointer-events-none cursor-not-allowed"
             )}
             style={{
               borderTopRightRadius: innerRadius,
@@ -273,7 +273,7 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
                 // Focus ring
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
                 // Disabled
-                isTrailingDisabled && "opacity-[0.38] pointer-events-none"
+                isTrailingDisabled && "opacity-[0.38] pointer-events-none cursor-not-allowed"
               )}
               style={{
                 borderTopLeftRadius: innerRadius,

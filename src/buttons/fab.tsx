@@ -31,6 +31,8 @@ const fabVariants = cva(
     // Elevation Level 3 at rest, Level 4 on hover
     "shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
     "hover:shadow-[0_6px_12px_var(--elevation-4),0_2px_4px_var(--elevation-4)]",
+    // Disabled
+    "disabled:opacity-[0.38] disabled:pointer-events-none disabled:cursor-not-allowed disabled:shadow-none",
     // State layer via ::before pseudo-element
     "overflow-hidden",
     "before:absolute before:inset-0 before:rounded-[inherit]",
@@ -165,7 +167,6 @@ const FAB = React.forwardRef<HTMLButtonElement, FABProps>(
           fabVariants({ color, size }),
           shapeClass,
           fixedClasses,
-          disabled && "opacity-[0.38] pointer-events-none",
           loading && "pointer-events-none",
           className
         )}

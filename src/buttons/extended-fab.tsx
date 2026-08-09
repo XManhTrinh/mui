@@ -22,8 +22,8 @@ const extendedFabVariants = cva(
   [
     // Layout
     "relative inline-flex items-center justify-center",
-    // Typography: Title Medium (16px / 500 / 24px / 0.15px)
-    "text-[16px] font-medium leading-[24px] tracking-[0.15px]",
+    // Typography: Label Large (14px / 500 / 20px / 0.1px)
+    "text-[14px] font-medium leading-5 tracking-[0.1px]",
     // Cursor & interaction
     "cursor-pointer select-none",
     // Transition for elevation + shape morph
@@ -48,7 +48,7 @@ const extendedFabVariants = cva(
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-6",
     "[&_.material-symbols-rounded]:pointer-events-none [&_.material-symbols-rounded]:text-[24px]",
     // Disabled
-    "disabled:opacity-[0.38] disabled:pointer-events-none",
+    "disabled:opacity-[0.38] disabled:pointer-events-none disabled:cursor-not-allowed",
   ].join(" "),
   {
     variants: {
@@ -61,9 +61,9 @@ const extendedFabVariants = cva(
         "tertiary-fixed": "bg-tertiary text-tertiary-foreground",
       },
       size: {
-        small: "h-14 px-4 gap-4 rounded-2xl active:rounded-xl",
-        medium: "h-20 px-4 gap-4 rounded-2xl active:rounded-xl",
-        large: "h-24 px-4 gap-4 rounded-[28px] active:rounded-2xl",
+        small: "h-14 px-4 gap-2 rounded-2xl active:rounded-xl",
+        medium: "h-20 px-4 gap-2 rounded-2xl active:rounded-xl",
+        large: "h-24 px-4 gap-2 rounded-[28px] active:rounded-2xl",
       },
     },
     defaultVariants: {

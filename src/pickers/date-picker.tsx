@@ -142,7 +142,7 @@ export function DatePicker({
     <div
       className={cn(
         "w-[320px] rounded-[28px] bg-surface-container-high px-4 py-3",
-        disabled && "opacity-[0.38] pointer-events-none",
+        disabled && "opacity-[0.38] pointer-events-none cursor-not-allowed",
         className
       )}
     >
@@ -208,12 +208,12 @@ export function DatePicker({
                 }
               }}
               className={cn(
-                "relative flex h-10 w-10 items-center justify-center rounded-full text-[14px] font-normal",
-                "transition-colors duration-100",
+                "relative flex h-10 w-10 items-center justify-center rounded-full text-[14px] font-normal cursor-pointer",
+                "transition-colors duration-100 outline-none focus-visible:ring-2 focus-visible:ring-primary",
                 // Base states
                 !isSelected &&
                   !isOutside &&
-                  "text-surface-foreground hover:bg-[hsl(var(--on-surface)/0.08)] focus:bg-[hsl(var(--on-surface)/0.10)] active:bg-[hsl(var(--on-surface)/0.10)]",
+                  "text-surface-foreground hover:bg-[hsl(var(--on-surface)/0.08)] focus-visible:bg-[hsl(var(--on-surface)/0.10)] active:bg-[hsl(var(--on-surface)/0.10)]",
                 // Outside month
                 isOutside && "text-surface-variant-foreground/50",
                 // Today (not selected)
@@ -224,7 +224,7 @@ export function DatePicker({
                 isSelected &&
                   "bg-primary text-primary-foreground hover:bg-primary/90",
                 // Disabled
-                isDisabled && "opacity-[0.38] pointer-events-none"
+                isDisabled && "opacity-[0.38] pointer-events-none cursor-not-allowed"
               )}
               aria-label={cell.date.toLocaleDateString()}
               aria-selected={isSelected}

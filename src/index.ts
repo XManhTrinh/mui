@@ -159,3 +159,11 @@ export type { CarouselProps, CarouselItemProps } from "./carousel";
 // ─── Pickers ──────────────────────────────────────────────────────────────────
 export { DatePicker, TimePicker } from "./pickers";
 export type { DatePickerProps, TimePickerProps } from "./pickers";
+
+// ─── Typography ───────────────────────────────────────────────────────────────
+export { Typography, typographyVariants, ELEMENT_MAP } from "./typography";
+export type {
+  TypographyProps,
+  TypographyVariant,
+  TypographyColor,
+} from "./typography";

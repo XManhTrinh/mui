@@ -137,12 +137,12 @@ function Carousel({
             onClick={() => scrollBy(-1)}
             className={cn(
               "absolute left-2 top-1/2 -translate-y-1/2 z-10",
-              "flex items-center justify-center w-12 h-12 rounded-full",
+              "flex items-center justify-center w-12 h-12 rounded-full cursor-pointer",
               "bg-surface text-surface-foreground shadow-[0_2px_6px_var(--elevation-2),0_1px_2px_var(--elevation-1)]",
               "opacity-0 group-hover/carousel:opacity-100 transition-opacity",
-              "hover:bg-surface-container-high",
+              "hover:bg-surface-container-high transition-colors duration-200",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-              "disabled:opacity-0 disabled:pointer-events-none"
+              "disabled:opacity-0 disabled:pointer-events-none disabled:cursor-not-allowed"
             )}
             disabled={!canScrollLeft}
             aria-label="Scroll left"
@@ -154,12 +154,12 @@ function Carousel({
             onClick={() => scrollBy(1)}
             className={cn(
               "absolute right-2 top-1/2 -translate-y-1/2 z-10",
-              "flex items-center justify-center w-12 h-12 rounded-full",
+              "flex items-center justify-center w-12 h-12 rounded-full cursor-pointer",
               "bg-surface text-surface-foreground shadow-[0_2px_6px_var(--elevation-2),0_1px_2px_var(--elevation-1)]",
               "opacity-0 group-hover/carousel:opacity-100 transition-opacity",
-              "hover:bg-surface-container-high",
+              "hover:bg-surface-container-high transition-colors duration-200",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-              "disabled:opacity-0 disabled:pointer-events-none"
+              "disabled:opacity-0 disabled:pointer-events-none disabled:cursor-not-allowed"
             )}
             disabled={!canScrollRight}
             aria-label="Scroll right"
@@ -201,7 +201,7 @@ function CarouselItem({
         "focus-within:before:opacity-[0.10]",
         "active:before:opacity-[0.10]",
         // Disabled state
-        disabled && "opacity-[0.38] pointer-events-none",
+        disabled && "opacity-[0.38] pointer-events-none cursor-not-allowed",
         className
       )}
     >

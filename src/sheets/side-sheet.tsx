@@ -182,7 +182,7 @@ export function SideSheet({
                 <button
                   type="button"
                   onClick={() => onOpenChange(false)}
-                  className="flex items-center justify-center w-10 h-10 rounded-full text-[hsl(var(--on-surface-variant))] hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors"
+                  className="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer text-[hsl(var(--on-surface-variant))] hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                   aria-label="Close"
                 >
                   <Icon name="close" size={24} />

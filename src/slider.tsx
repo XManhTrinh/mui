@@ -109,8 +109,8 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
     return (
       <div
         className={cn(
-          "relative flex items-center w-full h-12 select-none",
-          disabled && "pointer-events-none",
+          "relative flex items-center w-full h-12 select-none group",
+          disabled && "pointer-events-none cursor-not-allowed",
           className
         )}
         onMouseEnter={() => setIsHovered(true)}
@@ -177,12 +177,12 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
         {/* Visual handle (thumb) — 44dp height × 4dp width */}
         <div
           className={cn(
-            "absolute top-1/2 -translate-y-1/2 -translate-x-1/2 pointer-events-none",
+            "absolute top-1/2 -translate-y-1/2 -translate-x-1/2",
             "w-1 h-11 rounded-full",
-            "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
+            "transition-[width,background-color] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
             disabled
-              ? "bg-[hsl(var(--on-surface)/0.38)]"
-              : "bg-primary",
+              ? "bg-[hsl(var(--on-surface)/0.38)] cursor-not-allowed"
+              : cn("bg-primary", isInteracting ? "cursor-grabbing" : "cursor-grab"),
             isInteracting && !disabled && "w-1.5"
           )}
           style={{ left: `${percentage}%` }}
@@ -193,7 +193,8 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
               "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full",
               "transition-colors duration-200 pointer-events-none",
               !disabled && isInteracting && "bg-[hsl(var(--primary)/0.10)]",
-              !disabled && isHovered && !isInteracting && "bg-[hsl(var(--primary)/0.08)]"
+              !disabled && isHovered && !isInteracting && "bg-[hsl(var(--primary)/0.08)]",
+              !disabled && !isHovered && !isInteracting && "group-focus-visible:bg-[hsl(var(--primary)/0.10)]"
             )}
           />
         </div>
@@ -217,7 +218,7 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
           aria-valuemin={min}
           aria-valuemax={max}
           aria-valuenow={currentValue}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed focus-visible:outline-none peer"
         />
       </div>
     );

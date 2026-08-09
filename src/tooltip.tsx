@@ -20,12 +20,12 @@ import { cn } from "./lib/utils";
  * - Accessibility: role="tooltip", aria-describedby on trigger
  */
 
-const tooltipVariants = cva("absolute z-50 pointer-events-none", {
+const tooltipVariants = cva("absolute z-60 pointer-events-none", {
   variants: {
     variant: {
       plain: [
-        // M3 spec: container height 24dp, padding 8dp, 4dp corner radius
-        "h-6 max-w-50 px-2 rounded-sm",
+        // M3 spec: container height 24dp, padding 8dp, 8dp corner radius
+        "h-6 max-w-50 px-2 rounded-lg",
         "bg-inverse-surface text-inverse-on-surface",
         "text-[12px] leading-4 font-normal whitespace-nowrap",
         "flex items-center",

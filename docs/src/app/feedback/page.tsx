@@ -76,10 +76,10 @@ export default function FeedbackPage() {
     <SnackbarProvider>
       <div className="max-w-5xl space-y-8">
         <div>
-          <h1 className="text-3xl font-bold text-surface-foreground mb-1">
+          <h1 className="text-[28px] leading-9 font-normal text-surface-foreground mb-2">
             Feedback
           </h1>
-          <p className="text-surface-variant-foreground">
+          <p className="text-[16px] leading-6 text-surface-variant-foreground">
             Feedback components communicate status, alerts, and results of user
             actions.
           </p>
@@ -87,7 +87,7 @@ export default function FeedbackPage() {
 
         {/* Dialog */}
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold">Dialog</h2>
+          <h2 className="text-[22px] leading-7 font-normal">Dialog</h2>
 
           <Showcase title="Basic Dialog">
             <Dialog>
@@ -145,7 +145,7 @@ export default function FeedbackPage() {
 
         {/* Snackbar */}
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold">Snackbar</h2>
+          <h2 className="text-[22px] leading-7 font-normal">Snackbar</h2>
 
           <Showcase title="Snackbar Examples">
             <SnackbarDemo />
@@ -154,7 +154,7 @@ export default function FeedbackPage() {
 
         {/* Menu */}
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold">Menu</h2>
+          <h2 className="text-[22px] leading-7 font-normal">Menu</h2>
 
           <Showcase title="Menu with Icons">
             <Menu
@@ -189,7 +189,7 @@ export default function FeedbackPage() {
 
         {/* Linear Progress */}
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold">Linear Progress</h2>
+          <h2 className="text-[22px] leading-7 font-normal">Linear Progress</h2>
 
           <Showcase title="Determinate" className="flex-col items-stretch">
             <div className="max-w-md w-full space-y-4">
@@ -208,7 +208,7 @@ export default function FeedbackPage() {
 
         {/* Circular Progress */}
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold">Circular Progress</h2>
+          <h2 className="text-[22px] leading-7 font-normal">Circular Progress</h2>
 
           <Showcase title="Determinate">
             <CircularProgress value={25} />
@@ -224,7 +224,7 @@ export default function FeedbackPage() {
 
         {/* Loading Indicator */}
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold">Loading Indicator</h2>
+          <h2 className="text-[22px] leading-7 font-normal">Loading Indicator</h2>
 
           <Showcase title="Loading Indicator Sizes">
             <LoadingIndicator size="sm" />
@@ -235,7 +235,7 @@ export default function FeedbackPage() {
 
         {/* Props Table */}
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold">Dialog Props</h2>
+          <h2 className="text-[22px] leading-7 font-normal">Dialog Props</h2>
           <div className="overflow-x-auto rounded-xl border border-outline-variant">
             <table className="w-full text-sm">
               <thead className="bg-surface-container">
@@ -263,7 +263,7 @@ export default function FeedbackPage() {
             </table>
           </div>
 
-          <h2 className="text-xl font-semibold">LinearProgress Props</h2>
+          <h2 className="text-[22px] leading-7 font-normal">LinearProgress Props</h2>
           <div className="overflow-x-auto rounded-xl border border-outline-variant">
             <table className="w-full text-sm">
               <thead className="bg-surface-container">

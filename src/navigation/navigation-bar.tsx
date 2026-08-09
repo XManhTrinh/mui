@@ -51,7 +51,7 @@ export function NavigationBar({ items, activeValue, onValueChange, className }: 
   return (
     <nav
       className={cn(
-        "fixed bottom-0 left-0 right-0 z-50 h-16 bg-surface-container",
+        "fixed bottom-0 left-0 right-0 z-40 h-16 bg-surface-container",
         "shadow-[0_-1px_3px_0_hsl(var(--elevation-1))]",
         className
       )}
@@ -82,7 +82,7 @@ export function NavigationBar({ items, activeValue, onValueChange, className }: 
                 aria-selected={isActive}
                 aria-label={item.label}
                 onClick={() => handleChange(item.value)}
-                className="group relative flex w-full flex-col items-center justify-center gap-1 h-16 min-h-12 outline-none cursor-pointer"
+                className="group relative flex w-full flex-col items-center justify-center gap-1 h-16 min-h-12 outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
               >
                 {/* Indicator container */}
                 <div className="relative flex items-center justify-center w-16 h-8">
@@ -119,7 +119,7 @@ export function NavigationBar({ items, activeValue, onValueChange, className }: 
                 {/* Label */}
                 <span
                   className={cn(
-                    "text-[12px] leading-4 font-medium tracking-[0.5px] transition-colors duration-200",
+                    "text-[12px] leading-4 font-medium tracking-[0.5px] transition-colors duration-200 truncate max-w-full px-1",
                     isActive
                       ? "text-secondary"
                       : "text-surface-variant-foreground"

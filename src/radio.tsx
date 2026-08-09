@@ -71,7 +71,7 @@ const Radio = React.forwardRef<HTMLButtonElement, RadioProps>(
         onClick={handleClick}
         className={cn(
           "group relative inline-flex items-center justify-center w-12 h-12 select-none",
-          "focus-visible:outline-none",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
           disabled ? "cursor-not-allowed" : "cursor-pointer",
           className
         )}
@@ -94,8 +94,8 @@ const Radio = React.forwardRef<HTMLButtonElement, RadioProps>(
         <span
           className={cn(
             "absolute w-10 h-10 rounded-full transition-colors duration-200 pointer-events-none",
-            !disabled && !isChecked && "group-hover:bg-[hsl(var(--on-surface)/0.08)]",
-            !disabled && isChecked && "group-hover:bg-[hsl(var(--primary)/0.08)]"
+            !disabled && !isChecked && "group-hover:bg-[hsl(var(--on-surface)/0.08)] group-focus-visible:bg-[hsl(var(--on-surface)/0.10)] group-active:bg-[hsl(var(--on-surface)/0.10)]",
+            !disabled && isChecked && "group-hover:bg-[hsl(var(--primary)/0.08)] group-focus-visible:bg-[hsl(var(--primary)/0.10)] group-active:bg-[hsl(var(--primary)/0.10)]"
           )}
         />
 

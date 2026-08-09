@@ -28,7 +28,7 @@ const chipVariants = cva(
     "text-[14px] leading-5 font-medium tracking-[0.1px]",
     "transition-colors duration-200 select-none cursor-pointer",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-    "disabled:pointer-events-none disabled:opacity-[0.38]",
+    "disabled:pointer-events-none disabled:opacity-[0.38] disabled:cursor-not-allowed",
   ].join(" "),
   {
     variants: {
@@ -122,7 +122,7 @@ const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
         {!showCheckmark && leadingIcon && (
           <Icon name={leadingIcon} size={18} className={cn("mr-2 relative z-10", variant === "assist" && "text-primary")} />
         )}
-        <span className="relative z-10">{children}</span>
+        <span className="relative z-10 truncate">{children}</span>
         {showDismiss && (
           <span
             role="button"

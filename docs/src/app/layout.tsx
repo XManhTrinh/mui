@@ -163,13 +163,14 @@ function Sidebar() {
                 />
               </button>
 
-              {/* Sub-items — collapsible */}
+              {/* Sub-items — collapsible with smooth open/close */}
               <div
-                className={`overflow-hidden transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)] ${
-                  isExpanded ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                className={`grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.2,0,0,1)] ${
+                  isExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
                 }`}
               >
-                <div className="pl-6 py-1">
+                <div className="overflow-hidden min-h-0">
+                  <div className="pl-6 py-1">
                   {category.links.map((link) => {
                     const isActive = pathname === link.href;
                     return (
@@ -190,6 +191,7 @@ function Sidebar() {
                       </Link>
                     );
                   })}
+                  </div>
                 </div>
               </div>
             </div>

@@ -152,7 +152,7 @@ function CollapsedRailItem({
         aria-selected={isActive}
         aria-label={item.label}
         onClick={() => onSelect(item.value)}
-        className="group relative flex flex-col items-center justify-center gap-1 w-24 min-h-12 py-1 outline-none cursor-pointer"
+        className="group relative flex flex-col items-center justify-center gap-1 w-24 min-h-12 py-1 outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
       >
         {/* Indicator container with state layer via ::after */}
         <div
@@ -192,7 +192,7 @@ function CollapsedRailItem({
         {showLabel && (
           <span
             className={cn(
-              "text-[12px] leading-4 font-medium tracking-[0.5px] transition-colors duration-200",
+              "text-[12px] leading-4 font-medium tracking-[0.5px] transition-colors duration-200 truncate max-w-full",
               isActive
                 ? "text-secondary"
                 : "text-surface-variant-foreground"
@@ -233,7 +233,7 @@ function ExpandedRailItem({
         aria-label={item.label}
         onClick={() => onSelect(item.value)}
         className={cn(
-          "group relative flex items-center gap-3 w-full h-14 rounded-full px-4 pr-6 outline-none transition-colors duration-200",
+          "group relative flex items-center gap-3 w-full h-14 rounded-full px-4 pr-6 outline-none cursor-pointer transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-primary",
           isActive
             ? "bg-secondary-container text-secondary-container-foreground font-medium"
             : "text-surface-variant-foreground"

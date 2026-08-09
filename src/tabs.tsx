@@ -155,13 +155,33 @@ function TabList({ className, children }: TabListProps) {
 
     if (activeTab) {
       const containerRect = container.getBoundingClientRect();
-      const tabRect = activeTab.getBoundingClientRect();
-      setIndicatorStyle({
-        left: tabRect.left - containerRect.left,
-        width: tabRect.width,
-      });
+
+      if (variant === "primary") {
+        // Primary: indicator spans content width (label element), not full tab
+        const labelEl = activeTab.querySelector("[data-tab-label]") as HTMLElement | null;
+        if (labelEl) {
+          const labelRect = labelEl.getBoundingClientRect();
+          setIndicatorStyle({
+            left: labelRect.left - containerRect.left,
+            width: labelRect.width,
+          });
+        } else {
+          const tabRect = activeTab.getBoundingClientRect();
+          setIndicatorStyle({
+            left: tabRect.left - containerRect.left,
+            width: tabRect.width,
+          });
+        }
+      } else {
+        // Secondary: indicator spans full tab width
+        const tabRect = activeTab.getBoundingClientRect();
+        setIndicatorStyle({
+          left: tabRect.left - containerRect.left,
+          width: tabRect.width,
+        });
+      }
     }
-  }, [value]);
+  }, [value, variant]);
 
   const indicatorHeight = variant === "primary" ? 3 : 2;
 
@@ -179,13 +199,13 @@ function TabList({ className, children }: TabListProps) {
 
       {/* Active indicator — slides between tabs */}
       <span
-        className="absolute bottom-0 bg-primary transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]"
+        className="absolute bottom-0 bg-primary transition-[left,width] duration-200 ease-[cubic-bezier(0.2,0,0,1)]"
         style={{
           left: `${indicatorStyle.left}px`,
           width: `${indicatorStyle.width}px`,
           height: `${indicatorHeight}px`,
-          borderTopLeftRadius: `${indicatorHeight}px`,
-          borderTopRightRadius: `${indicatorHeight}px`,
+          borderTopLeftRadius: variant === "primary" ? `${indicatorHeight}px` : "0",
+          borderTopRightRadius: variant === "primary" ? `${indicatorHeight}px` : "0",
           minWidth: "24px",
         }}
       />
@@ -218,7 +238,7 @@ function Tab({ value: tabValue, icon, label, disabled = false, className }: TabP
     if (!disabled) onValueChange(tabValue);
   };
 
-  // Color logic
+  // Color logic per variant
   const labelColor = isActive
     ? variant === "primary"
       ? "text-primary"
@@ -231,6 +251,9 @@ function Tab({ value: tabValue, icon, label, disabled = false, className }: TabP
       : "text-surface-foreground"
     : "text-[hsl(var(--on-surface-variant))]";
 
+  // Primary: icon stacked above label (flex-col), Secondary: icon inline (flex-row)
+  const layoutDirection = variant === "primary" ? "flex-col" : "flex-row";
+
   return (
     <button
       ref={buttonRef}
@@ -242,9 +265,10 @@ function Tab({ value: tabValue, icon, label, disabled = false, className }: TabP
       data-tab-value={tabValue}
       onClick={handleClick}
       className={cn(
-        "relative flex-1 flex flex-col items-center justify-center gap-1 min-w-12 px-4",
+        "relative flex-1 flex items-center justify-center gap-1 min-w-12 px-4",
+        layoutDirection,
         "select-none transition-colors duration-200",
-        "focus-visible:outline-none",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset",
         // Hover state
         !disabled && "hover:bg-[hsl(var(--on-surface)/0.08)]",
         // Disabled
@@ -257,7 +281,7 @@ function Tab({ value: tabValue, icon, label, disabled = false, className }: TabP
       <span
         className={cn(
           "absolute inset-0 rounded-none transition-colors duration-200 pointer-events-none",
-          !disabled && "active:bg-[hsl(var(--on-surface)/0.10)]"
+          !disabled && "focus-visible:bg-[hsl(var(--on-surface)/0.10)] active:bg-[hsl(var(--on-surface)/0.10)]"
         )}
       />
 
@@ -268,8 +292,9 @@ function Tab({ value: tabValue, icon, label, disabled = false, className }: TabP
 
       {/* Label */}
       <span
+        data-tab-label
         className={cn(
-          "relative z-10 text-[14px] font-medium leading-5 tracking-[0.1px]",
+          "relative z-10 text-[14px] font-medium leading-5 tracking-[0.1px] truncate",
           labelColor
         )}
       >

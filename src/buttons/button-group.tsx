@@ -282,13 +282,13 @@ const innerRadiusValues = {
   xl: 20,
 } as const;
 
-/** Size heights matching M3 button heights: 32/40/48/56/64dp */
+/** Size heights matching M3 Expressive button heights: 32/36/40/48/56dp */
 const sizeHeightMap = {
   xs: "h-8",
-  s: "h-10",
-  m: "h-12",
-  l: "h-14",
-  xl: "h-16",
+  s: "h-9",
+  m: "h-10",
+  l: "h-12",
+  xl: "h-14",
 } as const;
 
 /** Minimum width for accessibility (XS and S need 48dp min) */
@@ -395,7 +395,7 @@ const ButtonGroupItem = React.forwardRef<HTMLButtonElement, ButtonGroupItemProps
 
     // Disabled
     const disabledClass = disabled
-      ? "opacity-[0.38] pointer-events-none"
+      ? "opacity-[0.38] pointer-events-none cursor-not-allowed"
       : "";
 
     // ARIA role
@@ -435,7 +435,7 @@ const ButtonGroupItem = React.forwardRef<HTMLButtonElement, ButtonGroupItemProps
           // Typography: Label Large
           "text-[14px] font-medium leading-5 tracking-[0.1px]",
           // Transition
-          "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
+          "transition-colors duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
           // State layer via ::before pseudo-element
           "overflow-hidden",
           "before:absolute before:inset-0 before:rounded-[inherit]",

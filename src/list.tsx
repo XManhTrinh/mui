@@ -126,9 +126,9 @@ const ListItem = React.forwardRef<HTMLLIElement, ListItemProps>(
             selected &&
             "hover:bg-[hsl(var(--on-primary-container)/0.08)] focus-visible:bg-[hsl(var(--on-primary-container)/0.10)] active:bg-[hsl(var(--on-primary-container)/0.10)]",
           // Disabled
-          disabled && "opacity-[0.38] pointer-events-none",
+          disabled && "opacity-[0.38] pointer-events-none cursor-not-allowed",
           // Transition
-          "transition-colors outline-none",
+          "transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset",
           className
         )}
       >
@@ -153,7 +153,7 @@ const ListItem = React.forwardRef<HTMLLIElement, ListItemProps>(
           )}
           <p
             className={cn(
-              "list-label text-[16px] leading-6 text-surface-foreground truncate",
+              "list-label text-[14px] leading-5 text-surface-foreground truncate",
               selected && "text-primary-container-foreground"
             )}
           >

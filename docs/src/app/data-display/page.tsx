@@ -26,17 +26,17 @@ export default function DataDisplayPage() {
   return (
     <div className="max-w-5xl space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-surface-foreground mb-1">
+        <h1 className="text-[28px] leading-9 font-normal text-surface-foreground mb-2">
           Data Display
         </h1>
-        <p className="text-surface-variant-foreground">
+        <p className="text-[16px] leading-6 text-surface-variant-foreground">
           Components for displaying content, data, and metadata in structured layouts.
         </p>
       </div>
 
       {/* Card */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Card</h2>
+        <h2 className="text-[22px] leading-7 font-normal">Card</h2>
 
         <Showcase title="Card Variants" className="items-start">
           <Card variant="elevated" className="w-64">
@@ -94,7 +94,7 @@ export default function DataDisplayPage() {
 
       {/* Badge */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Badge</h2>
+        <h2 className="text-[22px] leading-7 font-normal">Badge</h2>
 
         <Showcase title="Badge Variants">
           <Badge variant="dot" visible>
@@ -122,7 +122,7 @@ export default function DataDisplayPage() {
 
       {/* Chip */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Chip</h2>
+        <h2 className="text-[22px] leading-7 font-normal">Chip</h2>
 
         <Showcase title="Assist Chip">
           <Chip variant="assist" leadingIcon="event">Event</Chip>
@@ -158,7 +158,7 @@ export default function DataDisplayPage() {
 
       {/* List */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">List</h2>
+        <h2 className="text-[22px] leading-7 font-normal">List</h2>
 
         <Showcase title="One-line List" className="flex-col items-stretch">
           <div className="max-w-md w-full bg-surface rounded-xl border border-outline-variant overflow-hidden">
@@ -224,7 +224,7 @@ export default function DataDisplayPage() {
 
       {/* Tooltip */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Tooltip</h2>
+        <h2 className="text-[22px] leading-7 font-normal">Tooltip</h2>
 
         <Showcase title="Plain Tooltip">
           <Tooltip content="Add to favorites">
@@ -256,7 +256,7 @@ export default function DataDisplayPage() {
 
       {/* Divider */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Divider</h2>
+        <h2 className="text-[22px] leading-7 font-normal">Divider</h2>
 
         <Showcase title="Divider Variants" className="flex-col items-stretch">
           <div className="max-w-md w-full space-y-4">
@@ -274,7 +274,7 @@ export default function DataDisplayPage() {
 
       {/* Icon */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Icon</h2>
+        <h2 className="text-[22px] leading-7 font-normal">Icon</h2>
 
         <Showcase title="Icon Sizes">
           <Icon name="home" size={18} />
@@ -318,7 +318,7 @@ export default function DataDisplayPage() {
 
       {/* Props Tables */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Card Props</h2>
+        <h2 className="text-[22px] leading-7 font-normal">Card Props</h2>
         <div className="overflow-x-auto rounded-xl border border-outline-variant">
           <table className="w-full text-sm">
             <thead className="bg-surface-container">

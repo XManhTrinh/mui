@@ -122,7 +122,7 @@ export function TimePicker({
     <div
       className={cn(
         "inline-flex items-center gap-0 rounded-[28px] bg-surface-container-high p-6",
-        disabled && "opacity-[0.38] pointer-events-none",
+        disabled && "opacity-[0.38] pointer-events-none cursor-not-allowed",
         className
       )}
     >
@@ -140,8 +140,8 @@ export function TimePicker({
           disabled={disabled}
           aria-label="Hour"
           className={cn(
-            "h-18 w-24 rounded-2xl bg-surface-container-highest text-center text-[24px] font-normal text-surface-foreground",
-            "outline-none focus:ring-2 focus:ring-primary",
+            "h-18 w-24 rounded-2xl bg-surface-container-highest text-center text-[24px] font-normal text-surface-foreground cursor-text",
+            "outline-none focus-visible:ring-2 focus-visible:ring-primary",
             "transition-colors duration-100"
           )}
         />
@@ -166,8 +166,8 @@ export function TimePicker({
           disabled={disabled}
           aria-label="Minute"
           className={cn(
-            "h-18 w-24 rounded-2xl bg-surface-container-highest text-center text-[24px] font-normal text-surface-foreground",
-            "outline-none focus:ring-2 focus:ring-primary",
+            "h-18 w-24 rounded-2xl bg-surface-container-highest text-center text-[24px] font-normal text-surface-foreground cursor-text",
+            "outline-none focus-visible:ring-2 focus-visible:ring-primary",
             "transition-colors duration-100"
           )}
         />
@@ -183,7 +183,7 @@ export function TimePicker({
             aria-label="AM"
             aria-pressed={period === "AM"}
             className={cn(
-              "flex h-9 flex-1 items-center justify-center text-[14px] font-medium transition-colors duration-100",
+              "flex h-9 flex-1 items-center justify-center text-[14px] font-medium transition-colors duration-100 cursor-pointer",
               period === "AM"
                 ? "bg-tertiary-container text-tertiary-container-foreground"
                 : "bg-transparent text-surface-variant-foreground hover:bg-[hsl(var(--on-surface-variant)/0.08)]"
@@ -199,7 +199,7 @@ export function TimePicker({
             aria-label="PM"
             aria-pressed={period === "PM"}
             className={cn(
-              "flex h-9 flex-1 items-center justify-center text-[14px] font-medium transition-colors duration-100",
+              "flex h-9 flex-1 items-center justify-center text-[14px] font-medium transition-colors duration-100 cursor-pointer",
               period === "PM"
                 ? "bg-tertiary-container text-tertiary-container-foreground"
                 : "bg-transparent text-surface-variant-foreground hover:bg-[hsl(var(--on-surface-variant)/0.08)]"

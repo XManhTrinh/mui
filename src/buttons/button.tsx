@@ -21,7 +21,7 @@ const buttonVariants = cva(
     // Layout
     "relative inline-flex items-center justify-center whitespace-nowrap",
     // Typography: Label Large
-    "text-[14px] font-medium leading-[20px] tracking-[0.1px]",
+    "text-[14px] font-medium leading-5 tracking-[0.1px]",
     // Cursor & interaction
     "cursor-pointer select-none",
     // Transition: fast spring-like for shape morph (M3: motionSpringFastSpatial)
@@ -29,7 +29,7 @@ const buttonVariants = cva(
     // Focus ring
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
     // Disabled
-    "disabled:opacity-[0.38] disabled:pointer-events-none",
+    "disabled:opacity-[0.38] disabled:pointer-events-none disabled:cursor-not-allowed",
     // State layer via ::before pseudo-element
     "overflow-hidden",
     "before:absolute before:inset-0 before:rounded-[inherit]",
@@ -56,11 +56,11 @@ const buttonVariants = cva(
           "bg-secondary-container text-secondary-container-foreground hover:shadow-[0_1px_3px_var(--elevation-1)]",
       },
       size: {
-        xs: "h-8 px-3 gap-1.5 [&_svg]:size-5",
-        s: "h-10 px-4 gap-2 [&_svg]:size-5",
-        m: "h-12 px-6 gap-2 [&_svg]:size-5",
-        l: "h-14 px-7 gap-2 [&_svg]:size-5",
-        xl: "h-16 px-8 gap-2 [&_svg]:size-5",
+        xs: "h-8 px-3 gap-1.5 [&_svg]:size-[18px]",
+        s: "h-9 px-4 gap-2 [&_svg]:size-[18px]",
+        m: "h-10 px-6 gap-2 [&_svg]:size-5",
+        l: "h-12 px-7 gap-2 [&_svg]:size-6",
+        xl: "h-14 px-8 gap-2 [&_svg]:size-6",
       },
     },
     defaultVariants: {

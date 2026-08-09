@@ -102,7 +102,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
     // Shared input classes
     const inputClasses = cn(
-      "w-full bg-transparent outline-none",
+      "w-full bg-transparent outline-none cursor-text",
       "text-[16px] leading-6 font-normal tracking-[0.5px]",
       "text-[hsl(var(--on-surface))]",
       "placeholder:text-[hsl(var(--on-surface-variant))]",
@@ -124,7 +124,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               "rounded-t-sm rounded-b-none",
               "bg-[hsl(var(--surface-container-highest))]",
               !disabled && "hover:bg-[hsl(var(--on-surface)/0.08)]",
-              disabled && "pointer-events-none bg-[hsl(var(--on-surface)/0.04)]",
+              disabled && "pointer-events-none cursor-not-allowed bg-[hsl(var(--on-surface)/0.04)]",
               "transition-colors duration-200"
             )}
           >
@@ -252,7 +252,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             <span
               className={cn(
                 "absolute bottom-0 left-0 right-0 pointer-events-none",
-                "transition-all duration-200",
+                "transition-[height,background-color] duration-200",
                 focused
                   ? error
                     ? "h-0.5 bg-[hsl(var(--error))]"
@@ -307,7 +307,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           className={cn(
             "group relative flex items-center",
             multiline ? "min-h-14" : "h-14",
-            disabled && "pointer-events-none"
+            disabled && "pointer-events-none cursor-not-allowed"
           )}
         >
           {/* Fieldset for border + notch */}
@@ -316,7 +316,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             className={cn(
               "absolute inset-0 rounded-sm pointer-events-none",
               "px-3",
-              "transition-all duration-200",
+              "transition-[border-color,border-width] duration-200",
               // Border styles
               focused
                 ? error

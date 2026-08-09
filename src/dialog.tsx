@@ -103,7 +103,7 @@ const DialogContent = React.forwardRef<
         {/* ── Full-screen header: 56dp, close icon, start-aligned ── */}
         {fullScreen && (
           <div className="flex items-center h-14 px-6 shrink-0 border-b border-outline-variant sm:hidden">
-            <DialogPrimitive.Close className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors -ml-2 mr-3">
+            <DialogPrimitive.Close className="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors -ml-2 mr-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
               <Icon name="close" size={24} className="text-surface-foreground" />
             </DialogPrimitive.Close>
           </div>
@@ -132,7 +132,7 @@ const DialogContent = React.forwardRef<
 
         {/* ── Close button (opt-in for basic, auto for fullscreen desktop) ── */}
         {showClose && !fullScreen && (
-          <DialogPrimitive.Close className="absolute right-4 top-4 flex items-center justify-center w-10 h-10 rounded-full text-surface-variant-foreground hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors focus:outline-none focus:ring-2 focus:ring-primary">
+          <DialogPrimitive.Close className="absolute right-4 top-4 flex items-center justify-center w-10 h-10 rounded-full text-surface-variant-foreground cursor-pointer hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
             <Icon name="close" size={20} />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>

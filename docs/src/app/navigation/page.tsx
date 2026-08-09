@@ -27,17 +27,17 @@ export default function NavigationPage() {
   return (
     <div className="max-w-5xl space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-surface-foreground mb-1">
+        <h1 className="text-[28px] leading-9 font-normal text-surface-foreground mb-2">
           Navigation
         </h1>
-        <p className="text-surface-variant-foreground">
+        <p className="text-[16px] leading-6 text-surface-variant-foreground">
           Navigation components help users move between destinations in an app.
         </p>
       </div>
 
       {/* NavigationBar */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Navigation Bar</h2>
+        <h2 className="text-[22px] leading-7 font-normal">Navigation Bar</h2>
 
         <Showcase title="Navigation Bar with Badges" className="flex-col items-stretch">
           <div className="relative w-full max-w-md mx-auto">
@@ -52,7 +52,7 @@ export default function NavigationPage() {
 
       {/* NavigationRail */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Navigation Rail</h2>
+        <h2 className="text-[22px] leading-7 font-normal">Navigation Rail</h2>
 
         <Showcase title="Collapsed Navigation Rail" className="flex-col items-stretch">
           <div className="relative h-96 w-full border border-outline-variant rounded-xl overflow-hidden">
@@ -95,7 +95,7 @@ export default function NavigationPage() {
 
       {/* Props Table */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">NavigationBar Props</h2>
+        <h2 className="text-[22px] leading-7 font-normal">NavigationBar Props</h2>
         <div className="overflow-x-auto rounded-xl border border-outline-variant">
           <table className="w-full text-sm">
             <thead className="bg-surface-container">
@@ -129,7 +129,7 @@ export default function NavigationPage() {
           </table>
         </div>
 
-        <h2 className="text-xl font-semibold">NavigationRail Props</h2>
+        <h2 className="text-[22px] leading-7 font-normal">NavigationRail Props</h2>
         <div className="overflow-x-auto rounded-xl border border-outline-variant">
           <table className="w-full text-sm">
             <thead className="bg-surface-container">

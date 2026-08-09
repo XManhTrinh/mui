@@ -166,7 +166,7 @@ function SnackbarItem({ item, onDismiss }: SnackbarItemProps) {
           className={cn(
             "shrink-0 text-[14px] font-medium leading-5 tracking-[0.1px]",
             "text-[hsl(var(--inverse-primary,var(--primary)))]",
-            "hover:opacity-80 transition-opacity",
+            "hover:opacity-80 transition-opacity cursor-pointer",
             "px-2 py-1.5 rounded-sm",
             "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--inverse-primary,var(--primary)))]",
             showClose ? "mr-0" : "mr-2"
@@ -182,7 +182,7 @@ function SnackbarItem({ item, onDismiss }: SnackbarItemProps) {
           type="button"
           onClick={handleClose}
           className={cn(
-            "shrink-0 flex items-center justify-center w-8 h-8 rounded-full",
+            "shrink-0 flex items-center justify-center w-8 h-8 rounded-full cursor-pointer",
             "text-inverse-on-surface",
             "hover:bg-[hsl(var(--inverse-on-surface)/0.08)] transition-colors",
             "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-inverse-on-surface",
@@ -241,7 +241,7 @@ export function SnackbarProvider({
       {/* Snackbar container — fixed at bottom */}
       <div
         className={cn(
-          "fixed bottom-4 z-50 flex flex-col gap-2 w-full max-w-140 pointer-events-none",
+          "fixed bottom-4 z-70 flex flex-col gap-2 w-full max-w-140 pointer-events-none",
           // Mobile: 16dp margins, centered
           "max-sm:left-4 max-sm:right-4 max-sm:w-[calc(100%-32px)]",
           // Above mobile nav (bottom-20 ~ 80px for nav bar clearance)

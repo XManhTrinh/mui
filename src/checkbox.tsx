@@ -89,7 +89,7 @@ const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
         onClick={handleClick}
         className={cn(
           "group relative inline-flex items-center justify-center w-12 h-12 select-none",
-          "focus-visible:outline-none",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
           disabled ? "cursor-not-allowed" : "cursor-pointer",
           className
         )}
@@ -114,8 +114,8 @@ const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
             "absolute w-10 h-10 rounded-full transition-colors duration-200 pointer-events-none",
             !disabled &&
               !active &&
-              "group-hover:bg-[hsl(var(--on-surface)/0.08)]",
-            !disabled && active && "group-hover:bg-[hsl(var(--primary)/0.08)]"
+              "group-hover:bg-[hsl(var(--on-surface)/0.08)] group-focus-visible:bg-[hsl(var(--on-surface)/0.10)] group-active:bg-[hsl(var(--on-surface)/0.10)]",
+            !disabled && active && "group-hover:bg-[hsl(var(--primary)/0.08)] group-focus-visible:bg-[hsl(var(--primary)/0.10)] group-active:bg-[hsl(var(--primary)/0.10)]"
           )}
         />
 
@@ -123,7 +123,7 @@ const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
         <span
           className={cn(
             "relative z-10 flex items-center justify-center w-4.5 h-4.5 rounded-xs",
-            "transition-all duration-100 ease-[cubic-bezier(0.2,0,0,1)]",
+            "transition-colors duration-100 ease-[cubic-bezier(0.2,0,0,1)]",
             // Unchecked
             !active && !disabled && "border-2 border-[hsl(var(--on-surface-variant))] bg-transparent",
             // Checked / Indeterminate
@@ -138,7 +138,7 @@ const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
           {active && (
             <svg
               className={cn(
-                "w-3 h-3 transition-all duration-100 ease-[cubic-bezier(0.2,0,0,1)]",
+                "w-3 h-3 transition-opacity duration-100 ease-[cubic-bezier(0.2,0,0,1)]",
                 !disabled ? "text-primary-foreground" : "text-surface"
               )}
               viewBox="0 0 12 12"

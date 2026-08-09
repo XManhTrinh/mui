@@ -24,10 +24,10 @@ export default function InputsPage() {
   return (
     <div className="max-w-5xl space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-surface-foreground mb-1">
+        <h1 className="text-[28px] leading-9 font-normal text-surface-foreground mb-2">
           Inputs
         </h1>
-        <p className="text-surface-variant-foreground">
+        <p className="text-[16px] leading-6 text-surface-variant-foreground">
           Input components allow users to enter and edit information in forms and
           interfaces.
         </p>
@@ -35,7 +35,7 @@ export default function InputsPage() {
 
       {/* Text Fields */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">TextField</h2>
+        <h2 className="text-[22px] leading-7 font-normal">TextField</h2>
 
         <Showcase title="Outlined TextField">
           <div className="flex flex-col gap-4 w-full max-w-sm">
@@ -101,7 +101,7 @@ export default function InputsPage() {
 
       {/* Checkbox */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Checkbox</h2>
+        <h2 className="text-[22px] leading-7 font-normal">Checkbox</h2>
 
         <Showcase title="Checkbox States">
           <div className="flex items-center gap-6">
@@ -134,7 +134,7 @@ export default function InputsPage() {
 
       {/* Radio */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Radio &amp; RadioGroup</h2>
+        <h2 className="text-[22px] leading-7 font-normal">Radio &amp; RadioGroup</h2>
 
         <Showcase title="RadioGroup">
           <RadioGroup value={radioValue} onValueChange={setRadioValue}>
@@ -160,7 +160,7 @@ export default function InputsPage() {
 
       {/* Switch */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Switch</h2>
+        <h2 className="text-[22px] leading-7 font-normal">Switch</h2>
 
         <Showcase title="Switch Variants">
           <div className="flex flex-col gap-4">
@@ -206,7 +206,7 @@ export default function InputsPage() {
 
       {/* Slider */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Slider</h2>
+        <h2 className="text-[22px] leading-7 font-normal">Slider</h2>
 
         <Showcase title="Continuous Slider">
           <div className="w-full max-w-md space-y-4">
@@ -246,7 +246,7 @@ export default function InputsPage() {
 
       {/* Search */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Search</h2>
+        <h2 className="text-[22px] leading-7 font-normal">Search</h2>
 
         <Showcase title="Search Bar">
           <div className="w-full max-w-md">
@@ -261,7 +261,7 @@ export default function InputsPage() {
 
       {/* Props Table */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">TextField Props</h2>
+        <h2 className="text-[22px] leading-7 font-normal">TextField Props</h2>
         <div className="overflow-x-auto rounded-xl border border-outline-variant">
           <table className="w-full text-sm">
             <thead className="bg-surface-container">

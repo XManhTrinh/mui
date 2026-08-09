@@ -132,7 +132,7 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
         onPointerUp={handlePointerUp}
         className={cn(
           "group relative inline-flex items-center justify-center w-12 h-12 select-none",
-          "focus-visible:outline-none",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
           disabled ? "cursor-not-allowed" : "cursor-pointer",
           className
         )}
@@ -167,7 +167,7 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
           {/* State layer — 40dp circle on handle position */}
           <span
             className={cn(
-              "absolute top-1/2 -translate-y-1/2 w-10 h-10 rounded-full transition-all duration-200 pointer-events-none",
+              "absolute top-1/2 -translate-y-1/2 w-10 h-10 rounded-full transition-colors duration-200 pointer-events-none",
               !disabled && !isChecked && "group-hover:bg-[hsl(var(--on-surface)/0.08)] group-focus-visible:bg-[hsl(var(--on-surface)/0.10)]",
               !disabled && isChecked && "group-hover:bg-[hsl(var(--primary)/0.08)] group-focus-visible:bg-[hsl(var(--primary)/0.10)]",
               isPressed && !isChecked && !disabled && "bg-[hsl(var(--on-surface)/0.10)]",
@@ -182,7 +182,7 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
           <span
             className={cn(
               "absolute top-1/2 -translate-y-1/2 rounded-full flex items-center justify-center",
-              "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
+              "transition-[left,width,height,background-color] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
               // Selected colors
               isChecked && !disabled && (isPressed ? "bg-primary-container" : "bg-[hsl(var(--on-primary))]"),
               // Unselected colors
