@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { List, ListItem, Icon, Checkbox, Switch } from "@mui/index";
+import { List, ListItem, Icon } from "@mui/index";
 import { Showcase } from "@/components/showcase";
 
 export default function ListsPage() {
@@ -12,8 +12,7 @@ export default function ListsPage() {
           Lists
         </h1>
         <p className="text-[16px] leading-6 text-surface-variant-foreground">
-          Lists are continuous, vertical indexes of text and images. They are
-          composed of items containing primary and supplemental actions.
+          Lists are continuous, vertical indexes of text and images.
         </p>
       </div>
 
@@ -21,9 +20,9 @@ export default function ListsPage() {
         <h2 className="text-[22px] leading-7 font-normal">One Line</h2>
         <Showcase title="Single-Line List" className="flex-col items-stretch">
           <List>
-            <ListItem headline="List item 1" />
-            <ListItem headline="List item 2" />
-            <ListItem headline="List item 3" />
+            <ListItem>List item 1</ListItem>
+            <ListItem>List item 2</ListItem>
+            <ListItem>List item 3</ListItem>
           </List>
         </Showcase>
       </section>
@@ -32,18 +31,15 @@ export default function ListsPage() {
         <h2 className="text-[22px] leading-7 font-normal">Two Lines</h2>
         <Showcase title="Two-Line List" className="flex-col items-stretch">
           <List>
-            <ListItem
-              headline="Photos"
-              supportingText="Jan 9, 2024"
-            />
-            <ListItem
-              headline="Recipes"
-              supportingText="Jan 17, 2024"
-            />
-            <ListItem
-              headline="Work"
-              supportingText="Feb 2, 2024"
-            />
+            <ListItem supporting="Jan 9, 2024" leading={<Icon name="folder" size={24} />} lines={2}>
+              Photos
+            </ListItem>
+            <ListItem supporting="Jan 17, 2024" leading={<Icon name="folder" size={24} />} lines={2}>
+              Recipes
+            </ListItem>
+            <ListItem supporting="Feb 2, 2024" leading={<Icon name="folder" size={24} />} lines={2}>
+              Work
+            </ListItem>
           </List>
         </Showcase>
       </section>
@@ -53,41 +49,21 @@ export default function ListsPage() {
         <Showcase title="Three-Line List" className="flex-col items-stretch">
           <List>
             <ListItem
-              headline="Brunch this weekend?"
-              supportingText="Ali Connors — I'll be in your neighborhood doing errands this weekend."
+              supporting="Ali Connors — I'll be in your neighborhood doing errands."
+              leading={<Icon name="person" size={24} />}
+              trailing={<span className="text-xs text-surface-variant-foreground">3m</span>}
               lines={3}
-            />
+            >
+              Brunch this weekend?
+            </ListItem>
             <ListItem
-              headline="Summer BBQ"
-              supportingText="to Alex, Scott, Jennifer — Wish I could come, but I'm out of town this weekend."
+              supporting="to Alex, Scott — Wish I could come, but I'm out of town."
+              leading={<Icon name="person" size={24} />}
+              trailing={<span className="text-xs text-surface-variant-foreground">1h</span>}
               lines={3}
-            />
-          </List>
-        </Showcase>
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="text-[22px] leading-7 font-normal">Leading & Trailing</h2>
-        <Showcase title="With Icons and Actions" className="flex-col items-stretch">
-          <List>
-            <ListItem
-              headline="Wi-Fi"
-              supportingText="Connected"
-              leading={<Icon name="wifi" />}
-              trailing={<Switch defaultChecked />}
-            />
-            <ListItem
-              headline="Bluetooth"
-              supportingText="Off"
-              leading={<Icon name="bluetooth" />}
-              trailing={<Switch />}
-            />
-            <ListItem
-              headline="Data usage"
-              supportingText="1.2 GB used"
-              leading={<Icon name="data_usage" />}
-              trailing={<Icon name="chevron_right" />}
-            />
+            >
+              Summer BBQ
+            </ListItem>
           </List>
         </Showcase>
       </section>

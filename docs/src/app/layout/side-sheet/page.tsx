@@ -1,12 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { SideSheet, Button, List, ListItem, Icon } from "@mui/index";
+import { SideSheet, Button, Icon } from "@mui/index";
 import { Showcase } from "@/components/showcase";
 
 export default function SideSheetPage() {
-  const [leftOpen, setLeftOpen] = React.useState(false);
   const [rightOpen, setRightOpen] = React.useState(false);
+  const [leftOpen, setLeftOpen] = React.useState(false);
 
   return (
     <div className="max-w-4xl space-y-8">
@@ -15,8 +15,8 @@ export default function SideSheetPage() {
           Side Sheet
         </h1>
         <p className="text-[16px] leading-6 text-surface-variant-foreground">
-          Side sheets are surfaces containing supplementary content or actions.
-          They are anchored to the left or right edge of the screen.
+          Side sheets are surfaces containing supplementary content anchored to
+          the left or right edge of the screen.
         </p>
       </div>
 
@@ -26,22 +26,16 @@ export default function SideSheetPage() {
           <Button variant="filled" onClick={() => setRightOpen(true)}>
             Open Right Sheet
           </Button>
-          <SideSheet
-            side="right"
-            open={rightOpen}
-            onOpenChange={setRightOpen}
-            title="Filters"
-          >
-            <div className="p-4 space-y-4">
+          <SideSheet open={rightOpen} onOpenChange={setRightOpen} headline="Filters" side="right">
+            <div className="space-y-4">
               <p className="text-sm text-surface-variant-foreground">
                 Apply filters to narrow your results.
               </p>
-              <List>
-                <ListItem headline="Category" trailing={<Icon name="chevron_right" />} />
-                <ListItem headline="Price Range" trailing={<Icon name="chevron_right" />} />
-                <ListItem headline="Rating" trailing={<Icon name="chevron_right" />} />
-                <ListItem headline="Availability" trailing={<Icon name="chevron_right" />} />
-              </List>
+              <div className="flex flex-wrap gap-2">
+                <Button variant="tonal" size="s">All</Button>
+                <Button variant="outlined" size="s">Photos</Button>
+                <Button variant="outlined" size="s">Videos</Button>
+              </div>
             </div>
           </SideSheet>
         </Showcase>
@@ -49,36 +43,26 @@ export default function SideSheetPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Left Side</h2>
-        <Showcase title="Left Side Sheet (Navigation Drawer)">
+        <Showcase title="Left Side Sheet">
           <Button variant="outlined" onClick={() => setLeftOpen(true)}>
             Open Left Sheet
           </Button>
-          <SideSheet
-            side="left"
-            open={leftOpen}
-            onOpenChange={setLeftOpen}
-            title="Navigation"
-          >
-            <div className="p-4">
-              <List>
-                <ListItem headline="Home" leading={<Icon name="home" />} />
-                <ListItem headline="Profile" leading={<Icon name="person" />} />
-                <ListItem headline="Settings" leading={<Icon name="settings" />} />
-                <ListItem headline="Help" leading={<Icon name="help" />} />
-              </List>
+          <SideSheet open={leftOpen} onOpenChange={setLeftOpen} headline="Navigation" side="left">
+            <div className="space-y-2">
+              <div className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[hsl(var(--on-surface)/0.08)] cursor-pointer">
+                <Icon name="home" size={24} className="text-surface-variant-foreground" />
+                <span className="text-[14px] text-surface-foreground">Home</span>
+              </div>
+              <div className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[hsl(var(--on-surface)/0.08)] cursor-pointer">
+                <Icon name="person" size={24} className="text-surface-variant-foreground" />
+                <span className="text-[14px] text-surface-foreground">Profile</span>
+              </div>
+              <div className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[hsl(var(--on-surface)/0.08)] cursor-pointer">
+                <Icon name="settings" size={24} className="text-surface-variant-foreground" />
+                <span className="text-[14px] text-surface-foreground">Settings</span>
+              </div>
             </div>
           </SideSheet>
-        </Showcase>
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="text-[22px] leading-7 font-normal">Usage Notes</h2>
-        <Showcase title="Design Guidelines">
-          <div className="text-sm text-surface-variant-foreground space-y-2">
-            <p>• Use right side sheets for supplementary content like filters and details.</p>
-            <p>• Use left side sheets for navigation drawers on larger screens.</p>
-            <p>• Side sheets can be modal (with scrim) or standard (persistent).</p>
-          </div>
         </Showcase>
       </section>
     </div>
