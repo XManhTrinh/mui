@@ -51,10 +51,10 @@ const iconButtonVariants = cva(
       },
       size: {
         xs: "size-8 [&_svg]:size-[18px] [&_.material-symbols-rounded]:text-[18px]",
-        s: "size-10 [&_svg]:size-6 [&_.material-symbols-rounded]:text-[24px]",
+        s: "size-10 [&_svg]:size-5 [&_.material-symbols-rounded]:text-[20px]",
         m: "size-12 [&_svg]:size-6 [&_.material-symbols-rounded]:text-[24px]",
-        l: "size-14 [&_svg]:size-6 [&_.material-symbols-rounded]:text-[24px]",
-        xl: "size-16 [&_svg]:size-6 [&_.material-symbols-rounded]:text-[24px]",
+        l: "size-14 [&_svg]:size-7 [&_.material-symbols-rounded]:text-[28px]",
+        xl: "size-16 [&_svg]:size-8 [&_.material-symbols-rounded]:text-[32px]",
       },
     },
     defaultVariants: {
