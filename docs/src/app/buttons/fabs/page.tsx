@@ -48,7 +48,7 @@ export default function FABsPage() {
       </Showcase>
 
       <Showcase title="Extended FAB without Icon">
-        <ExtendedFAB size="medium" label="No Icon" />
+        <ExtendedFAB size="medium" icon={null} label="No Icon" />
       </Showcase>
 
       {/* Props Table */}

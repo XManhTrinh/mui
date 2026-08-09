@@ -38,7 +38,7 @@ export default function ButtonGroupPage() {
 
       <Showcase title="Controlled Button Group">
         <div className="flex flex-col gap-4">
-          <ButtonGroup variant="connected" value={selected} onValueChange={setSelected}>
+          <ButtonGroup variant="connected" value={selected} onValueChange={(v) => setSelected(Array.isArray(v) ? v[0] : v)}>
             <ButtonGroupItem value="left" label="Left" />
             <ButtonGroupItem value="center" label="Center" />
             <ButtonGroupItem value="right" label="Right" />

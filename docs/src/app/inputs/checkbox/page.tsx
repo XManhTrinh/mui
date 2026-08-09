@@ -21,7 +21,7 @@ export default function CheckboxPage() {
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">States</h2>
         <Showcase title="Unchecked & Checked">
-          <Checkbox checked={checked} onCheckedChange={setChecked} />
+          <Checkbox checked={checked} onCheckedChange={(v) => setChecked(v === true)} />
           <Checkbox defaultChecked />
         </Showcase>
         <Showcase title="Indeterminate">

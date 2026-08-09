@@ -90,7 +90,7 @@ export default function DialogPage() {
             <DialogTrigger asChild>
               <Button variant="tonal">Open Full-Screen</Button>
             </DialogTrigger>
-            <DialogContent variant="fullscreen">
+            <DialogContent fullScreen>
               <DialogHeader>
                 <DialogTitle>New Event</DialogTitle>
                 <DialogDescription>

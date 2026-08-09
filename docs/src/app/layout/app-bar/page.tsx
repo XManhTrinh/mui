@@ -19,14 +19,14 @@ export default function AppBarPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Basic</h2>
-        <Showcase headline="Simple App Bar" className="flex-col items-stretch">
+        <Showcase title="Simple App Bar" className="flex-col items-stretch">
           <AppBar headline="Page Title" />
         </Showcase>
       </section>
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Icons</h2>
-        <Showcase headline="App Bar with Navigation & Actions" className="flex-col items-stretch">
+        <Showcase title="App Bar with Navigation & Actions" className="flex-col items-stretch">
           <AppBar
             headline="Messages"
             leadingIcon={
@@ -50,10 +50,10 @@ export default function AppBarPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Subtitle</h2>
-        <Showcase headline="App Bar with Subtitle" className="flex-col items-stretch">
+        <Showcase title="App Bar with Subtitle" className="flex-col items-stretch">
           <AppBar
             headline="Inbox"
-            subheadline="3 new messages"
+            subtitle="3 new messages"
             leadingIcon={
               <IconButton variant="standard" aria-label="Back">
                 <Icon name="arrow_back" />
@@ -70,7 +70,7 @@ export default function AppBarPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Centered Title</h2>
-        <Showcase headline="Centered" className="flex-col items-stretch">
+        <Showcase title="Centered" className="flex-col items-stretch">
           <AppBar
             headline="Profile"
             centered

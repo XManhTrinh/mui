@@ -21,10 +21,10 @@ export default function IconPage() {
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Sizes</h2>
         <Showcase title="Icon Sizes">
-          <Icon name="home" size={16} />
+          <Icon name="home" size={18} />
           <Icon name="home" size={20} />
           <Icon name="home" size={24} />
-          <Icon name="home" size={32} />
+          <Icon name="home" size={40} />
           <Icon name="home" size={40} />
           <Icon name="home" size={48} />
         </Showcase>

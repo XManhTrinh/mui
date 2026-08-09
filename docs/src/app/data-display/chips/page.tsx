@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Chip, Icon } from "@mui/index";
+import { Chip } from "@mui/index";
 import { Showcase } from "@/components/showcase";
 
 export default function ChipsPage() {
@@ -22,9 +22,9 @@ export default function ChipsPage() {
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Assist Chips</h2>
         <Showcase title="Assist">
-          <Chip variant="assist" label="Add to calendar" icon={<Icon name="event" />} />
-          <Chip variant="assist" label="Get directions" icon={<Icon name="directions" />} />
-          <Chip variant="assist" label="Share" icon={<Icon name="share" />} />
+          <Chip variant="assist" leadingIcon="event">Add to calendar</Chip>
+          <Chip variant="assist" leadingIcon="directions">Get directions</Chip>
+          <Chip variant="assist" leadingIcon="share">Share</Chip>
         </Showcase>
       </section>
 
@@ -33,31 +33,30 @@ export default function ChipsPage() {
         <Showcase title="Filter">
           <Chip
             variant="filter"
-            label="Running"
             selected={selected}
-            onSelectedChange={setSelected}
-          />
-          <Chip variant="filter" label="Walking" />
-          <Chip variant="filter" label="Cycling" selected />
-          <Chip variant="filter" label="Swimming" />
+            onClick={() => setSelected((s) => !s)}
+          >Running</Chip>
+          <Chip variant="filter">Walking</Chip>
+          <Chip variant="filter" selected>Cycling</Chip>
+          <Chip variant="filter">Swimming</Chip>
         </Showcase>
       </section>
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Input Chips</h2>
         <Showcase title="Input">
-          <Chip variant="input" label="john@example.com" onDismiss={() => {}} />
-          <Chip variant="input" label="jane@example.com" onDismiss={() => {}} />
-          <Chip variant="input" label="bob@example.com" onDismiss={() => {}} />
+          <Chip variant="input" onDismiss={() => {}}>john@example.com</Chip>
+          <Chip variant="input" onDismiss={() => {}}>jane@example.com</Chip>
+          <Chip variant="input" onDismiss={() => {}}>bob@example.com</Chip>
         </Showcase>
       </section>
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Suggestion Chips</h2>
         <Showcase title="Suggestion">
-          <Chip variant="suggestion" label="Price: Low to High" />
-          <Chip variant="suggestion" label="Top Rated" />
-          <Chip variant="suggestion" label="Nearby" />
+          <Chip variant="suggestion">Price: Low to High</Chip>
+          <Chip variant="suggestion">Top Rated</Chip>
+          <Chip variant="suggestion">Nearby</Chip>
         </Showcase>
       </section>
     </div>

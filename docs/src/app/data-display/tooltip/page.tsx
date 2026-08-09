@@ -43,14 +43,14 @@ export default function TooltipPage() {
         <Showcase title="Rich">
           <Tooltip
             variant="rich"
-            title="Rich tooltip"
+            subhead="Rich tooltip"
             content="Rich tooltips bring attention to a particular element of a feature that otherwise might go unnoticed."
           >
             <Button variant="outlined">Hover for details</Button>
           </Tooltip>
           <Tooltip
             variant="rich"
-            title="Keyboard shortcut"
+            subhead="Keyboard shortcut"
             content="Press Ctrl+S to save your work. Changes are saved automatically every 5 minutes."
           >
             <Button variant="text">Shortcut info</Button>
