@@ -196,7 +196,7 @@ function CarouselItem({
         size === "small" && "w-14 min-w-10 max-w-14",
         // State layer via pseudo-element
         "before:absolute before:inset-0 before:z-10 before:rounded-[28px] before:pointer-events-none",
-        "before:bg-on-surface before:opacity-0 before:transition-opacity",
+        "before:bg-surface-foreground before:opacity-0 before:transition-opacity",
         "hover:before:opacity-[0.08]",
         "focus-within:before:opacity-[0.10]",
         "active:before:opacity-[0.10]",

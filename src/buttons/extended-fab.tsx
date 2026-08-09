@@ -42,8 +42,6 @@ const extendedFabVariants = cva(
     "hover:before:opacity-[0.08]",
     "focus-visible:before:opacity-[0.10]",
     "active:before:opacity-[0.10]",
-    // Shape: 16dp corner radius, morph to 12dp on press
-    "rounded-2xl active:rounded-xl",
     // Min width
     "min-w-20",
     // Icon sizing: 24dp for all sizes
@@ -63,9 +61,9 @@ const extendedFabVariants = cva(
         "tertiary-fixed": "bg-tertiary text-tertiary-foreground",
       },
       size: {
-        small: "h-14 px-4 gap-4",
-        medium: "h-20 px-4 gap-4",
-        large: "h-24 px-4 gap-4",
+        small: "h-14 px-4 gap-4 rounded-2xl active:rounded-xl",
+        medium: "h-20 px-4 gap-4 rounded-2xl active:rounded-xl",
+        large: "h-24 px-4 gap-4 rounded-[28px] active:rounded-2xl",
       },
     },
     defaultVariants: {

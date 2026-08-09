@@ -104,7 +104,7 @@ const DialogContent = React.forwardRef<
         {fullScreen && (
           <div className="flex items-center h-14 px-6 shrink-0 border-b border-outline-variant sm:hidden">
             <DialogPrimitive.Close className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors -ml-2 mr-3">
-              <Icon name="close" size={24} className="text-foreground" />
+              <Icon name="close" size={24} className="text-surface-foreground" />
             </DialogPrimitive.Close>
           </div>
         )}
@@ -182,7 +182,7 @@ const DialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn("text-[24px] leading-8 font-normal text-foreground", className)}
+    className={cn("text-[24px] leading-8 font-normal text-surface-foreground", className)}
     {...props}
   />
 ));

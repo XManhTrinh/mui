@@ -269,7 +269,7 @@ function Tab({ value: tabValue, icon, label, disabled = false, className }: TabP
       {/* Label */}
       <span
         className={cn(
-          "relative z-10 text-sm font-medium leading-5",
+          "relative z-10 text-[14px] font-medium leading-5 tracking-[0.1px]",
           labelColor
         )}
       >
