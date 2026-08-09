@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Tabs, TabList, Tab, TabContent, Icon } from "@mui/index";
+import { Tabs, TabList, Tab, TabContent } from "@mui/index";
 import { Showcase } from "@/components/showcase";
 
 export default function TabsPage() {
@@ -12,8 +12,7 @@ export default function TabsPage() {
           Tabs
         </h1>
         <p className="text-[16px] leading-6 text-surface-variant-foreground">
-          Tabs organize content across different screens, data sets, and other
-          interactions. They come in primary and secondary variants.
+          Tabs organize content across different screens and data sets.
         </p>
       </div>
 
@@ -22,9 +21,9 @@ export default function TabsPage() {
         <Showcase title="Primary" className="flex-col items-stretch">
           <Tabs defaultValue="tab1" variant="primary">
             <TabList>
-              <Tab value="tab1">Flights</Tab>
-              <Tab value="tab2">Hotels</Tab>
-              <Tab value="tab3">Activities</Tab>
+              <Tab value="tab1" label="Flights" />
+              <Tab value="tab2" label="Hotels" />
+              <Tab value="tab3" label="Activities" />
             </TabList>
             <TabContent value="tab1">
               <p className="p-4 text-sm text-surface-foreground">Flights content</p>
@@ -44,10 +43,9 @@ export default function TabsPage() {
         <Showcase title="Secondary" className="flex-col items-stretch">
           <Tabs defaultValue="all" variant="secondary">
             <TabList>
-              <Tab value="all">All</Tab>
-              <Tab value="unread">Unread</Tab>
-              <Tab value="starred">Starred</Tab>
-              <Tab value="archived">Archived</Tab>
+              <Tab value="all" label="All" />
+              <Tab value="unread" label="Unread" />
+              <Tab value="starred" label="Starred" />
             </TabList>
             <TabContent value="all">
               <p className="p-4 text-sm text-surface-foreground">All messages</p>
@@ -58,9 +56,6 @@ export default function TabsPage() {
             <TabContent value="starred">
               <p className="p-4 text-sm text-surface-foreground">Starred messages</p>
             </TabContent>
-            <TabContent value="archived">
-              <p className="p-4 text-sm text-surface-foreground">Archived messages</p>
-            </TabContent>
           </Tabs>
         </Showcase>
       </section>
@@ -70,9 +65,9 @@ export default function TabsPage() {
         <Showcase title="Tabs with Icons" className="flex-col items-stretch">
           <Tabs defaultValue="photos" variant="primary">
             <TabList>
-              <Tab value="photos" icon={<Icon name="photo" />}>Photos</Tab>
-              <Tab value="videos" icon={<Icon name="videocam" />}>Videos</Tab>
-              <Tab value="music" icon={<Icon name="music_note" />}>Music</Tab>
+              <Tab value="photos" icon="photo" label="Photos" />
+              <Tab value="videos" icon="videocam" label="Videos" />
+              <Tab value="music" icon="music_note" label="Music" />
             </TabList>
             <TabContent value="photos">
               <p className="p-4 text-sm text-surface-foreground">Your photos</p>
@@ -83,20 +78,6 @@ export default function TabsPage() {
             <TabContent value="music">
               <p className="p-4 text-sm text-surface-foreground">Your music</p>
             </TabContent>
-          </Tabs>
-        </Showcase>
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="text-[22px] leading-7 font-normal">Icon Only</h2>
-        <Showcase title="Icon-Only Tabs" className="flex-col items-stretch">
-          <Tabs defaultValue="home" variant="primary">
-            <TabList>
-              <Tab value="home" icon={<Icon name="home" />} />
-              <Tab value="search" icon={<Icon name="search" />} />
-              <Tab value="favorite" icon={<Icon name="favorite" />} />
-              <Tab value="settings" icon={<Icon name="settings" />} />
-            </TabList>
           </Tabs>
         </Showcase>
       </section>

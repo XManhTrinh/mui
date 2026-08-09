@@ -39,7 +39,7 @@ export default function ToolbarPage() {
           </Toolbar>
         </Showcase>
         <Showcase title="Docked Vibrant" className="flex-col items-stretch">
-          <Toolbar variant="docked" appearance="vibrant">
+          <Toolbar variant="docked" color="vibrant">
             <ToolbarLeading>
               <IconButton variant="standard" aria-label="Back">
                 <Icon name="arrow_back" />
@@ -79,7 +79,7 @@ export default function ToolbarPage() {
           </Toolbar>
         </Showcase>
         <Showcase title="Floating Vibrant" className="flex-col items-stretch">
-          <Toolbar variant="floating" appearance="vibrant">
+          <Toolbar variant="floating" color="vibrant">
             <ToolbarLeading>
               <IconButton variant="standard" aria-label="Close">
                 <Icon name="close" />
