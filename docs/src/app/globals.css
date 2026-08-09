@@ -1,3 +1,10 @@
 @import "tailwindcss";
 @import "../../../src/theme.css";
 @source "../../../src";
+
+body {
+  background-color: hsl(var(--surface));
+  color: hsl(var(--on-surface));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
