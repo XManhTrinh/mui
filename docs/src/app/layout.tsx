@@ -15,39 +15,70 @@ type NavCategory = {
 
 const navCategories: NavCategory[] = [
   {
-    label: "Action",
+    label: "Buttons",
     links: [
       { href: "/buttons", label: "Buttons", icon: "buttons_alt" },
+      { href: "/buttons/icon-buttons", label: "Icon Buttons", icon: "radio_button_checked" },
+      { href: "/buttons/fabs", label: "FABs", icon: "add_circle" },
+      { href: "/buttons/split-button", label: "Split Button", icon: "call_split" },
+      { href: "/buttons/button-group", label: "Button Group", icon: "view_column" },
     ],
   },
   {
     label: "Inputs & Selection",
     links: [
-      { href: "/inputs", label: "Text Fields, Checkbox, Radio, Switch, Slider", icon: "input" },
+      { href: "/inputs/text-fields", label: "Text Fields", icon: "input" },
+      { href: "/inputs/checkbox", label: "Checkbox", icon: "check_box" },
+      { href: "/inputs/radio", label: "Radio Button", icon: "radio_button_checked" },
+      { href: "/inputs/switch", label: "Switch", icon: "toggle_on" },
+      { href: "/inputs/slider", label: "Slider", icon: "tune" },
+      { href: "/inputs/search", label: "Search", icon: "search" },
     ],
   },
   {
     label: "Data Display",
     links: [
-      { href: "/data-display", label: "Card, Badge, Chip, List, Tooltip", icon: "dashboard" },
+      { href: "/data-display/cards", label: "Cards", icon: "crop_portrait" },
+      { href: "/data-display/badges", label: "Badges", icon: "notifications" },
+      { href: "/data-display/chips", label: "Chips", icon: "label" },
+      { href: "/data-display/lists", label: "Lists", icon: "list" },
+      { href: "/data-display/tooltip", label: "Tooltips", icon: "info" },
+      { href: "/data-display/divider", label: "Divider", icon: "horizontal_rule" },
+      { href: "/data-display/icon", label: "Icon", icon: "emoji_symbols" },
     ],
   },
   {
     label: "Feedback",
     links: [
-      { href: "/feedback", label: "Dialog, Snackbar, Menu, Progress", icon: "feedback" },
+      { href: "/feedback/dialog", label: "Dialogs", icon: "open_in_new" },
+      { href: "/feedback/snackbar", label: "Snackbar", icon: "info" },
+      { href: "/feedback/menu", label: "Menus", icon: "menu" },
+      { href: "/feedback/progress", label: "Progress", icon: "progress_activity" },
     ],
   },
   {
     label: "Navigation",
     links: [
-      { href: "/navigation", label: "NavigationBar, NavigationRail", icon: "menu" },
+      { href: "/navigation/bar", label: "Navigation Bar", icon: "bottom_navigation" },
+      { href: "/navigation/rail", label: "Navigation Rail", icon: "side_navigation" },
     ],
   },
   {
-    label: "Layout",
+    label: "Layout & Containment",
     links: [
-      { href: "/layout-components", label: "AppBar, Tabs, Sheets, Toolbar", icon: "view_sidebar" },
+      { href: "/layout/app-bar", label: "App Bar", icon: "web_asset" },
+      { href: "/layout/tabs", label: "Tabs", icon: "tab" },
+      { href: "/layout/bottom-sheet", label: "Bottom Sheet", icon: "call_to_action" },
+      { href: "/layout/side-sheet", label: "Side Sheet", icon: "view_sidebar" },
+      { href: "/layout/toolbar", label: "Toolbar", icon: "toolbar" },
+      { href: "/layout/carousel", label: "Carousel", icon: "view_carousel" },
+    ],
+  },
+  {
+    label: "Date & Time",
+    links: [
+      { href: "/pickers/date", label: "Date Picker", icon: "calendar_month" },
+      { href: "/pickers/time", label: "Time Picker", icon: "schedule" },
     ],
   },
 ];
@@ -56,7 +87,7 @@ function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed left-0 top-16 bottom-0 z-30 w-70 border-r border-outline-variant bg-surface overflow-y-auto">
+    <aside className="fixed left-0 top-16 bottom-0 z-30 w-70 border-r border-outline-variant bg-surface-container overflow-y-auto">
       <nav className="py-2">
         {navCategories.map((category, idx) => (
           <div key={category.label}>
