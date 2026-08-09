@@ -6,7 +6,7 @@ import "./globals.css";
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { NavigationRail, Icon } from "@mui/index";
+import { NavigationRail, Icon, IconButton } from "@mui/index";
 import type { NavigationRailItem } from "@mui/index";
 
 const navItems: (NavigationRailItem & { href: string })[] = [
@@ -76,6 +76,32 @@ function Sidebar() {
   );
 }
 
+function ThemeToggle() {
+  const [dark, setDark] = React.useState(false);
+
+  React.useEffect(() => {
+    const isDark = document.documentElement.classList.contains("dark");
+    setDark(isDark);
+  }, []);
+
+  const toggle = () => {
+    const next = !dark;
+    setDark(next);
+    document.documentElement.classList.toggle("dark", next);
+  };
+
+  return (
+    <div className="flex items-center gap-3 px-5 py-3 border-t border-outline-variant">
+      <IconButton variant="standard" aria-label="Toggle theme" onClick={toggle}>
+        <Icon name={dark ? "light_mode" : "dark_mode"} />
+      </IconButton>
+      <span className="text-sm text-surface-variant-foreground">
+        {dark ? "Light mode" : "Dark mode"}
+      </span>
+    </div>
+  );
+}
+
 function SidebarLink() {
   const pathname = usePathname();
 
@@ -113,6 +139,8 @@ function SidebarLink() {
           })}
         </ul>
       </nav>
+      {/* Theme switcher */}
+      <ThemeToggle />
     </aside>
   );
 }
