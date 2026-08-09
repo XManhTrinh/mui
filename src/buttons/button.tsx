@@ -22,8 +22,6 @@ const buttonVariants = cva(
     "relative inline-flex items-center justify-center whitespace-nowrap",
     // Typography: Label Large
     "text-[14px] font-medium leading-[20px] tracking-[0.1px]",
-    // Shape
-    "rounded-full",
     // Cursor & interaction
     "cursor-pointer select-none",
     // Transition (M3 standard easing)
@@ -58,16 +56,40 @@ const buttonVariants = cva(
           "bg-secondary-container text-secondary-container-foreground hover:shadow-[0_1px_3px_var(--elevation-1)]",
       },
       size: {
-        xs: "h-8 px-3 gap-1.5 [&_svg]:size-5 active:rounded-lg",
-        s: "h-10 px-4 gap-2 [&_svg]:size-5 active:rounded-lg",
-        m: "h-12 px-6 gap-2 [&_svg]:size-5 active:rounded-xl",
-        l: "h-14 px-7 gap-2 [&_svg]:size-5 active:rounded-2xl",
-        xl: "h-16 px-8 gap-2 [&_svg]:size-5 active:rounded-2xl",
+        xs: "h-8 px-3 gap-1.5 [&_svg]:size-5",
+        s: "h-10 px-4 gap-2 [&_svg]:size-5",
+        m: "h-12 px-6 gap-2 [&_svg]:size-5",
+        l: "h-14 px-7 gap-2 [&_svg]:size-5",
+        xl: "h-16 px-8 gap-2 [&_svg]:size-5",
+      },
+      shape: {
+        round: "rounded-full",
+        square: "",
       },
     },
+    compoundVariants: [
+      // Square shape radii per size (M3 spec: xs=12, s=12, m=16, l=28, xl=28)
+      { shape: "square", size: "xs", className: "rounded-xl" },
+      { shape: "square", size: "s", className: "rounded-xl" },
+      { shape: "square", size: "m", className: "rounded-2xl" },
+      { shape: "square", size: "l", className: "rounded-[28px]" },
+      { shape: "square", size: "xl", className: "rounded-[28px]" },
+      // Pressed shape morph (M3 spec: xs/s=8dp, m=12dp, l/xl=16dp)
+      { shape: "round", size: "xs", className: "active:rounded-lg" },
+      { shape: "round", size: "s", className: "active:rounded-lg" },
+      { shape: "round", size: "m", className: "active:rounded-xl" },
+      { shape: "round", size: "l", className: "active:rounded-2xl" },
+      { shape: "round", size: "xl", className: "active:rounded-2xl" },
+      { shape: "square", size: "xs", className: "active:rounded-lg" },
+      { shape: "square", size: "s", className: "active:rounded-lg" },
+      { shape: "square", size: "m", className: "active:rounded-xl" },
+      { shape: "square", size: "l", className: "active:rounded-2xl" },
+      { shape: "square", size: "xl", className: "active:rounded-2xl" },
+    ],
     defaultVariants: {
       variant: "filled",
       size: "s",
+      shape: "round",
     },
   }
 );
@@ -114,6 +136,8 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   /** Render as child element (Radix Slot pattern) */
   asChild?: boolean;
+  /** Button shape */
+  shape?: "round" | "square";
   /** Leading icon (React node, typically <Icon />) */
   icon?: React.ReactNode;
   /** Trailing icon (React node) */
@@ -128,6 +152,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       className,
       variant,
       size,
+      shape,
       asChild = false,
       icon,
       trailingIcon,
@@ -158,7 +183,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         className={cn(
-          buttonVariants({ variant, size, className: undefined }),
+          buttonVariants({ variant, size, shape, className: undefined }),
           paddingOverride,
           loading && "pointer-events-none",
           className

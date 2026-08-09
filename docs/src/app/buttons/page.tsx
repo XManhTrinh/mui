@@ -72,6 +72,14 @@ export default function ButtonsPage() {
           <Button variant="tonal" size="l">Large</Button>
           <Button variant="tonal" size="xl">XL</Button>
         </Showcase>
+
+        <Showcase title="Square Shape">
+          <Button variant="filled" shape="square" size="xs">XS</Button>
+          <Button variant="filled" shape="square" size="s">Small</Button>
+          <Button variant="filled" shape="square" size="m">Medium</Button>
+          <Button variant="filled" shape="square" size="l">Large</Button>
+          <Button variant="filled" shape="square" size="xl">XL</Button>
+        </Showcase>
       </section>
 
       {/* Button with Icons */}
