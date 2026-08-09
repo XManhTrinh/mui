@@ -20,14 +20,14 @@ export default function DatePickerPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Basic</h2>
-        <Showcase title="Default Date Picker">
+        <Showcase title="Default Date Picker" code={`<DatePicker value={date} onChange={setDate} />`}>
           <DatePicker value={date} onChange={setDate} />
         </Showcase>
       </section>
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Min/Max</h2>
-        <Showcase title="Constrained Date Range">
+        <Showcase title="Constrained Date Range" code={`<DatePicker\n  min={new Date(2024, 0, 1)}\n  max={new Date(2024, 11, 31)}\n/>`}>
           <DatePicker
             min={new Date(2024, 0, 1)}
             max={new Date(2024, 11, 31)}
@@ -37,7 +37,7 @@ export default function DatePickerPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Disabled</h2>
-        <Showcase title="Disabled State">
+        <Showcase title="Disabled State" code={`<DatePicker disabled />`}>
           <DatePicker disabled />
         </Showcase>
       </section>

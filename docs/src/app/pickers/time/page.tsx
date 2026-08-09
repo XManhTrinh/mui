@@ -20,21 +20,21 @@ export default function TimePickerPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">12-Hour Format</h2>
-        <Showcase title="AM/PM">
+        <Showcase title="AM/PM" code={`<TimePicker format="12h" value={time} onChange={setTime} />`}>
           <TimePicker format="12h" value={time} onChange={setTime} />
         </Showcase>
       </section>
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">24-Hour Format</h2>
-        <Showcase title="24h">
+        <Showcase title="24h" code={`<TimePicker format="24h" />`}>
           <TimePicker format="24h" />
         </Showcase>
       </section>
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Value</h2>
-        <Showcase title="Pre-selected Time">
+        <Showcase title="Pre-selected Time" code={`<TimePicker format="12h" value={{ hours: 9, minutes: 30 }} />\n<TimePicker format="24h" value={{ hours: 14, minutes: 45 }} />`}>
           <TimePicker format="12h" value={{ hours: 9, minutes: 30 }} />
           <TimePicker format="24h" value={{ hours: 14, minutes: 45 }} />
         </Showcase>
@@ -42,7 +42,7 @@ export default function TimePickerPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Disabled</h2>
-        <Showcase title="Disabled State">
+        <Showcase title="Disabled State" code={`<TimePicker format="12h" value={{ hours: 10, minutes: 0 }} disabled />`}>
           <TimePicker format="12h" value={{ hours: 10, minutes: 0 }} disabled />
         </Showcase>
       </section>

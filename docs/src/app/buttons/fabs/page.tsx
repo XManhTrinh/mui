@@ -17,37 +17,37 @@ export default function FABsPage() {
         </p>
       </div>
 
-      <Showcase title="FAB Sizes">
+      <Showcase title="FAB Sizes" code={`<FAB size="m" icon={<Icon name="add" />} aria-label="Add" />\n<FAB size="l" icon={<Icon name="add" />} aria-label="Add" />\n<FAB size="xl" icon={<Icon name="add" />} aria-label="Add" />`}>
         <FAB size="m" icon={<Icon name="add" />} aria-label="Add" />
         <FAB size="l" icon={<Icon name="add" />} aria-label="Add" />
         <FAB size="xl" icon={<Icon name="add" />} aria-label="Add" />
       </Showcase>
 
-      <Showcase title="FAB Colors">
+      <Showcase title="FAB Colors" code={`<FAB color="primary" icon={<Icon name="edit" />} aria-label="Edit" />\n<FAB color="secondary" icon={<Icon name="edit" />} aria-label="Edit" />\n<FAB color="tertiary" icon={<Icon name="edit" />} aria-label="Edit" />`}>
         <FAB color="primary" icon={<Icon name="edit" />} aria-label="Edit" />
         <FAB color="secondary" icon={<Icon name="edit" />} aria-label="Edit" />
         <FAB color="tertiary" icon={<Icon name="edit" />} aria-label="Edit" />
       </Showcase>
 
-      <Showcase title="FAB Round Shape">
+      <Showcase title="FAB Round Shape" code={`<FAB shape="round" size="m" icon={<Icon name="navigation" />} aria-label="Navigate" />\n<FAB shape="round" size="l" icon={<Icon name="navigation" />} aria-label="Navigate" />\n<FAB shape="round" size="xl" icon={<Icon name="navigation" />} aria-label="Navigate" />`}>
         <FAB shape="round" size="m" icon={<Icon name="navigation" />} aria-label="Navigate" />
         <FAB shape="round" size="l" icon={<Icon name="navigation" />} aria-label="Navigate" />
         <FAB shape="round" size="xl" icon={<Icon name="navigation" />} aria-label="Navigate" />
       </Showcase>
 
-      <Showcase title="Extended FAB Sizes">
+      <Showcase title="Extended FAB Sizes" code={`<ExtendedFAB size="small" icon={<Icon name="add" />} label="Create" />\n<ExtendedFAB size="medium" icon={<Icon name="edit" />} label="Compose" />\n<ExtendedFAB size="large" icon={<Icon name="navigation" />} label="Navigate" />`}>
         <ExtendedFAB size="small" icon={<Icon name="add" />} label="Create" />
         <ExtendedFAB size="medium" icon={<Icon name="edit" />} label="Compose" />
         <ExtendedFAB size="large" icon={<Icon name="navigation" />} label="Navigate" />
       </Showcase>
 
-      <Showcase title="Extended FAB Colors">
+      <Showcase title="Extended FAB Colors" code={`<ExtendedFAB color="primary" icon={<Icon name="add" />} label="Primary" />\n<ExtendedFAB color="secondary" icon={<Icon name="add" />} label="Secondary" />\n<ExtendedFAB color="tertiary" icon={<Icon name="add" />} label="Tertiary" />`}>
         <ExtendedFAB color="primary" icon={<Icon name="add" />} label="Primary" />
         <ExtendedFAB color="secondary" icon={<Icon name="add" />} label="Secondary" />
         <ExtendedFAB color="tertiary" icon={<Icon name="add" />} label="Tertiary" />
       </Showcase>
 
-      <Showcase title="Extended FAB without Icon">
+      <Showcase title="Extended FAB without Icon" code={`<ExtendedFAB size="medium" icon={null} label="No Icon" />`}>
         <ExtendedFAB size="medium" icon={null} label="No Icon" />
       </Showcase>
 

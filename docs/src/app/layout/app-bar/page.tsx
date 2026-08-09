@@ -19,14 +19,14 @@ export default function AppBarPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Basic</h2>
-        <Showcase title="Simple App Bar" className="flex-col items-stretch">
+        <Showcase title="Simple App Bar" className="flex-col items-stretch" code={`<AppBar headline="Page Title" />`}>
           <AppBar headline="Page Title" />
         </Showcase>
       </section>
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Icons</h2>
-        <Showcase title="App Bar with Navigation & Actions" className="flex-col items-stretch">
+        <Showcase title="App Bar with Navigation & Actions" className="flex-col items-stretch" code={`<AppBar\n  headline="Messages"\n  leadingIcon={\n    <IconButton variant="standard" aria-label="Menu">\n      <Icon name="menu" />\n    </IconButton>\n  }\n  trailingIcons={\n    <>\n      <IconButton variant="standard" aria-label="Search">\n        <Icon name="search" />\n      </IconButton>\n    </>\n  }\n/>`}>
           <AppBar
             headline="Messages"
             leadingIcon={
@@ -50,7 +50,7 @@ export default function AppBarPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Subtitle</h2>
-        <Showcase title="App Bar with Subtitle" className="flex-col items-stretch">
+        <Showcase title="App Bar with Subtitle" className="flex-col items-stretch" code={`<AppBar\n  headline="Inbox"\n  subtitle="3 new messages"\n  leadingIcon={<IconButton variant="standard"><Icon name="arrow_back" /></IconButton>}\n/>`}>
           <AppBar
             headline="Inbox"
             subtitle="3 new messages"
@@ -70,7 +70,7 @@ export default function AppBarPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Centered Title</h2>
-        <Showcase title="Centered" className="flex-col items-stretch">
+        <Showcase title="Centered" className="flex-col items-stretch" code={`<AppBar\n  headline="Profile"\n  centered\n  leadingIcon={<IconButton variant="standard"><Icon name="arrow_back" /></IconButton>}\n  trailingIcons={<IconButton variant="standard"><Icon name="edit" /></IconButton>}\n/>`}>
           <AppBar
             headline="Profile"
             centered

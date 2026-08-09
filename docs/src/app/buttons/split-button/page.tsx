@@ -17,7 +17,7 @@ export default function SplitButtonPage() {
         </p>
       </div>
 
-      <Showcase title="Basic Split Button">
+      <Showcase title="Basic Split Button" code={`<SplitButton\n  label="Save"\n  icon={<Icon name="save" />}\n  menuContent={\n    <>\n      <MenuItem>Save as Draft</MenuItem>\n      <MenuItem>Save and Publish</MenuItem>\n    </>\n  }\n/>`}>
         <SplitButton
           label="Save"
           icon={<Icon name="save" />}
@@ -31,7 +31,7 @@ export default function SplitButtonPage() {
         />
       </Showcase>
 
-      <Showcase title="Split Button Variants">
+      <Showcase title="Split Button Variants" code={`<SplitButton\n  label="Send"\n  icon={<Icon name="send" />}\n  menuContent={<>...</>}\n/>\n<SplitButton\n  label="Download"\n  icon={<Icon name="download" />}\n  menuContent={<>...</>}\n/>`}>
         <SplitButton
           label="Send"
           icon={<Icon name="send" />}
@@ -56,7 +56,7 @@ export default function SplitButtonPage() {
         />
       </Showcase>
 
-      <Showcase title="Without Icon">
+      <Showcase title="Without Icon" code={`<SplitButton\n  label="Actions"\n  menuContent={<>...</>}\n/>`}>
         <SplitButton
           label="Actions"
           menuContent={

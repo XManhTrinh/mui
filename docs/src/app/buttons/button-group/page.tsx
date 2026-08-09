@@ -20,7 +20,7 @@ export default function ButtonGroupPage() {
         </p>
       </div>
 
-      <Showcase title="Connected Button Group">
+      <Showcase title="Connected Button Group" code={`<ButtonGroup variant="connected">\n  <ButtonGroupItem value="left" label="Left" />\n  <ButtonGroupItem value="center" label="Center" />\n  <ButtonGroupItem value="right" label="Right" />\n</ButtonGroup>`}>
         <ButtonGroup variant="connected">
           <ButtonGroupItem value="left" label="Left" />
           <ButtonGroupItem value="center" label="Center" />
@@ -28,7 +28,7 @@ export default function ButtonGroupPage() {
         </ButtonGroup>
       </Showcase>
 
-      <Showcase title="Standard Button Group">
+      <Showcase title="Standard Button Group" code={`<ButtonGroup variant="standard">\n  <ButtonGroupItem value="a" label="Option A" />\n  <ButtonGroupItem value="b" label="Option B" />\n  <ButtonGroupItem value="c" label="Option C" />\n</ButtonGroup>`}>
         <ButtonGroup variant="standard">
           <ButtonGroupItem value="a" label="Option A" />
           <ButtonGroupItem value="b" label="Option B" />
@@ -36,7 +36,7 @@ export default function ButtonGroupPage() {
         </ButtonGroup>
       </Showcase>
 
-      <Showcase title="Controlled Button Group">
+      <Showcase title="Controlled Button Group" code={`<ButtonGroup variant="connected" value={selected} onValueChange={setSelected}>\n  <ButtonGroupItem value="left" label="Left" />\n  <ButtonGroupItem value="center" label="Center" />\n  <ButtonGroupItem value="right" label="Right" />\n</ButtonGroup>`}>
         <div className="flex flex-col gap-4">
           <ButtonGroup variant="connected" value={selected} onValueChange={(v) => setSelected(Array.isArray(v) ? v[0] : v)}>
             <ButtonGroupItem value="left" label="Left" />
@@ -49,7 +49,7 @@ export default function ButtonGroupPage() {
         </div>
       </Showcase>
 
-      <Showcase title="Multi-Option Group">
+      <Showcase title="Multi-Option Group" code={`<ButtonGroup variant="connected">\n  <ButtonGroupItem value="bold" label="B" />\n  <ButtonGroupItem value="italic" label="I" />\n  <ButtonGroupItem value="underline" label="U" />\n  <ButtonGroupItem value="strike" label="S" />\n</ButtonGroup>`}>
         <ButtonGroup variant="connected">
           <ButtonGroupItem value="bold" label="B" />
           <ButtonGroupItem value="italic" label="I" />

@@ -20,7 +20,7 @@ export default function ToolbarPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Docked</h2>
-        <Showcase title="Docked Standard" className="flex-col items-stretch">
+        <Showcase title="Docked Standard" className="flex-col items-stretch" code={`<Toolbar variant="docked">\n  <ToolbarLeading>\n    <IconButton variant="standard" aria-label="Menu">\n      <Icon name="menu" />\n    </IconButton>\n  </ToolbarLeading>\n  <ToolbarHeadline>Document</ToolbarHeadline>\n  <ToolbarActions>\n    <IconButton variant="standard" aria-label="Search">\n      <Icon name="search" />\n    </IconButton>\n  </ToolbarActions>\n</Toolbar>`}>
           <Toolbar variant="docked">
             <ToolbarLeading>
               <IconButton variant="standard" aria-label="Menu">
@@ -38,7 +38,7 @@ export default function ToolbarPage() {
             </ToolbarActions>
           </Toolbar>
         </Showcase>
-        <Showcase title="Docked Vibrant" className="flex-col items-stretch">
+        <Showcase title="Docked Vibrant" className="flex-col items-stretch" code={`<Toolbar variant="docked" color="vibrant">\n  <ToolbarLeading>\n    <IconButton variant="standard" aria-label="Back">\n      <Icon name="arrow_back" />\n    </IconButton>\n  </ToolbarLeading>\n  <ToolbarHeadline>Settings</ToolbarHeadline>\n  <ToolbarActions>\n    <IconButton variant="standard" aria-label="Save">\n      <Icon name="save" />\n    </IconButton>\n  </ToolbarActions>\n</Toolbar>`}>
           <Toolbar variant="docked" color="vibrant">
             <ToolbarLeading>
               <IconButton variant="standard" aria-label="Back">
@@ -57,7 +57,7 @@ export default function ToolbarPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Floating</h2>
-        <Showcase title="Floating Standard" className="flex-col items-stretch">
+        <Showcase title="Floating Standard" className="flex-col items-stretch" code={`<Toolbar variant="floating">\n  <ToolbarLeading>\n    <IconButton variant="standard" aria-label="Close">\n      <Icon name="close" />\n    </IconButton>\n  </ToolbarLeading>\n  <ToolbarHeadline>Editing</ToolbarHeadline>\n  <ToolbarActions>\n    <IconButton variant="standard" aria-label="Undo">\n      <Icon name="undo" />\n    </IconButton>\n  </ToolbarActions>\n</Toolbar>`}>
           <Toolbar variant="floating">
             <ToolbarLeading>
               <IconButton variant="standard" aria-label="Close">
@@ -78,7 +78,7 @@ export default function ToolbarPage() {
             </ToolbarActions>
           </Toolbar>
         </Showcase>
-        <Showcase title="Floating Vibrant" className="flex-col items-stretch">
+        <Showcase title="Floating Vibrant" className="flex-col items-stretch" code={`<Toolbar variant="floating" color="vibrant">\n  <ToolbarLeading>\n    <IconButton variant="standard" aria-label="Close">\n      <Icon name="close" />\n    </IconButton>\n  </ToolbarLeading>\n  <ToolbarHeadline>Selection: 3 items</ToolbarHeadline>\n  <ToolbarActions>\n    <IconButton variant="standard" aria-label="Share">\n      <Icon name="share" />\n    </IconButton>\n  </ToolbarActions>\n</Toolbar>`}>
           <Toolbar variant="floating" color="vibrant">
             <ToolbarLeading>
               <IconButton variant="standard" aria-label="Close">

@@ -21,7 +21,7 @@ function SnackbarDemos() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Basic</h2>
-        <Showcase title="With Action">
+        <Showcase title="With Action" code={`const { show } = useSnackbar();\n\nshow({\n  message: "Item archived",\n  action: { label: "Undo", onClick: () => {} },\n});`}>
           <Button
             variant="filled"
             onClick={() =>
@@ -38,7 +38,7 @@ function SnackbarDemos() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Close</h2>
-        <Showcase title="Dismissable">
+        <Showcase title="Dismissable" code={`show({\n  message: "Message sent successfully",\n  showClose: true,\n});`}>
           <Button
             variant="outlined"
             onClick={() =>
@@ -55,7 +55,7 @@ function SnackbarDemos() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Persistent</h2>
-        <Showcase title="Longer Duration">
+        <Showcase title="Longer Duration" code={`show({\n  message: "No internet connection",\n  action: { label: "Retry", onClick: () => {} },\n  duration: 10000,\n});`}>
           <Button
             variant="tonal"
             onClick={() =>

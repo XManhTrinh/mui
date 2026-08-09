@@ -20,7 +20,7 @@ export default function IconPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Sizes</h2>
-        <Showcase title="Icon Sizes">
+        <Showcase title="Icon Sizes" code={`<Icon name="home" size={18} />\n<Icon name="home" size={24} />\n<Icon name="home" size={40} />\n<Icon name="home" size={48} />`}>
           <Icon name="home" size={18} />
           <Icon name="home" size={20} />
           <Icon name="home" size={24} />
@@ -32,7 +32,7 @@ export default function IconPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Weight</h2>
-        <Showcase title="Font Weights">
+        <Showcase title="Font Weights" code={`<Icon name="settings" weight={100} />\n<Icon name="settings" weight={400} />\n<Icon name="settings" weight={700} />`}>
           <Icon name="settings" weight={100} />
           <Icon name="settings" weight={200} />
           <Icon name="settings" weight={300} />
@@ -45,7 +45,7 @@ export default function IconPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Filled & Outlined</h2>
-        <Showcase title="Fill Styles">
+        <Showcase title="Fill Styles" code={`<Icon name="favorite" filled />\n<Icon name="favorite" />`}>
           <div className="flex flex-col items-center gap-1">
             <Icon name="favorite" filled />
             <span className="text-xs text-surface-variant-foreground">Filled</span>
@@ -75,7 +75,7 @@ export default function IconPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Common Icons</h2>
-        <Showcase title="Icon Gallery">
+        <Showcase title="Icon Gallery" code={`<Icon name="home" />\n<Icon name="search" />\n<Icon name="settings" />\n<Icon name="person" />\n<Icon name="mail" />`}>
           <Icon name="home" />
           <Icon name="search" />
           <Icon name="settings" />

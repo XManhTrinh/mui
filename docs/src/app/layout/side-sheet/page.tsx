@@ -22,7 +22,7 @@ export default function SideSheetPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Right Side</h2>
-        <Showcase title="Right Side Sheet">
+        <Showcase title="Right Side Sheet" code={`<SideSheet\n  open={rightOpen}\n  onOpenChange={setRightOpen}\n  headline="Filters"\n  side="right"\n>\n  <p>Apply filters to narrow your results.</p>\n</SideSheet>`}>
           <Button variant="filled" onClick={() => setRightOpen(true)}>
             Open Right Sheet
           </Button>
@@ -43,7 +43,7 @@ export default function SideSheetPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Left Side</h2>
-        <Showcase title="Left Side Sheet">
+        <Showcase title="Left Side Sheet" code={`<SideSheet\n  open={leftOpen}\n  onOpenChange={setLeftOpen}\n  headline="Navigation"\n  side="left"\n>\n  <div>Navigation content</div>\n</SideSheet>`}>
           <Button variant="outlined" onClick={() => setLeftOpen(true)}>
             Open Left Sheet
           </Button>

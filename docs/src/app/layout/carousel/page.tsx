@@ -19,7 +19,7 @@ export default function CarouselPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Uncontained</h2>
-        <Showcase title="Uncontained Carousel" className="flex-col items-stretch">
+        <Showcase title="Uncontained Carousel" className="flex-col items-stretch" code={`<Carousel variant="uncontained">\n  <CarouselItem>\n    <div>Slide 1</div>\n  </CarouselItem>\n  <CarouselItem>\n    <div>Slide 2</div>\n  </CarouselItem>\n  <CarouselItem>\n    <div>Slide 3</div>\n  </CarouselItem>\n</Carousel>`}>
           <Carousel variant="uncontained">
             <CarouselItem>
               <div className="w-64 h-40 rounded-xl bg-primary-container flex items-center justify-center">
@@ -47,7 +47,7 @@ export default function CarouselPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Hero</h2>
-        <Showcase title="Hero Carousel" className="flex-col items-stretch">
+        <Showcase title="Hero Carousel" className="flex-col items-stretch" code={`<Carousel variant="hero">\n  <CarouselItem>\n    <div>Featured Item 1</div>\n  </CarouselItem>\n  <CarouselItem>\n    <div>Featured Item 2</div>\n  </CarouselItem>\n</Carousel>`}>
           <Carousel variant="hero">
             <CarouselItem>
               <div className="w-full h-48 rounded-xl bg-primary-container flex items-center justify-center">
@@ -70,7 +70,7 @@ export default function CarouselPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Usage Notes</h2>
-        <Showcase title="Guidelines">
+        <Showcase title="Guidelines" code={`<Carousel variant="uncontained">\n  <CarouselItem>...</CarouselItem>\n</Carousel>`}>
           <div className="text-sm text-surface-variant-foreground space-y-2">
             <p>• Uncontained carousels show peek of adjacent items to indicate scrollability.</p>
             <p>• Hero carousels emphasize one item at a time with a larger viewport.</p>

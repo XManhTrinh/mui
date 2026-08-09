@@ -21,7 +21,7 @@ export default function NavigationBarPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Basic</h2>
-        <Showcase title="Standard Navigation Bar" className="flex-col items-stretch">
+        <Showcase title="Standard Navigation Bar" className="flex-col items-stretch" code={`<NavigationBar\n  activeValue={active}\n  onValueChange={setActive}\n  items={[\n    { value: "home", icon: "home", label: "Home" },\n    { value: "explore", icon: "explore", label: "Explore" },\n    { value: "library", icon: "video_library", label: "Library" },\n    { value: "profile", icon: "person", label: "Profile" },\n  ]}\n/>`}>
           <div className="relative h-20">
             <NavigationBar
               activeValue={active}
@@ -40,7 +40,7 @@ export default function NavigationBarPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Badges</h2>
-        <Showcase title="Badges" className="flex-col items-stretch">
+        <Showcase title="Badges" className="flex-col items-stretch" code={`<NavigationBar\n  activeValue="inbox"\n  onValueChange={setActive}\n  items={[\n    { value: "inbox", icon: "inbox", label: "Inbox", badge: 12 },\n    { value: "articles", icon: "article", label: "Articles", badge: "dot" },\n    { value: "messages", icon: "chat", label: "Messages", badge: 3 },\n    { value: "videos", icon: "play_circle", label: "Videos" },\n  ]}\n/>`}>
           <div className="relative h-20">
             <NavigationBar
               activeValue="inbox"
@@ -59,7 +59,7 @@ export default function NavigationBarPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Three Items</h2>
-        <Showcase title="Minimal" className="flex-col items-stretch">
+        <Showcase title="Minimal" className="flex-col items-stretch" code={`<NavigationBar\n  activeValue="feed"\n  items={[\n    { value: "feed", icon: "dynamic_feed", label: "Feed" },\n    { value: "search", icon: "search", label: "Search" },\n    { value: "settings", icon: "settings", label: "Settings" },\n  ]}\n/>`}>
           <div className="relative h-20">
             <NavigationBar
               activeValue="feed"

@@ -22,14 +22,14 @@ export default function SearchPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Basic</h2>
-        <Showcase title="Default Search Bar">
+        <Showcase title="Default Search Bar" code={`<Search placeholder="Search..." />`}>
           <Search placeholder="Search..." />
         </Showcase>
       </section>
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Controlled</h2>
-        <Showcase title="Controlled Search" className="flex-col items-stretch">
+        <Showcase title="Controlled Search" className="flex-col items-stretch" code={`<Search\n  value={query}\n  onValueChange={setQuery}\n  placeholder="Type to search..."\n/>`}>
           <Search
             value={query}
             onValueChange={setQuery}
@@ -43,7 +43,7 @@ export default function SearchPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Leading Icon</h2>
-        <Showcase title="Search with Avatar/Icon">
+        <Showcase title="Search with Avatar/Icon" code={`<Search placeholder="Search messages..." leadingIcon="search" />`}>
           <Search
             placeholder="Search messages..."
             leadingIcon="search"

@@ -21,7 +21,7 @@ export default function RadioPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Basic Radio</h2>
-        <Showcase title="Individual Radio Buttons">
+        <Showcase title="Individual Radio Buttons" code={`<Radio value="a" checked />\n<Radio value="b" />\n<Radio value="c" disabled />`}>
           <Radio value="a" checked />
           <Radio value="b" />
           <Radio value="c" disabled />
@@ -30,7 +30,7 @@ export default function RadioPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Radio Group</h2>
-        <Showcase title="Controlled Radio Group">
+        <Showcase title="Controlled Radio Group" code={`<RadioGroup value={value} onValueChange={setValue}>\n  <Radio value="option1" />\n  <Radio value="option2" />\n  <Radio value="option3" />\n</RadioGroup>`}>
           <RadioGroup value={value} onValueChange={setValue}>
             <label className="flex items-center gap-2 cursor-pointer">
               <Radio value="option1" />
@@ -50,7 +50,7 @@ export default function RadioPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Disabled</h2>
-        <Showcase title="Disabled Radio Group">
+        <Showcase title="Disabled Radio Group" code={`<RadioGroup value="disabled1" disabled>\n  <Radio value="disabled1" />\n  <Radio value="disabled2" />\n</RadioGroup>`}>
           <RadioGroup value="disabled1" disabled>
             <label className="flex items-center gap-2">
               <Radio value="disabled1" />

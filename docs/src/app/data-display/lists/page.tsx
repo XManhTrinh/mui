@@ -18,7 +18,7 @@ export default function ListsPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">One Line</h2>
-        <Showcase title="Single-Line List" className="flex-col items-stretch">
+        <Showcase title="Single-Line List" className="flex-col items-stretch" code={`<List>\n  <ListItem>List item 1</ListItem>\n  <ListItem>List item 2</ListItem>\n  <ListItem>List item 3</ListItem>\n</List>`}>
           <List>
             <ListItem>List item 1</ListItem>
             <ListItem>List item 2</ListItem>
@@ -29,7 +29,7 @@ export default function ListsPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Two Lines</h2>
-        <Showcase title="Two-Line List" className="flex-col items-stretch">
+        <Showcase title="Two-Line List" className="flex-col items-stretch" code={`<List>\n  <ListItem supporting="Jan 9, 2024" leading={<Icon name="folder" />} lines={2}>\n    Photos\n  </ListItem>\n  <ListItem supporting="Jan 17, 2024" leading={<Icon name="folder" />} lines={2}>\n    Recipes\n  </ListItem>\n</List>`}>
           <List>
             <ListItem supporting="Jan 9, 2024" leading={<Icon name="folder" size={24} />} lines={2}>
               Photos
@@ -46,7 +46,7 @@ export default function ListsPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Three Lines</h2>
-        <Showcase title="Three-Line List" className="flex-col items-stretch">
+        <Showcase title="Three-Line List" className="flex-col items-stretch" code={`<List>\n  <ListItem\n    supporting="Ali Connors — I'll be in your neighborhood..."\n    leading={<Icon name="person" />}\n    trailing={<span>3m</span>}\n    lines={3}\n  >\n    Brunch this weekend?\n  </ListItem>\n</List>`}>
           <List>
             <ListItem
               supporting="Ali Connors — I'll be in your neighborhood doing errands."

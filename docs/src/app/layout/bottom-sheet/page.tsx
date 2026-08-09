@@ -21,7 +21,7 @@ export default function BottomSheetPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Modal</h2>
-        <Showcase title="Modal Bottom Sheet">
+        <Showcase title="Modal Bottom Sheet" code={`<BottomSheet open={open} onOpenChange={setOpen}>\n  <div className="p-2">\n    <div>Copy link</div>\n    <div>Email</div>\n    <div>Messages</div>\n  </div>\n</BottomSheet>`}>
           <Button variant="filled" onClick={() => setOpen(true)}>
             Open Bottom Sheet
           </Button>

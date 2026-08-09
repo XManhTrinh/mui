@@ -18,7 +18,7 @@ export default function TabsPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Primary Tabs</h2>
-        <Showcase title="Primary" className="flex-col items-stretch">
+        <Showcase title="Primary" className="flex-col items-stretch" code={`<Tabs defaultValue="tab1" variant="primary">\n  <TabList>\n    <Tab value="tab1" label="Flights" />\n    <Tab value="tab2" label="Hotels" />\n    <Tab value="tab3" label="Activities" />\n  </TabList>\n  <TabContent value="tab1">Flights content</TabContent>\n  <TabContent value="tab2">Hotels content</TabContent>\n</Tabs>`}>
           <Tabs defaultValue="tab1" variant="primary">
             <TabList>
               <Tab value="tab1" label="Flights" />
@@ -40,7 +40,7 @@ export default function TabsPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Secondary Tabs</h2>
-        <Showcase title="Secondary" className="flex-col items-stretch">
+        <Showcase title="Secondary" className="flex-col items-stretch" code={`<Tabs defaultValue="all" variant="secondary">\n  <TabList>\n    <Tab value="all" label="All" />\n    <Tab value="unread" label="Unread" />\n    <Tab value="starred" label="Starred" />\n  </TabList>\n  <TabContent value="all">All messages</TabContent>\n</Tabs>`}>
           <Tabs defaultValue="all" variant="secondary">
             <TabList>
               <Tab value="all" label="All" />
@@ -62,7 +62,7 @@ export default function TabsPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Icons</h2>
-        <Showcase title="Tabs with Icons" className="flex-col items-stretch">
+        <Showcase title="Tabs with Icons" className="flex-col items-stretch" code={`<Tabs defaultValue="photos" variant="primary">\n  <TabList>\n    <Tab value="photos" icon="photo" label="Photos" />\n    <Tab value="videos" icon="videocam" label="Videos" />\n    <Tab value="music" icon="music_note" label="Music" />\n  </TabList>\n  <TabContent value="photos">Your photos</TabContent>\n</Tabs>`}>
           <Tabs defaultValue="photos" variant="primary">
             <TabList>
               <Tab value="photos" icon="photo" label="Photos" />

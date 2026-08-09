@@ -19,7 +19,7 @@ export default function TooltipPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Plain Tooltip</h2>
-        <Showcase title="Plain">
+        <Showcase title="Plain" code={`<Tooltip content="Add item" variant="plain">\n  <IconButton variant="filled" aria-label="Add">\n    <Icon name="add" />\n  </IconButton>\n</Tooltip>`}>
           <Tooltip content="Add item" variant="plain">
             <IconButton variant="filled" aria-label="Add">
               <Icon name="add" />
@@ -40,7 +40,7 @@ export default function TooltipPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Rich Tooltip</h2>
-        <Showcase title="Rich">
+        <Showcase title="Rich" code={`<Tooltip\n  variant="rich"\n  subhead="Rich tooltip"\n  content="Rich tooltips bring attention to a particular element..."\n>\n  <Button variant="outlined">Hover for details</Button>\n</Tooltip>`}>
           <Tooltip
             variant="rich"
             subhead="Rich tooltip"
@@ -60,7 +60,7 @@ export default function TooltipPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Placement</h2>
-        <Showcase title="Tooltip Positions">
+        <Showcase title="Tooltip Positions" code={`<Tooltip content="Top" variant="plain" side="top">\n  <Button variant="outlined">Top</Button>\n</Tooltip>`}>
           <Tooltip content="Top" variant="plain" side="top">
             <Button variant="outlined">Top</Button>
           </Tooltip>

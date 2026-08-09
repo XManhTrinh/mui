@@ -21,7 +21,7 @@ export default function NavigationRailPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Collapsed</h2>
-        <Showcase title="Collapsed Rail" className="justify-start min-h-80">
+        <Showcase title="Collapsed Rail" className="justify-start min-h-80" code={`<NavigationRail\n  variant="collapsed"\n  activeValue={activeItem}\n  onValueChange={setActiveItem}\n  items={[\n    { value: "home", icon: "home", label: "Home" },\n    { value: "explore", icon: "explore", label: "Explore" },\n    { value: "library", icon: "video_library", label: "Library" },\n    { value: "settings", icon: "settings", label: "Settings" },\n  ]}\n/>`}>
           <NavigationRail
             variant="collapsed"
             activeValue={activeItem}
@@ -39,7 +39,7 @@ export default function NavigationRailPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Expanded</h2>
-        <Showcase title="Expanded Rail with Labels" className="justify-start min-h-80">
+        <Showcase title="Expanded Rail with Labels" className="justify-start min-h-80" code={`<NavigationRail\n  variant="expanded"\n  activeValue={activeItem}\n  onValueChange={setActiveItem}\n  items={[\n    { value: "home", icon: "home", label: "Home" },\n    { value: "explore", icon: "explore", label: "Explore" },\n    { value: "library", icon: "video_library", label: "Library" },\n    { value: "settings", icon: "settings", label: "Settings" },\n  ]}\n/>`}>
           <NavigationRail
             variant="expanded"
             activeValue={activeItem}
@@ -57,7 +57,7 @@ export default function NavigationRailPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Badges</h2>
-        <Showcase title="Rail with Badges" className="justify-start min-h-80">
+        <Showcase title="Rail with Badges" className="justify-start min-h-80" code={`<NavigationRail\n  variant="collapsed"\n  activeValue="inbox"\n  onValueChange={setActiveItem}\n  items={[\n    { value: "inbox", icon: "inbox", label: "Inbox", badge: 12 },\n    { value: "sent", icon: "send", label: "Sent" },\n    { value: "drafts", icon: "drafts", label: "Drafts", badge: "dot" },\n    { value: "trash", icon: "delete", label: "Trash" },\n  ]}\n/>`}>
           <NavigationRail
             variant="collapsed"
             activeValue="inbox"
