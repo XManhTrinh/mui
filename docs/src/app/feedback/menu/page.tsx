@@ -18,7 +18,7 @@ export default function MenuPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Basic</h2>
-        <Showcase title="Simple Menu">
+        <Showcase title="Simple Menu" code={`<Menu trigger={<Button variant="outlined">Open Menu</Button>}>\n  <MenuItem>Cut</MenuItem>\n  <MenuItem>Copy</MenuItem>\n  <MenuItem>Paste</MenuItem>\n</Menu>`}>
           <Menu trigger={<Button variant="outlined">Open Menu</Button>}>
             <MenuItem>Cut</MenuItem>
             <MenuItem>Copy</MenuItem>
@@ -29,7 +29,7 @@ export default function MenuPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Icons</h2>
-        <Showcase title="Leading Icons">
+        <Showcase title="Leading Icons" code={`<Menu trigger={<Button variant="filled">Edit</Button>}>\n  <MenuItem leadingIcon="content_cut">Cut</MenuItem>\n  <MenuItem leadingIcon="content_copy">Copy</MenuItem>\n  <MenuItem leadingIcon="content_paste">Paste</MenuItem>\n  <MenuDivider />\n  <MenuItem leadingIcon="select_all">Select All</MenuItem>\n</Menu>`}>
           <Menu trigger={<Button variant="filled">Edit</Button>}>
             <MenuItem leadingIcon="content_cut">Cut</MenuItem>
             <MenuItem leadingIcon="content_copy">Copy</MenuItem>
@@ -42,7 +42,7 @@ export default function MenuPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Trailing Text</h2>
-        <Showcase title="Keyboard Shortcuts">
+        <Showcase title="Keyboard Shortcuts" code={`<Menu trigger={<IconButton variant="standard" aria-label="More"><Icon name="more_vert" /></IconButton>}>\n  <MenuItem leadingIcon="content_cut" trailingText="⌘X">Cut</MenuItem>\n  <MenuItem leadingIcon="content_copy" trailingText="⌘C">Copy</MenuItem>\n  <MenuItem leadingIcon="content_paste" trailingText="⌘V">Paste</MenuItem>\n</Menu>`}>
           <Menu trigger={<IconButton variant="standard" aria-label="More"><Icon name="more_vert" /></IconButton>}>
             <MenuItem leadingIcon="content_cut" trailingText="⌘X">Cut</MenuItem>
             <MenuItem leadingIcon="content_copy" trailingText="⌘C">Copy</MenuItem>

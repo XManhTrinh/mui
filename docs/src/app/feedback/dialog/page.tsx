@@ -30,7 +30,7 @@ export default function DialogPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Basic Dialog</h2>
-        <Showcase title="Basic">
+        <Showcase title="Basic" code={`<Dialog>\n  <DialogTrigger asChild>\n    <Button variant="filled">Open Dialog</Button>\n  </DialogTrigger>\n  <DialogContent>\n    <DialogHeader>\n      <DialogTitle>Discard draft?</DialogTitle>\n      <DialogDescription>Your changes have not been saved.</DialogDescription>\n    </DialogHeader>\n    <DialogFooter>\n      <DialogClose asChild>\n        <Button variant="text">Cancel</Button>\n      </DialogClose>\n      <Button variant="filled">Discard</Button>\n    </DialogFooter>\n  </DialogContent>\n</Dialog>`}>
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="filled">Open Dialog</Button>
@@ -56,7 +56,7 @@ export default function DialogPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Icon</h2>
-        <Showcase title="Icon Dialog">
+        <Showcase title="Icon Dialog" code={`<Dialog>\n  <DialogTrigger asChild>\n    <Button variant="outlined">Delete Item</Button>\n  </DialogTrigger>\n  <DialogContent>\n    <DialogHeader>\n      <Icon name="delete" size={24} />\n      <DialogTitle>Delete file?</DialogTitle>\n      <DialogDescription>This action cannot be undone.</DialogDescription>\n    </DialogHeader>\n    <DialogFooter>\n      <DialogClose asChild>\n        <Button variant="text">Cancel</Button>\n      </DialogClose>\n      <Button variant="filled">Delete</Button>\n    </DialogFooter>\n  </DialogContent>\n</Dialog>`}>
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="outlined">Delete Item</Button>
@@ -85,7 +85,7 @@ export default function DialogPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Full-Screen Dialog</h2>
-        <Showcase title="Full-Screen">
+        <Showcase title="Full-Screen" code={`<Dialog>\n  <DialogTrigger asChild>\n    <Button variant="tonal">Open Full-Screen</Button>\n  </DialogTrigger>\n  <DialogContent fullScreen>\n    <DialogHeader>\n      <DialogTitle>New Event</DialogTitle>\n    </DialogHeader>\n    <DialogFooter>\n      <DialogClose asChild>\n        <Button variant="text">Cancel</Button>\n      </DialogClose>\n      <Button variant="filled">Save</Button>\n    </DialogFooter>\n  </DialogContent>\n</Dialog>`}>
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="tonal">Open Full-Screen</Button>
