@@ -213,7 +213,12 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
       !compact && (resolvedSize === "xs" || resolvedSize === "s");
 
     // Shape classes for resting + active morph
-    const shapeClass = shapeClasses[shape][resolvedSize];
+    // M3 spec: In toggle mode, selected state inverts the shape (round→square, square→round)
+    let effectiveShape = shape;
+    if (toggle && isPressed) {
+      effectiveShape = shape === "round" ? "square" : "round";
+    }
+    const shapeClass = shapeClasses[effectiveShape][resolvedSize];
 
     // Resolve icon content: children take priority over `icon` shorthand
     const resolvedIconSize = iconSize ?? iconSizeMap[resolvedSize];
