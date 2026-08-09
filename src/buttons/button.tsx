@@ -10,10 +10,10 @@ import { cn } from "../lib/utils";
  * Material Design 3 Button
  *
  * Implements all five M3 common button variants with proper state layers,
- * icon support, loading state, and touch targets.
+ * icon support, loading state, and shape morph on press.
  *
- * State layers use a ::before pseudo-element with `bg-current` to inherit
- * the text color (which is the on-color for each variant).
+ * Shapes: round (default) or square (pass `square` prop).
+ * Sizes: xs (32dp), s (40dp, default), m (48dp), l (56dp), xl (64dp).
  */
 
 const buttonVariants = cva(
@@ -62,40 +62,37 @@ const buttonVariants = cva(
         l: "h-14 px-7 gap-2 [&_svg]:size-5",
         xl: "h-16 px-8 gap-2 [&_svg]:size-5",
       },
-      shape: {
-        round: "rounded-full",
-        square: "",
-      },
     },
-    compoundVariants: [
-      // Square shape radii per size (M3 spec: xs=12, s=12, m=16, l=28, xl=28)
-      { shape: "square", size: "xs", className: "rounded-xl" },
-      { shape: "square", size: "s", className: "rounded-xl" },
-      { shape: "square", size: "m", className: "rounded-2xl" },
-      { shape: "square", size: "l", className: "rounded-[28px]" },
-      { shape: "square", size: "xl", className: "rounded-[28px]" },
-      // Pressed shape morph (M3 spec: xs/s=8dp, m=12dp, l/xl=16dp)
-      { shape: "round", size: "xs", className: "active:rounded-lg" },
-      { shape: "round", size: "s", className: "active:rounded-lg" },
-      { shape: "round", size: "m", className: "active:rounded-xl" },
-      { shape: "round", size: "l", className: "active:rounded-2xl" },
-      { shape: "round", size: "xl", className: "active:rounded-2xl" },
-      { shape: "square", size: "xs", className: "active:rounded-lg" },
-      { shape: "square", size: "s", className: "active:rounded-lg" },
-      { shape: "square", size: "m", className: "active:rounded-xl" },
-      { shape: "square", size: "l", className: "active:rounded-2xl" },
-      { shape: "square", size: "xl", className: "active:rounded-2xl" },
-    ],
     defaultVariants: {
       variant: "filled",
       size: "s",
-      shape: "round",
     },
   }
 );
 
-// Touch target note: xs (32dp) and s (40dp) are below the 48dp minimum.
-// Use adequate spacing between adjacent buttons in dense layouts.
+/**
+ * Shape classes: round uses rounded-full, square uses size-dependent radii.
+ * Pressed morph reduces radius for both shapes.
+ * M3 spec corner radii:
+ *   Square resting: xs=12dp, s=12dp, m=16dp, l=28dp, xl=28dp
+ *   Pressed: xs=8dp, s=8dp, m=12dp, l=16dp, xl=16dp
+ */
+const shapeClasses = {
+  round: {
+    xs: "rounded-full active:rounded-lg",
+    s: "rounded-full active:rounded-lg",
+    m: "rounded-full active:rounded-xl",
+    l: "rounded-full active:rounded-2xl",
+    xl: "rounded-full active:rounded-2xl",
+  },
+  square: {
+    xs: "rounded-xl active:rounded-lg",
+    s: "rounded-xl active:rounded-lg",
+    m: "rounded-2xl active:rounded-xl",
+    l: "rounded-[28px] active:rounded-2xl",
+    xl: "rounded-[28px] active:rounded-2xl",
+  },
+} as const;
 
 // Asymmetric padding when icon is present (icon-side gets less padding)
 const iconPaddingMap = {
@@ -136,8 +133,8 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   /** Render as child element (Radix Slot pattern) */
   asChild?: boolean;
-  /** Button shape */
-  shape?: "round" | "square";
+  /** Use square shape (rounded corners instead of pill) */
+  square?: boolean;
   /** Leading icon (React node, typically <Icon />) */
   icon?: React.ReactNode;
   /** Trailing icon (React node) */
@@ -152,7 +149,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       className,
       variant,
       size,
-      shape,
+      square = false,
       asChild = false,
       icon,
       trailingIcon,
@@ -165,6 +162,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const Comp = asChild ? Slot : "button";
     const resolvedSize = size ?? "s";
+    const shape = square ? "square" : "round";
 
     // Determine asymmetric padding
     const hasLeadingIcon = loading || !!icon;
@@ -176,14 +174,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     } else if (hasTrailingIcon && !hasLeadingIcon) {
       paddingOverride = iconPaddingMap[resolvedSize].trailing;
     } else if (hasLeadingIcon && hasTrailingIcon) {
-      // Both icons: use icon padding on both sides
       paddingOverride = `${iconPaddingMap[resolvedSize].icon.split(" ")[0]} ${iconPaddingMap[resolvedSize].trailing.split(" ")[1]}`;
     }
 
     return (
       <Comp
         className={cn(
-          buttonVariants({ variant, size, shape, className: undefined }),
+          buttonVariants({ variant, size }),
+          shapeClasses[shape][resolvedSize],
           paddingOverride,
           loading && "pointer-events-none",
           className

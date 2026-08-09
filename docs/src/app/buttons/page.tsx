@@ -74,11 +74,11 @@ export default function ButtonsPage() {
         </Showcase>
 
         <Showcase title="Square Shape">
-          <Button variant="filled" shape="square" size="xs">XS</Button>
-          <Button variant="filled" shape="square" size="s">Small</Button>
-          <Button variant="filled" shape="square" size="m">Medium</Button>
-          <Button variant="filled" shape="square" size="l">Large</Button>
-          <Button variant="filled" shape="square" size="xl">XL</Button>
+          <Button square variant="filled" size="xs">XS</Button>
+          <Button square variant="filled" size="s">Small</Button>
+          <Button square variant="filled" size="m">Medium</Button>
+          <Button square variant="filled" size="l">Large</Button>
+          <Button square variant="filled" size="xl">XL</Button>
         </Showcase>
       </section>
 
@@ -197,13 +197,13 @@ export default function ButtonsPage() {
         </Showcase>
 
         <Showcase title="Square Shape">
-          <IconButton variant="filled" shape="square" aria-label="Grid">
+          <IconButton variant="filled" aria-label="Grid">
             <Icon name="grid_view" />
           </IconButton>
-          <IconButton variant="filled-tonal" shape="square" aria-label="List">
+          <IconButton variant="filled-tonal" aria-label="List">
             <Icon name="view_list" />
           </IconButton>
-          <IconButton variant="outlined" shape="square" aria-label="Modules">
+          <IconButton variant="outlined" aria-label="Modules">
             <Icon name="view_module" />
           </IconButton>
         </Showcase>
