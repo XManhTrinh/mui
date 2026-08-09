@@ -49,7 +49,7 @@ const ToolbarLeading = React.forwardRef<HTMLDivElement, ToolbarLeadingProps>(
       <button
         type="button"
         onClick={onPress}
-        className="flex items-center justify-center w-12 h-12 rounded-full hover:bg-[hsl(var(--on-surface)/0.08)] focus-visible:bg-[hsl(var(--on-surface)/0.10)] active:bg-[hsl(var(--on-surface)/0.10)] transition-colors"
+        className="flex items-center justify-center w-12 h-12 rounded-full cursor-pointer hover:bg-[hsl(var(--on-surface)/0.08)] focus-visible:bg-[hsl(var(--on-surface)/0.10)] active:bg-[hsl(var(--on-surface)/0.10)] transition-colors"
         aria-label={icon === "close" ? "Close" : "Back"}
       >
         <Icon name={icon} size={24} className="text-surface-foreground" />
@@ -102,7 +102,7 @@ const ToolbarAction = React.forwardRef<HTMLButtonElement, ToolbarActionProps>(
       type="button"
       aria-label={label}
       className={cn(
-        "flex items-center justify-center w-12 h-12 rounded-full hover:bg-[hsl(var(--on-surface)/0.08)] focus-visible:bg-[hsl(var(--on-surface)/0.10)] active:bg-[hsl(var(--on-surface)/0.10)] transition-colors",
+        "flex items-center justify-center w-12 h-12 rounded-full cursor-pointer hover:bg-[hsl(var(--on-surface)/0.08)] focus-visible:bg-[hsl(var(--on-surface)/0.10)] active:bg-[hsl(var(--on-surface)/0.10)] transition-colors",
         className
       )}
       {...props}
