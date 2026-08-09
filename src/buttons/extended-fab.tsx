@@ -46,7 +46,7 @@ const extendedFabVariants = cva(
     "min-w-20",
     // Icon sizing: 24dp for all sizes
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-6",
-    "[&_.material-symbols-rounded]:pointer-events-none [&_.material-symbols-rounded]:text-[24px]",
+    "[&_.material-symbols-rounded]:pointer-events-none",
     // Disabled
     "disabled:opacity-[0.38] disabled:pointer-events-none disabled:cursor-not-allowed",
   ].join(" "),

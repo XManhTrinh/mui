@@ -13,9 +13,9 @@ export default function IconButtonsPage() {
   const [pgShape, setPgShape] = React.useState<"round" | "square">("round");
   const [pgToggle, setPgToggle] = React.useState(false);
 
-  const pgCode = `<IconButton variant="${pgVariant}" size="${pgSize}" shape="${pgShape}"${pgToggle ? " toggle pressed" : ""} aria-label="Favorite">
-  <Icon name="favorite" />
-</IconButton>`;
+  const pgCode = pgToggle
+    ? `<IconButton icon="favorite" variant="${pgVariant}" size="${pgSize}" shape="${pgShape}" toggle pressed aria-label="Favorite" />`
+    : `<IconButton icon="favorite" variant="${pgVariant}" size="${pgSize}" shape="${pgShape}" aria-label="Favorite" />`;
 
   return (
     <div className="max-w-5xl space-y-8">
@@ -75,98 +75,73 @@ export default function IconButtonsPage() {
         }
       >
         <IconButton
+          icon="favorite"
           variant={pgVariant}
           size={pgSize}
           shape={pgShape}
           toggle={pgToggle}
           pressed={pgToggle ? true : undefined}
           aria-label="Favorite"
-        >
-          <Icon name="favorite" filled={pgToggle} />
-        </IconButton>
+        />
       </Playground>
 
-      <Showcase title="Standard" code={`<IconButton variant="standard" aria-label="Settings">\n  <Icon name="settings" />\n</IconButton>`}>
-        <IconButton variant="standard" size="xs" aria-label="Settings">
-          <Icon name="settings" />
-        </IconButton>
-        <IconButton variant="standard" size="s" aria-label="Search">
-          <Icon name="search" />
-        </IconButton>
-        <IconButton variant="standard" size="m" aria-label="Close">
-          <Icon name="close" />
-        </IconButton>
-        <IconButton variant="standard" size="l" aria-label="Menu">
-          <Icon name="menu" />
-        </IconButton>
-        <IconButton variant="standard" size="xl" aria-label="Home">
-          <Icon name="home" />
-        </IconButton>
+      {/* Shorthand usage — sizes with auto-proportional icons */}
+      <Showcase
+        title="Sizes (shorthand)"
+        code={`<IconButton icon="settings" size="xs" aria-label="Settings" />\n<IconButton icon="search" size="s" aria-label="Search" />\n<IconButton icon="close" size="m" aria-label="Close" />\n<IconButton icon="menu" size="l" aria-label="Menu" />\n<IconButton icon="home" size="xl" aria-label="Home" />`}
+      >
+        <IconButton icon="settings" variant="standard" size="xs" aria-label="Settings" />
+        <IconButton icon="search" variant="standard" size="s" aria-label="Search" />
+        <IconButton icon="close" variant="standard" size="m" aria-label="Close" />
+        <IconButton icon="menu" variant="standard" size="l" aria-label="Menu" />
+        <IconButton icon="home" variant="standard" size="xl" aria-label="Home" />
       </Showcase>
 
-      <Showcase title="Filled" code={`<IconButton variant="filled" aria-label="Add">\n  <Icon name="add" />\n</IconButton>`}>
-        <IconButton variant="filled" aria-label="Add">
-          <Icon name="add" />
-        </IconButton>
-        <IconButton variant="filled" aria-label="Edit">
-          <Icon name="edit" />
-        </IconButton>
-        <IconButton variant="filled" aria-label="Delete">
-          <Icon name="delete" />
-        </IconButton>
+      <Showcase title="Filled" code={`<IconButton icon="add" variant="filled" aria-label="Add" />`}>
+        <IconButton icon="add" variant="filled" aria-label="Add" />
+        <IconButton icon="edit" variant="filled" aria-label="Edit" />
+        <IconButton icon="delete" variant="filled" aria-label="Delete" />
       </Showcase>
 
-      <Showcase title="Filled Tonal" code={`<IconButton variant="filled-tonal" aria-label="Bookmark">\n  <Icon name="bookmark" />\n</IconButton>`}>
-        <IconButton variant="filled-tonal" aria-label="Bookmark">
-          <Icon name="bookmark" />
-        </IconButton>
-        <IconButton variant="filled-tonal" aria-label="Share">
-          <Icon name="share" />
-        </IconButton>
-        <IconButton variant="filled-tonal" aria-label="Download">
-          <Icon name="download" />
-        </IconButton>
+      <Showcase title="Filled Tonal" code={`<IconButton icon="bookmark" variant="filled-tonal" aria-label="Bookmark" />`}>
+        <IconButton icon="bookmark" variant="filled-tonal" aria-label="Bookmark" />
+        <IconButton icon="share" variant="filled-tonal" aria-label="Share" />
+        <IconButton icon="download" variant="filled-tonal" aria-label="Download" />
       </Showcase>
 
-      <Showcase title="Outlined" code={`<IconButton variant="outlined" aria-label="Favorite">\n  <Icon name="favorite" />\n</IconButton>`}>
-        <IconButton variant="outlined" aria-label="Favorite">
-          <Icon name="favorite" />
-        </IconButton>
-        <IconButton variant="outlined" aria-label="Print">
-          <Icon name="print" />
-        </IconButton>
-        <IconButton variant="outlined" aria-label="More">
-          <Icon name="more_vert" />
-        </IconButton>
+      <Showcase title="Outlined" code={`<IconButton icon="favorite" variant="outlined" aria-label="Favorite" />`}>
+        <IconButton icon="favorite" variant="outlined" aria-label="Favorite" />
+        <IconButton icon="print" variant="outlined" aria-label="Print" />
+        <IconButton icon="more_vert" variant="outlined" aria-label="More" />
       </Showcase>
 
-      <Showcase title="Toggle Icon Button" code={`<IconButton variant="standard" toggle pressed={pressed} onPressedChange={setPressed} aria-label="Favorite">\n  <Icon name="favorite" filled={pressed} />\n</IconButton>`}>
+      <Showcase title="Toggle (auto-fills icon)" code={`<IconButton\n  icon="favorite"\n  toggle\n  pressed={pressed}\n  onPressedChange={setPressed}\n  aria-label="Favorite"\n/>`}>
         <IconButton
-          variant="standard"
+          icon="favorite"
           toggle
           pressed={togglePressed}
           onPressedChange={setTogglePressed}
           aria-label="Favorite"
-        >
-          <Icon name="favorite" filled={togglePressed} />
-        </IconButton>
+        />
         <span className="text-sm text-surface-variant-foreground">
           {togglePressed ? "Pressed" : "Unpressed"} — click to toggle
         </span>
       </Showcase>
 
-      <Showcase title="Disabled States" code={`<IconButton variant="filled" disabled aria-label="Add">\n  <Icon name="add" />\n</IconButton>`}>
-        <IconButton variant="standard" disabled aria-label="Settings">
-          <Icon name="settings" />
+      <Showcase title="Disabled" code={`<IconButton icon="settings" disabled aria-label="Settings" />`}>
+        <IconButton icon="settings" variant="standard" disabled aria-label="Settings" />
+        <IconButton icon="add" variant="filled" disabled aria-label="Add" />
+        <IconButton icon="bookmark" variant="filled-tonal" disabled aria-label="Bookmark" />
+        <IconButton icon="favorite" variant="outlined" disabled aria-label="Favorite" />
+      </Showcase>
+
+      {/* Composable usage — backward compatible */}
+      <Showcase title="Composable (children)" code={`<IconButton size="m" aria-label="Settings">\n  <Icon name="settings" size={24} weight={300} />\n</IconButton>`}>
+        <IconButton size="m" aria-label="Settings">
+          <Icon name="settings" size={24} weight={300} />
         </IconButton>
-        <IconButton variant="filled" disabled aria-label="Add">
-          <Icon name="add" />
-        </IconButton>
-        <IconButton variant="filled-tonal" disabled aria-label="Bookmark">
-          <Icon name="bookmark" />
-        </IconButton>
-        <IconButton variant="outlined" disabled aria-label="Favorite">
-          <Icon name="favorite" />
+        <IconButton variant="filled" size="l" aria-label="Star">
+          <Icon name="star" size={28} filled />
         </IconButton>
       </Showcase>
 
@@ -185,16 +160,40 @@ export default function IconButtonsPage() {
             </thead>
             <tbody className="divide-y divide-outline-variant">
               <tr>
+                <td className="px-4 py-2 font-mono text-xs">icon</td>
+                <td className="px-4 py-2 font-mono text-xs">string</td>
+                <td className="px-4 py-2 font-mono text-xs">—</td>
+                <td className="px-4 py-2">Material Symbols icon name (shorthand). Auto-sizes proportionally.</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2 font-mono text-xs">iconSize</td>
+                <td className="px-4 py-2 font-mono text-xs">number</td>
+                <td className="px-4 py-2 font-mono text-xs">auto</td>
+                <td className="px-4 py-2">Override icon size (px). Defaults to proportional (18→20→24→28→32).</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2 font-mono text-xs">iconFilled</td>
+                <td className="px-4 py-2 font-mono text-xs">boolean</td>
+                <td className="px-4 py-2 font-mono text-xs">false</td>
+                <td className="px-4 py-2">Fill the icon. In toggle mode, auto-tracks pressed state.</td>
+              </tr>
+              <tr>
                 <td className="px-4 py-2 font-mono text-xs">variant</td>
                 <td className="px-4 py-2 font-mono text-xs">{`"standard" | "filled" | "filled-tonal" | "outlined"`}</td>
                 <td className="px-4 py-2 font-mono text-xs">{`"standard"`}</td>
-                <td className="px-4 py-2">Visual variant</td>
+                <td className="px-4 py-2">Visual variant (colors and container fill)</td>
               </tr>
               <tr>
                 <td className="px-4 py-2 font-mono text-xs">size</td>
                 <td className="px-4 py-2 font-mono text-xs">{`"xs" | "s" | "m" | "l" | "xl"`}</td>
-                <td className="px-4 py-2 font-mono text-xs">{`"m"`}</td>
-                <td className="px-4 py-2">Button size</td>
+                <td className="px-4 py-2 font-mono text-xs">{`"s"`}</td>
+                <td className="px-4 py-2">Container size (32→40→48→56→64dp)</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2 font-mono text-xs">shape</td>
+                <td className="px-4 py-2 font-mono text-xs">{`"round" | "square"`}</td>
+                <td className="px-4 py-2 font-mono text-xs">{`"round"`}</td>
+                <td className="px-4 py-2">Corner shape with morph on press</td>
               </tr>
               <tr>
                 <td className="px-4 py-2 font-mono text-xs">toggle</td>
@@ -205,20 +204,26 @@ export default function IconButtonsPage() {
               <tr>
                 <td className="px-4 py-2 font-mono text-xs">pressed</td>
                 <td className="px-4 py-2 font-mono text-xs">boolean</td>
-                <td className="px-4 py-2 font-mono text-xs">false</td>
+                <td className="px-4 py-2 font-mono text-xs">—</td>
                 <td className="px-4 py-2">Controlled pressed state (toggle mode)</td>
               </tr>
               <tr>
                 <td className="px-4 py-2 font-mono text-xs">onPressedChange</td>
                 <td className="px-4 py-2 font-mono text-xs">{`(pressed: boolean) => void`}</td>
                 <td className="px-4 py-2 font-mono text-xs">—</td>
-                <td className="px-4 py-2">Callback when pressed state changes</td>
+                <td className="px-4 py-2">Callback when toggle state changes</td>
               </tr>
               <tr>
                 <td className="px-4 py-2 font-mono text-xs">disabled</td>
                 <td className="px-4 py-2 font-mono text-xs">boolean</td>
                 <td className="px-4 py-2 font-mono text-xs">false</td>
                 <td className="px-4 py-2">Disables the button</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2 font-mono text-xs">children</td>
+                <td className="px-4 py-2 font-mono text-xs">ReactNode</td>
+                <td className="px-4 py-2 font-mono text-xs">—</td>
+                <td className="px-4 py-2">Custom icon content (takes priority over `icon` prop)</td>
               </tr>
             </tbody>
           </table>

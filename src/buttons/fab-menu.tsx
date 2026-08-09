@@ -247,7 +247,7 @@ const FABMenu: React.FC<FABMenuProps> = ({
                   "shadow-[0_2px_4px_var(--elevation-2),0_1px_2px_var(--elevation-1)]",
                   // Icon sizing
                   "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-6",
-                  "[&_.material-symbols-rounded]:pointer-events-none [&_.material-symbols-rounded]:text-[24px]",
+                  "[&_.material-symbols-rounded]:pointer-events-none",
                   menuItemColors[colorSet]
                 )}
                 aria-label={item["aria-label"] || undefined}
@@ -301,7 +301,7 @@ const FABMenu: React.FC<FABMenuProps> = ({
             "shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
             // Icon sizing
             "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-6",
-            "[&_.material-symbols-rounded]:pointer-events-none [&_.material-symbols-rounded]:text-[24px]",
+            "[&_.material-symbols-rounded]:pointer-events-none",
             closeButtonColors[colorSet]
           )}
           aria-label={closeLabel}
@@ -362,7 +362,7 @@ const FABMenu: React.FC<FABMenuProps> = ({
             "hover:shadow-[0_6px_12px_var(--elevation-4),0_2px_4px_var(--elevation-4)]",
             // Icon sizing
             "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-6",
-            "[&_.material-symbols-rounded]:pointer-events-none [&_.material-symbols-rounded]:text-[24px]",
+            "[&_.material-symbols-rounded]:pointer-events-none",
             closeButtonColors[colorSet]
           )}
           aria-haspopup="menu"

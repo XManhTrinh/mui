@@ -5,12 +5,17 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../lib/utils";
+import { Icon } from "../icon";
 
 /**
- * Material Design 3 Icon Button
+ * Material Design 3 Icon Button (M3 Expressive)
  *
  * Implements Standard, Filled, Filled-Tonal, and Outlined icon button variants
  * with toggle support, shape morph on press, and accessible touch targets.
+ *
+ * Supports two usage patterns:
+ * 1. Shorthand: `<IconButton icon="favorite" />` — renders Icon internally with correct size
+ * 2. Composable: `<IconButton><Icon name="favorite" /></IconButton>` — full control
  *
  * State layers use a ::before pseudo-element with `bg-current` to inherit
  * the text color (which is the on-color for each variant).
@@ -31,11 +36,11 @@ const iconButtonVariants = cva(
     "before:absolute before:inset-0 before:rounded-[inherit]",
     "before:bg-current before:opacity-0",
     "before:transition-opacity before:duration-200 before:pointer-events-none",
-    // State layer opacities (M3: 8% hover, 10% focus, 10% press for icon buttons)
+    // State layer opacities (M3: 8% hover, 10% focus, 10% press)
     "hover:before:opacity-[0.08]",
     "focus-visible:before:opacity-[0.10]",
     "active:before:opacity-[0.10]",
-    // Icon sizing defaults
+    // Icon sizing defaults (SVG icons)
     "[&_svg]:pointer-events-none [&_svg]:shrink-0",
     "[&_.material-symbols-rounded]:pointer-events-none",
   ].join(" "),
@@ -50,11 +55,11 @@ const iconButtonVariants = cva(
           "bg-transparent border border-outline text-surface-variant-foreground",
       },
       size: {
-        xs: "size-8 [&_svg]:size-[18px] [&_.material-symbols-rounded]:text-[18px]",
-        s: "size-10 [&_svg]:size-5 [&_.material-symbols-rounded]:text-[20px]",
-        m: "size-12 [&_svg]:size-6 [&_.material-symbols-rounded]:text-[24px]",
-        l: "size-14 [&_svg]:size-7 [&_.material-symbols-rounded]:text-[28px]",
-        xl: "size-16 [&_svg]:size-8 [&_.material-symbols-rounded]:text-[32px]",
+        xs: "size-8 [&_svg]:size-[18px]",
+        s: "size-10 [&_svg]:size-5",
+        m: "size-12 [&_svg]:size-6",
+        l: "size-14 [&_svg]:size-7",
+        xl: "size-16 [&_svg]:size-8",
       },
     },
     defaultVariants: {
@@ -63,6 +68,17 @@ const iconButtonVariants = cva(
     },
   }
 );
+
+/**
+ * Proportional icon sizes per container size (M3 Expressive ~60% ratio).
+ */
+const iconSizeMap = {
+  xs: 18,
+  s: 20,
+  m: 24,
+  l: 28,
+  xl: 32,
+} as const;
 
 /**
  * Shape classes for round and square shapes at each size.
@@ -93,10 +109,28 @@ export interface IconButtonProps
   asChild?: boolean;
   /** Icon button style */
   variant?: "standard" | "filled" | "filled-tonal" | "outlined";
-  /** Size */
+  /** Container size */
   size?: "xs" | "s" | "m" | "l" | "xl";
   /** Shape: round (circle) or square (rounded square) */
   shape?: "round" | "square";
+  /**
+   * Material Symbols icon name (shorthand).
+   * When provided, renders an Icon internally with the correct proportional size.
+   * If `children` is also provided, `children` takes priority.
+   */
+  icon?: string;
+  /**
+   * Override the icon size (in px) when using the `icon` shorthand.
+   * Defaults to proportional sizing based on container size.
+   */
+  iconSize?: number;
+  /**
+   * Whether the icon is filled (when using `icon` shorthand).
+   * In toggle mode, this auto-tracks the pressed state.
+   */
+  iconFilled?: boolean;
+  /** Icon weight (when using `icon` shorthand). Default: 400 */
+  iconWeight?: 100 | 200 | 300 | 400 | 500 | 600 | 700;
   /** Enable toggle behavior */
   toggle?: boolean;
   /** Controlled pressed state (used with toggle) */
@@ -119,6 +153,10 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
       size,
       shape = "round",
       asChild = false,
+      icon,
+      iconSize,
+      iconFilled,
+      iconWeight,
       toggle = false,
       pressed: pressedProp,
       defaultPressed = false,
@@ -149,10 +187,8 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     let effectiveVariant = resolvedVariant;
     if (toggle) {
       if (isPressed) {
-        // Pressed → filled treatment
         effectiveVariant = "filled";
       } else {
-        // Unpressed → standard treatment
         effectiveVariant = "standard";
       }
     }
@@ -179,6 +215,21 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     // Shape classes for resting + active morph
     const shapeClass = shapeClasses[shape][resolvedSize];
 
+    // Resolve icon content: children take priority over `icon` shorthand
+    const resolvedIconSize = iconSize ?? iconSizeMap[resolvedSize];
+    const resolvedFilled = iconFilled ?? (toggle ? !!isPressed : false);
+
+    const iconContent = children ?? (
+      icon ? (
+        <Icon
+          name={icon}
+          size={resolvedIconSize}
+          filled={resolvedFilled}
+          weight={iconWeight}
+        />
+      ) : null
+    );
+
     const button = (
       <Comp
         className={cn(
@@ -195,7 +246,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         onClick={handleClick}
         {...props}
       >
-        {children}
+        {iconContent}
       </Comp>
     );
 

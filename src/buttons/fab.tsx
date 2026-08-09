@@ -54,11 +54,11 @@ const fabVariants = cva(
         tertiary: "bg-tertiary-container text-tertiary-container-foreground",
       },
       size: {
-        m: "size-12 [&_svg]:size-6 [&_.material-symbols-rounded]:text-[24px]",
-        l: "size-14 [&_svg]:size-6 [&_.material-symbols-rounded]:text-[24px]",
-        xl: "size-24 [&_svg]:size-9 [&_.material-symbols-rounded]:text-[36px]",
+        m: "size-12 [&_svg]:size-6",
+        l: "size-14 [&_svg]:size-6",
+        xl: "size-24 [&_svg]:size-9",
         extended:
-          "h-14 w-auto pl-4 pr-5 gap-2 [&_svg]:size-6 [&_.material-symbols-rounded]:text-[24px]",
+          "h-14 w-auto pl-4 pr-5 gap-2 [&_svg]:size-6",
       },
     },
     defaultVariants: {

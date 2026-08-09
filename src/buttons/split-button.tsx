@@ -207,7 +207,7 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
               // Icon sizing
               "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-5",
-              "[&_.material-symbols-rounded]:pointer-events-none [&_.material-symbols-rounded]:text-[20px]",
+              "[&_.material-symbols-rounded]:pointer-events-none",
               // Disabled
               isLeadingDisabled && "opacity-[0.38] pointer-events-none cursor-not-allowed"
             )}
