@@ -5,7 +5,7 @@ import { SnackbarProvider, useSnackbar, Button } from "@mui/index";
 import { Showcase } from "@/components/showcase";
 
 function SnackbarDemos() {
-  const { showSnackbar } = useSnackbar();
+  const { show } = useSnackbar();
 
   return (
     <div className="max-w-4xl space-y-8">
@@ -25,7 +25,7 @@ function SnackbarDemos() {
           <Button
             variant="filled"
             onClick={() =>
-              showSnackbar({
+              show({
                 message: "Item archived",
                 action: { label: "Undo", onClick: () => {} },
               })
@@ -42,9 +42,9 @@ function SnackbarDemos() {
           <Button
             variant="outlined"
             onClick={() =>
-              showSnackbar({
+              show({
                 message: "Message sent successfully",
-                dismissible: true,
+                showClose: true,
               })
             }
           >
@@ -59,7 +59,7 @@ function SnackbarDemos() {
           <Button
             variant="tonal"
             onClick={() =>
-              showSnackbar({
+              show({
                 message: "No internet connection",
                 action: { label: "Retry", onClick: () => {} },
                 duration: 10000,
@@ -71,9 +71,9 @@ function SnackbarDemos() {
           <Button
             variant="text"
             onClick={() =>
-              showSnackbar({
+              show({
                 message: "Processing your request...",
-                dismissible: true,
+                showClose: true,
                 duration: Infinity,
               })
             }

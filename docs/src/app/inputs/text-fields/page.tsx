@@ -32,8 +32,8 @@ export default function TextFieldsPage() {
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">States</h2>
         <Showcase title="Error">
-          <TextField variant="outlined" label="Email" error helperText="Invalid email address" defaultValue="not-an-email" />
-          <TextField variant="filled" label="Email" error helperText="Required field" />
+          <TextField variant="outlined" label="Email" error errorText="Invalid email address" defaultValue="not-an-email" />
+          <TextField variant="filled" label="Email" error errorText="Required field" />
         </Showcase>
         <Showcase title="Disabled">
           <TextField variant="outlined" label="Disabled" disabled defaultValue="Cannot edit" />

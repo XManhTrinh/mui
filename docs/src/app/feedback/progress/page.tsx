@@ -50,9 +50,9 @@ export default function ProgressPage() {
         <h2 className="text-[22px] leading-7 font-normal">Loading Indicator</h2>
         <Showcase title="Loading States">
           <LoadingIndicator />
-          <LoadingIndicator size="small" />
-          <LoadingIndicator size="medium" />
-          <LoadingIndicator size="large" />
+          <LoadingIndicator size="sm" />
+          <LoadingIndicator size="md" />
+          <LoadingIndicator size="lg" />
         </Showcase>
       </section>
     </div>

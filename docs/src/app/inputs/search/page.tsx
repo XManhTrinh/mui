@@ -46,7 +46,7 @@ export default function SearchPage() {
         <Showcase title="Search with Avatar/Icon">
           <Search
             placeholder="Search messages..."
-            leadingIcon={<Icon name="search" />}
+            leadingIcon="search"
           />
         </Showcase>
       </section>

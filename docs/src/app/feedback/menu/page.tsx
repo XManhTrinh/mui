@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Menu, MenuItem, MenuDivider, Icon, Button } from "@mui/index";
+import { Menu, MenuItem, MenuDivider, Button, IconButton, Icon } from "@mui/index";
 import { Showcase } from "@/components/showcase";
 
 export default function MenuPage() {
@@ -12,31 +12,30 @@ export default function MenuPage() {
           Menu
         </h1>
         <p className="text-[16px] leading-6 text-surface-variant-foreground">
-          Menus display a list of choices on a temporary surface. They appear
-          when users interact with a button, action, or other control.
+          Menus display a list of choices on a temporary surface.
         </p>
       </div>
 
       <section className="space-y-4">
-        <h2 className="text-[22px] leading-7 font-normal">Basic Menu</h2>
+        <h2 className="text-[22px] leading-7 font-normal">Basic</h2>
         <Showcase title="Simple Menu">
           <Menu trigger={<Button variant="outlined">Open Menu</Button>}>
-            <MenuItem label="Cut" />
-            <MenuItem label="Copy" />
-            <MenuItem label="Paste" />
+            <MenuItem>Cut</MenuItem>
+            <MenuItem>Copy</MenuItem>
+            <MenuItem>Paste</MenuItem>
           </Menu>
         </Showcase>
       </section>
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Icons</h2>
-        <Showcase title="Menu Items with Icons">
-          <Menu trigger={<Button variant="filled">Edit Menu</Button>}>
-            <MenuItem label="Cut" icon={<Icon name="content_cut" />} />
-            <MenuItem label="Copy" icon={<Icon name="content_copy" />} />
-            <MenuItem label="Paste" icon={<Icon name="content_paste" />} />
+        <Showcase title="Leading Icons">
+          <Menu trigger={<Button variant="filled">Edit</Button>}>
+            <MenuItem leadingIcon="content_cut">Cut</MenuItem>
+            <MenuItem leadingIcon="content_copy">Copy</MenuItem>
+            <MenuItem leadingIcon="content_paste">Paste</MenuItem>
             <MenuDivider />
-            <MenuItem label="Select All" icon={<Icon name="select_all" />} />
+            <MenuItem leadingIcon="select_all">Select All</MenuItem>
           </Menu>
         </Showcase>
       </section>
@@ -44,25 +43,12 @@ export default function MenuPage() {
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Trailing Text</h2>
         <Showcase title="Keyboard Shortcuts">
-          <Menu trigger={<Button variant="outlined">File Menu</Button>}>
-            <MenuItem label="New" icon={<Icon name="add" />} trailing="Ctrl+N" />
-            <MenuItem label="Open" icon={<Icon name="folder_open" />} trailing="Ctrl+O" />
-            <MenuItem label="Save" icon={<Icon name="save" />} trailing="Ctrl+S" />
+          <Menu trigger={<IconButton variant="standard" aria-label="More"><Icon name="more_vert" /></IconButton>}>
+            <MenuItem leadingIcon="content_cut" trailingText="⌘X">Cut</MenuItem>
+            <MenuItem leadingIcon="content_copy" trailingText="⌘C">Copy</MenuItem>
+            <MenuItem leadingIcon="content_paste" trailingText="⌘V">Paste</MenuItem>
             <MenuDivider />
-            <MenuItem label="Print" icon={<Icon name="print" />} trailing="Ctrl+P" />
-          </Menu>
-        </Showcase>
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="text-[22px] leading-7 font-normal">With Divider</h2>
-        <Showcase title="Grouped Menu Items">
-          <Menu trigger={<Button variant="tonal">Actions</Button>}>
-            <MenuItem label="Edit" icon={<Icon name="edit" />} />
-            <MenuItem label="Duplicate" icon={<Icon name="content_copy" />} />
-            <MenuDivider />
-            <MenuItem label="Archive" icon={<Icon name="archive" />} />
-            <MenuItem label="Delete" icon={<Icon name="delete" />} />
+            <MenuItem leadingIcon="select_all" trailingText="⌘A">Select All</MenuItem>
           </Menu>
         </Showcase>
       </section>

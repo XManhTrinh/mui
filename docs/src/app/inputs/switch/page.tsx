@@ -33,8 +33,8 @@ export default function SwitchPage() {
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Icons</h2>
         <Showcase title="Switch with Icons">
-          <Switch defaultChecked icon={<Icon name="check" />} />
-          <Switch icon={<Icon name="close" />} />
+          <Switch defaultChecked showIcons />
+          <Switch showIcons />
         </Showcase>
       </section>
 

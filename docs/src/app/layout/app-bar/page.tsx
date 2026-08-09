@@ -19,22 +19,22 @@ export default function AppBarPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Basic</h2>
-        <Showcase title="Simple App Bar" className="flex-col items-stretch">
-          <AppBar title="Page Title" />
+        <Showcase headline="Simple App Bar" className="flex-col items-stretch">
+          <AppBar headline="Page Title" />
         </Showcase>
       </section>
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Icons</h2>
-        <Showcase title="App Bar with Navigation & Actions" className="flex-col items-stretch">
+        <Showcase headline="App Bar with Navigation & Actions" className="flex-col items-stretch">
           <AppBar
-            title="Messages"
-            leading={
+            headline="Messages"
+            leadingIcon={
               <IconButton variant="standard" aria-label="Menu">
                 <Icon name="menu" />
               </IconButton>
             }
-            trailing={
+            trailingIcons={
               <>
                 <IconButton variant="standard" aria-label="Search">
                   <Icon name="search" />
@@ -50,16 +50,16 @@ export default function AppBarPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Subtitle</h2>
-        <Showcase title="App Bar with Subtitle" className="flex-col items-stretch">
+        <Showcase headline="App Bar with Subtitle" className="flex-col items-stretch">
           <AppBar
-            title="Inbox"
-            subtitle="3 new messages"
-            leading={
+            headline="Inbox"
+            subheadline="3 new messages"
+            leadingIcon={
               <IconButton variant="standard" aria-label="Back">
                 <Icon name="arrow_back" />
               </IconButton>
             }
-            trailing={
+            trailingIcons={
               <IconButton variant="standard" aria-label="Search">
                 <Icon name="search" />
               </IconButton>
@@ -70,16 +70,16 @@ export default function AppBarPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Centered Title</h2>
-        <Showcase title="Centered" className="flex-col items-stretch">
+        <Showcase headline="Centered" className="flex-col items-stretch">
           <AppBar
-            title="Profile"
+            headline="Profile"
             centered
-            leading={
+            leadingIcon={
               <IconButton variant="standard" aria-label="Back">
                 <Icon name="arrow_back" />
               </IconButton>
             }
-            trailing={
+            trailingIcons={
               <IconButton variant="standard" aria-label="Edit">
                 <Icon name="edit" />
               </IconButton>
