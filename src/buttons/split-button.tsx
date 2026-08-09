@@ -187,7 +187,7 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
               heightClasses[resolvedSize],
               leadingPadding[resolvedSize],
               // Typography: Label Large
-              "text-[14px] font-medium leading-[20px] tracking-[0.1px]",
+              "text-[14px] font-medium leading-5 tracking-[0.1px]",
               // Colors
               segmentColors[resolvedVariant],
               segmentHoverElevation[resolvedVariant],
