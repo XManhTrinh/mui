@@ -4,6 +4,26 @@ Material Design 3 Expressive component library for React & Next.js.
 
 Built per official [m3.material.io](https://m3.material.io) specifications (May 2025 Expressive update). 36 components, zero runtime config, theme-driven via CSS custom properties.
 
+📖 **[Live Documentation & Playground →](https://mui-docs.vercel.app)** *(deploy your own — see below)*
+
+---
+
+## Documentation Site
+
+An interactive showcase with live examples of every component variant:
+
+```bash
+cd docs
+npm install
+npm run dev
+```
+
+Deploy to Vercel:
+```bash
+cd docs
+npx vercel
+```
+
 ---
 
 ## Installation
