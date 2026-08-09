@@ -117,6 +117,8 @@ export default function RootLayout({
     return undefined;
   }, [pathname]);
 
+  const [navExpanded, setNavExpanded] = React.useState(true);
+
   return (
     <html lang="en" className={dark ? "dark" : ""}>
       <body className="bg-surface text-surface-foreground min-h-screen">
@@ -139,12 +141,15 @@ export default function RootLayout({
           }
         />
 
-        {/* Sidebar — MUI NavigationRail (expanded variant with sections) */}
+        {/* Sidebar — MUI NavigationRail (collapsible with sections) */}
         <NavigationRail
           variant="expanded"
           sections={navCategories}
           activeValue={activeValue}
-          className="top-16 z-30 border-r border-outline-variant"
+          collapsible
+          expanded={navExpanded}
+          onExpandedChange={setNavExpanded}
+          className="top-16 z-30"
           renderLink={({ href, isActive, children, className }) => (
             <Link href={href ?? "#"} className={className}>
               {children}
@@ -152,8 +157,8 @@ export default function RootLayout({
           )}
         />
 
-        {/* Main content */}
-        <main className="ml-90 mt-16 p-8 max-w-240">
+        {/* Main content — margin adjusts with rail state */}
+        <main className={`mt-16 p-8 max-w-240 transition-[margin-left] duration-300 ease-[cubic-bezier(0.2,0,0,1)] ${navExpanded ? "ml-90" : "ml-24"}`}>
           {children}
         </main>
       </body>

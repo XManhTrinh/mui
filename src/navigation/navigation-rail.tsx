@@ -117,36 +117,28 @@ export function NavigationRail({
         )}
         aria-label="Main navigation"
       >
-        {/* Header slot */}
-        {(header || collapsible) && (
-          <div className="flex items-center w-full h-11 shrink-0 mt-2 px-3">
-            {collapsible && (
-              <button
-                onClick={toggleExpanded}
-                className="relative flex items-center justify-center w-12 h-12 rounded-full cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                aria-label="Collapse navigation"
-              >
-                <Icon name="menu_open" size={24} className="text-surface-variant-foreground" />
-              </button>
-            )}
-            {header}
-          </div>
-        )}
+        {/* Header — burger menu toggle */}
+        <div className="flex items-center w-full shrink-0 px-3 pt-3 pb-2">
+          <button
+            onClick={toggleExpanded}
+            className="relative flex items-center justify-center w-12 h-12 rounded-full cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-hidden before:absolute before:inset-0 before:rounded-full before:bg-current before:opacity-0 before:transition-opacity before:duration-200 hover:before:opacity-[0.08] active:before:opacity-[0.10]"
+            aria-label={isExpanded ? "Collapse navigation" : "Expand navigation"}
+          >
+            <Icon name="menu" size={24} className="relative z-10 text-surface-variant-foreground" />
+          </button>
+          {header}
+        </div>
 
         {/* Sectioned navigation */}
         <nav className="flex-1 flex flex-col w-full overflow-y-auto py-3 px-3" aria-label="Navigation rail">
-          {sections.map((section, idx) => (
-            <React.Fragment key={section.label}>
-              {idx > 0 && (
-                <div className="mx-4 my-2 h-px bg-outline-variant" aria-hidden="true" />
-              )}
-              <SectionItem
-                section={section}
-                activeValue={active}
-                onSelect={handleChange}
-                renderLink={renderLink}
-              />
-            </React.Fragment>
+          {sections.map((section) => (
+            <SectionItem
+              key={section.label}
+              section={section}
+              activeValue={active}
+              onSelect={handleChange}
+              renderLink={renderLink}
+            />
           ))}
         </nav>
       </aside>
@@ -165,15 +157,15 @@ export function NavigationRail({
       )}
       aria-label="Main navigation"
     >
-      {/* Header slot (FAB or menu button) — 44dp top padding area */}
-      <div className="flex items-center justify-center w-full h-11 shrink-0 mt-2">
-        {collapsible && !isExpanded && (
+      {/* Header — burger menu toggle */}
+      <div className="flex items-center justify-center w-full shrink-0 pt-3 pb-2">
+        {collapsible && (
           <button
             onClick={toggleExpanded}
-            className="relative flex items-center justify-center w-12 h-12 rounded-full cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="relative flex items-center justify-center w-12 h-12 rounded-full cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-hidden before:absolute before:inset-0 before:rounded-full before:bg-current before:opacity-0 before:transition-opacity before:duration-200 hover:before:opacity-[0.08] active:before:opacity-[0.10]"
             aria-label="Expand navigation"
           >
-            <Icon name="menu" size={24} className="text-surface-variant-foreground" />
+            <Icon name="menu" size={24} className="relative z-10 text-surface-variant-foreground" />
           </button>
         )}
         {!collapsible && header}
