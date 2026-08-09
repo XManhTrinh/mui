@@ -62,7 +62,7 @@ export default function NavigationPage() {
                 items={railItems}
                 activeValue={railValue}
                 onValueChange={setRailValue}
-                className="!position-static static !relative"
+                className="relative!"
               />
             </div>
             <div className="ml-24 p-4">
@@ -81,7 +81,7 @@ export default function NavigationPage() {
                 items={railItems}
                 activeValue={railExpandedValue}
                 onValueChange={setRailExpandedValue}
-                className="!position-static static !relative !w-64"
+                className="relative! w-64!"
               />
             </div>
             <div className="ml-64 p-4">

@@ -32,7 +32,7 @@ export default function NavigationRailPage() {
               { value: "library", icon: "video_library", label: "Library" },
               { value: "settings", icon: "settings", label: "Settings" },
             ]}
-            className="!static !relative"
+            className="relative!"
           />
         </Showcase>
       </section>
@@ -50,7 +50,7 @@ export default function NavigationRailPage() {
               { value: "library", icon: "video_library", label: "Library" },
               { value: "settings", icon: "settings", label: "Settings" },
             ]}
-            className="!static !relative !w-64"
+            className="relative! w-64!"
           />
         </Showcase>
       </section>
@@ -68,7 +68,7 @@ export default function NavigationRailPage() {
               { value: "drafts", icon: "drafts", label: "Drafts", badge: "dot" },
               { value: "trash", icon: "delete", label: "Trash" },
             ]}
-            className="!static !relative"
+            className="relative!"
           />
         </Showcase>
       </section>

@@ -122,7 +122,7 @@ const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
         {/* Visual container — 18×18dp, 2dp border radius */}
         <span
           className={cn(
-            "relative z-10 flex items-center justify-center w-[18px] h-[18px] rounded-[2px]",
+            "relative z-10 flex items-center justify-center w-4.5 h-4.5 rounded-xs",
             "transition-all duration-100 ease-[cubic-bezier(0.2,0,0,1)]",
             // Unchecked
             !active && !disabled && "border-2 border-[hsl(var(--on-surface-variant))] bg-transparent",

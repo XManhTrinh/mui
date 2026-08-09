@@ -316,7 +316,7 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 aria-hidden="true"
-                className="pointer-events-none transition-transform duration-200 [transition-timing-function:cubic-bezier(0.2,0,0,1)]"
+                className="pointer-events-none transition-transform duration-200 ease-[cubic-bezier(0.2,0,0,1)]"
                 style={{
                   transform: menuOpen
                     ? "translateX(0px) rotate(180deg)"

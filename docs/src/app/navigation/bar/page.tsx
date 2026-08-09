@@ -32,7 +32,7 @@ export default function NavigationBarPage() {
                 { value: "library", icon: "video_library", label: "Library" },
                 { value: "profile", icon: "person", label: "Profile" },
               ]}
-              className="!static !relative"
+              className="relative!"
             />
           </div>
         </Showcase>
@@ -51,7 +51,7 @@ export default function NavigationBarPage() {
                 { value: "messages", icon: "chat", label: "Messages", badge: 3 },
                 { value: "videos", icon: "play_circle", label: "Videos" },
               ]}
-              className="!static !relative"
+              className="relative!"
             />
           </div>
         </Showcase>
@@ -68,7 +68,7 @@ export default function NavigationBarPage() {
                 { value: "search", icon: "search", label: "Search" },
                 { value: "settings", icon: "settings", label: "Settings" },
               ]}
-              className="!static !relative"
+              className="relative!"
             />
           </div>
         </Showcase>

@@ -201,14 +201,14 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
               <Icon
                 name="check"
                 size={18}
-                className="text-[hsl(var(--on-primary-container))] !text-[16px]"
+                className="text-[hsl(var(--on-primary-container))] text-[16px]!"
               />
             )}
             {showIcons && !isChecked && (
               <Icon
                 name="close"
                 size={18}
-                className="text-surface-container-highest !text-[16px]"
+                className="text-surface-container-highest text-[16px]!"
               />
             )}
           </span>

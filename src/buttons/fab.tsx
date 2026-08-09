@@ -183,7 +183,7 @@ const FAB = React.forwardRef<HTMLButtonElement, FABProps>(
           icon
         )}
         {resolvedSize === "extended" && label && (
-          <span className="text-[14px] font-medium leading-[20px] tracking-[0.1px]">
+          <span className="text-[14px] font-medium leading-5 tracking-[0.1px]">
             {label}
           </span>
         )}
