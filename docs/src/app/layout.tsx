@@ -122,26 +122,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={dark ? "dark" : ""}>
       <body className="bg-surface text-surface-foreground min-h-screen">
-        {/* Header — M3 AppBar */}
-        <AppBar
-          className="fixed top-0 left-0 right-0 z-40"
-          headline={
-            <Link href="/" className="text-[22px] leading-7 font-normal text-surface-foreground no-underline">
-              M3 Components
-            </Link>
-          }
-          trailingIcons={
-            <IconButton
-              variant="standard"
-              aria-label="Toggle theme"
-              onClick={toggleTheme}
-            >
-              <Icon name={dark ? "light_mode" : "dark_mode"} />
-            </IconButton>
-          }
-        />
-
-        {/* Sidebar — MUI NavigationRail (collapsible with sections) */}
+        {/* Sidebar — full height, starts from top of viewport */}
         <NavigationRail
           variant="expanded"
           sections={navCategories}
@@ -149,7 +130,7 @@ export default function RootLayout({
           collapsible
           expanded={navExpanded}
           onExpandedChange={setNavExpanded}
-          className="top-16 z-30"
+          className="top-0 z-40"
           renderLink={({ href, isActive, children, className }) => (
             <Link href={href ?? "#"} className={className}>
               {children}
@@ -157,10 +138,32 @@ export default function RootLayout({
           )}
         />
 
-        {/* Main content — margin adjusts with rail state */}
-        <main className={`mt-16 p-8 max-w-240 transition-[margin-left] duration-300 ease-[cubic-bezier(0.2,0,0,1)] ${navExpanded ? "ml-90" : "ml-24"}`}>
-          {children}
-        </main>
+        {/* Right side: header + content */}
+        <div className={`transition-[margin-left] duration-300 ease-[cubic-bezier(0.2,0,0,1)] ${navExpanded ? "ml-90" : "ml-24"}`}>
+          {/* Header — AppBar spanning only the content area */}
+          <AppBar
+            className="sticky top-0 z-30"
+            headline={
+              <Link href="/" className="text-[22px] leading-7 font-normal text-surface-foreground no-underline">
+                M3 Components
+              </Link>
+            }
+            trailingIcons={
+              <IconButton
+                variant="standard"
+                aria-label="Toggle theme"
+                onClick={toggleTheme}
+              >
+                <Icon name={dark ? "light_mode" : "dark_mode"} />
+              </IconButton>
+            }
+          />
+
+          {/* Main content */}
+          <main className="p-8 max-w-240">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );
