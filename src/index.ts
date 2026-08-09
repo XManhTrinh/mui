@@ -105,7 +105,7 @@ export { NavigationBar } from "./navigation";
 export type { NavigationBarProps, NavigationBarItem } from "./navigation";
 
 export { NavigationRail } from "./navigation";
-export type { NavigationRailProps, NavigationRailItem } from "./navigation";
+export type { NavigationRailProps, NavigationRailItem, NavigationRailSection } from "./navigation";
 
 // ─── Snackbar ─────────────────────────────────────────────────────────────────
 export { SnackbarProvider, useSnackbar } from "./snackbar";

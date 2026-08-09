@@ -13,86 +13,186 @@ export interface NavigationRailItem {
   badge?: "dot" | number;
 }
 
+export interface NavigationRailSection {
+  label: string;
+  icon: string;
+  links: { value: string; label: string; href?: string }[];
+}
+
 export interface NavigationRailProps {
   variant?: "collapsed" | "expanded";
-  items: NavigationRailItem[];
+  items?: NavigationRailItem[];
+  sections?: NavigationRailSection[];
   activeValue?: string;
   onValueChange?: (value: string) => void;
   header?: React.ReactNode;
   showLabels?: boolean;
   className?: string;
+  /** Whether the rail supports collapsing/expanding via a toggle button */
+  collapsible?: boolean;
+  /** Controlled expanded state (use with collapsible) */
+  expanded?: boolean;
+  /** Callback when expanded state changes */
+  onExpandedChange?: (expanded: boolean) => void;
+  /** Render function for sub-items (useful for wrapping in Link components) */
+  renderLink?: (props: {
+    value: string;
+    label: string;
+    href?: string;
+    isActive: boolean;
+    children: React.ReactNode;
+    className: string;
+  }) => React.ReactNode;
 }
 
 /**
- * Material Design 3 Navigation Rail
+ * Material Design 3 Navigation Rail (M3 Expressive)
  *
  * @see https://m3.material.io/components/navigation-rail/specs
  *
- * Specs (Collapsed):
+ * Specs:
  * - Container width: 96dp (collapsed), 360dp (expanded)
- * - Container height: 100%
- * - Container bg: surface-container (optional, can be transparent)
- * - Active indicator: 56×32dp pill (collapsed), full-width - padding (expanded)
- * - Active indicator bg: secondary-container
- * - Active icon: on-secondary-container, filled
- * - Active label (collapsed): secondary
- * - Active label (expanded): on-secondary-container
- * - Inactive icon/label: on-surface-variant
- * - Label (collapsed): Label Medium (12px, 500, 16px, 0.5px tracking)
- * - Label (expanded): Label Large (14px, 500, 20px, 0.1px tracking)
+ * - Container elevation: level 3 shadow
+ * - Item min height (collapsed): 64dp
+ * - Item spacing: 4dp between items
+ * - Active indicator (collapsed): 56×32dp pill
+ * - Active indicator (expanded): 56dp height, 20dp horizontal margin, 16dp padding
  * - Top padding: 44dp (gap for FAB/menu button header)
- * - Item spacing: 12dp between items
- * - Touch target: 48dp minimum
- * - State layers: 8% hover, 10% focus, 10% press (full rail width target area)
- * - Animation: active indicator (200ms), expanded/collapsed transition (200ms)
+ * - Label collapsed: Title Small (12px, 500)
+ * - Label expanded: Label Large (14px, 500)
+ * - Transition: cubic-bezier(0.2,0,0,1) expand, cubic-bezier(0.4,0,1,1) collapse
+ * - State layers: 8% hover, 10% focus, 10% press
+ *
+ * Sections (expanded variant only):
+ * - Collapsible category headers with icon, label, and chevron
+ * - Sub-items within each category shown when expanded
+ * - Auto-expands the section containing the active item
+ * - Dividers between sections supported
  */
 export function NavigationRail({
   variant = "collapsed",
   items,
+  sections,
   activeValue,
   onValueChange,
   header,
   showLabels = true,
   className,
+  collapsible = false,
+  expanded: controlledExpanded,
+  onExpandedChange,
+  renderLink,
 }: NavigationRailProps) {
-  const [internalValue, setInternalValue] = React.useState(items[0]?.value ?? "");
+  const effectiveItems = items ?? [];
+  const [internalValue, setInternalValue] = React.useState(effectiveItems[0]?.value ?? "");
+  const [internalExpanded, setInternalExpanded] = React.useState(variant === "expanded");
   const active = activeValue ?? internalValue;
+
+  // Determine expanded state from controlled or internal
+  const isExpanded = collapsible
+    ? (controlledExpanded ?? internalExpanded)
+    : variant === "expanded";
 
   const handleChange = (value: string) => {
     if (!activeValue) setInternalValue(value);
     onValueChange?.(value);
   };
 
-  const isCollapsed = variant === "collapsed";
+  const toggleExpanded = () => {
+    const next = !isExpanded;
+    if (controlledExpanded === undefined) {
+      setInternalExpanded(next);
+    }
+    onExpandedChange?.(next);
+  };
+
+  // If sections are provided and rail is expanded, render sectioned layout
+  if (sections && isExpanded) {
+    return (
+      <aside
+        className={cn(
+          "fixed left-0 top-0 bottom-0 z-40 flex flex-col bg-surface-container shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
+          "w-90 transition-[width] duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
+          className
+        )}
+        aria-label="Main navigation"
+      >
+        {/* Header slot */}
+        {(header || collapsible) && (
+          <div className="flex items-center w-full h-11 shrink-0 mt-2 px-3">
+            {collapsible && (
+              <button
+                onClick={toggleExpanded}
+                className="relative flex items-center justify-center w-12 h-12 rounded-full cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                aria-label="Collapse navigation"
+              >
+                <Icon name="menu_open" size={24} className="text-surface-variant-foreground" />
+              </button>
+            )}
+            {header}
+          </div>
+        )}
+
+        {/* Sectioned navigation */}
+        <nav className="flex-1 flex flex-col w-full overflow-y-auto py-3 px-3" aria-label="Navigation rail">
+          {sections.map((section, idx) => (
+            <React.Fragment key={section.label}>
+              {idx > 0 && (
+                <div className="mx-4 my-2 h-px bg-outline-variant" aria-hidden="true" />
+              )}
+              <SectionItem
+                section={section}
+                activeValue={active}
+                onSelect={handleChange}
+                renderLink={renderLink}
+              />
+            </React.Fragment>
+          ))}
+        </nav>
+      </aside>
+    );
+  }
 
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 bottom-0 z-40 flex flex-col items-center bg-surface-container transition-[width] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
-        isCollapsed ? "w-24" : "w-90",
+        "fixed left-0 top-0 bottom-0 z-40 flex flex-col items-center bg-surface-container shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
+        "transition-[width] duration-300",
+        isExpanded
+          ? "w-90 ease-[cubic-bezier(0.2,0,0,1)]"
+          : "w-24 ease-in",
         className
       )}
       aria-label="Main navigation"
     >
       {/* Header slot (FAB or menu button) — 44dp top padding area */}
       <div className="flex items-center justify-center w-full h-11 shrink-0 mt-2">
-        {header}
+        {collapsible && !isExpanded && (
+          <button
+            onClick={toggleExpanded}
+            className="relative flex items-center justify-center w-12 h-12 rounded-full cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            aria-label="Expand navigation"
+          >
+            <Icon name="menu" size={24} className="text-surface-variant-foreground" />
+          </button>
+        )}
+        {!collapsible && header}
       </div>
 
       {/* Navigation items */}
       <nav className="flex-1 flex flex-col w-full overflow-y-auto pt-1" aria-label="Navigation rail">
         <ul
           className={cn(
-            "flex flex-col gap-3",
-            isCollapsed ? "items-center" : "px-3"
+            "flex flex-col gap-1",
+            isExpanded ? "px-3" : "items-center"
           )}
           role="tablist"
           aria-orientation="vertical"
         >
-          {items.map((item) => {
+          {effectiveItems.map((item) => {
             const isActive = active === item.value;
 
-            if (isCollapsed) {
+            if (!isExpanded) {
               return (
                 <CollapsedRailItem
                   key={item.value}
@@ -116,6 +216,138 @@ export function NavigationRail({
         </ul>
       </nav>
     </aside>
+  );
+}
+
+/** Collapsible section for the expanded rail variant */
+function SectionItem({
+  section,
+  activeValue,
+  onSelect,
+  renderLink,
+}: {
+  section: NavigationRailSection;
+  activeValue: string;
+  onSelect: (value: string) => void;
+  renderLink?: NavigationRailProps["renderLink"];
+}) {
+  const hasActiveChild = section.links.some((link) => link.value === activeValue);
+
+  const [isExpanded, setIsExpanded] = React.useState(hasActiveChild);
+
+  // Auto-expand when active item changes into this section
+  React.useEffect(() => {
+    if (hasActiveChild) {
+      setIsExpanded(true);
+    }
+  }, [hasActiveChild]);
+
+  return (
+    <div className="mb-1">
+      {/* Section header — 56dp height */}
+      <button
+        onClick={() => setIsExpanded((prev) => !prev)}
+        className={cn(
+          "group relative w-full flex items-center gap-3 px-4 h-14 rounded-full text-[14px] leading-5 font-medium tracking-[0.1px] transition-colors duration-200 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary",
+          hasActiveChild
+            ? "text-primary"
+            : "text-surface-variant-foreground"
+        )}
+        aria-expanded={isExpanded}
+      >
+        {/* State layer */}
+        <span className="absolute inset-0 rounded-full transition-colors duration-200 group-hover:bg-[hsl(var(--on-surface)/0.08)] group-focus-visible:bg-[hsl(var(--on-surface)/0.10)]" />
+
+        <Icon
+          name={section.icon}
+          size={24}
+          filled={hasActiveChild}
+          className={cn(
+            "relative z-10 shrink-0",
+            hasActiveChild ? "text-primary" : "text-surface-variant-foreground"
+          )}
+        />
+        <span className="relative z-10 flex-1 text-left truncate">{section.label}</span>
+        <Icon
+          name="expand_more"
+          size={20}
+          className={cn(
+            "relative z-10 text-surface-variant-foreground transition-transform duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
+            isExpanded ? "rotate-180" : ""
+          )}
+        />
+      </button>
+
+      {/* Sub-items — collapsible with grid-rows animation */}
+      <div
+        className={cn(
+          "grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
+          isExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+        )}
+      >
+        <div className="overflow-hidden min-h-0">
+          <div className="py-1">
+            {section.links.map((link) => {
+              const isActive = link.value === activeValue;
+
+              const itemClassName = cn(
+                "group/item relative flex items-center pl-14 pr-4 h-12 rounded-full text-[14px] leading-5 font-medium tracking-[0.1px] transition-colors duration-200 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                "text-surface-variant-foreground"
+              );
+
+              const itemChildren = (
+                <>
+                  {/* Active indicator — scale from center */}
+                  <span
+                    className={cn(
+                      "absolute inset-0 rounded-full bg-secondary-container transition-transform duration-200 ease-[cubic-bezier(0.2,0,0,1)] origin-center",
+                      isActive ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
+                    )}
+                  />
+                  {/* State layer */}
+                  <span className="absolute inset-0 rounded-full transition-colors duration-200 group-hover/item:bg-[hsl(var(--on-surface)/0.08)] group-focus-visible/item:bg-[hsl(var(--on-surface)/0.10)]" />
+                  {/* Label */}
+                  <span
+                    className={cn(
+                      "relative z-10",
+                      isActive ? "text-secondary-container-foreground" : ""
+                    )}
+                  >
+                    {link.label}
+                  </span>
+                </>
+              );
+
+              // If renderLink is provided, use it for custom link rendering
+              if (renderLink) {
+                return (
+                  <React.Fragment key={link.value}>
+                    {renderLink({
+                      value: link.value,
+                      label: link.label,
+                      href: link.href,
+                      isActive,
+                      children: itemChildren,
+                      className: itemClassName,
+                    })}
+                  </React.Fragment>
+                );
+              }
+
+              return (
+                <button
+                  key={link.value}
+                  onClick={() => onSelect(link.value)}
+                  className={itemClassName}
+                >
+                  {itemChildren}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -152,7 +384,7 @@ function CollapsedRailItem({
         aria-selected={isActive}
         aria-label={item.label}
         onClick={() => onSelect(item.value)}
-        className="group relative flex flex-col items-center justify-center gap-1 w-24 min-h-12 py-1 outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
+        className="group relative flex flex-col items-center justify-center gap-1 w-24 min-h-16 py-1 outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
       >
         {/* Indicator container with state layer via ::after */}
         <div
@@ -206,7 +438,7 @@ function CollapsedRailItem({
   );
 }
 
-/** Expanded rail item: horizontal icon + label, full-width indicator */
+/** Expanded rail item: horizontal icon + label, full-width indicator with 56dp height */
 function ExpandedRailItem({
   item,
   isActive,
@@ -233,11 +465,12 @@ function ExpandedRailItem({
         aria-label={item.label}
         onClick={() => onSelect(item.value)}
         className={cn(
-          "group relative flex items-center gap-3 w-full h-14 rounded-full px-4 pr-6 outline-none cursor-pointer transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-primary",
+          "group relative flex items-center gap-3 w-full h-14 rounded-full mx-5 px-4 outline-none cursor-pointer transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-primary",
           isActive
             ? "bg-secondary-container text-secondary-container-foreground font-medium"
             : "text-surface-variant-foreground"
         )}
+        style={{ width: "calc(100% - 40px)" }}
       >
         {/* State layer */}
         <div
