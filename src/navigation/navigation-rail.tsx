@@ -126,32 +126,42 @@ export function NavigationRail({
     onExpandedChange?.(next);
   };
 
-  // If sections are provided and rail is expanded, render sectioned layout
-  if (sections && isExpanded) {
-    return (
-      <aside
-        className={cn(
-          "fixed left-0 top-0 bottom-0 z-40 flex flex-col bg-surface-container shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
-          "w-90 transition-[width] duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
-          className
-        )}
-        aria-label="Main navigation"
-      >
-        {/* Header — burger menu toggle */}
-        <div className="flex items-center w-full shrink-0 px-3 pt-3 pb-2">
+  // Determine if we have sections to show in expanded mode
+  const hasSections = !!sections && sections.length > 0;
+
+  return (
+    <aside
+      className={cn(
+        "fixed left-0 top-0 bottom-0 z-40 flex flex-col bg-surface-container shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
+        "transition-[width] duration-300 ease-[cubic-bezier(0.2,0,0,1)] overflow-hidden",
+        isExpanded ? "w-90" : "w-24",
+        className
+      )}
+      aria-label="Main navigation"
+    >
+      {/* Header — burger menu toggle (always at left edge) */}
+      {collapsible && (
+        <div className="flex items-start w-full shrink-0 px-3 pt-3 pb-2">
           <button
             onClick={toggleExpanded}
-            className="relative flex items-center justify-center w-12 h-12 rounded-full cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-hidden before:absolute before:inset-0 before:rounded-full before:bg-current before:opacity-0 before:transition-opacity before:duration-200 hover:before:opacity-[0.08] active:before:opacity-[0.10]"
+            className="relative flex items-center justify-center w-12 h-12 shrink-0 rounded-full cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-hidden before:absolute before:inset-0 before:rounded-full before:bg-current before:opacity-0 before:transition-opacity before:duration-200 hover:before:opacity-[0.08] active:before:opacity-[0.10]"
             aria-label={isExpanded ? "Collapse navigation" : "Expand navigation"}
           >
             <Icon name="menu" size={24} className="relative z-10 text-surface-variant-foreground" />
           </button>
+          {isExpanded && header}
+        </div>
+      )}
+      {!collapsible && header && (
+        <div className="flex items-center justify-center w-full h-11 shrink-0 mt-2">
           {header}
         </div>
+      )}
 
-        {/* Sectioned navigation */}
+      {/* Content — expanded sections or collapsed icons */}
+      {isExpanded && hasSections ? (
         <nav className="flex-1 flex flex-col w-full overflow-y-auto py-3 px-3" aria-label="Navigation rail">
-          {sections.map((section) => (
+          {sections!.map((section) => (
             <SectionItem
               key={section.label}
               section={section}
@@ -161,57 +171,22 @@ export function NavigationRail({
             />
           ))}
         </nav>
-      </aside>
-    );
-  }
-
-  return (
-    <aside
-      className={cn(
-        "fixed left-0 top-0 bottom-0 z-40 flex flex-col items-center bg-surface-container shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
-        "transition-[width] duration-300",
-        isExpanded
-          ? "w-90 ease-[cubic-bezier(0.2,0,0,1)]"
-          : "w-24 ease-in",
-        className
-      )}
-      aria-label="Main navigation"
-    >
-      {/* Header — burger menu toggle */}
-      <div className="flex items-center justify-center w-full shrink-0 pt-3 pb-2">
-        {collapsible && (
-          <button
-            onClick={toggleExpanded}
-            className="relative flex items-center justify-center w-12 h-12 rounded-full cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-hidden before:absolute before:inset-0 before:rounded-full before:bg-current before:opacity-0 before:transition-opacity before:duration-200 hover:before:opacity-[0.08] active:before:opacity-[0.10]"
-            aria-label="Expand navigation"
+      ) : (
+        <nav className="flex-1 flex flex-col w-full overflow-y-auto pt-1" aria-label="Navigation rail">
+          <ul
+            className="flex flex-col gap-1 items-center"
+            role="tablist"
+            aria-orientation="vertical"
           >
-            <Icon name="menu" size={24} className="relative z-10 text-surface-variant-foreground" />
-          </button>
-        )}
-        {!collapsible && header}
-      </div>
-
-      {/* Navigation items */}
-      <nav className="flex-1 flex flex-col w-full overflow-y-auto pt-1" aria-label="Navigation rail">
-        <ul
-          className={cn(
-            "flex flex-col gap-1",
-            isExpanded ? "px-3" : "items-center"
-          )}
-          role="tablist"
-          aria-orientation="vertical"
-        >
-          {collapsedItems.map((item) => {
-            // For section-derived items, check if active is in any link of that section
-            let isActive = active === item.value;
-            if (!isActive && sections) {
-              const section = sections.find((s) => s.links[0]?.value === item.value);
-              if (section) {
-                isActive = section.links.some((link) => link.value === active);
+            {collapsedItems.map((item) => {
+              let isActive = active === item.value;
+              if (!isActive && sections) {
+                const section = sections.find((s) => s.links[0]?.value === item.value);
+                if (section) {
+                  isActive = section.links.some((link) => link.value === active);
+                }
               }
-            }
 
-            if (!isExpanded) {
               return (
                 <CollapsedRailItem
                   key={item.value}
@@ -221,19 +196,10 @@ export function NavigationRail({
                   onSelect={handleChange}
                 />
               );
-            }
-
-            return (
-              <ExpandedRailItem
-                key={item.value}
-                item={item}
-                isActive={isActive}
-                onSelect={handleChange}
-              />
-            );
-          })}
-        </ul>
-      </nav>
+            })}
+          </ul>
+        </nav>
+      )}
     </aside>
   );
 }
