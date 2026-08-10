@@ -3,10 +3,13 @@
 import * as React from "react";
 import { FAB, ExtendedFAB, FABMenu, Icon } from "@mui/index";
 import { Showcase } from "@/components/showcase";
+import { PropsTable } from "@/components/props-table";
+import { AccessibilityNotes } from "@/components/accessibility-notes";
 
 export default function FABsPage() {
   return (
     <div className="max-w-5xl space-y-8">
+      {/* Hero */}
       <div>
         <h1 className="text-[28px] leading-9 font-normal text-surface-foreground mb-2">
           Floating Action Buttons
@@ -17,6 +20,7 @@ export default function FABsPage() {
         </p>
       </div>
 
+      {/* FAB Examples */}
       <Showcase title="FAB Sizes" code={`<FAB size="m" icon={<Icon name="add" />} aria-label="Add" />\n<FAB size="l" icon={<Icon name="add" />} aria-label="Add" />\n<FAB size="xl" icon={<Icon name="add" />} aria-label="Add" />`}>
         <FAB size="m" icon={<Icon name="add" />} aria-label="Add" />
         <FAB size="l" icon={<Icon name="add" />} aria-label="Add" />
@@ -35,6 +39,7 @@ export default function FABsPage() {
         <FAB shape="round" size="xl" icon={<Icon name="navigation" />} aria-label="Navigate" />
       </Showcase>
 
+      {/* ExtendedFAB Examples */}
       <Showcase title="Extended FAB Sizes" code={`<ExtendedFAB size="small" icon={<Icon name="add" />} label="Create" />\n<ExtendedFAB size="medium" icon={<Icon name="edit" />} label="Compose" />\n<ExtendedFAB size="large" icon={<Icon name="navigation" />} label="Navigate" />`}>
         <ExtendedFAB size="small" icon={<Icon name="add" />} label="Create" />
         <ExtendedFAB size="medium" icon={<Icon name="edit" />} label="Compose" />
@@ -51,14 +56,13 @@ export default function FABsPage() {
         <ExtendedFAB size="medium" icon={null} label="No Icon" />
       </Showcase>
 
-      {/* Props Table */}
+      {/* FABMenu — Composable API */}
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">FABMenu — Composable API</h2>
         <p className="text-[14px] leading-5 text-surface-variant-foreground">
           The <code>FABMenu</code> component provides a speed-dial overlay that
-          opens from a FAB to display related actions. The composable API uses{" "}
-          <code>FABMenu.Item</code> sub-components instead of a data-driven{" "}
-          <code>items</code> array, giving you more control over each action item.
+          opens from a FAB to display related actions. Use{" "}
+          <code>FABMenu.Item</code> sub-components for each action.
         </p>
 
         <Showcase
@@ -85,90 +89,79 @@ export default function FABsPage() {
             <FABMenu.Item icon={<Icon name="content_copy" />} label="Copy" onClick={() => {}} />
           </FABMenu>
         </Showcase>
+
+        <Showcase
+          title="FABMenu — Tertiary Color"
+          code={`<FABMenu\n  triggerIcon={<Icon name="palette" />}\n  triggerLabel="Creative tools"\n  colorSet="tertiary"\n>\n  <FABMenu.Item icon={<Icon name="brush" />} label="Draw" onClick={() => {}} />\n  <FABMenu.Item icon={<Icon name="text_fields" />} label="Text" onClick={() => {}} />\n  <FABMenu.Item icon={<Icon name="image" />} label="Image" onClick={() => {}} />\n</FABMenu>`}
+        >
+          <FABMenu
+            triggerIcon={<Icon name="palette" />}
+            triggerLabel="Creative tools"
+            colorSet="tertiary"
+          >
+            <FABMenu.Item icon={<Icon name="brush" />} label="Draw" onClick={() => {}} />
+            <FABMenu.Item icon={<Icon name="text_fields" />} label="Text" onClick={() => {}} />
+            <FABMenu.Item icon={<Icon name="image" />} label="Image" onClick={() => {}} />
+          </FABMenu>
+        </Showcase>
       </section>
 
-      {/* Props Table */}
-      <section className="space-y-4">
-        <h2 className="text-[22px] leading-7 font-normal">FAB Props</h2>
-        <div className="overflow-x-auto rounded-xl border border-outline-variant">
-          <table className="w-full text-sm">
-            <thead className="bg-surface-container">
-              <tr>
-                <th className="text-left px-4 py-2 font-medium">Prop</th>
-                <th className="text-left px-4 py-2 font-medium">Type</th>
-                <th className="text-left px-4 py-2 font-medium">Default</th>
-                <th className="text-left px-4 py-2 font-medium">Description</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-outline-variant">
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">size</td>
-                <td className="px-4 py-2 font-mono text-xs">{`"m" | "l" | "xl"`}</td>
-                <td className="px-4 py-2 font-mono text-xs">{`"l"`}</td>
-                <td className="px-4 py-2">FAB size</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">color</td>
-                <td className="px-4 py-2 font-mono text-xs">{`"primary" | "secondary" | "tertiary"`}</td>
-                <td className="px-4 py-2 font-mono text-xs">{`"primary"`}</td>
-                <td className="px-4 py-2">Color scheme</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">shape</td>
-                <td className="px-4 py-2 font-mono text-xs">{`"square" | "round"`}</td>
-                <td className="px-4 py-2 font-mono text-xs">{`"square"`}</td>
-                <td className="px-4 py-2">Border radius shape</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">icon</td>
-                <td className="px-4 py-2 font-mono text-xs">ReactNode</td>
-                <td className="px-4 py-2 font-mono text-xs">—</td>
-                <td className="px-4 py-2">Icon element</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      {/* Props Tables */}
+      <PropsTable
+        componentName="FAB"
+        props={[
+          { name: "size", type: '"m" | "l" | "xl"', default: '"l"', description: "FAB size" },
+          { name: "color", type: '"primary" | "secondary" | "tertiary"', default: '"primary"', description: "Color scheme" },
+          { name: "shape", type: '"square" | "round"', default: '"square"', description: "Border radius shape" },
+          { name: "icon", type: "ReactNode", description: "Icon element", required: true },
+          { name: "aria-label", type: "string", description: "Accessible label", required: true },
+        ]}
+      />
 
-        <h2 className="text-[22px] leading-7 font-normal">ExtendedFAB Props</h2>
-        <div className="overflow-x-auto rounded-xl border border-outline-variant">
-          <table className="w-full text-sm">
-            <thead className="bg-surface-container">
-              <tr>
-                <th className="text-left px-4 py-2 font-medium">Prop</th>
-                <th className="text-left px-4 py-2 font-medium">Type</th>
-                <th className="text-left px-4 py-2 font-medium">Default</th>
-                <th className="text-left px-4 py-2 font-medium">Description</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-outline-variant">
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">size</td>
-                <td className="px-4 py-2 font-mono text-xs">{`"small" | "medium" | "large"`}</td>
-                <td className="px-4 py-2 font-mono text-xs">{`"medium"`}</td>
-                <td className="px-4 py-2">Extended FAB size</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">color</td>
-                <td className="px-4 py-2 font-mono text-xs">{`"primary" | "secondary" | "tertiary"`}</td>
-                <td className="px-4 py-2 font-mono text-xs">{`"primary"`}</td>
-                <td className="px-4 py-2">Color scheme</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">icon</td>
-                <td className="px-4 py-2 font-mono text-xs">ReactNode</td>
-                <td className="px-4 py-2 font-mono text-xs">—</td>
-                <td className="px-4 py-2">Optional leading icon</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">label</td>
-                <td className="px-4 py-2 font-mono text-xs">string</td>
-                <td className="px-4 py-2 font-mono text-xs">—</td>
-                <td className="px-4 py-2">Text label</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+      <PropsTable
+        componentName="ExtendedFAB"
+        props={[
+          { name: "size", type: '"small" | "medium" | "large"', default: '"medium"', description: "Extended FAB size" },
+          { name: "color", type: '"primary" | "secondary" | "tertiary"', default: '"primary"', description: "Color scheme" },
+          { name: "icon", type: "ReactNode | null", description: "Optional leading icon" },
+          { name: "label", type: "string", description: "Text label", required: true },
+        ]}
+      />
+
+      <PropsTable
+        componentName="FABMenu"
+        props={[
+          { name: "triggerIcon", type: "ReactNode", description: "Icon for the FAB trigger button", required: true },
+          { name: "triggerLabel", type: "string", description: "Accessible label for the trigger button", required: true },
+          { name: "colorSet", type: '"primary" | "secondary" | "tertiary"', default: '"primary"', description: "Color set for close button and items" },
+          { name: "open", type: "boolean", description: "Controlled open state" },
+          { name: "onOpenChange", type: "(open: boolean) => void", description: "Callback when open state changes" },
+          { name: "children", type: "ReactNode", description: "FABMenu.Item elements (2–6 items)", required: true },
+        ]}
+      />
+
+      <PropsTable
+        componentName="FABMenu.Item"
+        props={[
+          { name: "icon", type: "ReactNode", description: "Icon element", required: true },
+          { name: "label", type: "string", description: "Label text", required: true },
+          { name: "onClick", type: "() => void", description: "Action callback", required: true },
+          { name: "aria-label", type: "string", description: "Optional aria-label override" },
+        ]}
+      />
+
+      {/* Accessibility */}
+      <AccessibilityNotes
+        componentName="FAB"
+        notes={[
+          { category: "aria", description: "FAB uses aria-label for accessible name since it contains only an icon" },
+          { category: "keyboard", description: "FABs are focusable with Tab and activated with Enter/Space" },
+          { category: "focus", description: "Focus ring visible on keyboard navigation with 2px primary ring" },
+          { category: "aria", description: "FABMenu trigger uses aria-haspopup=\"menu\" and aria-expanded" },
+          { category: "keyboard", description: "FABMenu supports Arrow Up/Down navigation and Escape to close" },
+          { category: "screen-reader", description: "Menu items use role=\"menuitem\" with readable labels" },
+        ]}
+      />
     </div>
   );
 }
