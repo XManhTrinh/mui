@@ -27,6 +27,11 @@ import { cn } from "./lib/utils";
  * - Selected text: on-primary-container
  *
  * States: 8% hover, 10% focus, 10% press
+ *
+ * @m3-audit VERIFIED — List and ListItem present with comprehensive prop-based anatomy
+ * (leading, trailing, overline, supporting, lines, selected, disabled, interactive).
+ * Prop-based approach is acceptable per design decision — ListItem's M3 anatomy is complex
+ * but works well with props. No refactor needed.
  */
 
 export interface ListProps {

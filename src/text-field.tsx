@@ -121,7 +121,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             className={cn(
               "group relative flex items-center",
               multiline ? "min-h-14" : "h-14",
-              "rounded-t-sm rounded-b-none",
+              "rounded-t rounded-b-none",
               "bg-[hsl(var(--surface-container-highest))]",
               !disabled && "hover:bg-[hsl(var(--on-surface)/0.08)]",
               disabled && "pointer-events-none cursor-not-allowed bg-[hsl(var(--on-surface)/0.04)]",
@@ -314,7 +314,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           <fieldset
             aria-hidden="true"
             className={cn(
-              "absolute inset-0 rounded-sm pointer-events-none",
+              "absolute inset-0 rounded pointer-events-none",
               "px-3",
               "transition-[border-color,border-width] duration-200",
               // Border styles

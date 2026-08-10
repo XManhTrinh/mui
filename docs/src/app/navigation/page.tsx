@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { NavigationBar, NavigationRail, Icon } from "@mui/index";
-import type { NavigationBarItem, NavigationRailItem } from "@mui/index";
+import { NavigationBar, NavigationRail } from "@mui/index";
+import type { NavigationBarItem } from "@mui/index";
 import { Showcase } from "@/components/showcase";
 
 const navBarItems: NavigationBarItem[] = [
@@ -12,11 +12,11 @@ const navBarItems: NavigationBarItem[] = [
   { value: "profile", icon: "person", activeIcon: "person", label: "Profile", badge: "dot" },
 ];
 
-const railItems: NavigationRailItem[] = [
-  { value: "inbox", icon: "inbox", activeIcon: "inbox", label: "Inbox", badge: 12 },
-  { value: "articles", icon: "article", activeIcon: "article", label: "Articles" },
-  { value: "chat", icon: "chat", activeIcon: "chat", label: "Chat", badge: "dot" },
-  { value: "spaces", icon: "group", activeIcon: "group", label: "Spaces" },
+const railItems = [
+  { value: "inbox", icon: "inbox", label: "Inbox" },
+  { value: "articles", icon: "article", label: "Articles" },
+  { value: "chat", icon: "chat", label: "Chat" },
+  { value: "spaces", icon: "group", label: "Spaces" },
 ];
 
 export default function NavigationPage() {
@@ -56,15 +56,19 @@ export default function NavigationPage() {
 
         <Showcase title="Collapsed Navigation Rail" className="flex-col items-stretch">
           <div className="relative h-96 w-full border border-outline-variant rounded-xl overflow-hidden">
-            <div className="absolute left-0 top-0 bottom-0">
-              <NavigationRail
-                variant="collapsed"
-                items={railItems}
-                activeValue={railValue}
-                onValueChange={setRailValue}
-                className="relative!"
-              />
-            </div>
+            <NavigationRail expanded={false} className="relative! h-full">
+              <NavigationRail.Content>
+                {railItems.map((item) => (
+                  <NavigationRail.Item
+                    key={item.value}
+                    icon={item.icon}
+                    label={item.label}
+                    active={railValue === item.value}
+                    onClick={() => setRailValue(item.value)}
+                  />
+                ))}
+              </NavigationRail.Content>
+            </NavigationRail>
             <div className="ml-24 p-4">
               <p className="text-sm text-surface-variant-foreground">
                 Content area — selected: <strong>{railValue}</strong>
@@ -75,15 +79,19 @@ export default function NavigationPage() {
 
         <Showcase title="Expanded Navigation Rail" className="flex-col items-stretch">
           <div className="relative h-96 w-full border border-outline-variant rounded-xl overflow-hidden">
-            <div className="absolute left-0 top-0 bottom-0">
-              <NavigationRail
-                variant="expanded"
-                items={railItems}
-                activeValue={railExpandedValue}
-                onValueChange={setRailExpandedValue}
-                className="relative! w-64!"
-              />
-            </div>
+            <NavigationRail expanded={true} className="relative! h-full w-64!">
+              <NavigationRail.Content>
+                {railItems.map((item) => (
+                  <NavigationRail.Item
+                    key={item.value}
+                    icon={item.icon}
+                    label={item.label}
+                    active={railExpandedValue === item.value}
+                    onClick={() => setRailExpandedValue(item.value)}
+                  />
+                ))}
+              </NavigationRail.Content>
+            </NavigationRail>
             <div className="ml-64 p-4">
               <p className="text-sm text-surface-variant-foreground">
                 Content area — selected: <strong>{railExpandedValue}</strong>
@@ -95,81 +103,35 @@ export default function NavigationPage() {
 
       {/* Props Table */}
       <section className="space-y-4">
-        <h2 className="text-[22px] leading-7 font-normal">NavigationBar Props</h2>
+        <h2 className="text-[22px] leading-7 font-normal">NavigationRail API</h2>
         <div className="overflow-x-auto rounded-xl border border-outline-variant">
           <table className="w-full text-sm">
             <thead className="bg-surface-container">
               <tr>
-                <th className="text-left px-4 py-2 font-medium">Prop</th>
-                <th className="text-left px-4 py-2 font-medium">Type</th>
-                <th className="text-left px-4 py-2 font-medium">Default</th>
+                <th className="text-left px-4 py-2 font-medium">Component</th>
                 <th className="text-left px-4 py-2 font-medium">Description</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-outline-variant">
               <tr>
-                <td className="px-4 py-2 font-mono text-xs">items</td>
-                <td className="px-4 py-2 font-mono text-xs">NavigationBarItem[]</td>
-                <td className="px-4 py-2 font-mono text-xs">required</td>
-                <td className="px-4 py-2">Navigation destinations</td>
+                <td className="px-4 py-2 font-mono text-xs">NavigationRail</td>
+                <td className="px-4 py-2">Container. Accepts `expanded` prop for width control.</td>
               </tr>
               <tr>
-                <td className="px-4 py-2 font-mono text-xs">activeValue</td>
-                <td className="px-4 py-2 font-mono text-xs">string</td>
-                <td className="px-4 py-2 font-mono text-xs">—</td>
-                <td className="px-4 py-2">Controlled active item value</td>
+                <td className="px-4 py-2 font-mono text-xs">NavigationRail.Header</td>
+                <td className="px-4 py-2">Top slot — burger menu, FAB, logo.</td>
               </tr>
               <tr>
-                <td className="px-4 py-2 font-mono text-xs">onValueChange</td>
-                <td className="px-4 py-2 font-mono text-xs">{`(value: string) => void`}</td>
-                <td className="px-4 py-2 font-mono text-xs">—</td>
-                <td className="px-4 py-2">Callback when active item changes</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h2 className="text-[22px] leading-7 font-normal">NavigationRail Props</h2>
-        <div className="overflow-x-auto rounded-xl border border-outline-variant">
-          <table className="w-full text-sm">
-            <thead className="bg-surface-container">
-              <tr>
-                <th className="text-left px-4 py-2 font-medium">Prop</th>
-                <th className="text-left px-4 py-2 font-medium">Type</th>
-                <th className="text-left px-4 py-2 font-medium">Default</th>
-                <th className="text-left px-4 py-2 font-medium">Description</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-outline-variant">
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">variant</td>
-                <td className="px-4 py-2 font-mono text-xs">{`"collapsed" | "expanded"`}</td>
-                <td className="px-4 py-2 font-mono text-xs">{`"collapsed"`}</td>
-                <td className="px-4 py-2">Rail display mode</td>
+                <td className="px-4 py-2 font-mono text-xs">NavigationRail.Content</td>
+                <td className="px-4 py-2">Scrollable area for items.</td>
               </tr>
               <tr>
-                <td className="px-4 py-2 font-mono text-xs">items</td>
-                <td className="px-4 py-2 font-mono text-xs">NavigationRailItem[]</td>
-                <td className="px-4 py-2 font-mono text-xs">required</td>
-                <td className="px-4 py-2">Navigation destinations</td>
+                <td className="px-4 py-2 font-mono text-xs">NavigationRail.Item</td>
+                <td className="px-4 py-2">Nav item — morphs between expanded/collapsed. Props: icon, label, active.</td>
               </tr>
               <tr>
-                <td className="px-4 py-2 font-mono text-xs">activeValue</td>
-                <td className="px-4 py-2 font-mono text-xs">string</td>
-                <td className="px-4 py-2 font-mono text-xs">—</td>
-                <td className="px-4 py-2">Controlled active item</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">header</td>
-                <td className="px-4 py-2 font-mono text-xs">ReactNode</td>
-                <td className="px-4 py-2 font-mono text-xs">—</td>
-                <td className="px-4 py-2">Header slot (FAB or logo)</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">showLabels</td>
-                <td className="px-4 py-2 font-mono text-xs">boolean</td>
-                <td className="px-4 py-2 font-mono text-xs">true</td>
-                <td className="px-4 py-2">Show item labels in collapsed mode</td>
+                <td className="px-4 py-2 font-mono text-xs">NavigationRail.Footer</td>
+                <td className="px-4 py-2">Bottom slot — theme toggle, settings, etc.</td>
               </tr>
             </tbody>
           </table>

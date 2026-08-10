@@ -18,6 +18,10 @@ import { cn } from "./lib/utils";
  * - States (interactive): 8% hover, 10% focus, 10% press state layers
  * - Disabled (interactive): 38% opacity
  * - Dragged: 16% state layer + elevated shadow
+ *
+ * @m3-audit VERIFIED — CardHeader, CardTitle, CardDescription, CardContent, CardFooter all present.
+ * Recommendation: Consider adding a CardMedia sub-component for M3's image/media slot
+ * (positioned between CardHeader and CardContent). Low priority — current API is fully functional.
  */
 const cardVariants = cva(
   "relative rounded-xl text-surface-foreground transition-[box-shadow,background-color] duration-200",

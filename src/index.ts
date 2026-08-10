@@ -9,7 +9,9 @@ export {
   ExtendedFAB,
   extendedFabVariants,
   FABMenu,
+  FABMenuItemComponent,
   SplitButton,
+  SplitButtonLeading,
   splitButtonVariants,
   ButtonGroup,
   ButtonGroupItem,
@@ -21,7 +23,9 @@ export type {
   ExtendedFABProps,
   FABMenuItem,
   FABMenuProps,
+  FABMenuItemComponentProps,
   SplitButtonProps,
+  SplitButtonLeadingProps,
   ButtonGroupProps,
   ButtonGroupItemProps,
 } from "./buttons";
@@ -81,8 +85,14 @@ export { Switch } from "./switch";
 export type { SwitchProps } from "./switch";
 
 // ─── Search ───────────────────────────────────────────────────────────────────
-export { Search } from "./search";
-export type { SearchProps } from "./search";
+export { Search, SearchLeadingIcon, SearchInput, SearchTrailingIcon, useSearch } from "./search";
+export type {
+  SearchProps,
+  SearchContextValue,
+  SearchLeadingIconProps,
+  SearchInputProps,
+  SearchTrailingIconProps,
+} from "./search";
 
 // ─── Tabs ─────────────────────────────────────────────────────────────────────
 export { Tabs, TabList, Tab, TabContent } from "./tabs";
@@ -101,11 +111,23 @@ export { Menu, MenuItem, MenuDivider } from "./menu";
 export type { MenuProps, MenuItemProps, MenuDividerProps } from "./menu";
 
 // ─── Navigation ───────────────────────────────────────────────────────────────
-export { NavigationBar } from "./navigation";
-export type { NavigationBarProps, NavigationBarItem } from "./navigation";
+export { NavigationBar, useNavigationBar } from "./navigation";
+export type {
+  NavigationBarProps,
+  NavigationBarItem,
+  NavigationBarItemData,
+  NavigationBarItemProps,
+  NavigationBarContextValue,
+} from "./navigation";
 
-export { NavigationRail } from "./navigation";
-export type { NavigationRailProps, NavigationRailItem, NavigationRailSection } from "./navigation";
+export { NavigationRail, useNavigationRail } from "./navigation";
+export type {
+  NavigationRailProps,
+  NavigationRailHeaderProps,
+  NavigationRailContentProps,
+  NavigationRailFooterProps,
+  NavigationRailItemProps,
+} from "./navigation";
 
 // ─── Snackbar ─────────────────────────────────────────────────────────────────
 export { SnackbarProvider, useSnackbar } from "./snackbar";
@@ -116,15 +138,48 @@ export type {
 } from "./snackbar";
 
 // ─── App Bar ──────────────────────────────────────────────────────────────────
-export { AppBar, PageBar } from "./app-bar";
-export type { AppBarProps, PageBarProps } from "./app-bar";
+export { AppBar, AppBarLeading, AppBarHeadline, AppBarTrailing, useAppBar, PageBar } from "./app-bar";
+export type {
+  AppBarProps,
+  AppBarContextValue,
+  AppBarLeadingProps,
+  AppBarHeadlineProps,
+  AppBarTrailingProps,
+  PageBarProps,
+} from "./app-bar";
 
 // ─── Sheets ───────────────────────────────────────────────────────────────────
-export { BottomSheet } from "./sheets";
-export type { BottomSheetProps } from "./sheets";
+export {
+  BottomSheet,
+  useBottomSheet,
+  BottomSheetHandle,
+  BottomSheetHeader,
+  BottomSheetContent,
+  BottomSheetActions,
+} from "./sheets";
+export type {
+  BottomSheetProps,
+  BottomSheetContextValue,
+  BottomSheetHandleProps,
+  BottomSheetHeaderProps,
+  BottomSheetContentProps,
+  BottomSheetActionsProps,
+} from "./sheets";
 
-export { SideSheet } from "./sheets";
-export type { SideSheetProps } from "./sheets";
+export {
+  SideSheet,
+  useSideSheet,
+  SideSheetHeader,
+  SideSheetContent,
+  SideSheetActions,
+} from "./sheets";
+export type {
+  SideSheetProps,
+  SideSheetContextValue,
+  SideSheetHeaderProps,
+  SideSheetContentProps,
+  SideSheetActionsProps,
+} from "./sheets";
 
 // ─── Toolbar ──────────────────────────────────────────────────────────────────
 export {

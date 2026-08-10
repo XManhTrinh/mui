@@ -31,58 +31,63 @@ export interface BadgeProps {
  * BadgeWrapper positions a badge indicator relative to its child element.
  * Wraps children in a relative container and absolutely positions the badge.
  */
-function Badge({
-  variant = "dot",
-  count,
-  max = 99,
-  visible = true,
-  className,
-  children,
-}: BadgeProps) {
-  if (!visible) {
-    return <>{children}</>;
+const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
+  function Badge(
+    {
+      variant = "dot",
+      count,
+      max = 99,
+      visible = true,
+      className,
+      children,
+    },
+    ref
+  ) {
+    if (!visible) {
+      return <>{children}</>;
+    }
+
+    const displayText =
+      variant === "count" && count !== undefined
+        ? count > max
+          ? `${max}+`
+          : String(count)
+        : undefined;
+
+    return (
+      <span ref={ref} className="relative inline-flex">
+        {children}
+        {variant === "dot" && (
+          <span
+            className={cn(
+              // M3 spec: small badge 6×6dp from top-trailing icon corner to bottom-leading badge corner
+              "absolute top-0 right-0 translate-x-0.75 -translate-y-0.75 z-20",
+              "h-1.5 w-1.5 rounded-[3px] bg-error",
+              className
+            )}
+            aria-hidden="true"
+          />
+        )}
+        {variant === "count" && displayText && (
+          <span
+            className={cn(
+              // M3 spec: large badge 14×12dp from top-trailing icon corner to bottom-leading badge corner
+              "absolute top-0 right-0 translate-x-1.5 -translate-y-1.5 z-20",
+              "h-4 min-w-4 rounded-full px-1",
+              "bg-error text-error-foreground",
+              "text-[11px] leading-4 font-medium tracking-[0.5px]",
+              "inline-flex items-center justify-center",
+              className
+            )}
+            aria-label={`${count} notifications`}
+          >
+            {displayText}
+          </span>
+        )}
+      </span>
+    );
   }
-
-  const displayText =
-    variant === "count" && count !== undefined
-      ? count > max
-        ? `${max}+`
-        : String(count)
-      : undefined;
-
-  return (
-    <span className="relative inline-flex">
-      {children}
-      {variant === "dot" && (
-        <span
-          className={cn(
-            // M3 spec: small badge 6×6dp from top-trailing icon corner to bottom-leading badge corner
-            "absolute top-0 right-0 translate-x-0.75 -translate-y-0.75 z-20",
-            "h-1.5 w-1.5 rounded-[3px] bg-error",
-            className
-          )}
-          aria-hidden="true"
-        />
-      )}
-      {variant === "count" && displayText && (
-        <span
-          className={cn(
-            // M3 spec: large badge 14×12dp from top-trailing icon corner to bottom-leading badge corner
-            "absolute top-0 right-0 translate-x-1.5 -translate-y-1.5 z-20",
-            "h-4 min-w-4 rounded-full px-1",
-            "bg-error text-error-foreground",
-            "text-[11px] leading-4 font-medium",
-            "inline-flex items-center justify-center",
-            className
-          )}
-          aria-label={`${count} notifications`}
-        >
-          {displayText}
-        </span>
-      )}
-    </span>
-  );
-}
+);
 
 Badge.displayName = "Badge";
 

@@ -12,6 +12,10 @@ import { cn } from "../lib/utils";
  * items. Features staggered entry/exit animations, focus trapping, keyboard
  * navigation, and full ARIA menu semantics.
  *
+ * Supports two APIs:
+ * 1. Data-driven: Pass an `items` array prop (original API)
+ * 2. Composable: Use `<FABMenu.Item>` sub-components as children
+ *
  * Uses Framer Motion (motion) for orchestrated animations.
  */
 
@@ -26,9 +30,23 @@ export interface FABMenuItem {
   "aria-label"?: string;
 }
 
+export interface FABMenuItemComponentProps {
+  /** Icon (React node) */
+  icon: React.ReactNode;
+  /** Label text */
+  label: string;
+  /** Action callback */
+  onClick: () => void;
+  /** Optional aria-label override */
+  "aria-label"?: string;
+  /** Additional className */
+  className?: string;
+  children?: React.ReactNode;
+}
+
 export interface FABMenuProps {
-  /** Menu items (2-6) */
-  items: FABMenuItem[];
+  /** Menu items (2-6) — data-driven API */
+  items?: FABMenuItem[];
   /** Color set for close button and items */
   colorSet?: "primary" | "secondary" | "tertiary";
   /** Controlled open state */
@@ -45,9 +63,35 @@ export interface FABMenuProps {
   triggerLabel: string;
   /** Additional className for the container */
   className?: string;
+  /** Children (composable API — FABMenu.Item elements) */
+  children?: React.ReactNode;
 }
 
-// Color mappings for close button and menu items
+// ─── FABMenu.Item Sub-Component ───────────────────────────────────────────────
+
+/**
+ * FABMenu.Item — Composable sub-component for FABMenu.
+ *
+ * When used as a child of FABMenu (without the `items` prop), these elements
+ * are collected and rendered in the same animated layout as the data-driven items.
+ *
+ * Note: This component does not render anything on its own — FABMenu extracts
+ * its props and renders them using the shared animation layout.
+ */
+const FABMenuItemComponent = React.forwardRef<
+  HTMLButtonElement,
+  FABMenuItemComponentProps
+>(function FABMenuItemComponent(_props, _ref) {
+  // This component is not rendered directly — FABMenu extracts its props
+  // and renders them in the animated menu layout. If somehow rendered
+  // standalone, return null.
+  return null;
+});
+
+FABMenuItemComponent.displayName = "FABMenuItemComponent";
+
+// ─── Color Mappings ───────────────────────────────────────────────────────────
+
 const closeButtonColors = {
   primary: "bg-primary-container text-primary-container-foreground",
   secondary: "bg-secondary-container text-secondary-container-foreground",
@@ -60,7 +104,34 @@ const menuItemColors = {
   tertiary: "bg-surface-container-high text-tertiary",
 } as const;
 
-const FABMenu: React.FC<FABMenuProps> = ({
+// ─── Dual-API Detection Helpers ───────────────────────────────────────────────
+
+function isValidFABMenuItemChild(
+  child: React.ReactNode
+): child is React.ReactElement<FABMenuItemComponentProps> {
+  return (
+    React.isValidElement(child) &&
+    (child.type as { displayName?: string })?.displayName ===
+      "FABMenuItemComponent"
+  );
+}
+
+function extractItemsFromChildren(
+  children: React.ReactNode
+): FABMenuItem[] {
+  const items: FABMenuItem[] = [];
+  React.Children.forEach(children, (child) => {
+    if (isValidFABMenuItemChild(child)) {
+      const { icon, label, onClick, "aria-label": ariaLabel } = child.props;
+      items.push({ icon, label, onClick, "aria-label": ariaLabel });
+    }
+  });
+  return items;
+}
+
+// ─── FABMenu Root Component ───────────────────────────────────────────────────
+
+const FABMenuRoot: React.FC<FABMenuProps> = ({
   items,
   colorSet = "primary",
   open: openProp,
@@ -70,8 +141,33 @@ const FABMenu: React.FC<FABMenuProps> = ({
   triggerIcon,
   triggerLabel,
   className,
+  children,
 }) => {
-  // Controlled / uncontrolled state
+  // ─── Dual-API Detection ───────────────────────────────────────────────
+  const composableItems = React.useMemo(
+    () => extractItemsFromChildren(children),
+    [children]
+  );
+
+  const hasItemsProp = items !== undefined && items.length > 0;
+  const hasComposableChildren = composableItems.length > 0;
+
+  // Warn if both APIs are used simultaneously
+  React.useEffect(() => {
+    if (hasItemsProp && hasComposableChildren) {
+      console.warn(
+        "[FABMenu] Both `items` prop and FABMenu.Item children are provided. " +
+          "The `items` prop takes precedence. Remove one API to silence this warning."
+      );
+    }
+  }, [hasItemsProp, hasComposableChildren]);
+
+  // Resolve final items: items prop takes precedence
+  const resolvedItems: FABMenuItem[] = hasItemsProp
+    ? items!
+    : composableItems;
+
+  // ─── Controlled / Uncontrolled State ──────────────────────────────────
   const isControlled = openProp !== undefined;
   const [internalOpen, setInternalOpen] = React.useState(defaultOpen);
   const isOpen = isControlled ? openProp : internalOpen;
@@ -94,9 +190,9 @@ const FABMenu: React.FC<FABMenuProps> = ({
 
   // Clamp items to 2-6
   const validItems = React.useMemo(() => {
-    if (items.length < 2) return [];
-    return items.slice(0, 6);
-  }, [items]);
+    if (resolvedItems.length < 2) return [];
+    return resolvedItems.slice(0, 6);
+  }, [resolvedItems]);
 
   // Detect reduced motion
   const [reducedMotion, setReducedMotion] = React.useState(false);
@@ -377,6 +473,12 @@ const FABMenu: React.FC<FABMenuProps> = ({
   );
 };
 
-FABMenu.displayName = "FABMenu";
+FABMenuRoot.displayName = "FABMenu";
 
-export { FABMenu };
+// ─── Compound Component Export ────────────────────────────────────────────────
+
+const FABMenu = Object.assign(FABMenuRoot, {
+  Item: FABMenuItemComponent,
+});
+
+export { FABMenu, FABMenuItemComponent };

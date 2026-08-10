@@ -1,5 +1,17 @@
-export { NavigationBar } from "./navigation-bar";
-export type { NavigationBarProps, NavigationBarItem } from "./navigation-bar";
+export { NavigationBar, useNavigationBar } from "./navigation-bar";
+export type {
+  NavigationBarProps,
+  NavigationBarItem,
+  NavigationBarItemData,
+  NavigationBarItemProps,
+  NavigationBarContextValue,
+} from "./navigation-bar";
 
-export { NavigationRail } from "./navigation-rail";
-export type { NavigationRailProps, NavigationRailItem, NavigationRailSection } from "./navigation-rail";
+export { NavigationRail, useNavigationRail } from "./navigation-rail";
+export type {
+  NavigationRailProps,
+  NavigationRailHeaderProps,
+  NavigationRailContentProps,
+  NavigationRailFooterProps,
+  NavigationRailItemProps,
+} from "./navigation-rail";

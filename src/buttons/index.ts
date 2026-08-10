@@ -10,11 +10,11 @@ export type { FABProps } from "./fab";
 export { ExtendedFAB, extendedFabVariants } from "./extended-fab";
 export type { ExtendedFABProps } from "./extended-fab";
 
-export { FABMenu } from "./fab-menu";
-export type { FABMenuItem, FABMenuProps } from "./fab-menu";
+export { FABMenu, FABMenuItemComponent } from "./fab-menu";
+export type { FABMenuItem, FABMenuProps, FABMenuItemComponentProps } from "./fab-menu";
 
-export { SplitButton, splitButtonVariants } from "./split-button";
-export type { SplitButtonProps } from "./split-button";
+export { SplitButton, SplitButtonLeading, splitButtonVariants } from "./split-button";
+export type { SplitButtonProps, SplitButtonLeadingProps } from "./split-button";
 
 export { ButtonGroup, ButtonGroupItem } from "./button-group";
 export type { ButtonGroupProps, ButtonGroupItemProps } from "./button-group";

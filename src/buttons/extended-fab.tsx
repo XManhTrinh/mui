@@ -48,7 +48,7 @@ const extendedFabVariants = cva(
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-6",
     "[&_.material-symbols-rounded]:pointer-events-none",
     // Disabled
-    "disabled:opacity-[0.38] disabled:pointer-events-none disabled:cursor-not-allowed",
+    "disabled:opacity-[0.38] disabled:pointer-events-none disabled:cursor-not-allowed disabled:shadow-none",
   ].join(" "),
   {
     variants: {

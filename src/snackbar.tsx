@@ -5,6 +5,14 @@ import { motion, AnimatePresence } from "motion/react";
 import { cn } from "./lib/utils";
 import { Icon } from "./icon";
 
+/**
+ * @m3-audit VERIFIED — SnackbarProvider with imperative show() hook present.
+ * Uses context pattern with show(), dismiss(), dismissAll() API.
+ * M3 spec compliant: inverse-surface bg, action button, close icon, auto-dismiss timers,
+ * aria-live regions (polite/assertive), hover pause behavior. Complete per M3.
+ * No gaps found.
+ */
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface SnackbarMessage {
@@ -65,9 +73,10 @@ function generateId(): string {
 interface SnackbarItemProps {
   item: SnackbarMessage & { id: string };
   onDismiss: (id: string) => void;
+  reducedMotion: boolean;
 }
 
-function SnackbarItem({ item, onDismiss }: SnackbarItemProps) {
+function SnackbarItem({ item, onDismiss, reducedMotion }: SnackbarItemProps) {
   const { id, message, action, showClose, duration, priority = "normal" } = item;
 
   // Determine effective duration: action snackbars are persistent by default
@@ -131,10 +140,10 @@ function SnackbarItem({ item, onDismiss }: SnackbarItemProps) {
   return (
     <motion.div
       layout
-      initial={{ y: "100%", opacity: 0 }}
-      animate={{ y: 0, opacity: 1, transition: { duration: 0.2, ease: [0.2, 0, 0, 1] } }}
-      exit={{ opacity: 0, transition: { duration: 0.15, ease: [0.4, 0, 1, 1] } }}
-      transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
+      initial={{ y: reducedMotion ? 0 : "100%", opacity: reducedMotion ? 1 : 0 }}
+      animate={{ y: 0, opacity: 1, transition: { duration: reducedMotion ? 0 : 0.2, ease: [0.2, 0, 0, 1] } }}
+      exit={{ opacity: 0, transition: { duration: reducedMotion ? 0 : 0.15, ease: [0.4, 0, 1, 1] } }}
+      transition={{ duration: reducedMotion ? 0 : 0.2, ease: [0.2, 0, 0, 1] }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       role={role}
@@ -206,6 +215,16 @@ export function SnackbarProvider({
 }: SnackbarProviderProps) {
   const [queue, setQueue] = React.useState<(SnackbarMessage & { id: string })[]>([]);
 
+  // Reduced motion detection for Framer Motion animations
+  const [reducedMotion, setReducedMotion] = React.useState(false);
+  React.useEffect(() => {
+    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mql.matches);
+    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, []);
+
   const show = React.useCallback((msg: SnackbarMessage): string => {
     const id = msg.id ?? generateId();
     setQueue((prev) => [...prev, { ...msg, id }]);
@@ -253,7 +272,7 @@ export function SnackbarProvider({
         <AnimatePresence mode="sync">
           {visible.map((item) => (
             <div key={item.id} className="pointer-events-auto">
-              <SnackbarItem item={item} onDismiss={dismiss} />
+              <SnackbarItem item={item} onDismiss={dismiss} reducedMotion={reducedMotion} />
             </div>
           ))}
         </AnimatePresence>

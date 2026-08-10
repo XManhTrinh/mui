@@ -24,10 +24,10 @@ const tooltipVariants = cva("absolute z-60 pointer-events-none", {
   variants: {
     variant: {
       plain: [
-        // M3 spec: container height 24dp, padding 8dp, 8dp corner radius
-        "h-6 max-w-50 px-2 rounded-lg",
+        // M3 spec: container height 24dp, padding 8dp horizontal, 4dp corner radius
+        "h-6 max-w-50 px-2 rounded-[4px]",
         "bg-inverse-surface text-inverse-on-surface",
-        "text-[12px] leading-4 font-normal whitespace-nowrap",
+        "text-[12px] leading-4 font-normal tracking-[0.4px] whitespace-nowrap",
         "flex items-center",
       ].join(" "),
       rich: [
@@ -76,6 +76,16 @@ function Tooltip({
   const hideTimeout = React.useRef<ReturnType<typeof setTimeout>>(null);
   const tooltipId = React.useId();
 
+  // Reduced motion detection
+  const [reducedMotion, setReducedMotion] = React.useState(false);
+  React.useEffect(() => {
+    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mql.matches);
+    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, []);
+
   const show = () => {
     if (hideTimeout.current) {
       clearTimeout(hideTimeout.current);
@@ -98,6 +108,26 @@ function Tooltip({
       if (hideTimeout.current) clearTimeout(hideTimeout.current);
     };
   }, []);
+
+  // Escape key dismisses tooltip (M3 spec)
+  React.useEffect(() => {
+    if (!isVisible) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (showTimeout.current) {
+          clearTimeout(showTimeout.current);
+          showTimeout.current = null;
+        }
+        if (hideTimeout.current) {
+          clearTimeout(hideTimeout.current);
+          hideTimeout.current = null;
+        }
+        setIsVisible(false);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isVisible]);
 
   const positionClasses = {
     top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
@@ -124,7 +154,7 @@ function Tooltip({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            transition={{ duration: reducedMotion ? 0 : 0.15 }}
             className={cn(
               tooltipVariants({ variant }),
               positionClasses[side],

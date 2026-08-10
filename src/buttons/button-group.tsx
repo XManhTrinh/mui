@@ -4,6 +4,14 @@ import * as React from "react";
 import { cn } from "../lib/utils";
 import { Icon } from "../icon";
 
+/**
+ * @m3-audit VERIFIED — ButtonGroup and ButtonGroupItem present with context and keyboard navigation.
+ * Uses ButtonGroupContext for shared state (variant, selectionMode, selected, size, shape).
+ * ButtonGroupPositionContext provides per-item position for corner radius calculation.
+ * Keyboard navigation: ArrowLeft/Right, Home/End. ARIA roles: radio/checkbox with aria-checked.
+ * Complete per M3 segmented button spec. No gaps found.
+ */
+
 // ---------- Context ----------
 
 interface ButtonGroupContextValue {

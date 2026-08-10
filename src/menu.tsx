@@ -31,6 +31,10 @@ import { Icon } from "./icon";
  * Animation:
  * - Enter: fade in + scale (150ms, ease-out)
  * - Exit: fade out (75ms, linear)
+ *
+ * @m3-audit VERIFIED — Menu, MenuItem, MenuDivider all present with Radix integration.
+ * Recommendation: Consider adding MenuHeader/MenuLabel sub-component for section titles
+ * (M3 menus support grouped items with section headers). Low priority.
  */
 
 export interface MenuProps {

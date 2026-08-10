@@ -52,6 +52,7 @@ const fabVariants = cva(
         primary: "bg-primary-container text-primary-container-foreground",
         secondary: "bg-secondary-container text-secondary-container-foreground",
         tertiary: "bg-tertiary-container text-tertiary-container-foreground",
+        surface: "bg-surface-container-high text-primary",
       },
       size: {
         m: "size-12 [&_svg]:size-6",
@@ -123,7 +124,7 @@ export interface FABProps
   /** Label text (required for extended, provides accessible name) */
   label?: string;
   /** Color scheme */
-  color?: "primary" | "secondary" | "tertiary";
+  color?: "primary" | "secondary" | "tertiary" | "surface";
   /** Shape variant */
   shape?: "rounded" | "round";
   /** Fixed positioning (bottom-right) */

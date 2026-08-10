@@ -1,0 +1,404 @@
+# Implementation Plan: M3 Expressive Production Audit
+
+## Overview
+
+This plan systematically audits and remediates the `@strata/mui` component library against M3 Expressive specifications, WCAG 2.1 AA accessibility, performance patterns, and code quality standards. Each task audits a component group against the design spec reference values, fixes any gaps found, and verifies the fix compiles.
+
+## Tasks
+
+- [x] 1. Theme infrastructure audit and remediation
+  - [x] 1.1 Audit theme.css color tokens for completeness (light + dark)
+    - Verify all M3 color roles are defined in `:root` and `.dark` blocks
+    - Verify HSL component format enables alpha composition (`hsl(var(--token)/opacity)`)
+    - Add any missing tokens (e.g., `inverse-primary` in dark mode if absent)
+    - _Requirements: 5.1, 5.7, 14.1, 14.2_
+  - [x] 1.2 Audit theme.css shape, elevation, and state tokens
+    - Verify shape scale tokens: full (9999px), xl (28px), lg (16px), md (12px), sm (8px)
+    - Verify elevation tokens: Level 1 (4%), Level 2 (6%), Level 3 (8%), Level 4 (10%), Level 5 (12%)
+    - Verify state layer opacity tokens: hover (0.08), focus (0.10), press (0.10)
+    - Verify `--m3-surface-bg` propagation for TextField label backgrounds
+    - _Requirements: 3.1, 4.1, 6.1, 6.2, 6.3, 14.3, 14.4, 14.5, 14.6_
+  - [x] 1.3 Audit reduced motion and Tailwind v4 @theme mapping
+    - Verify `@media (prefers-reduced-motion: reduce)` sets animation/transition durations to 0.01ms
+    - Verify scroll-behavior is set to auto in reduced motion
+    - Verify `@theme` block maps all CSS variables to Tailwind v4 color utilities
+    - _Requirements: 13.1, 13.2, 13.3, 14.7, 14.8_
+  - [x] 1.4 Audit keyframe animations for GPU acceleration
+    - Verify all keyframes animate only transform/opacity (not width/height/left for perf-critical paths)
+    - Verify M3 standard easing curves are used: `cubic-bezier(0.2, 0, 0, 1)` for enter, `cubic-bezier(0.4, 0, 1, 1)` for exit
+    - Fix any keyframes using layout-triggering properties
+    - _Requirements: 9.1, 9.2, 9.6, 16.3, 16.4, 16.5_
+
+- [x] 2. Checkpoint — Theme infrastructure
+  - Ensure all theme token changes compile correctly, ask the user if questions arise.
+
+- [x] 3. Buttons audit and remediation (Button, IconButton)
+  - [x] 3.1 Audit Button dimensions, padding, and shape morph
+    - Verify heights: xs=32dp, s=36dp, m=40dp, l=48dp, xl=56dp
+    - Verify horizontal padding per size matches spec (xs=12, s=16, m=24, l=28, xl=32)
+    - Verify asymmetric padding when icons are present (icon-side reduced)
+    - Verify shape morph on `:active` reduces border-radius by ~20-30%
+    - Verify disabled state: 38% opacity, no shadows, `aria-disabled`
+    - _Requirements: 1.1, 2.7, 3.5, 3.6, 4.7, 6.1, 6.2, 6.3, 9.4, 19.4_
+  - [x] 3.2 Audit IconButton dimensions, shape morph, and touch targets
+    - Verify container sizes: xs=32dp, s=40dp, m=48dp, l=56dp, xl=64dp
+    - Verify icon sizes: xs=18dp, s=20dp, m=24dp, l=28dp, xl=32dp
+    - Verify touch-target expander wraps xs/s sizes to reach 48dp
+    - Verify shape morph on press for both round and square shapes
+    - Verify toggle behavior: pressed inverts shape (round↔square), uses filled variant
+    - _Requirements: 1.2, 3.6, 8.1, 8.2, 10.11_
+  - [x] 3.3 Audit Button/IconButton typography and state layers
+    - Verify Label Large typography: 14px, weight 500, line-height 20px, letter-spacing 0.1px
+    - Verify state layer implementation via `::before` pseudo-element with `bg-current`
+    - Verify opacities: hover 8%, focus 10%, press 10%
+    - Verify focus ring: 2px primary color on `focus-visible`
+    - _Requirements: 6.5, 6.7, 7.1, 12.1_
+
+- [x] 4. FAB, ExtendedFAB, FABMenu, SplitButton, ButtonGroup audit
+  - [x] 4.1 Audit FAB dimensions and elevation
+    - Verify container sizes: m=48dp, l=56dp, xl=96dp
+    - Verify icon sizes: m/l=24dp, xl=36dp
+    - Verify elevation: Level 3 rest, Level 4 hover, no shadow when disabled
+    - Verify shape morph values for rounded and round shapes per size
+    - _Requirements: 1.2, 3.3, 3.6, 4.2, 4.7_
+  - [x] 4.2 Audit ExtendedFAB dimensions and label
+    - Verify sizes: small=56dp, medium=80dp, large=96dp height
+    - Verify Label Large typography on label text
+    - Verify elevation and shape morph match FAB spec
+    - _Requirements: 4.2, 7.1, 9.4_
+  - [x] 4.3 Audit FABMenu ARIA, keyboard, and animation
+    - Verify `role="menu"` on overlay and `role="menuitem"` on items
+    - Verify ArrowUp/ArrowDown keyboard navigation between items
+    - Verify Escape closes and returns focus to trigger
+    - Verify staggered animation uses M3 standard easing
+    - Verify reduced motion detection disables motion in Framer Motion
+    - _Requirements: 10.8, 11.7, 12.6, 13.4, 9.1_
+  - [x] 4.4 Audit SplitButton and ButtonGroup
+    - Verify SplitButton inner corner radius values per size (xs=4dp, s=4dp, m=4dp, l=8dp, xl=12dp)
+    - Verify ButtonGroup ARIA roles: radio/checkbox with aria-checked
+    - Verify keyboard navigation: ArrowLeft/Right, Home/End
+    - Verify equal-width and selection-required modes work correctly
+    - _Requirements: 10.1, 10.2, 11.3, 11.4, 11.5_
+
+- [x] 5. Checkpoint — Buttons complete
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [x] 6. Form controls audit (Checkbox, Radio, Switch, Slider, TextField)
+  - [x] 6.1 Audit Checkbox dimensions, ARIA, and state layers
+    - Verify visual container: 18×18dp with 2dp corner radius
+    - Verify 48dp touch target (button container)
+    - Verify `role="checkbox"` with `aria-checked` (true/false/mixed for indeterminate)
+    - Verify state layer: 40dp circle, primary color when checked, on-surface when unchecked
+    - Verify animation: 100ms, cubic-bezier(0.2, 0, 0, 1)
+    - _Requirements: 1.3, 6.6, 8.4, 10.1, 11.5_
+  - [x] 6.2 Audit Radio dimensions, ARIA, and RadioGroup
+    - Verify outer circle: 20dp diameter with 2dp border width
+    - Verify 48dp touch target
+    - Verify `role="radio"` with `aria-checked`, `role="radiogroup"` on container
+    - Verify state layer colors: primary when selected, on-surface when unselected
+    - Verify keyboard: Home/End in RadioGroup
+    - _Requirements: 1.4, 8.4, 10.2, 11.4_
+  - [x] 6.3 Audit Switch dimensions, handle sizing, and ARIA
+    - Verify track: 52×32dp with pill shape
+    - Verify handle sizes: 16dp (off), 24dp (on/icon), 28dp (pressed)
+    - Verify 48dp touch target
+    - Verify `role="switch"` with `aria-checked`
+    - Verify state layer: 40dp, primary when selected, on-surface when unselected
+    - Verify Enter/Space activates toggle
+    - _Requirements: 1.5, 6.6, 8.5, 10.3, 11.5_
+  - [x] 6.4 Audit Slider dimensions, track, handle, and ARIA
+    - Verify track: 16dp height with 8dp (fully rounded) radius
+    - Verify handle: 44dp height × 4dp width
+    - Verify 48dp vertical touch area
+    - Verify native range input provides keyboard support (Left/Right arrows)
+    - Verify value indicator shows on interaction with proper positioning
+    - Verify discrete stop indicators positioned correctly
+    - _Requirements: 1.8 (slider-specific from design), 2.8, 8.6_
+  - [x] 6.5 Audit TextField dimensions, variants, and ARIA
+    - Verify container height: 56dp
+    - Verify corner radius: 4dp (outlined all corners), 4dp top-only (filled)
+    - Verify content padding: 16dp left/right
+    - Verify floating label: Body Small (12px/16px/400/0.4px) when floating
+    - Verify input text: Body Large (16px/24px/400/0.5px)
+    - Verify error state: error color on indicator, label, and supporting text
+    - Verify `aria-invalid` on error, `aria-describedby` linking to supporting text
+    - Verify controlled/uncontrolled pattern consistency
+    - _Requirements: 1.6, 2.2, 7.5, 7.6, 10.11, 17.7, 19.6_
+
+- [x] 7. Checkpoint — Form controls complete
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [x] 8. Navigation audit (AppBar, NavigationBar, NavigationRail, Tabs)
+  - [x] 8.1 Audit AppBar dimensions and elevation
+    - Verify container height: 64dp (h-16)
+    - Verify leading/trailing icon 48dp touch targets
+    - Verify headline: Title Large (22px, 400 weight, 28px line-height)
+    - Verify elevated state adds surface-container bg + Level 1 shadow
+    - Verify composable and legacy APIs both render correctly
+    - _Requirements: 7.2 (dialog title, but AppBar uses Title Large), 17.3_
+  - [x] 8.2 Audit NavigationBar dimensions, indicator, and ARIA
+    - Verify container height: 64dp
+    - Verify active indicator: 64×32dp pill shape, secondary-container fill
+    - Verify label: Label Medium (12px, 500, 16px, 0.5px tracking)
+    - Verify `role="tab"` with `aria-selected` on items, `role="tablist"` on container
+    - Verify state layers: 8% hover, 10% focus, 10% press
+    - Verify indicator animation: 200ms M3 standard easing
+    - _Requirements: 1.7, 5.3, 7.4, 9.7, 10.4_
+  - [x] 8.3 Audit NavigationRail expanded/collapsed states
+    - Verify collapsed width: 96dp (w-24), expanded width: 360dp (w-90)
+    - Verify `role="tab"` with `aria-selected` on items
+    - Verify state layers on items
+    - Verify animation uses M3 standard easing (cubic-bezier(0.2, 0, 0, 1))
+    - _Requirements: 9.1, 10.4_
+  - [x] 8.4 Audit Tabs dimensions, indicator, and ARIA
+    - Verify container heights: 48dp (text-only), 64dp (icon+text)
+    - Verify active indicator: 3dp (primary), 2dp (secondary) height
+    - Verify indicator min-length: 24dp
+    - Verify `role="tab"` with `aria-selected`, `role="tablist"` on TabList, `role="tabpanel"` on TabContent
+    - Verify ArrowLeft/ArrowRight keyboard navigation within TabList
+    - Verify indicator slides between tabs with 200ms M3 standard easing
+    - _Requirements: 1.8, 9.3, 9.7, 10.4, 10.5, 11.3_
+
+- [x] 9. Checkpoint — Navigation complete
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [x] 10. Communication audit (Dialog, Snackbar, Tooltip, Badge)
+  - [x] 10.1 Audit Dialog dimensions, padding, and ARIA
+    - Verify min-width 280dp, max-width 560dp, corner radius 28dp
+    - Verify padding: 24dp all sides, 16dp title-to-body gap, 24dp body-to-actions gap, 8dp between buttons
+    - Verify `role="dialog"` with `aria-modal` (via Radix)
+    - Verify elevation: Level 4 shadow
+    - Verify title: Headline Small (24px, 400, 32px line-height)
+    - Verify body: Body Medium (14px, 400, 20px line-height)
+    - Verify Escape closes, focus trap within modal, focus returns on close
+    - _Requirements: 1.9, 2.1, 2.4, 4.4, 7.2, 7.3, 10.7, 11.2, 11.6, 12.2, 12.3_
+  - [x] 10.2 Audit Snackbar dimensions, colors, queue, and ARIA
+    - Verify inverse-surface background with inverse-on-surface text
+    - Verify elevation: Level 3
+    - Verify corner radius: 4dp (rounded-sm)
+    - Verify queue management: only one visible at a time (maxVisible=1)
+    - Verify auto-dismiss: 6s default, persistent for action snackbars
+    - Verify hover-pause behavior for auto-dismiss timer
+    - Verify `aria-live` regions: polite (normal), assertive (urgent)
+    - _Requirements: 4.6, 5.5, 19.5, 19.7_
+  - [x] 10.3 Audit Tooltip dimensions, colors, and ARIA
+    - Verify plain: inverse-surface bg, 24dp height, 8dp horizontal padding, 4dp radius, Body Small (12px)
+    - Verify rich: surface-container bg, 12dp top/8dp bottom/16dp horizontal padding, 12dp radius
+    - Verify `role="tooltip"` with `aria-describedby` linkage
+    - Verify 500ms show delay, 200ms hide delay
+    - Verify 150ms fade animation
+    - Verify Escape dismisses tooltip
+    - _Requirements: 5.5, 9.5, 10.9, 11.6_
+  - [x] 10.4 Audit Badge dimensions and accessibility
+    - Verify small badge (dot): 6×6dp, 3dp radius, error bg
+    - Verify large badge (count): 16dp height, min-width 16dp, 8dp radius (pill), Label Small (11px)
+    - Verify `aria-hidden` on dot, `aria-label` on count
+    - Verify error color for background
+    - _Requirements: 5.6_
+
+- [x] 11. Checkpoint — Communication complete
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [x] 12. Containment audit (Card, Carousel, List, Menu, BottomSheet, SideSheet)
+  - [x] 12.1 Audit Card variants, elevation, and state layers
+    - Verify corner radius: 12dp (rounded-xl)
+    - Verify elevated: Level 1 shadow, surface-container-low bg
+    - Verify filled: surface-container-high bg, no shadow
+    - Verify outlined: surface bg, outline-variant border, no shadow
+    - Verify interactive cards: state layer 8%/10%/10%, cursor-pointer, focus ring
+    - Verify content padding: 16dp
+    - _Requirements: 2.3, 3.2, 3.4, 4.3, 6.1, 6.2, 6.3_
+  - [x] 12.2 Audit Carousel variants and accessibility
+    - Verify item corner radius: 28dp
+    - Verify gap: 8dp between items
+    - Verify variants: uncontained (16dp leading), hero (16dp padding both), full-screen (no padding)
+    - Verify `role="region"` with `aria-roledescription="carousel"`, items as `role="listitem"`
+    - Verify keyboard: ArrowLeft/ArrowRight scrolls content
+    - Verify state layers: 8%/10%/10%
+    - _Requirements: 11.8, 19.3_
+  - [x] 12.3 Audit List dimensions and accessibility
+    - Verify item heights: 1-line=56dp, 2-line=72dp, 3-line=88dp
+    - Verify label left padding: 16dp, trailing right padding: 24dp (via px-4 + pr-2 trailing)
+    - Verify 48dp minimum height for interactive items
+    - Verify state layers on interactive items
+    - Verify leading icon alignment: center (top-aligned for 3-line)
+    - _Requirements: 2.6, 8.3_
+  - [x] 12.4 Audit Menu dimensions, elevation, and ARIA
+    - Verify min-width 112dp, max-width 280dp
+    - Verify corner radius: 4dp
+    - Verify item height: 48dp, left/right padding: 12dp
+    - Verify elevation: Level 3
+    - Verify enter animation: 150ms fade+scale, exit: 75ms
+    - Verify Escape closes menu, focus returns to trigger
+    - _Requirements: 2.5, 3.4, 4.5, 9.5, 11.6, 12.6_
+  - [x] 12.5 Audit BottomSheet and SideSheet
+    - Verify BottomSheet: 28dp top corners, max-width 640dp, drag handle 32×4dp
+    - Verify SideSheet: max-width 400dp, 24dp start/end padding
+    - Verify modal variants: `role="dialog"`, `aria-modal`, focus trap, Escape closes
+    - Verify standard variants: no focus trap, Escape closes
+    - Verify scrim: on-surface at 32% opacity
+    - Verify animation: 200ms slide, M3 standard easing, scrim 150ms fade
+    - Verify reduced motion detection in Framer Motion animations
+    - _Requirements: 3.2, 10.7, 11.2, 11.6, 12.2, 12.3, 12.5, 13.4_
+
+- [x] 13. Checkpoint — Containment complete
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [ ] 14. Selection audit (Chip)
+  - [x] 14.1 Audit Chip dimensions, variants, and state layers
+    - Verify height: 32dp, corner radius: 8dp
+    - Verify icon size: 18dp
+    - Verify padding: 16dp L/R (no icon), 8dp L/R (with icon)
+    - Verify Label Large typography on label
+    - Verify selected state: secondary-container bg, no border
+    - Verify disabled: 38% opacity
+    - Verify state layers via `::before` with correct opacities
+    - Verify all 4 variants: assist, filter, input, suggestion
+    - _Requirements: 1.10, 3.4, 7.7, 6.1, 6.2, 6.3, 19.4_
+
+- [ ] 15. Search audit
+  - [x] 15.1 Audit Search dimensions, shape, and state layers
+    - Verify height: 56dp (h-14)
+    - Verify shape: full pill (rounded-full)
+    - Verify min-width: 360dp, max-width: 720dp
+    - Verify unfocused bg: surface-container-high, focused bg: surface-container-low
+    - Verify composable and legacy APIs both render correctly
+    - Verify state layers: hover 8%, focus ring on focus
+    - _Requirements: 3.5, 5.4 (search uses surface-container-high)_
+
+- [ ] 16. Indicators audit (CircularProgress, LinearProgress, LoadingIndicator)
+  - [x] 16.1 Audit CircularProgress dimensions and ARIA
+    - Verify default size: 48dp, stroke width: 4dp
+    - Verify `role="progressbar"` with `aria-valuemin`, `aria-valuemax`, `aria-valuenow` (determinate)
+    - Verify determinate: smooth stroke-dashoffset transition (200ms M3 easing)
+    - Verify indeterminate: CSS keyframe animation (rotate 1.4s + dash grow/shrink)
+    - Verify track: secondary-container, indicator: primary
+    - _Requirements: 10.6, 16.4_
+  - [x] 16.2 Audit LinearProgress dimensions and ARIA
+    - Verify track height: 4dp with 2dp radius (fully rounded)
+    - Verify `role="progressbar"` with aria attributes (determinate)
+    - Verify determinate: width transition 200ms M3 standard easing
+    - Verify indeterminate: CSS keyframe animation (2s cycle)
+    - Verify colors: primary indicator, secondary-container track
+    - _Requirements: 10.6, 16.4_
+  - [x] 16.3 Audit LoadingIndicator convenience wrapper
+    - Verify size presets: sm=24dp, md=48dp, lg=64dp
+    - Verify passes through `aria-label` (default "Loading")
+    - Verify uses CircularProgress indeterminate mode
+    - _Requirements: 10.6_
+
+- [ ] 17. Pickers audit (DatePicker, TimePicker)
+  - [x] 17.1 Audit DatePicker dimensions, layout, and year selection
+    - Verify container: 320dp width, 28dp corner radius, surface-container-high bg
+    - Verify calendar grid: 40dp × 40dp cells, rounded-full shape
+    - Verify today indicator: border primary
+    - Verify selected: primary bg, primary-foreground text
+    - Verify month navigation with IconButtons
+    - Check if year selection mode exists — add if missing per M3 spec
+    - _Requirements: 5.4, 19.1_
+  - [x] 17.2 Audit TimePicker input mode and format
+    - Verify container: 28dp corner radius, surface-container-high bg
+    - Verify input fields: 72dp height, 96dp width, rounded-2xl
+    - Verify 12h/24h format support with AM/PM selector
+    - Verify disabled state: 38% opacity
+    - Check if dial (clock face) mode exists — document gap if missing
+    - _Requirements: 19.2_
+
+- [x] 18. Checkpoint — Pickers complete
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [ ] 19. Layout audit (Divider, Toolbar)
+  - [x] 19.1 Audit Divider dimensions and ARIA
+    - Verify height: 1px, color: outline-variant
+    - Verify variants: full (100%), inset (16dp left), middle-inset (16dp left+right)
+    - Verify `role="separator"` with `aria-orientation`
+    - Verify horizontal and vertical orientations
+    - _Requirements: 10.10_
+  - [x] 19.2 Audit Toolbar dimensions and structure
+    - Verify docked variant: 64dp height, full width
+    - Verify floating variant: 56dp height, pill shape
+    - Verify `role="toolbar"`
+    - Verify sub-components: ToolbarLeading, ToolbarHeadline, ToolbarActions all present with displayName
+    - _Requirements: 17.2, 17.3_
+
+- [ ] 20. Typography audit
+  - [x] 20.1 Audit Typography component against full M3 type scale
+    - Verify all 15 variants render exact font-size, font-weight, line-height, letter-spacing:
+      - Display: 57/45/36px, weight 400, tracking -0.25/0/0
+      - Headline: 32/28/24px, weight 400, tracking 0
+      - Title: 22/16/14px, weight 400 for large / 500 for medium+small, tracking 0/0.15/0.1
+      - Body: 16/14/12px, weight 400, tracking 0.5/0.25/0.4
+      - Label: 14/12/11px, weight 500, tracking 0.1/0.5/0.5
+    - Verify semantic element mapping (h1-h6, p, span)
+    - Verify `as` prop overrides element
+    - Verify color prop maps to M3 color tokens
+    - _Requirements: 7.8_
+
+- [ ] 21. Icon audit
+  - [x] 21.1 Audit Icon component Material Symbols integration
+    - Verify default size: 24dp
+    - Verify font-variation-settings support: FILL, wght, GRAD, opsz axes
+    - Verify `aria-hidden="true"` on icon element
+    - Verify optical size defaults to nearest M3 value
+    - Verify parent components can override size via CSS specificity
+    - _Requirements: 10.12_
+
+- [x] 22. Checkpoint — Component audits complete
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [-] 23. Performance and exports audit
+  - [x] 23.1 Audit package.json exports and tree-shaking
+    - Verify sub-path exports: `./buttons`, `./navigation`, `./sheets`, `./indicators`
+    - Verify all exports are named (no `export default`) across all component files
+    - Verify barrel files re-export types alongside components
+    - Add any missing sub-path exports (e.g., `./pickers`, `./typography`)
+    - _Requirements: 16.1, 16.2_
+  - [x] 23.2 Audit React performance patterns across all components
+    - Verify `React.forwardRef` on all components rendering DOM elements
+    - Verify `displayName` set on all forwardRef components
+    - Verify context value objects wrapped in `React.useMemo`
+    - Verify callback functions in context wrapped in `React.useCallback`
+    - Verify `useEffect` cleanup functions remove event listeners/timers
+    - Verify no inline object/array creation in render paths of context providers
+    - Fix any components missing these patterns
+    - _Requirements: 15.1, 15.2, 15.3, 15.4, 15.5, 15.6, 17.2, 17.3_
+  - [x] 23.3 Audit "use client" directives and SSR safety
+    - Verify all interactive component files start with `"use client"` directive
+    - Verify no `window`/`document` access in render phase (only in useEffect/handlers)
+    - Verify all components export TypeScript strict types (no implicit `any`)
+    - _Requirements: 17.1, 17.4, 17.5_
+
+- [ ] 24. Accessibility global patterns audit
+  - [x] 24.1 Audit ARIA role assignments across all components
+    - Cross-reference every interactive component against requirements 10.1–10.12
+    - Verify each component has the correct ARIA role assigned
+    - Verify `aria-disabled` is applied to all disabled interactive components
+    - Verify components without visible text have `aria-label` or `aria-labelledby`
+    - Document any remaining gaps with file paths and fix
+    - _Requirements: 10.1–10.12_
+  - [x] 24.2 Audit keyboard navigation patterns
+    - Verify Tab navigation between all focusable components
+    - Verify modal focus traps (Dialog, modal BottomSheet, modal SideSheet)
+    - Verify Escape closes all dismissible overlays (Dialog, Menu, Sheet, Tooltip)
+    - Verify focus returns to trigger element when overlays close
+    - Verify ArrowLeft/ArrowRight in grouped controls (ButtonGroup, TabList, NavigationBar)
+    - Verify Home/End in grouped controls (ButtonGroup, RadioGroup)
+    - _Requirements: 11.1–11.8, 12.1–12.6_
+  - [x] 24.3 Audit reduced motion support in JavaScript animations
+    - Verify Framer Motion animations in BottomSheet, SideSheet, FABMenu, Snackbar, Tooltip detect `prefers-reduced-motion`
+    - Verify JavaScript-driven animations are disabled or minimized when reduced motion is active
+    - Fix any components that don't respect reduced motion in JS-driven animations
+    - _Requirements: 13.4_
+
+- [x] 25. Final checkpoint — Full audit complete
+  - Ensure TypeScript compilation passes with strict mode
+  - Ensure all component fixes compile without errors
+  - Ask the user if questions arise.
+
+## Notes
+
+- Tasks marked with `*` are optional and can be skipped for faster MVP
+- Each task references specific requirements for traceability
+- Checkpoints ensure incremental validation between major component groups
+- The audit follows the design document's severity classification: Critical > Major > Minor
+- Only code-level fixes are in scope — no deployment, user testing, or documentation tasks

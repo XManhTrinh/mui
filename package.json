@@ -14,7 +14,8 @@
     "./buttons": "./src/buttons/index.ts",
     "./navigation": "./src/navigation/index.ts",
     "./sheets": "./src/sheets/index.ts",
-    "./indicators": "./src/indicators/index.ts"
+    "./indicators": "./src/indicators/index.ts",
+    "./pickers": "./src/pickers/index.ts"
   },
   "peerDependencies": {
     "react": ">=18.0.0",

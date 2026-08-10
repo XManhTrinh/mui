@@ -27,6 +27,10 @@ import { Icon } from "./icon";
  * - Bottom action bar: 56dp
  * - Content padding: 24dp top/left/right
  * - Element gap: 8dp
+ *
+ * @m3-audit VERIFIED — DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription,
+ * DialogClose, DialogTrigger all present. Uses Radix Dialog primitives. Complete per M3 anatomy.
+ * No gaps found.
  */
 
 const Dialog = DialogPrimitive.Root;
@@ -196,7 +200,7 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn("text-[14px] leading-5 text-surface-variant-foreground", className)}
+    className={cn("text-[14px] leading-5 font-normal tracking-[0.25px] text-surface-variant-foreground", className)}
     {...props}
   />
 ));

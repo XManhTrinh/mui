@@ -157,12 +157,61 @@ const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
     const [internalValue, setInternalValue] = React.useState(defaultValue ?? "");
     const isControlled = controlledValue !== undefined;
     const currentValue = isControlled ? controlledValue : internalValue;
+    const groupRef = React.useRef<HTMLDivElement>(null);
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+      const group = groupRef.current;
+      if (!group) return;
+
+      const radios = Array.from(
+        group.querySelectorAll<HTMLButtonElement>('[role="radio"]:not([disabled])')
+      );
+      if (radios.length === 0) return;
+
+      const currentIndex = radios.findIndex(
+        (r) => r === document.activeElement
+      );
+
+      let nextIndex: number | null = null;
+
+      const isHorizontal = orientation === "horizontal";
+      const nextKey = isHorizontal ? "ArrowRight" : "ArrowDown";
+      const prevKey = isHorizontal ? "ArrowLeft" : "ArrowUp";
+
+      switch (e.key) {
+        case nextKey:
+          nextIndex = currentIndex < radios.length - 1 ? currentIndex + 1 : 0;
+          break;
+        case prevKey:
+          nextIndex = currentIndex > 0 ? currentIndex - 1 : radios.length - 1;
+          break;
+        case "Home":
+          nextIndex = 0;
+          break;
+        case "End":
+          nextIndex = radios.length - 1;
+          break;
+        default:
+          return;
+      }
+
+      if (nextIndex !== null) {
+        e.preventDefault();
+        radios[nextIndex].focus();
+        radios[nextIndex].click();
+      }
+    };
 
     return (
       <div
-        ref={ref}
+        ref={(node) => {
+          (groupRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+          if (typeof ref === "function") ref(node);
+          else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        }}
         role="radiogroup"
         aria-orientation={orientation}
+        onKeyDown={handleKeyDown}
         className={cn(
           "flex",
           orientation === "vertical" ? "flex-col" : "flex-row gap-2",

@@ -104,14 +104,46 @@ const trailingWidth = {
   xl: "w-14",
 } as const;
 
+// ─── SplitButton.Leading Sub-Component ────────────────────────────────────────
+
+export interface SplitButtonLeadingProps {
+  /** Click handler for the leading segment */
+  onClick?: (e: React.MouseEvent) => void;
+  /** Disabled state for the leading segment */
+  disabled?: boolean;
+  /** Accessible label */
+  "aria-label"?: string;
+  /** Additional className */
+  className?: string;
+  /** Custom content for the leading segment */
+  children?: React.ReactNode;
+}
+
+/**
+ * SplitButton.Leading — Composable sub-component for custom leading segment content.
+ *
+ * Does not render on its own. The SplitButton root detects this element via displayName
+ * and extracts its props/children to render inside the leading segment slot.
+ */
+const SplitButtonLeading = React.forwardRef<HTMLButtonElement, SplitButtonLeadingProps>(
+  (_props, _ref) => {
+    // This component never renders directly.
+    // SplitButton extracts its props and renders custom content in the leading segment.
+    return null;
+  }
+);
+SplitButtonLeading.displayName = "SplitButtonLeading";
+
+// ─── SplitButton Root ─────────────────────────────────────────────────────────
+
 export interface SplitButtonProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "children">,
     VariantProps<typeof splitButtonVariants> {
-  /** Leading button icon */
+  /** Leading button icon (legacy prop-based API) */
   icon?: React.ReactNode;
-  /** Leading button label */
+  /** Leading button label (legacy prop-based API) */
   label?: React.ReactNode;
-  /** Leading button click handler */
+  /** Leading button click handler (legacy prop-based API) */
   onLeadingClick?: (e: React.MouseEvent) => void;
   /** Menu content (DropdownMenu items) */
   menuContent: React.ReactNode;
@@ -129,9 +161,27 @@ export interface SplitButtonProps
   "aria-label"?: string;
   /** Additional className */
   className?: string;
+  /** Children — use SplitButton.Leading for composable API */
+  children?: React.ReactNode;
 }
 
-const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
+/**
+ * Detects if children contain a SplitButtonLeading element by checking displayName.
+ */
+function findLeadingChild(children: React.ReactNode): React.ReactElement<SplitButtonLeadingProps> | null {
+  const childArray = React.Children.toArray(children);
+  for (const child of childArray) {
+    if (
+      React.isValidElement(child) &&
+      (child.type as { displayName?: string })?.displayName === "SplitButtonLeading"
+    ) {
+      return child as React.ReactElement<SplitButtonLeadingProps>;
+    }
+  }
+  return null;
+}
+
+const SplitButtonRoot = React.forwardRef<HTMLDivElement, SplitButtonProps>(
   (
     {
       className,
@@ -145,6 +195,7 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
       leadingDisabled = false,
       trailingDisabled = false,
       "aria-label": ariaLabel,
+      children,
       ...props
     },
     ref
@@ -154,11 +205,26 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
     const resolvedVariant = variantProp ?? "tonal";
     const resolvedSize = sizeProp ?? "m";
 
-    const isLeadingDisabled = disabled || leadingDisabled;
     const isTrailingDisabled = disabled || trailingDisabled;
 
     const innerRadius = innerRadii[resolvedSize];
     const iconOffset = iconOffsets[resolvedSize];
+
+    // Dual-API detection: check if children contain a SplitButtonLeading element
+    const leadingChild = findLeadingChild(children);
+    const useComposableAPI = leadingChild !== null;
+
+    // Resolve leading segment props from either composable child or legacy props
+    const leadingOnClick = useComposableAPI ? leadingChild.props.onClick : onLeadingClick;
+    const leadingAriaLabel = useComposableAPI ? leadingChild.props["aria-label"] : ariaLabel;
+    const leadingClassName = useComposableAPI ? leadingChild.props.className : undefined;
+    const leadingContent = useComposableAPI ? leadingChild.props.children : (
+      <>
+        {icon}
+        {label && <span>{label}</span>}
+      </>
+    );
+    const isLeadingDisabled = disabled || (useComposableAPI ? (leadingChild.props.disabled ?? false) : leadingDisabled);
 
     return (
       <DropdownMenu.Root
@@ -209,7 +275,9 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
               "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-5",
               "[&_.material-symbols-rounded]:pointer-events-none",
               // Disabled
-              isLeadingDisabled && "opacity-[0.38] pointer-events-none cursor-not-allowed"
+              isLeadingDisabled && "opacity-[0.38] pointer-events-none cursor-not-allowed",
+              // Composable className from SplitButton.Leading
+              leadingClassName
             )}
             style={{
               borderTopRightRadius: innerRadius,
@@ -217,8 +285,8 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
             }}
             disabled={isLeadingDisabled}
             tabIndex={isLeadingDisabled ? -1 : undefined}
-            aria-label={ariaLabel}
-            onClick={onLeadingClick}
+            aria-label={leadingAriaLabel}
+            onClick={leadingOnClick}
             onMouseEnter={(e) => {
               // Morph inner corners toward full round on hover
               const el = e.currentTarget;
@@ -241,8 +309,7 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
               el.style.borderBottomRightRadius = innerRadius;
             }}
           >
-            {icon}
-            {label && <span>{label}</span>}
+            {leadingContent}
           </button>
 
           {/* Trailing segment (menu trigger) */}
@@ -348,6 +415,12 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
     );
   }
 );
-SplitButton.displayName = "SplitButton";
+SplitButtonRoot.displayName = "SplitButton";
 
-export { SplitButton, splitButtonVariants };
+// ─── Compound Component Export ────────────────────────────────────────────────
+
+const SplitButton = Object.assign(SplitButtonRoot, {
+  Leading: SplitButtonLeading,
+});
+
+export { SplitButton, SplitButtonLeading, splitButtonVariants };

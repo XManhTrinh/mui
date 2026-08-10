@@ -18,6 +18,11 @@ import { cn } from "./lib/utils";
  *
  * Usage: Toolbar is a simple container — place IconButtons, FABs,
  * or any other M3 components inside as children.
+ *
+ * @m3-audit VERIFIED — ToolbarLeading, ToolbarHeadline, ToolbarActions all present and correctly typed.
+ * Minor: Does not use Object.assign namespace pattern (exports sub-components separately).
+ * Consider adding `Object.assign(Toolbar, { Leading, Headline, Actions })` for API consistency
+ * with other compound components, while keeping separate exports for tree-shaking.
  */
 
 export interface ToolbarProps extends React.HTMLAttributes<HTMLDivElement> {

@@ -5,85 +5,17 @@ import "./globals.css";
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Icon, IconButton, AppBar, NavigationRail } from "@mui/index";
-import type { NavigationRailSection } from "@mui/index";
+import { usePathname, useRouter } from "next/navigation";
+import { Icon, IconButton, AppBar, NavigationRail, Divider } from "@mui/index";
 
-const navCategories: NavigationRailSection[] = [
-  {
-    label: "Buttons",
-    icon: "buttons_alt",
-    links: [
-      { value: "/buttons", label: "Buttons", href: "/buttons" },
-      { value: "/buttons/icon-buttons", label: "Icon Buttons", href: "/buttons/icon-buttons" },
-      { value: "/buttons/fabs", label: "FABs", href: "/buttons/fabs" },
-      { value: "/buttons/split-button", label: "Split Button", href: "/buttons/split-button" },
-      { value: "/buttons/button-group", label: "Button Group", href: "/buttons/button-group" },
-    ],
-  },
-  {
-    label: "Inputs",
-    icon: "input",
-    links: [
-      { value: "/inputs/text-fields", label: "Text Fields", href: "/inputs/text-fields" },
-      { value: "/inputs/checkbox", label: "Checkbox", href: "/inputs/checkbox" },
-      { value: "/inputs/radio", label: "Radio", href: "/inputs/radio" },
-      { value: "/inputs/switch", label: "Switch", href: "/inputs/switch" },
-      { value: "/inputs/slider", label: "Slider", href: "/inputs/slider" },
-      { value: "/inputs/search", label: "Search", href: "/inputs/search" },
-    ],
-  },
-  {
-    label: "Data Display",
-    icon: "dashboard",
-    links: [
-      { value: "/data-display/cards", label: "Cards", href: "/data-display/cards" },
-      { value: "/data-display/badges", label: "Badges", href: "/data-display/badges" },
-      { value: "/data-display/chips", label: "Chips", href: "/data-display/chips" },
-      { value: "/data-display/lists", label: "Lists", href: "/data-display/lists" },
-      { value: "/data-display/tooltip", label: "Tooltips", href: "/data-display/tooltip" },
-      { value: "/data-display/divider", label: "Divider", href: "/data-display/divider" },
-      { value: "/data-display/icon", label: "Icon", href: "/data-display/icon" },
-    ],
-  },
-  {
-    label: "Feedback",
-    icon: "feedback",
-    links: [
-      { value: "/feedback/dialog", label: "Dialogs", href: "/feedback/dialog" },
-      { value: "/feedback/snackbar", label: "Snackbar", href: "/feedback/snackbar" },
-      { value: "/feedback/menu", label: "Menus", href: "/feedback/menu" },
-      { value: "/feedback/progress", label: "Progress", href: "/feedback/progress" },
-    ],
-  },
-  {
-    label: "Navigation",
-    icon: "near_me",
-    links: [
-      { value: "/navigation/bar", label: "Navigation Bar", href: "/navigation/bar" },
-      { value: "/navigation/rail", label: "Navigation Rail", href: "/navigation/rail" },
-    ],
-  },
-  {
-    label: "Layout",
-    icon: "view_sidebar",
-    links: [
-      { value: "/layout/app-bar", label: "App Bar", href: "/layout/app-bar" },
-      { value: "/layout/tabs", label: "Tabs", href: "/layout/tabs" },
-      { value: "/layout/bottom-sheet", label: "Bottom Sheet", href: "/layout/bottom-sheet" },
-      { value: "/layout/side-sheet", label: "Side Sheet", href: "/layout/side-sheet" },
-      { value: "/layout/toolbar", label: "Toolbar", href: "/layout/toolbar" },
-      { value: "/layout/carousel", label: "Carousel", href: "/layout/carousel" },
-    ],
-  },
-  {
-    label: "Pickers",
-    icon: "calendar_month",
-    links: [
-      { value: "/pickers/date", label: "Date Picker", href: "/pickers/date" },
-      { value: "/pickers/time", label: "Time Picker", href: "/pickers/time" },
-    ],
-  },
+const navItems = [
+  { value: "buttons", icon: "buttons_alt", label: "Buttons", href: "/buttons" },
+  { value: "inputs", icon: "input", label: "Inputs", href: "/inputs/text-fields" },
+  { value: "data-display", icon: "dashboard", label: "Display", href: "/data-display/cards" },
+  { value: "feedback", icon: "feedback", label: "Feedback", href: "/feedback/dialog" },
+  { value: "navigation", icon: "near_me", label: "Navigation", href: "/navigation/bar" },
+  { value: "layout", icon: "view_sidebar", label: "Layout", href: "/layout/app-bar" },
+  { value: "pickers", icon: "calendar_month", label: "Pickers", href: "/pickers/date" },
 ];
 
 export default function RootLayout({
@@ -92,11 +24,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [dark, setDark] = React.useState(false);
+  const [navExpanded, setNavExpanded] = React.useState(true);
 
   React.useEffect(() => {
-    const isDark = document.documentElement.classList.contains("dark");
-    setDark(isDark);
+    setDark(document.documentElement.classList.contains("dark"));
   }, []);
 
   const toggleTheme = () => {
@@ -105,42 +38,53 @@ export default function RootLayout({
     document.documentElement.classList.toggle("dark", next);
   };
 
-  // Determine active value from pathname — match exact or startsWith for nested routes
   const activeValue = React.useMemo(() => {
-    for (const section of navCategories) {
-      for (const link of section.links) {
-        if (pathname === link.value || pathname.startsWith(link.value + "/")) {
-          return link.value;
-        }
+    for (const item of navItems) {
+      if (pathname === item.href || pathname.startsWith(item.href + "/") || pathname.startsWith("/" + item.value)) {
+        return item.value;
       }
     }
     return undefined;
   }, [pathname]);
 
-  const [navExpanded, setNavExpanded] = React.useState(true);
-
   return (
     <html lang="en" className={dark ? "dark" : ""}>
       <body className="bg-surface text-surface-foreground min-h-screen">
-        {/* Sidebar — full height, starts from top of viewport */}
-        <NavigationRail
-          variant="expanded"
-          sections={navCategories}
-          activeValue={activeValue}
-          collapsible
-          expanded={navExpanded}
-          onExpandedChange={setNavExpanded}
-          className="top-0 z-40"
-          renderLink={({ href, isActive, children, className }) => (
-            <Link href={href ?? "#"} className={className}>
-              {children}
-            </Link>
-          )}
-        />
+        {/* Sidebar — Composable NavigationRail */}
+        <NavigationRail expanded={navExpanded} className="top-0 z-40">
+          <NavigationRail.Header>
+            <IconButton
+              icon="menu"
+              variant="standard"
+              aria-label={navExpanded ? "Collapse navigation" : "Expand navigation"}
+              onClick={() => setNavExpanded((prev) => !prev)}
+            />
+          </NavigationRail.Header>
+
+          <NavigationRail.Content>
+            {navItems.map((item) => (
+              <Link key={item.value} href={item.href} className="no-underline">
+                <NavigationRail.Item
+                  icon={item.icon}
+                  label={item.label}
+                  active={activeValue === item.value}
+                />
+              </Link>
+            ))}
+          </NavigationRail.Content>
+
+          <NavigationRail.Footer>
+            <IconButton
+              icon={dark ? "light_mode" : "dark_mode"}
+              variant="standard"
+              aria-label="Toggle theme"
+              onClick={toggleTheme}
+            />
+          </NavigationRail.Footer>
+        </NavigationRail>
 
         {/* Right side: header + content */}
         <div className={`transition-[margin-left] duration-300 ease-[cubic-bezier(0.2,0,0,1)] ${navExpanded ? "ml-90" : "ml-24"}`}>
-          {/* Header — AppBar spanning only the content area */}
           <AppBar
             className="sticky top-0 z-30"
             headline={
@@ -148,18 +92,8 @@ export default function RootLayout({
                 M3 Components
               </Link>
             }
-            trailingIcons={
-              <IconButton
-                variant="standard"
-                aria-label="Toggle theme"
-                onClick={toggleTheme}
-              >
-                <Icon name={dark ? "light_mode" : "dark_mode"} />
-              </IconButton>
-            }
           />
 
-          {/* Main content */}
           <main className="p-8 max-w-240">
             {children}
           </main>

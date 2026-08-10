@@ -42,6 +42,10 @@ import { Icon } from "./icon";
  *
  * States: 8% hover, 10% focus, 10% press
  * Animation: Active indicator slides between tabs (200ms M3 standard easing)
+ *
+ * @m3-audit VERIFIED — Tabs, TabList, Tab, TabContent all present with context (TabsContext).
+ * Controlled/uncontrolled state management via value/defaultValue/onValueChange. Complete per M3.
+ * No gaps found.
  */
 
 // --- Context ---
@@ -144,6 +148,39 @@ function TabList({ className, children }: TabListProps) {
     (child) => React.isValidElement(child) && (child.props as TabProps).icon
   );
 
+  // Keyboard navigation: ArrowLeft/ArrowRight within TabList
+  const handleKeyDown = React.useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      const tabs = Array.from(
+        container.querySelectorAll<HTMLButtonElement>('[role="tab"]:not([disabled])')
+      );
+      const currentIndex = tabs.indexOf(e.target as HTMLButtonElement);
+      if (currentIndex === -1) return;
+
+      let nextIndex: number | null = null;
+
+      if (e.key === "ArrowRight") {
+        nextIndex = (currentIndex + 1) % tabs.length;
+      } else if (e.key === "ArrowLeft") {
+        nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+      } else if (e.key === "Home") {
+        nextIndex = 0;
+      } else if (e.key === "End") {
+        nextIndex = tabs.length - 1;
+      }
+
+      if (nextIndex !== null) {
+        e.preventDefault();
+        tabs[nextIndex].focus();
+        tabs[nextIndex].click();
+      }
+    },
+    []
+  );
+
   // Update indicator position when active value changes
   React.useEffect(() => {
     const container = containerRef.current;
@@ -189,6 +226,7 @@ function TabList({ className, children }: TabListProps) {
     <div
       ref={containerRef}
       role="tablist"
+      onKeyDown={handleKeyDown}
       className={cn(
         "relative flex bg-surface border-b border-outline-variant",
         hasIcons ? "h-16" : "h-12",

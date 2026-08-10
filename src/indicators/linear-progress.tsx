@@ -66,8 +66,8 @@ const LinearProgress = React.forwardRef<HTMLDivElement, LinearProgressProps>(
           />
         ) : (
           <>
-            <div className="absolute inset-y-0 rounded-full bg-primary animate-[m3-linear-indeterminate-1_2s_ease-in-out_infinite]" />
-            <div className="absolute inset-y-0 rounded-full bg-primary animate-[m3-linear-indeterminate-2_2s_ease-in-out_0.8s_infinite]" />
+            <div className="absolute inset-y-0 left-0 w-full origin-left rounded-full bg-primary will-change-transform animate-[m3-linear-indeterminate-1_2s_ease-in-out_infinite]" />
+            <div className="absolute inset-y-0 left-0 w-full origin-left rounded-full bg-primary will-change-transform animate-[m3-linear-indeterminate-2_2s_ease-in-out_0.8s_infinite]" />
           </>
         )}
       </div>

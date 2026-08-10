@@ -243,15 +243,15 @@ select:-webkit-autofill:active {
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 @keyframes m3-linear-indeterminate-1 {
-  0% { left: -35%; width: 35%; }
-  60% { left: 100%; width: 35%; }
-  100% { left: 100%; width: 35%; }
+  0% { transform: translateX(-100%) scaleX(0.35); }
+  60% { transform: translateX(186%) scaleX(0.35); }
+  100% { transform: translateX(186%) scaleX(0.35); }
 }
 
 @keyframes m3-linear-indeterminate-2 {
-  0% { left: -100%; width: 35%; }
-  60% { left: 60%; width: 35%; }
-  100% { left: 100%; width: 35%; }
+  0% { transform: translateX(-186%) scaleX(0.35); }
+  60% { transform: translateX(86%) scaleX(0.35); }
+  100% { transform: translateX(186%) scaleX(0.35); }
 }
 
 @keyframes m3-circular-rotate {
