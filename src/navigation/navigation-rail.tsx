@@ -126,7 +126,7 @@ export function NavigationRail({
     onExpandedChange?.(next);
   };
 
-  // Determine if we have sections to show in expanded mode
+  // Determine if we have sections to show
   const hasSections = !!sections && sections.length > 0;
 
   return (
@@ -161,14 +161,15 @@ export function NavigationRail({
         </div>
       )}
 
-      {/* Content — expanded sections or collapsed icons */}
-      {isExpanded && hasSections ? (
-        <nav className="flex-1 flex flex-col w-full overflow-y-auto py-3 px-3" aria-label="Navigation rail">
+      {/* Content — single render path for sections, conditional for items-only */}
+      {hasSections ? (
+        <nav className="flex-1 flex flex-col w-full overflow-y-auto overflow-x-hidden py-3 px-3" aria-label="Navigation rail">
           {sections!.map((section) => (
-            <SectionItem
+            <MorphingSectionItem
               key={section.label}
               section={section}
               activeValue={active}
+              railExpanded={isExpanded}
               onSelect={handleChange}
               renderLink={renderLink}
             />
@@ -207,70 +208,135 @@ export function NavigationRail({
   );
 }
 
-/** Collapsible section for the expanded rail variant */
-function SectionItem({
+/**
+ * Single-render-path section item that morphs between expanded and collapsed states
+ * via CSS transitions. No conditional rendering — the same DOM elements exist in both states.
+ */
+function MorphingSectionItem({
   section,
   activeValue,
+  railExpanded,
   onSelect,
   renderLink,
 }: {
   section: NavigationRailSection;
   activeValue: string;
+  railExpanded: boolean;
   onSelect: (value: string) => void;
   renderLink?: NavigationRailProps["renderLink"];
 }) {
   const hasActiveChild = section.links.some((link) => link.value === activeValue);
 
-  const [isExpanded, setIsExpanded] = React.useState(hasActiveChild);
+  const [sectionOpen, setSectionOpen] = React.useState(hasActiveChild);
 
   // Auto-expand when active item changes into this section
   React.useEffect(() => {
     if (hasActiveChild) {
-      setIsExpanded(true);
+      setSectionOpen(true);
     }
   }, [hasActiveChild]);
 
+  const handleHeaderClick = () => {
+    if (railExpanded) {
+      setSectionOpen((prev) => !prev);
+    } else {
+      // In collapsed state, clicking a section item triggers expand
+      onSelect(section.links[0]?.value ?? section.label);
+    }
+  };
+
   return (
     <div className="mb-1">
-      {/* Section header — 56dp height */}
+      {/* Section header — morphs between horizontal (expanded) and vertical (collapsed) */}
       <button
-        onClick={() => setIsExpanded((prev) => !prev)}
+        onClick={handleHeaderClick}
         className={cn(
-          "group relative w-full flex items-center gap-3 px-4 h-14 rounded-full text-[14px] leading-5 font-medium tracking-[0.1px] transition-colors duration-200 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary",
-          hasActiveChild
-            ? "text-primary"
-            : "text-surface-variant-foreground"
+          "group relative flex transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)] cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary",
+          railExpanded
+            ? "flex-row items-center gap-3 px-4 h-14 w-full rounded-full"
+            : "flex-col items-center justify-center gap-1 w-18 min-h-16 mx-auto rounded-2xl"
         )}
-        aria-expanded={isExpanded}
+        aria-expanded={railExpanded ? sectionOpen : undefined}
       >
         {/* State layer */}
-        <span className="absolute inset-0 rounded-full transition-colors duration-200 group-hover:bg-[hsl(var(--on-surface)/0.08)] group-focus-visible:bg-[hsl(var(--on-surface)/0.10)]" />
+        <span
+          className={cn(
+            "absolute inset-0 transition-colors duration-200",
+            railExpanded ? "rounded-full" : "rounded-2xl",
+            "group-hover:bg-[hsl(var(--on-surface)/0.08)] group-focus-visible:bg-[hsl(var(--on-surface)/0.10)]"
+          )}
+        />
 
+        {/* Active indicator for collapsed state — 56×32dp pill behind icon */}
+        <span
+          className={cn(
+            "absolute transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)] rounded-full bg-secondary-container origin-center",
+            railExpanded
+              ? "inset-0 scale-x-0 opacity-0"
+              : hasActiveChild
+                ? "top-1/2 left-1/2 -translate-x-1/2 -translate-y-4.5 w-14 h-8 scale-x-100 opacity-100"
+                : "top-1/2 left-1/2 -translate-x-1/2 -translate-y-4.5 w-14 h-8 scale-x-0 opacity-0"
+          )}
+        />
+
+        {/* Icon */}
         <Icon
           name={section.icon}
           size={24}
           filled={hasActiveChild}
           className={cn(
-            "relative z-10 shrink-0",
-            hasActiveChild ? "text-primary" : "text-surface-variant-foreground"
+            "relative z-10 shrink-0 transition-colors duration-200",
+            hasActiveChild
+              ? railExpanded ? "text-primary" : "text-secondary-container-foreground"
+              : "text-surface-variant-foreground"
           )}
         />
-        <span className="relative z-10 flex-1 text-left truncate">{section.label}</span>
+
+        {/* Expanded label — fades/clips away when collapsed */}
+        <span
+          className={cn(
+            "relative z-10 flex-1 text-left truncate text-[14px] leading-5 font-medium tracking-[0.1px] transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)] whitespace-nowrap",
+            railExpanded
+              ? "opacity-100 max-w-full"
+              : "opacity-0 max-w-0 overflow-hidden h-0",
+            hasActiveChild ? "text-primary" : "text-surface-variant-foreground"
+          )}
+        >
+          {section.label}
+        </span>
+
+        {/* Collapsed label — appears below icon when collapsed */}
+        <span
+          className={cn(
+            "relative z-10 text-[12px] leading-4 font-medium tracking-[0.5px] truncate max-w-full text-center transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
+            railExpanded
+              ? "opacity-0 h-0 overflow-hidden absolute"
+              : "opacity-100",
+            hasActiveChild ? "text-secondary" : "text-surface-variant-foreground"
+          )}
+        >
+          {section.label}
+        </span>
+
+        {/* Chevron — only visible in expanded state */}
         <Icon
           name="expand_more"
           size={20}
           className={cn(
-            "relative z-10 text-surface-variant-foreground transition-transform duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
-            isExpanded ? "rotate-180" : ""
+            "relative z-10 text-surface-variant-foreground transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
+            railExpanded
+              ? "opacity-100 w-5 h-5"
+              : "opacity-0 w-0 h-0 overflow-hidden",
+            railExpanded && sectionOpen ? "rotate-180" : ""
           )}
         />
       </button>
 
-      {/* Sub-items — collapsible with grid-rows animation */}
+      {/* Sub-items — grid animate closed when rail collapses OR section is closed */}
       <div
         className={cn(
           "grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
-          isExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+          railExpanded && sectionOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
         )}
       >
         <div className="overflow-hidden min-h-0">
