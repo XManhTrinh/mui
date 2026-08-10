@@ -139,9 +139,12 @@ export function NavigationRail({
       )}
       aria-label="Main navigation"
     >
-      {/* Header — burger menu toggle (always at left edge) */}
+      {/* Header — burger menu toggle (centered in collapsed, left-aligned in expanded) */}
       {collapsible && (
-        <div className="flex items-start w-full shrink-0 px-3 pt-3 pb-2">
+        <div className={cn(
+          "flex w-full shrink-0 pt-3 pb-2",
+          isExpanded ? "items-start px-3" : "items-center justify-center"
+        )}>
           <button
             onClick={toggleExpanded}
             className="relative flex items-center justify-center w-12 h-12 shrink-0 rounded-full cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-hidden before:absolute before:inset-0 before:rounded-full before:bg-current before:opacity-0 before:transition-opacity before:duration-200 hover:before:opacity-[0.08] active:before:opacity-[0.10]"
