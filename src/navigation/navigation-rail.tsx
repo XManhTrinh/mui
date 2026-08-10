@@ -267,15 +267,14 @@ function MorphingSectionItem({
           )}
         />
 
-        {/* Active indicator for collapsed state — 56×32dp pill behind icon */}
+        {/* Active indicator pill — morphs between expanded (full width) and collapsed (56×32dp centered behind icon) */}
         <span
           className={cn(
-            "absolute transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)] rounded-full bg-secondary-container origin-center",
+            "absolute rounded-full bg-secondary-container transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
+            hasActiveChild ? "opacity-100" : "opacity-0 scale-x-0",
             railExpanded
-              ? "inset-0 scale-x-0 opacity-0"
-              : hasActiveChild
-                ? "top-1/2 left-1/2 -translate-x-1/2 -translate-y-4.5 w-14 h-8 scale-x-100 opacity-100"
-                : "top-1/2 left-1/2 -translate-x-1/2 -translate-y-4.5 w-14 h-8 scale-x-0 opacity-0"
+              ? "inset-0"
+              : "top-1/2 left-1/2 -translate-x-1/2 -translate-y-4.5 w-14 h-8"
           )}
         />
 
