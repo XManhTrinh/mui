@@ -84,7 +84,7 @@ export interface NavigationRailHeaderProps {
 
 function NavigationRailHeader({ className, children }: NavigationRailHeaderProps) {
   return (
-    <div className={cn("flex items-center shrink-0 px-3 pt-3 pb-2", className)}>
+    <div className={cn("flex items-center justify-center shrink-0 px-3 pt-3 pb-10", className)}>
       {children}
     </div>
   );
@@ -98,13 +98,18 @@ export interface NavigationRailContentProps {
 }
 
 function NavigationRailContent({ className, children }: NavigationRailContentProps) {
+  const { expanded } = useNavigationRail();
+
   return (
-    <nav
-      className={cn("flex-1 flex flex-col gap-1 overflow-y-auto overflow-x-hidden py-2 px-3", className)}
-      aria-label="Navigation"
+    <div
+      className={cn(
+        "flex-1 flex flex-col overflow-y-auto overflow-x-hidden",
+        expanded ? "gap-0 px-3" : "gap-1 px-0",
+        className
+      )}
     >
       {children}
-    </nav>
+    </div>
   );
 }
 
@@ -117,7 +122,7 @@ export interface NavigationRailFooterProps {
 
 function NavigationRailFooter({ className, children }: NavigationRailFooterProps) {
   return (
-    <div className={cn("flex items-center shrink-0 px-3 pb-3 pt-2", className)}>
+    <div className={cn("flex items-center justify-center shrink-0 px-3 pb-3 pt-2", className)}>
       {children}
     </div>
   );
@@ -162,7 +167,8 @@ function NavigationRailItem({
       aria-selected={active}
       onClick={onClick}
       className={cn(
-        "group relative flex flex-col items-center w-full cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full",
+        "group relative flex flex-col items-center justify-center w-full cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full",
+        expanded ? "py-0" : "pt-1 pb-1",
         className
       )}
     >
@@ -179,8 +185,8 @@ function NavigationRailItem({
         {/* Active indicator — scales from center outward */}
         <span
           className={cn(
-            "absolute inset-0 rounded-full bg-secondary-container origin-center transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
-            active ? "opacity-100 scale-100" : "opacity-0 scale-x-0 scale-y-75"
+            "absolute inset-0 rounded-full bg-secondary-container origin-center transition-transform duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
+            active ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
           )}
         />
         {/* State layer */}
@@ -226,11 +232,11 @@ function NavigationRailItem({
       {/* Second label — below pill, appears from behind icon when collapsed */}
       <span
         className={cn(
-          "relative z-10 text-[12px] leading-4 font-medium tracking-[0.5px] truncate text-center self-center overflow-hidden",
-          "transition-[opacity,max-height,transform] duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
+          "relative z-10 block text-[14px] leading-5 font-medium tracking-[0.1px] truncate text-center overflow-hidden",
+          "transition-[opacity,transform,height] duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
           expanded
-            ? "opacity-0 max-h-0 -translate-y-2"
-            : "opacity-100 max-h-4 translate-y-0 mt-1",
+            ? "opacity-0 -translate-y-4 h-0"
+            : "opacity-100 translate-y-0 h-5 mt-1",
           active
             ? "text-secondary"
             : "text-surface-variant-foreground"
