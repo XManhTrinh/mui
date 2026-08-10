@@ -73,6 +73,45 @@ export default function NavigationBarPage() {
           </div>
         </Showcase>
       </section>
+
+      {/* ─── Composable API ─────────────────────────────────────────────── */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">Composable API</h2>
+        <p className="text-[14px] leading-5 text-surface-variant-foreground">
+          The composable API uses <code>NavigationBar.Item</code> sub-components
+          as children instead of a data-driven <code>items</code> array. This
+          gives you more flexibility for custom rendering and per-item logic.
+        </p>
+
+        <Showcase
+          title="Composable — Basic Navigation"
+          className="flex-col items-stretch"
+          code={`<NavigationBar value={active} onValueChange={setActive}>\n  <NavigationBar.Item value="home" icon="home" label="Home" />\n  <NavigationBar.Item value="search" icon="search" label="Search" />\n  <NavigationBar.Item value="profile" icon="person" label="Profile" />\n</NavigationBar>`}
+        >
+          <div className="relative h-20">
+            <NavigationBar value={active} onValueChange={setActive} className="relative!">
+              <NavigationBar.Item value="home" icon="home" label="Home" />
+              <NavigationBar.Item value="search" icon="search" label="Search" />
+              <NavigationBar.Item value="profile" icon="person" label="Profile" />
+            </NavigationBar>
+          </div>
+        </Showcase>
+
+        <Showcase
+          title="Composable — With Badges"
+          className="flex-col items-stretch"
+          code={`<NavigationBar value={active} onValueChange={setActive}>\n  <NavigationBar.Item value="home" icon="home" label="Home" />\n  <NavigationBar.Item value="search" icon="search" label="Search" badge="dot" />\n  <NavigationBar.Item value="notifications" icon="notifications" label="Alerts" badge={5} />\n  <NavigationBar.Item value="profile" icon="person" label="Profile" badge={3} />\n</NavigationBar>`}
+        >
+          <div className="relative h-20">
+            <NavigationBar value={active} onValueChange={setActive} className="relative!">
+              <NavigationBar.Item value="home" icon="home" label="Home" />
+              <NavigationBar.Item value="search" icon="search" label="Search" badge="dot" />
+              <NavigationBar.Item value="notifications" icon="notifications" label="Alerts" badge={5} />
+              <NavigationBar.Item value="profile" icon="person" label="Profile" badge={3} />
+            </NavigationBar>
+          </div>
+        </Showcase>
+      </section>
     </div>
   );
 }

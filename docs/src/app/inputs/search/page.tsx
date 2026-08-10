@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Search, Icon } from "@mui/index";
+import { Search, Icon, IconButton } from "@mui/index";
 import { Showcase } from "@/components/showcase";
 
 export default function SearchPage() {
@@ -48,6 +48,56 @@ export default function SearchPage() {
             placeholder="Search messages..."
             leadingIcon="search"
           />
+        </Showcase>
+      </section>
+
+      {/* ─── Composable API ─────────────────────────────────────────────── */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">Composable API</h2>
+        <p className="text-[14px] leading-5 text-surface-variant-foreground">
+          The composable API uses <code>Search.LeadingIcon</code>,{" "}
+          <code>Search.Input</code>, and <code>Search.TrailingIcon</code>{" "}
+          sub-components for full control over each slot. This enables custom
+          icons, buttons, or avatars in the leading and trailing positions.
+        </p>
+
+        <Showcase
+          title="Composable — Custom Icons"
+          code={`<Search value={query} onValueChange={setQuery}>\n  <Search.LeadingIcon>\n    <Icon name="search" size={24} />\n  </Search.LeadingIcon>\n  <Search.Input placeholder="Search items..." />\n  <Search.TrailingIcon>\n    <IconButton variant="standard" size="xs" aria-label="Voice search">\n      <Icon name="mic" />\n    </IconButton>\n  </Search.TrailingIcon>\n</Search>`}
+        >
+          <Search value={query} onValueChange={setQuery}>
+            <Search.LeadingIcon>
+              <Icon name="search" size={24} />
+            </Search.LeadingIcon>
+            <Search.Input placeholder="Search items..." />
+            <Search.TrailingIcon>
+              <IconButton variant="standard" size="xs" aria-label="Voice search">
+                <Icon name="mic" />
+              </IconButton>
+            </Search.TrailingIcon>
+          </Search>
+        </Showcase>
+
+        <Showcase
+          title="Composable — With Clear Button"
+          code={`<Search value={query} onValueChange={setQuery}>\n  <Search.LeadingIcon>\n    <Icon name="search" size={24} />\n  </Search.LeadingIcon>\n  <Search.Input placeholder="Type to search..." />\n  <Search.TrailingIcon>\n    <IconButton\n      variant="standard"\n      size="xs"\n      aria-label="Clear"\n      onClick={() => setQuery("")}\n    >\n      <Icon name="close" />\n    </IconButton>\n  </Search.TrailingIcon>\n</Search>`}
+        >
+          <Search value={query} onValueChange={setQuery}>
+            <Search.LeadingIcon>
+              <Icon name="search" size={24} />
+            </Search.LeadingIcon>
+            <Search.Input placeholder="Type to search..." />
+            <Search.TrailingIcon>
+              <IconButton
+                variant="standard"
+                size="xs"
+                aria-label="Clear"
+                onClick={() => setQuery("")}
+              >
+                <Icon name="close" />
+              </IconButton>
+            </Search.TrailingIcon>
+          </Search>
         </Showcase>
       </section>
     </div>

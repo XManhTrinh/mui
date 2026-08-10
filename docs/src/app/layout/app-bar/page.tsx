@@ -87,6 +87,60 @@ export default function AppBarPage() {
           />
         </Showcase>
       </section>
+
+      {/* ─── Composable API ─────────────────────────────────────────────── */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">Composable API</h2>
+        <p className="text-[14px] leading-5 text-surface-variant-foreground">
+          The composable compound component API gives you full control over the
+          AppBar layout using <code>AppBar.Leading</code>,{" "}
+          <code>AppBar.Headline</code>, and <code>AppBar.Trailing</code>{" "}
+          sub-components. This is ideal when you need custom content in each slot.
+        </p>
+
+        <Showcase
+          title="Composable — Navigation & Actions"
+          className="flex-col items-stretch"
+          code={`<AppBar elevated>\n  <AppBar.Leading>\n    <IconButton variant="standard" aria-label="Menu">\n      <Icon name="menu" />\n    </IconButton>\n  </AppBar.Leading>\n  <AppBar.Headline subtitle="3 new messages">Inbox</AppBar.Headline>\n  <AppBar.Trailing>\n    <IconButton variant="standard" aria-label="Search">\n      <Icon name="search" />\n    </IconButton>\n    <IconButton variant="standard" aria-label="More">\n      <Icon name="more_vert" />\n    </IconButton>\n  </AppBar.Trailing>\n</AppBar>`}
+        >
+          <AppBar elevated>
+            <AppBar.Leading>
+              <IconButton variant="standard" aria-label="Menu">
+                <Icon name="menu" />
+              </IconButton>
+            </AppBar.Leading>
+            <AppBar.Headline subtitle="3 new messages">Inbox</AppBar.Headline>
+            <AppBar.Trailing>
+              <IconButton variant="standard" aria-label="Search">
+                <Icon name="search" />
+              </IconButton>
+              <IconButton variant="standard" aria-label="More">
+                <Icon name="more_vert" />
+              </IconButton>
+            </AppBar.Trailing>
+          </AppBar>
+        </Showcase>
+
+        <Showcase
+          title="Composable — Centered with Back Navigation"
+          className="flex-col items-stretch"
+          code={`<AppBar centered>\n  <AppBar.Leading>\n    <IconButton variant="standard" aria-label="Back">\n      <Icon name="arrow_back" />\n    </IconButton>\n  </AppBar.Leading>\n  <AppBar.Headline>Settings</AppBar.Headline>\n  <AppBar.Trailing>\n    <IconButton variant="standard" aria-label="Save">\n      <Icon name="check" />\n    </IconButton>\n  </AppBar.Trailing>\n</AppBar>`}
+        >
+          <AppBar centered>
+            <AppBar.Leading>
+              <IconButton variant="standard" aria-label="Back">
+                <Icon name="arrow_back" />
+              </IconButton>
+            </AppBar.Leading>
+            <AppBar.Headline>Settings</AppBar.Headline>
+            <AppBar.Trailing>
+              <IconButton variant="standard" aria-label="Save">
+                <Icon name="check" />
+              </IconButton>
+            </AppBar.Trailing>
+          </AppBar>
+        </Showcase>
+      </section>
     </div>
   );
 }

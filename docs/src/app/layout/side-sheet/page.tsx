@@ -7,6 +7,8 @@ import { Showcase } from "@/components/showcase";
 export default function SideSheetPage() {
   const [rightOpen, setRightOpen] = React.useState(false);
   const [leftOpen, setLeftOpen] = React.useState(false);
+  const [composableRight, setComposableRight] = React.useState(false);
+  const [composableLeft, setComposableLeft] = React.useState(false);
 
   return (
     <div className="max-w-4xl space-y-8">
@@ -62,6 +64,83 @@ export default function SideSheetPage() {
                 <span className="text-[14px] text-surface-foreground">Settings</span>
               </div>
             </div>
+          </SideSheet>
+        </Showcase>
+      </section>
+
+      {/* ─── Composable API ─────────────────────────────────────────────── */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">Composable API</h2>
+        <p className="text-[14px] leading-5 text-surface-variant-foreground">
+          The composable API uses <code>SideSheet.Header</code>,{" "}
+          <code>SideSheet.Content</code>, and <code>SideSheet.Actions</code>{" "}
+          sub-components for structured layouts with header, scrollable content,
+          and a fixed action bar at the bottom.
+        </p>
+
+        <Showcase
+          title="Composable — Filters Panel"
+          code={`<SideSheet open={open} onOpenChange={setOpen} side="right">\n  <SideSheet.Header headline="Filters" showClose />\n  <SideSheet.Content>\n    <p>Filter options go here...</p>\n  </SideSheet.Content>\n  <SideSheet.Actions>\n    <Button variant="outlined">Reset</Button>\n    <Button variant="filled">Apply</Button>\n  </SideSheet.Actions>\n</SideSheet>`}
+        >
+          <Button variant="filled" onClick={() => setComposableRight(true)}>
+            Open Composable Sheet
+          </Button>
+          <SideSheet open={composableRight} onOpenChange={setComposableRight} side="right">
+            <SideSheet.Header headline="Filters" showClose />
+            <SideSheet.Content>
+              <div className="space-y-4">
+                <p className="text-sm text-surface-variant-foreground">
+                  Narrow your results using the filters below.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <Button variant="tonal" size="s">All</Button>
+                  <Button variant="outlined" size="s">Photos</Button>
+                  <Button variant="outlined" size="s">Videos</Button>
+                  <Button variant="outlined" size="s">Documents</Button>
+                </div>
+              </div>
+            </SideSheet.Content>
+            <SideSheet.Actions>
+              <Button variant="outlined" onClick={() => setComposableRight(false)}>Reset</Button>
+              <Button variant="filled" onClick={() => setComposableRight(false)}>Apply</Button>
+            </SideSheet.Actions>
+          </SideSheet>
+        </Showcase>
+
+        <Showcase
+          title="Composable — Details Panel (Left)"
+          code={`<SideSheet open={open} onOpenChange={setOpen} side="left">\n  <SideSheet.Header headline="Item Details" showClose />\n  <SideSheet.Content>\n    <p>Detailed information...</p>\n  </SideSheet.Content>\n  <SideSheet.Actions>\n    <Button variant="outlined">Close</Button>\n    <Button variant="filled">Save</Button>\n  </SideSheet.Actions>\n</SideSheet>`}
+        >
+          <Button variant="outlined" onClick={() => setComposableLeft(true)}>
+            Open Details Panel
+          </Button>
+          <SideSheet open={composableLeft} onOpenChange={setComposableLeft} side="left">
+            <SideSheet.Header headline="Item Details" showClose />
+            <SideSheet.Content>
+              <div className="space-y-3">
+                <p className="text-sm text-surface-variant-foreground">
+                  View and edit the details for this item.
+                </p>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-surface-variant-foreground">Created</span>
+                    <span className="text-surface-foreground">Jan 15, 2024</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-surface-variant-foreground">Modified</span>
+                    <span className="text-surface-foreground">Mar 2, 2024</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-surface-variant-foreground">Size</span>
+                    <span className="text-surface-foreground">2.4 MB</span>
+                  </div>
+                </div>
+              </div>
+            </SideSheet.Content>
+            <SideSheet.Actions>
+              <Button variant="outlined" onClick={() => setComposableLeft(false)}>Close</Button>
+              <Button variant="filled" onClick={() => setComposableLeft(false)}>Save</Button>
+            </SideSheet.Actions>
           </SideSheet>
         </Showcase>
       </section>

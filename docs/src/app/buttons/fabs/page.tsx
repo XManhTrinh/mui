@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { FAB, ExtendedFAB, Icon } from "@mui/index";
+import { FAB, ExtendedFAB, FABMenu, Icon } from "@mui/index";
 import { Showcase } from "@/components/showcase";
 
 export default function FABsPage() {
@@ -50,6 +50,42 @@ export default function FABsPage() {
       <Showcase title="Extended FAB without Icon" code={`<ExtendedFAB size="medium" icon={null} label="No Icon" />`}>
         <ExtendedFAB size="medium" icon={null} label="No Icon" />
       </Showcase>
+
+      {/* Props Table */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">FABMenu — Composable API</h2>
+        <p className="text-[14px] leading-5 text-surface-variant-foreground">
+          The <code>FABMenu</code> component provides a speed-dial overlay that
+          opens from a FAB to display related actions. The composable API uses{" "}
+          <code>FABMenu.Item</code> sub-components instead of a data-driven{" "}
+          <code>items</code> array, giving you more control over each action item.
+        </p>
+
+        <Showcase
+          title="FABMenu — Composable Items"
+          code={`<FABMenu triggerIcon={<Icon name="add" />} triggerLabel="Actions">\n  <FABMenu.Item icon={<Icon name="edit" />} label="Edit" onClick={() => {}} />\n  <FABMenu.Item icon={<Icon name="share" />} label="Share" onClick={() => {}} />\n  <FABMenu.Item icon={<Icon name="delete" />} label="Delete" onClick={() => {}} />\n</FABMenu>`}
+        >
+          <FABMenu triggerIcon={<Icon name="add" />} triggerLabel="Actions">
+            <FABMenu.Item icon={<Icon name="edit" />} label="Edit" onClick={() => {}} />
+            <FABMenu.Item icon={<Icon name="share" />} label="Share" onClick={() => {}} />
+            <FABMenu.Item icon={<Icon name="delete" />} label="Delete" onClick={() => {}} />
+          </FABMenu>
+        </Showcase>
+
+        <Showcase
+          title="FABMenu — Secondary Color"
+          code={`<FABMenu\n  triggerIcon={<Icon name="more_vert" />}\n  triggerLabel="More actions"\n  colorSet="secondary"\n>\n  <FABMenu.Item icon={<Icon name="bookmark" />} label="Save" onClick={() => {}} />\n  <FABMenu.Item icon={<Icon name="content_copy" />} label="Copy" onClick={() => {}} />\n</FABMenu>`}
+        >
+          <FABMenu
+            triggerIcon={<Icon name="more_vert" />}
+            triggerLabel="More actions"
+            colorSet="secondary"
+          >
+            <FABMenu.Item icon={<Icon name="bookmark" />} label="Save" onClick={() => {}} />
+            <FABMenu.Item icon={<Icon name="content_copy" />} label="Copy" onClick={() => {}} />
+          </FABMenu>
+        </Showcase>
+      </section>
 
       {/* Props Table */}
       <section className="space-y-4">
