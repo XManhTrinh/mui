@@ -169,18 +169,18 @@ function NavigationRailItem({
       {/* Pill — contains indicator, state layer, icon, mainlabel */}
       <span
         className={cn(
-          "relative flex items-center w-full rounded-full overflow-hidden",
+          "relative flex items-center w-full rounded-full",
           "transition-[height,padding,gap,max-width] duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
           expanded
-            ? "h-14 px-4 gap-3 max-w-full"
+            ? "h-14 px-4 gap-3 max-w-full overflow-hidden"
             : "h-8 px-4 gap-0 max-w-14"
         )}
       >
-        {/* Active indicator */}
+        {/* Active indicator — scales from center outward */}
         <span
           className={cn(
-            "absolute inset-0 rounded-full bg-secondary-container transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
-            active ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
+            "absolute inset-0 rounded-full bg-secondary-container origin-center transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
+            active ? "opacity-100 scale-100" : "opacity-0 scale-x-0 scale-y-75"
           )}
         />
         {/* State layer */}
