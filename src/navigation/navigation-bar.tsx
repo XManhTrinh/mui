@@ -81,7 +81,7 @@ const NavigationBarItem = React.forwardRef<HTMLButtonElement, NavigationBarItemP
         )}
       >
         {/* Indicator container */}
-        <div className="relative flex items-center justify-center w-16 h-8">
+        <div className="relative flex items-center justify-center w-14 h-8">
           {/* Active indicator pill — animates from center outward */}
           <div
             className={cn(
@@ -250,7 +250,7 @@ function NavigationBarRoot({
                   className="group relative flex w-full flex-col items-center justify-center gap-1 h-16 min-h-12 outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
                 >
                   {/* Indicator container */}
-                  <div className="relative flex items-center justify-center w-16 h-8">
+                  <div className="relative flex items-center justify-center w-14 h-8">
                     {/* Active indicator pill */}
                     <div
                       className={cn(

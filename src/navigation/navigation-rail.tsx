@@ -100,7 +100,7 @@ export interface NavigationRailContentProps {
 function NavigationRailContent({ className, children }: NavigationRailContentProps) {
   return (
     <nav
-      className={cn("flex-1 flex flex-col overflow-y-auto overflow-x-hidden py-2 px-3", className)}
+      className={cn("flex-1 flex flex-col gap-1 overflow-y-auto overflow-x-hidden py-2 px-3", className)}
       aria-label="Navigation"
     >
       {children}
@@ -179,8 +179,8 @@ function NavigationRailItem({
         {/* Active indicator */}
         <span
           className={cn(
-            "absolute inset-0 rounded-full bg-secondary-container transition-opacity duration-200",
-            active ? "opacity-100" : "opacity-0"
+            "absolute inset-0 rounded-full bg-secondary-container transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
+            active ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
           )}
         />
         {/* State layer */}
