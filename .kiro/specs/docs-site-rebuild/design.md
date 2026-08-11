@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `@strata/mui` docs site is a Next.js App Router site that documents the M3 Expressive component library. The rebuild standardizes all component pages to exclusively use the composable compound component API (for components that support it), removes all legacy prop-based examples, ensures the entire site is built with MUI components (no raw HTML or third-party UI libraries for UI elements), and adds interactive playgrounds plus accessibility notes to every component page.
+The `@vkieu/mui` docs site is a Next.js App Router site that documents the M3 Expressive component library. The rebuild standardizes all component pages to exclusively use the composable compound component API (for components that support it), removes all legacy prop-based examples, ensures the entire site is built with MUI components (no raw HTML or third-party UI libraries for UI elements), and adds interactive playgrounds plus accessibility notes to every component page.
 
 The site shell (NavigationRail, AppBar, layout) already uses MUI components and stays as-is. The work focuses on updating compound-component pages (AppBar, NavigationBar, Search, BottomSheet, SideSheet, FABMenu) and establishing a consistent page template that every component page follows: description, live examples via `Showcase`, interactive playground via `Playground`, props table, and accessibility notes.
 

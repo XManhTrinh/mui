@@ -1,4 +1,4 @@
-# @strata/mui
+# @vkieu/mui
 
 Material Design 3 Expressive component library for React & Next.js.
 
@@ -71,7 +71,7 @@ Add the M3 theme CSS file to your project's main stylesheet (e.g. `globals.css` 
 
 ```css
 @import "tailwindcss";
-@import "@strata/mui/theme.css";
+@import "@vkieu/mui/theme.css";
 ```
 
 This single file provides all M3 color tokens, elevation shadows, shape scale, Tailwind v4 `@theme` color mappings, keyframes, and animation utilities for both light and dark modes.
@@ -85,18 +85,18 @@ In **Tailwind v4**, you must explicitly tell Tailwind to scan the package's sour
 ```css
 /* app/globals.css (or wherever your main CSS file lives) */
 @import "tailwindcss";
-@import "@strata/mui/theme.css";
-@source "../../node_modules/@strata/mui/src";
+@import "@vkieu/mui/theme.css";
+@source "../../node_modules/@vkieu/mui/src";
 ```
 
 Adjust the relative path based on where your CSS file is relative to `node_modules`. For example:
 
 | CSS file location | `@source` path |
 |---|---|
-| `src/app/globals.css` | `../../node_modules/@strata/mui/src` |
-| `src/globals.css` | `../node_modules/@strata/mui/src` |
-| `styles/main.css` | `../node_modules/@strata/mui/src` |
-| `app/globals.css` | `../node_modules/@strata/mui/src` |
+| `src/app/globals.css` | `../../node_modules/@vkieu/mui/src` |
+| `src/globals.css` | `../node_modules/@vkieu/mui/src` |
+| `styles/main.css` | `../node_modules/@vkieu/mui/src` |
+| `app/globals.css` | `../node_modules/@vkieu/mui/src` |
 
 Without this, you'll see unstyled components because Tailwind won't generate the utility classes used inside the library.
 
@@ -139,7 +139,7 @@ All components automatically adapt via the dark-mode token overrides in `theme.c
 ### Basic buttons
 
 ```tsx
-import { Button, IconButton, Icon } from "@strata/mui";
+import { Button, IconButton, Icon } from "@vkieu/mui";
 
 function Actions() {
   return (
@@ -160,7 +160,7 @@ function Actions() {
 ### Card with content
 
 ```tsx
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Button } from "@strata/mui";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Button } from "@vkieu/mui";
 
 function ProductCard() {
   return (
@@ -187,7 +187,7 @@ import {
   Dialog, DialogTrigger, DialogContent,
   DialogHeader, DialogTitle, DialogDescription,
   DialogFooter, DialogClose, Button
-} from "@strata/mui";
+} from "@vkieu/mui";
 
 function ConfirmDialog() {
   return (
@@ -217,7 +217,7 @@ function ConfirmDialog() {
 ### Navigation
 
 ```tsx
-import { NavigationBar, NavigationRail, FAB, Icon } from "@strata/mui";
+import { NavigationBar, NavigationRail, FAB, Icon } from "@vkieu/mui";
 
 // Bottom navigation (mobile)
 <NavigationBar
@@ -244,7 +244,7 @@ import { NavigationBar, NavigationRail, FAB, Icon } from "@strata/mui";
 ### Form elements
 
 ```tsx
-import { TextField, Switch, Checkbox, Radio, RadioGroup, Chip, Slider } from "@strata/mui";
+import { TextField, Switch, Checkbox, Radio, RadioGroup, Chip, Slider } from "@vkieu/mui";
 
 function FormExample() {
   return (
@@ -271,7 +271,7 @@ function FormExample() {
 ### Snackbar
 
 ```tsx
-import { SnackbarProvider, useSnackbar, Button } from "@strata/mui";
+import { SnackbarProvider, useSnackbar, Button } from "@vkieu/mui";
 
 function App() {
   return (
@@ -298,7 +298,7 @@ function Content() {
 ### Tabs
 
 ```tsx
-import { Tabs, TabList, Tab, TabContent } from "@strata/mui";
+import { Tabs, TabList, Tab, TabContent } from "@vkieu/mui";
 
 function TabExample() {
   return (

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This plan systematically audits and remediates the `@strata/mui` component library against M3 Expressive specifications, WCAG 2.1 AA accessibility, performance patterns, and code quality standards. Each task audits a component group against the design spec reference values, fixes any gaps found, and verifies the fix compiles.
+This plan systematically audits and remediates the `@vkieu/mui` component library against M3 Expressive specifications, WCAG 2.1 AA accessibility, performance patterns, and code quality standards. Each task audits a component group against the design spec reference values, fixes any gaps found, and verifies the fix compiles.
 
 ## Tasks
 

@@ -2,13 +2,13 @@
 
 ## Introduction
 
-This document specifies the requirements for a comprehensive staff-engineer-level production audit of the `@strata/mui` Material Design 3 component library. The audit covers M3 spec compliance, accessibility (WCAG 2.1 AA), theming architecture, performance optimization, Next.js/React best practices, and code quality standards across all 40+ components. The goal is to identify and resolve all gaps between the current implementation and production-ready quality.
+This document specifies the requirements for a comprehensive staff-engineer-level production audit of the `@vkieu/mui` Material Design 3 component library. The audit covers M3 spec compliance, accessibility (WCAG 2.1 AA), theming architecture, performance optimization, Next.js/React best practices, and code quality standards across all 40+ components. The goal is to identify and resolve all gaps between the current implementation and production-ready quality.
 
 ## Glossary
 
 - **M3**: Material Design 3 — Google's latest design system specification
 - **M3_Expressive**: The expressive variant of M3 with enhanced motion, shapes, and colors
-- **Component_Library**: The `@strata/mui` package containing all React components in `mui/src`
+- **Component_Library**: The `@vkieu/mui` package containing all React components in `mui/src`
 - **Theme_System**: The CSS custom property architecture defined in `theme.css`
 - **State_Layer**: Semi-transparent overlay on interactive elements (hover 8%, focus 10%, press 10%, drag 16%)
 - **Touch_Target**: Minimum interactive area (48dp per M3 spec)
@@ -224,7 +224,7 @@ This document specifies the requirements for a comprehensive staff-engineer-leve
 4. THE Theme_System SHALL define elevation tokens (levels 1-5) as shadow opacity values
 5. THE Theme_System SHALL define state layer opacity tokens (hover, focus, press) as CSS custom properties
 6. THE Theme_System SHALL propagate surface background color via `--m3-surface-bg` for components that need it (TextField label background)
-7. THE Theme_System SHALL provide a single-file import (`@import "@strata/mui/theme.css"`) that delivers all tokens, keyframes, and utility classes
+7. THE Theme_System SHALL provide a single-file import (`@import "@vkieu/mui/theme.css"`) that delivers all tokens, keyframes, and utility classes
 8. THE Theme_System SHALL map CSS variable tokens to Tailwind v4 color utilities via `@theme` block
 
 ### Requirement 15: Performance — React Optimization

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This design document defines the architecture and methodology for a comprehensive M3 Expressive production audit of the `@strata/mui` component library. The audit systematically verifies that all 40+ components conform to the M3 Expressive specification (as documented at [m3.material.io](https://m3.material.io/components)), WCAG 2.1 AA accessibility standards, and production-grade React/Next.js patterns.
+This design document defines the architecture and methodology for a comprehensive M3 Expressive production audit of the `@vkieu/mui` component library. The audit systematically verifies that all 40+ components conform to the M3 Expressive specification (as documented at [m3.material.io](https://m3.material.io/components)), WCAG 2.1 AA accessibility standards, and production-grade React/Next.js patterns.
 
 The library already implements many M3 Expressive features (5-size scale, shape morph, enhanced motion). This audit validates correctness of existing implementations and identifies remaining gaps.
 
