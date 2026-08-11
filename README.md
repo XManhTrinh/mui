@@ -30,13 +30,13 @@ npx vercel
 
 ```bash
 # From GitHub (pnpm)
-pnpm add github:XManhTrinh/mui
+pnpm add github:VKieuGroup/mui
 
 # npm
-npm install github:XManhTrinh/mui
+npm install github:VKieuGroup/mui
 
 # yarn
-yarn add github:XManhTrinh/mui
+yarn add github:VKieuGroup/mui
 ```
 
 ## Peer Dependencies
@@ -628,4 +628,4 @@ Buttons and icon buttons morph their border-radius on press (reduced by ~20–30
 
 ## License
 
-MIT — [XManhTrinh/mui](https://github.com/XManhTrinh/mui)
+MIT — [VKieuGroup/mui](https://github.com/VKieuGroup/mui)
