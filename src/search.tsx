@@ -248,7 +248,7 @@ const SearchRoot = React.forwardRef<HTMLDivElement, SearchProps>(
             "transition-[background-color,margin] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
             // Background color
             isFocused
-              ? "bg-surface-container-low ring-2 ring-primary"
+              ? "bg-surface-container-low shadow-[inset_0_0_0_2px_hsl(var(--primary))]"
               : "bg-surface-container-high",
             // Hover state
             !disabled && !isFocused && "hover:bg-surface-container-high/92",
