@@ -1,5 +1,5 @@
 /**
- * @strata/mui — M3 Expressive Theme
+ * @vkieu/mui — M3 Expressive Theme
  *
  * Single-file import that provides all M3 tokens, Tailwind v4 color mappings,
  * keyframes, and animation utilities needed by the component library.
@@ -7,7 +7,7 @@
  * Usage in your project's globals.css:
  *
  *   @import "tailwindcss";
- *   @import "@strata/mui/theme.css";
+ *   @import "@vkieu/mui/theme.css";
  *
  * Dark mode: add class="dark" to <html>.
  * Custom brand: override :root CSS variables.

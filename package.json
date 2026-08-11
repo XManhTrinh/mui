@@ -1,5 +1,5 @@
 {
-  "name": "@strata/mui",
+  "name": "@vkieu/mui",
   "version": "1.0.0",
   "description": "Material Design 3 Expressive component library for React & Next.js",
   "main": "./src/index.ts",
