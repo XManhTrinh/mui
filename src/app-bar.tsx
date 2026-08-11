@@ -37,6 +37,8 @@ export interface AppBarLeadingProps extends React.HTMLAttributes<HTMLDivElement>
  */
 const AppBarLeading = React.forwardRef<HTMLDivElement, AppBarLeadingProps>(
   ({ className, children, ...props }, ref) => {
+    // If no children, don't render the slot (no reserved space)
+    if (!children) return null;
     return (
       <div
         ref={ref}
@@ -223,7 +225,7 @@ const AppBarRoot = React.forwardRef<HTMLElement, AppBarProps>(
           ref={ref}
           role="banner"
           className={cn(
-            "sticky top-0 z-30 flex items-center h-16 px-1 transition-[background-color,box-shadow] duration-200",
+            "flex items-center h-16 px-1 transition-[background-color,box-shadow] duration-200",
             "bg-surface",
             elevated && "bg-surface-container shadow-[0_1px_3px_hsl(var(--elevation-1))]",
             className
