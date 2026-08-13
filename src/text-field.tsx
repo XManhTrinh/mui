@@ -99,7 +99,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     const inputCx = cn(
       // peer class enables CSS-only label floating via peer selectors
       "peer w-full bg-transparent outline-none",
-      "text-[16px] leading-[24px] font-normal tracking-[0.5px]",
+      "text-[16px] leading-6 font-normal tracking-[0.5px]",
       "text-[hsl(var(--on-surface))] caret-[hsl(var(--primary))]",
       // Invisible placeholder — browser still tracks :placeholder-shown state
       "placeholder:text-transparent",
@@ -189,7 +189,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
             <div className={cn("relative flex-1 h-full flex items-center", padL, padR)}>
               {prefix && showAffixes && (
-                <span className="text-[16px] leading-[24px] tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 mr-1 pt-6 pb-2">
+                <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 mr-1 pt-6 pb-2">
                   {prefix}
                 </span>
               )}
@@ -223,10 +223,10 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                     padL,
                     "origin-top-left transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
                     // Resting state (default)
-                    "top-1/2 -translate-y-1/2 text-[16px] leading-[24px] tracking-[0.5px]",
+                    "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
                     // Floating state — triggered by peer:focus, peer:not(:placeholder-shown), or peer autofill
                     "peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
-                    "peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:leading-4 peer-[:not(:placeholder-shown)]:tracking-[0.4px]",
+                    "peer-not-placeholder-shown:top-2 peer-not-placeholder-shown:translate-y-0 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
                     "peer-[:-webkit-autofill]:top-2 peer-[:-webkit-autofill]:translate-y-0 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]",
                     labelColor
                   )}
@@ -236,7 +236,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               )}
 
               {suffix && showAffixes && (
-                <span className="text-[16px] leading-[24px] tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 ml-1 pt-6 pb-2">
+                <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 ml-1 pt-6 pb-2">
                   {suffix}
                 </span>
               )}
@@ -297,7 +297,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
           <div className={cn("relative flex-1 h-full flex items-center", padL, padR)}>
             {prefix && showAffixes && (
-              <span className="text-[16px] leading-[24px] tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 mr-1">
+              <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 mr-1">
                 {prefix}
               </span>
             )}
@@ -331,10 +331,10 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   "origin-top-left transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
                   leadingIcon ? "left-13" : "left-4",
                   // Resting state
-                  "top-1/2 -translate-y-1/2 text-[16px] leading-[24px] tracking-[0.5px]",
+                  "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
                   // Floating states via CSS peer selectors
                   "peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
-                  "peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:-translate-y-1/2 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:leading-4 peer-[:not(:placeholder-shown)]:tracking-[0.4px]",
+                  "peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
                   "peer-[:-webkit-autofill]:top-0 peer-[:-webkit-autofill]:-translate-y-1/2 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]",
                   labelColor
                 )}
@@ -344,7 +344,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             )}
 
             {suffix && showAffixes && (
-              <span className="text-[16px] leading-[24px] tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 ml-1">
+              <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 ml-1">
                 {suffix}
               </span>
             )}
