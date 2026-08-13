@@ -1,22 +1,40 @@
 "use client";
 
 import * as React from "react";
-
 import { cn } from "./lib/utils";
 
 /**
- * Material Design 3 TextField
+ * Material Design 3 — Text Field
+ * https://m3.material.io/components/text-fields/specs
  *
- * M3 Specs (m3.material.io/components/text-fields/specs):
- * - Container height: 56dp
- * - Corner radius: 4dp (outlined all, filled top only)
- * - Content padding: 16dp left/right
- * - Floating label: 12px/16px/400/0.4px tracking
- * - Resting label: 16px/24px/400/0.5px tracking
- * - Input text: 16px/24px/400/0.5px tracking
- * - Border: 1px default, 2px focus
- * - Outlined uses fieldset/legend for notch gap
- * - Filled uses bottom indicator line
+ * Layout (both variants):
+ *   Container height: 56dp | Shape: extra-small (4dp)
+ *   Padding: 16dp left/right (no icons)
+ *   Icon area: 12dp + 24dp + 16dp = 52dp (w-13)
+ *   Icon alignment: vertically centered
+ *
+ * Typography:
+ *   Input/placeholder: body-large (16/24/400/0.5)
+ *   Label resting:     body-large (16/24/400/0.5), on-surface-variant
+ *   Label floating:    body-small (12/16/400/0.4), primary (focused)
+ *   Supporting text:   body-small (12/16/400/0.4), 4dp top padding
+ *   Prefix/suffix:     body-large (16/24/400/0.5), on-surface-variant
+ *
+ * Filled:
+ *   Background: surface-container-highest
+ *   Hover: state layer on-surface/0.08 via ::before
+ *   Active indicator: 1dp enabled → 2dp focused
+ *   Label resting: vertically centered
+ *   Label floating: 8dp from top
+ *   Input: pt-6 (24dp) pb-2 (8dp)
+ *
+ * Outlined:
+ *   Border: 1dp outline (enabled) → 2dp primary (focused)
+ *   Hover: border → on-surface
+ *   Label resting: vertically centered
+ *   Label floating: centered on top border
+ *   Input: py-4 (16dp top/bottom)
+ *   Notch: fieldset/legend, 4dp padding around label text
  */
 
 export interface TextFieldProps
@@ -64,120 +82,148 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     ref
   ) => {
     const [focused, setFocused] = React.useState(false);
-    const [internalValue, setInternalValue] = React.useState(
-      defaultValue ?? ""
-    );
+    const [internalValue, setInternalValue] = React.useState(defaultValue ?? "");
     const inputId = id ?? React.useId();
 
     const isControlled = value !== undefined;
     const currentValue = isControlled ? value : internalValue;
-    const hasValue =
-      currentValue !== "" && currentValue !== null && currentValue !== undefined;
-    const isFloating = focused || hasValue || !!placeholder;
+    const hasValue = currentValue !== "" && currentValue != null;
+    const isFloating = focused || hasValue;
 
-    const handleFocus = (
-      e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
+    const handleFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setFocused(true);
       onFocus?.(e as React.FocusEvent<HTMLInputElement>);
     };
 
-    const handleBlur = (
-      e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setFocused(false);
       onBlur?.(e as React.FocusEvent<HTMLInputElement>);
     };
 
-    const handleChange = (
-      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
-      if (!isControlled) {
-        setInternalValue(e.target.value);
-      }
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      if (!isControlled) setInternalValue(e.target.value);
       inputProps.onChange?.(e as React.ChangeEvent<HTMLInputElement>);
     };
 
-    const displayedSupportingText = error && errorText ? errorText : supportingText;
+    const displayedSupporting = error && errorText ? errorText : supportingText;
 
-    // Shared input classes
-    const inputClasses = cn(
-      "w-full bg-transparent outline-none cursor-text",
-      "text-[16px] leading-6 font-normal tracking-[0.5px]",
-      "text-[hsl(var(--on-surface))]",
+    // ── Design tokens ─────────────────────────────────────────────────────────
+
+    const labelColor = disabled
+      ? "text-[hsl(var(--on-surface)/0.38)]"
+      : error
+        ? "text-[hsl(var(--error))]"
+        : focused
+          ? "text-[hsl(var(--primary))]"
+          : "text-[hsl(var(--on-surface-variant))]";
+
+    const inputCx = cn(
+      "w-full bg-transparent outline-none",
+      "text-base leading-6 font-normal tracking-[0.5px]",
+      "text-[hsl(var(--on-surface))] caret-[hsl(var(--primary))]",
       "placeholder:text-[hsl(var(--on-surface-variant))]",
-      disabled && "text-[hsl(var(--on-surface)/0.38)] cursor-not-allowed"
+      disabled ? "text-[hsl(var(--on-surface)/0.38)] cursor-not-allowed" : "cursor-text"
     );
 
-    if (variant === "filled") {
-      return (
-        <div className={cn("relative", className)}>
-          {/* Main container */}
-          <div
+    // Autofill: transition prevents Chrome's forced bg from rendering
+    const filledAutofill = "[&:-webkit-autofill]:[transition:background-color_9999s_ease-in-out_0s] [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_9999px_var(--color-surface-container-highest)_inset] [&:-webkit-autofill]:[-webkit-text-fill-color:hsl(var(--on-surface))]";
+    const outlinedAutofill = "[&:-webkit-autofill]:[transition:background-color_9999s_ease-in-out_0s] [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_9999px_var(--m3-surface-bg,hsl(var(--surface)))_inset] [&:-webkit-autofill]:[-webkit-text-fill-color:hsl(var(--on-surface))]";
+
+    // Padding: 16dp without icons, 0 with (icon slot provides 52dp spacing)
+    const padL = leadingIcon ? "pl-0" : "pl-4";
+    const padR = trailingIcon ? "pr-0" : "pr-4";
+
+    // ── Reusable elements ─────────────────────────────────────────────────────
+
+    const leadingEl = leadingIcon && (
+      <span className={cn(
+        "shrink-0 flex items-center justify-center w-13 h-full pl-3",
+        "text-[hsl(var(--on-surface-variant))]",
+        disabled && "text-[hsl(var(--on-surface)/0.38)]"
+      )}>
+        {leadingIcon}
+      </span>
+    );
+
+    const trailingEl = trailingIcon && (
+      <span className={cn(
+        "shrink-0 flex items-center justify-center w-13 h-full pr-3",
+        error ? "text-[hsl(var(--error))]" : "text-[hsl(var(--on-surface-variant))]",
+        disabled && "text-[hsl(var(--on-surface)/0.38)]"
+      )}>
+        {trailingIcon}
+      </span>
+    );
+
+    const supportingEl = (displayedSupporting || characterCount) && (
+      <div className="flex justify-between px-4 pt-1">
+        {displayedSupporting && (
+          <span
+            id={`${inputId}-supporting`}
             className={cn(
-              "group relative flex items-center",
-              multiline ? "min-h-14" : "h-14",
-              "rounded-t rounded-b-none",
-              "bg-[hsl(var(--surface-container-highest))]",
-              !disabled && "hover:bg-[hsl(var(--on-surface)/0.08)]",
-              disabled && "pointer-events-none cursor-not-allowed bg-[hsl(var(--on-surface)/0.04)]",
-              "transition-colors duration-200"
+              "text-xs leading-4 tracking-[0.4px]",
+              error ? "text-[hsl(var(--error))]" : "text-[hsl(var(--on-surface-variant))]",
+              disabled && "text-[hsl(var(--on-surface)/0.38)]"
             )}
           >
-            {/* Leading icon */}
-            {leadingIcon && (
-              <span
-                className={cn(
-                  "flex items-center justify-center pl-3 pr-0",
-                  "text-[hsl(var(--on-surface-variant))]",
-                  disabled && "text-[hsl(var(--on-surface)/0.38)]"
-                )}
-              >
-                {leadingIcon}
-              </span>
-            )}
+            {displayedSupporting}
+          </span>
+        )}
+        {characterCount && (
+          <span className={cn(
+            "text-xs leading-4 tracking-[0.4px] ml-auto text-[hsl(var(--on-surface-variant))]",
+            disabled && "text-[hsl(var(--on-surface)/0.38)]"
+          )}>
+            {characterCount.current}/{characterCount.max}
+          </span>
+        )}
+      </div>
+    );
 
-            {/* Input area */}
-            <div
-              className={cn(
-                "relative flex-1 flex items-center",
-                leadingIcon ? "pl-3" : "pl-4",
-                trailingIcon ? "pr-0" : "pr-4"
-              )}
-            >
-              {/* Floating label */}
+    // ═══════════════════════════════════════════════════════════════════════════
+    // FILLED VARIANT
+    // ═══════════════════════════════════════════════════════════════════════════
+    if (variant === "filled") {
+      return (
+        <div className={cn("relative w-full", className)}>
+          <div
+            className={cn(
+              "group relative flex items-center overflow-hidden",
+              multiline ? "min-h-14" : "h-14",
+              "rounded-t rounded-b-none",
+              "bg-surface-container-highest",
+              !disabled && "before:absolute before:inset-0 before:transition-colors before:duration-200 hover:before:bg-[hsl(var(--on-surface)/0.08)]",
+              disabled && "pointer-events-none cursor-not-allowed bg-[hsl(var(--on-surface)/0.04)]",
+            )}
+          >
+            {leadingEl}
+
+            {/* Content area — label & input share same padding */}
+            <div className={cn("relative flex-1 h-full flex items-center", padL, padR)}>
+              {/* Label */}
               {label && (
                 <label
                   htmlFor={inputId}
                   className={cn(
-                    "absolute pointer-events-none select-none",
-                    "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
-                    "origin-top-left",
+                    "absolute left-0 pointer-events-none select-none z-1",
+                    padL,
+                    "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)] origin-top-left",
                     isFloating
-                      ? [
-                          "top-2 left-0",
-                          "text-[12px] leading-4 tracking-[0.4px]",
-                          focused && !error && "text-[hsl(var(--primary))]",
-                          !focused && !error && "text-[hsl(var(--on-surface-variant))]",
-                          error && "text-[hsl(var(--error))]",
-                        ]
-                      : [
-                          "top-1/2 left-0 -translate-y-1/2",
-                          "text-[16px] leading-6 tracking-[0.5px]",
-                          !error
-                            ? "text-[hsl(var(--on-surface-variant))]"
-                            : "text-[hsl(var(--error))]",
-                        ],
-                    disabled && "text-[hsl(var(--on-surface)/0.38)]"
+                      ? "top-2 text-xs leading-4 tracking-[0.4px]"
+                      : "top-1/2 -translate-y-1/2 text-base leading-6 tracking-[0.5px]",
+                    labelColor
                   )}
                 >
                   {label}
                 </label>
               )}
 
-              {/* Prefix */}
+              {/* Prefix — aligned with input text (pt-6 pb-2 for filled) */}
               {prefix && isFloating && (
-                <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] mr-0.5 mt-3">
+                <span className={cn(
+                  "text-base leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 mr-1 pt-6 pb-2",
+                  disabled && "text-[hsl(var(--on-surface)/0.38)]"
+                )}>
                   {prefix}
                 </span>
               )}
@@ -187,6 +233,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 <textarea
                   ref={ref as unknown as React.Ref<HTMLTextAreaElement>}
                   id={inputId}
+                  data-m3-input=""
                   disabled={disabled}
                   value={isControlled ? (value as string) : undefined}
                   defaultValue={!isControlled ? (defaultValue as string) : undefined}
@@ -196,15 +243,14 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   onBlur={handleBlur}
                   rows={rows}
                   aria-invalid={error || undefined}
-                  aria-describedby={
-                    displayedSupportingText ? `${inputId}-supporting` : undefined
-                  }
-                  className={cn(inputClasses, "pt-6 pb-2 resize-y")}
+                  aria-describedby={displayedSupporting ? `${inputId}-supporting` : undefined}
+                  className={cn(inputCx, filledAutofill, "pt-6 pb-2 resize-y")}
                 />
               ) : (
                 <input
                   ref={ref}
                   id={inputId}
+                  data-m3-input=""
                   disabled={disabled}
                   value={isControlled ? value : undefined}
                   defaultValue={!isControlled ? defaultValue : undefined}
@@ -213,192 +259,107 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   onFocus={handleFocus}
                   onBlur={handleBlur}
                   aria-invalid={error || undefined}
-                  aria-describedby={
-                    displayedSupportingText ? `${inputId}-supporting` : undefined
-                  }
+                  aria-describedby={displayedSupporting ? `${inputId}-supporting` : undefined}
                   {...inputProps}
-                  className={cn(inputClasses, "pt-6 pb-2")}
+                  className={cn(inputCx, filledAutofill, "pt-6 pb-2")}
                 />
               )}
 
-              {/* Suffix */}
+              {/* Suffix — aligned with input text */}
               {suffix && isFloating && (
-                <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] ml-0.5 mt-3">
+                <span className={cn(
+                  "text-base leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 ml-1 pt-6 pb-2",
+                  disabled && "text-[hsl(var(--on-surface)/0.38)]"
+                )}>
                   {suffix}
                 </span>
               )}
             </div>
 
-            {/* Trailing icon */}
-            {trailingIcon && (
-              <span
-                className={cn(
-                  "flex items-center justify-center pr-3 pl-0",
-                  error
-                    ? "text-[hsl(var(--error))]"
-                    : "text-[hsl(var(--on-surface-variant))]",
-                  disabled && "text-[hsl(var(--on-surface)/0.38)]"
-                )}
-              >
-                {trailingIcon}
-              </span>
-            )}
+            {trailingEl}
 
-            {/* Bottom indicator line */}
-            <span
-              className={cn(
-                "absolute bottom-0 left-0 right-0 pointer-events-none",
-                "transition-[height,background-color] duration-200",
-                focused
-                  ? error
-                    ? "h-0.5 bg-[hsl(var(--error))]"
-                    : "h-0.5 bg-[hsl(var(--primary))]"
-                  : error
-                    ? "h-px bg-[hsl(var(--error))]"
-                    : "h-px bg-[hsl(var(--on-surface-variant))]",
-                disabled && "bg-[hsl(var(--on-surface)/0.12)]"
-              )}
-            />
+            {/* Active indicator */}
+            <span className={cn(
+              "absolute bottom-0 inset-x-0 pointer-events-none transition-[height,background-color] duration-200",
+              focused
+                ? error ? "h-0.5 bg-[hsl(var(--error))]" : "h-0.5 bg-[hsl(var(--primary))]"
+                : error ? "h-px bg-[hsl(var(--error))]" : "h-px bg-[hsl(var(--on-surface))]",
+              disabled && "h-px bg-[hsl(var(--on-surface)/0.12)]"
+            )} />
           </div>
 
-          {/* Supporting text / character count */}
-          {(displayedSupportingText || characterCount) && (
-            <div className="flex justify-between px-4 pt-1">
-              {displayedSupportingText && (
-                <span
-                  id={`${inputId}-supporting`}
-                  className={cn(
-                    "text-[12px] leading-4 tracking-[0.4px]",
-                    error
-                      ? "text-[hsl(var(--error))]"
-                      : "text-[hsl(var(--on-surface-variant))]",
-                    disabled && "text-[hsl(var(--on-surface)/0.38)]"
-                  )}
-                >
-                  {displayedSupportingText}
-                </span>
-              )}
-              {characterCount && (
-                <span
-                  className={cn(
-                    "text-[12px] leading-4 tracking-[0.4px] ml-auto",
-                    "text-[hsl(var(--on-surface-variant))]",
-                    disabled && "text-[hsl(var(--on-surface)/0.38)]"
-                  )}
-                >
-                  {characterCount.current}/{characterCount.max}
-                </span>
-              )}
-            </div>
-          )}
+          {supportingEl}
         </div>
       );
     }
 
-    // Outlined variant
+    // ═══════════════════════════════════════════════════════════════════════════
+    // OUTLINED VARIANT
+    // ═══════════════════════════════════════════════════════════════════════════
     return (
-      <div className={cn("relative", className)}>
-        {/* Main container */}
+      <div className={cn("relative w-full", className)}>
+        {/* Label — on root wrapper, never clipped by overflow-hidden */}
+        {label && (
+          <label
+            htmlFor={inputId}
+            className={cn(
+              "absolute pointer-events-none select-none z-3",
+              "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)] origin-top-left",
+              leadingIcon ? "left-13" : "left-4",
+              isFloating
+                ? "top-0 -translate-y-1/2 text-xs leading-4 tracking-[0.4px]"
+                : "top-1/2 -translate-y-1/2 text-base leading-6 tracking-[0.5px]",
+              labelColor
+            )}
+          >
+            {label}
+          </label>
+        )}
+
+        {/* Container */}
         <div
           className={cn(
-            "group relative flex items-center",
+            "group relative flex items-center overflow-hidden rounded",
             multiline ? "min-h-14" : "h-14",
             disabled && "pointer-events-none cursor-not-allowed"
           )}
         >
-          {/* Fieldset for border + notch */}
+          {/* Border with notch */}
           <fieldset
             aria-hidden="true"
             className={cn(
-              "absolute inset-0 rounded pointer-events-none",
-              "px-3 m-0",
+              "absolute inset-0 rounded pointer-events-none m-0 px-3 z-2",
               "transition-[border-color,border-width] duration-200",
-              // Border styles
               focused
-                ? error
-                  ? "border-2 border-[hsl(var(--error))]"
-                  : "border-2 border-[hsl(var(--primary))]"
+                ? error ? "border-2 border-[hsl(var(--error))]" : "border-2 border-[hsl(var(--primary))]"
                 : error
                   ? "border border-[hsl(var(--error))]"
-                  : cn(
-                      "border border-[hsl(var(--outline))]",
-                      !disabled && "group-hover:border-[hsl(var(--on-surface))]"
-                    ),
-              disabled && "border-[hsl(var(--on-surface)/0.12)]"
+                  : cn("border border-[hsl(var(--outline))]", !disabled && "group-hover:border-[hsl(var(--on-surface))]"),
+              disabled && "border border-[hsl(var(--on-surface)/0.12)]"
             )}
-            style={{ top: "-5px" }}
           >
             <legend
               className={cn(
-                "invisible h-0 overflow-hidden",
-                "text-[12px] leading-0",
+                "invisible h-0 overflow-hidden block text-xs leading-0",
                 "transition-all duration-200",
-                isFloating ? "px-1 max-w-full" : "px-0 max-w-[0.01px]"
+                isFloating ? "px-1 max-w-full" : "px-0 max-w-[0.01px]",
+                leadingIcon ? "ml-9" : "ml-0"
               )}
-              style={{ marginLeft: "12px" }}
             >
               <span>{label}</span>
             </legend>
           </fieldset>
 
-          {/* Visible floating label */}
-          {label && (
-            <label
-              htmlFor={inputId}
-              className={cn(
-                "absolute pointer-events-none select-none",
-                "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
-                "origin-top-left",
-                isFloating
-                  ? [
-                      "text-[12px] leading-4 tracking-[0.4px]",
-                      focused && !error && "text-[hsl(var(--primary))]",
-                      !focused && !error && "text-[hsl(var(--on-surface-variant))]",
-                      error && "text-[hsl(var(--error))]",
-                    ]
-                  : [
-                      "top-1/2 -translate-y-1/2",
-                      "text-[16px] leading-6 tracking-[0.5px]",
-                      !error
-                        ? "text-[hsl(var(--on-surface-variant))]"
-                        : "text-[hsl(var(--error))]",
-                    ],
-                disabled && "text-[hsl(var(--on-surface)/0.38)]"
-              )}
-              style={
-                isFloating
-                  ? { top: "-8px", left: leadingIcon ? "48px" : "16px" }
-                  : { left: leadingIcon ? "48px" : "16px" }
-              }
-            >
-              {label}
-            </label>
-          )}
+          {leadingEl}
 
-          {/* Leading icon */}
-          {leadingIcon && (
-            <span
-              className={cn(
-                "flex items-center justify-center pl-3 pr-0 z-10",
-                "text-[hsl(var(--on-surface-variant))]",
-                disabled && "text-[hsl(var(--on-surface)/0.38)]"
-              )}
-            >
-              {leadingIcon}
-            </span>
-          )}
-
-          {/* Input wrapper */}
-          <div
-            className={cn(
-              "relative flex-1 flex items-center",
-              leadingIcon ? "pl-3" : "pl-4",
-              trailingIcon ? "pr-0" : "pr-4"
-            )}
-          >
-            {/* Prefix */}
+          {/* Content area */}
+          <div className={cn("relative flex-1 h-full flex items-center", padL, padR)}>
+            {/* Prefix — vertically centered in outlined */}
             {prefix && isFloating && (
-              <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] mr-0.5">
+              <span className={cn(
+                "text-base leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 mr-1",
+                disabled && "text-[hsl(var(--on-surface)/0.38)]"
+              )}>
                 {prefix}
               </span>
             )}
@@ -408,6 +369,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               <textarea
                 ref={ref as unknown as React.Ref<HTMLTextAreaElement>}
                 id={inputId}
+                data-m3-input=""
                 disabled={disabled}
                 value={isControlled ? (value as string) : undefined}
                 defaultValue={!isControlled ? (defaultValue as string) : undefined}
@@ -417,15 +379,14 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 onBlur={handleBlur}
                 rows={rows}
                 aria-invalid={error || undefined}
-                aria-describedby={
-                  displayedSupportingText ? `${inputId}-supporting` : undefined
-                }
-                className={cn(inputClasses, "py-4 resize-y")}
+                aria-describedby={displayedSupporting ? `${inputId}-supporting` : undefined}
+                className={cn(inputCx, outlinedAutofill, "py-4 resize-y")}
               />
             ) : (
               <input
                 ref={ref}
                 id={inputId}
+                data-m3-input=""
                 disabled={disabled}
                 value={isControlled ? value : undefined}
                 defaultValue={!isControlled ? defaultValue : undefined}
@@ -434,68 +395,27 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 aria-invalid={error || undefined}
-                aria-describedby={
-                  displayedSupportingText ? `${inputId}-supporting` : undefined
-                }
+                aria-describedby={displayedSupporting ? `${inputId}-supporting` : undefined}
                 {...inputProps}
-                className={cn(inputClasses)}
+                className={cn(inputCx, outlinedAutofill, "py-4")}
               />
             )}
 
-            {/* Suffix */}
+            {/* Suffix — vertically centered in outlined */}
             {suffix && isFloating && (
-              <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] ml-0.5">
+              <span className={cn(
+                "text-base leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 ml-1",
+                disabled && "text-[hsl(var(--on-surface)/0.38)]"
+              )}>
                 {suffix}
               </span>
             )}
           </div>
 
-          {/* Trailing icon */}
-          {trailingIcon && (
-            <span
-              className={cn(
-                "flex items-center justify-center pr-3 pl-0 z-10",
-                error
-                  ? "text-[hsl(var(--error))]"
-                  : "text-[hsl(var(--on-surface-variant))]",
-                disabled && "text-[hsl(var(--on-surface)/0.38)]"
-              )}
-            >
-              {trailingIcon}
-            </span>
-          )}
+          {trailingEl}
         </div>
 
-        {/* Supporting text / character count */}
-        {(displayedSupportingText || characterCount) && (
-          <div className="flex justify-between px-4 pt-1">
-            {displayedSupportingText && (
-              <span
-                id={`${inputId}-supporting`}
-                className={cn(
-                  "text-[12px] leading-4 tracking-[0.4px]",
-                  error
-                    ? "text-[hsl(var(--error))]"
-                    : "text-[hsl(var(--on-surface-variant))]",
-                  disabled && "text-[hsl(var(--on-surface)/0.38)]"
-                )}
-              >
-                {displayedSupportingText}
-              </span>
-            )}
-            {characterCount && (
-              <span
-                className={cn(
-                  "text-[12px] leading-4 tracking-[0.4px] ml-auto",
-                  "text-[hsl(var(--on-surface-variant))]",
-                  disabled && "text-[hsl(var(--on-surface)/0.38)]"
-                )}
-              >
-                {characterCount.current}/{characterCount.max}
-              </span>
-            )}
-          </div>
-        )}
+        {supportingEl}
       </div>
     );
   }

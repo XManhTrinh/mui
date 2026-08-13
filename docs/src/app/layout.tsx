@@ -50,8 +50,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={dark ? "dark" : ""}>
       <body className="bg-surface text-surface-foreground min-h-screen">
-        {/* Sidebar — Composable NavigationRail */}
-        <NavigationRail expanded={navExpanded} className="top-0 z-40">
+        {/* Sidebar — fixed position, full height */}
+        <NavigationRail expanded={navExpanded} className="fixed top-0 left-0 h-screen z-40">
           <NavigationRail.Header>
             <IconButton
               icon="menu"
@@ -83,7 +83,7 @@ export default function RootLayout({
           </NavigationRail.Footer>
         </NavigationRail>
 
-        {/* Right side: header + content */}
+        {/* Main content — offset by sidebar width */}
         <div className={`transition-[margin-left] duration-300 ease-[cubic-bezier(0.2,0,0,1)] ${navExpanded ? "ml-90" : "ml-24"}`}>
           <AppBar
             className="sticky top-0 z-30"
