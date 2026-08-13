@@ -4,12 +4,15 @@ import * as React from "react";
 import { cn } from "./lib/utils";
 
 /**
- * Material Design 3 — Text Field
+ * Material Design 3 — Text Field (CSS-only label floating)
  * https://m3.material.io/components/text-fields/specs
  *
- * Variants: outlined (default), filled
+ * Key pattern: input comes BEFORE label in DOM. Label floats via CSS sibling
+ * selectors (:focus, :not(:placeholder-shown), :-webkit-autofill).
+ * No JS needed for autofill detection — the browser handles it natively.
+ *
  * Container: 56dp height, 4dp corner radius
- * Typography: body-large (16/24/400/0.5) for input, body-small (12/16/400/0.4) for floating label
+ * Typography: body-large (16/24/400/0.5) input, body-small (12/16/400/0.4) floating label
  */
 
 export interface TextFieldProps
@@ -59,37 +62,10 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     const [focused, setFocused] = React.useState(false);
     const [internalValue, setInternalValue] = React.useState(defaultValue ?? "");
     const inputId = id ?? React.useId();
-    const inputElRef = React.useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
     const isControlled = value !== undefined;
     const currentValue = isControlled ? value : internalValue;
     const hasValue = currentValue !== "" && currentValue != null;
-    const [autofilled, setAutofilled] = React.useState(false);
-    const shouldFloat = focused || hasValue || autofilled;
-
-    // Detect autofill on mount — Chrome autofills before React hydrates
-    React.useEffect(() => {
-      const el = inputElRef.current;
-      if (!el) return;
-      // Poll briefly — Chrome may autofill with a small delay after paint
-      const check = () => {
-        try {
-          if (el.matches(":-webkit-autofill")) {
-            setAutofilled(true);
-          }
-        } catch { /* Firefox throws on :-webkit-autofill */ }
-      };
-      // Check immediately and again after a short delay
-      check();
-      const t1 = setTimeout(check, 120);
-      const t2 = setTimeout(check, 500);
-      return () => { clearTimeout(t1); clearTimeout(t2); };
-    }, []);
-
-    const handleAnimationStart = (e: React.AnimationEvent) => {
-      if (e.animationName === "m3-autofill-start") setAutofilled(true);
-      else if (e.animationName === "m3-autofill-cancel") setAutofilled(false);
-    };
 
     const handleFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setFocused(true);
@@ -110,6 +86,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
     const displayedSupporting = error && errorText ? errorText : supportingText;
 
+    // Label color determined by JS (focus state needed for primary color)
     const labelColor = disabled
       ? "text-[hsl(var(--on-surface)/0.38)]"
       : error
@@ -118,10 +95,13 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           ? "text-[hsl(var(--primary))]"
           : "text-[hsl(var(--on-surface-variant))]";
 
+    // Input text styles
     const inputCx = cn(
-      "w-full bg-transparent outline-none",
+      // peer class enables CSS-only label floating via peer selectors
+      "peer w-full bg-transparent outline-none",
       "text-[16px] leading-[24px] font-normal tracking-[0.5px]",
       "text-[hsl(var(--on-surface))] caret-[hsl(var(--primary))]",
+      // Invisible placeholder — browser still tracks :placeholder-shown state
       "placeholder:text-transparent",
       disabled ? "text-[hsl(var(--on-surface)/0.38)] cursor-not-allowed" : "cursor-text"
     );
@@ -176,21 +156,24 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       </div>
     );
 
-    // Common input/textarea props
+    // Common props for input/textarea
     const sharedProps = {
       id: inputId,
       disabled,
+      // Always render a space placeholder — makes :placeholder-shown work for autofill
       placeholder: placeholder || " ",
       onChange: handleChange,
       onFocus: handleFocus,
       onBlur: handleBlur,
-      onAnimationStart: handleAnimationStart,
       "aria-invalid": error || undefined,
       "aria-describedby": displayedSupporting ? `${inputId}-supporting` : undefined,
     };
 
+    // For prefix/suffix visibility (JS-based since they affect layout)
+    const showAffixes = focused || hasValue;
+
     // ═══════════════════════════════════════════════════════════════════════════
-    // FILLED
+    // FILLED VARIANT
     // ═══════════════════════════════════════════════════════════════════════════
     if (variant === "filled") {
       return (
@@ -205,32 +188,15 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             {leadingEl}
 
             <div className={cn("relative flex-1 h-full flex items-center", padL, padR)}>
-              {/* Label */}
-              {label && (
-                <label
-                  htmlFor={inputId}
-                  className={cn(
-                    "absolute left-0 pointer-events-none select-none z-1",
-                    padL,
-                    "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)] origin-top-left",
-                    shouldFloat
-                      ? "top-2 text-xs leading-4 tracking-[0.4px]"
-                      : "top-1/2 -translate-y-1/2 text-[16px] leading-[24px] tracking-[0.5px]",
-                    labelColor
-                  )}
-                >
-                  {label}
-                </label>
-              )}
-
-              {prefix && shouldFloat && (
+              {prefix && showAffixes && (
                 <span className="text-[16px] leading-[24px] tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 mr-1 pt-6 pb-2">
                   {prefix}
                 </span>
               )}
 
+              {/* Input BEFORE label — enables peer selectors */}
               {multiline ? (
-                <textarea ref={(el) => { inputElRef.current = el; }}
+                <textarea
                   {...sharedProps}
                   value={isControlled ? (value as string) : undefined}
                   defaultValue={!isControlled ? (defaultValue as string) : undefined}
@@ -239,7 +205,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 />
               ) : (
                 <input
-                  ref={(el) => { inputElRef.current = el; if (typeof ref === "function") ref(el); else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = el; }}
+                  ref={ref}
                   {...sharedProps}
                   {...inputProps}
                   value={isControlled ? value : undefined}
@@ -248,7 +214,28 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 />
               )}
 
-              {suffix && shouldFloat && (
+              {/* Label — uses peer selectors for CSS-only floating */}
+              {label && (
+                <label
+                  htmlFor={inputId}
+                  className={cn(
+                    "absolute left-0 pointer-events-none select-none z-1",
+                    padL,
+                    "origin-top-left transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
+                    // Resting state (default)
+                    "top-1/2 -translate-y-1/2 text-[16px] leading-[24px] tracking-[0.5px]",
+                    // Floating state — triggered by peer:focus, peer:not(:placeholder-shown), or peer autofill
+                    "peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
+                    "peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:leading-4 peer-[:not(:placeholder-shown)]:tracking-[0.4px]",
+                    "peer-[:-webkit-autofill]:top-2 peer-[:-webkit-autofill]:translate-y-0 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]",
+                    labelColor
+                  )}
+                >
+                  {label}
+                </label>
+              )}
+
+              {suffix && showAffixes && (
                 <span className="text-[16px] leading-[24px] tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 ml-1 pt-6 pb-2">
                   {suffix}
                 </span>
@@ -273,30 +260,12 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
-    // OUTLINED
+    // OUTLINED VARIANT
     // ═══════════════════════════════════════════════════════════════════════════
     return (
       <div className={cn("relative w-full", className)}>
-        {/* Label — positioned on root to avoid clipping */}
-        {label && (
-          <label
-            htmlFor={inputId}
-            className={cn(
-              "absolute pointer-events-none select-none z-3",
-              "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)] origin-top-left",
-              leadingIcon ? "left-13" : "left-4",
-              shouldFloat
-                ? "top-0 -translate-y-1/2 text-xs leading-4 tracking-[0.4px]"
-                : "top-1/2 -translate-y-1/2 text-[16px] leading-[24px] tracking-[0.5px]",
-              labelColor
-            )}
-          >
-            {label}
-          </label>
-        )}
-
         <div className={cn(
-          "group relative flex items-center overflow-hidden rounded",
+          "group relative flex items-center rounded",
           multiline ? "min-h-14" : "h-14",
           disabled && "pointer-events-none cursor-not-allowed"
         )}>
@@ -317,7 +286,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             <legend className={cn(
               "invisible h-0 overflow-hidden block text-xs leading-0",
               "transition-all duration-200",
-              shouldFloat ? "px-1 max-w-full" : "px-0 max-w-[0.01px]",
+              (focused || hasValue) ? "px-1 max-w-full" : "px-0 max-w-[0.01px]",
               leadingIcon ? "ml-9" : "ml-0"
             )}>
               <span>{label}</span>
@@ -327,14 +296,15 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           {leadingEl}
 
           <div className={cn("relative flex-1 h-full flex items-center", padL, padR)}>
-            {prefix && shouldFloat && (
+            {prefix && showAffixes && (
               <span className="text-[16px] leading-[24px] tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 mr-1">
                 {prefix}
               </span>
             )}
 
+            {/* Input BEFORE label — enables peer selectors */}
             {multiline ? (
-              <textarea ref={(el) => { inputElRef.current = el; }}
+              <textarea
                 {...sharedProps}
                 value={isControlled ? (value as string) : undefined}
                 defaultValue={!isControlled ? (defaultValue as string) : undefined}
@@ -343,7 +313,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               />
             ) : (
               <input
-                ref={(el) => { inputElRef.current = el; if (typeof ref === "function") ref(el); else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = el; }}
+                ref={ref}
                 {...sharedProps}
                 {...inputProps}
                 value={isControlled ? value : undefined}
@@ -352,7 +322,28 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               />
             )}
 
-            {suffix && shouldFloat && (
+            {/* Label — floats via CSS peer selectors */}
+            {label && (
+              <label
+                htmlFor={inputId}
+                className={cn(
+                  "absolute pointer-events-none select-none z-3",
+                  "origin-top-left transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
+                  leadingIcon ? "left-13" : "left-4",
+                  // Resting state
+                  "top-1/2 -translate-y-1/2 text-[16px] leading-[24px] tracking-[0.5px]",
+                  // Floating states via CSS peer selectors
+                  "peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
+                  "peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:-translate-y-1/2 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:leading-4 peer-[:not(:placeholder-shown)]:tracking-[0.4px]",
+                  "peer-[:-webkit-autofill]:top-0 peer-[:-webkit-autofill]:-translate-y-1/2 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]",
+                  labelColor
+                )}
+              >
+                {label}
+              </label>
+            )}
+
+            {suffix && showAffixes && (
               <span className="text-[16px] leading-[24px] tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 ml-1">
                 {suffix}
               </span>
