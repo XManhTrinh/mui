@@ -61,7 +61,7 @@ function NavigationRailRoot({
     <NavigationRailContext.Provider value={{ expanded }}>
       <aside
         className={cn(
-          "fixed left-0 top-0 bottom-0 z-40 flex flex-col bg-surface-container",
+          "z-40 flex flex-col bg-surface-container shrink-0",
           "shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
           "transition-[width] duration-300 ease-[cubic-bezier(0.2,0,0,1)] overflow-hidden",
           expanded ? "w-90" : "w-24",
