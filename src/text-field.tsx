@@ -63,7 +63,13 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     const isControlled = value !== undefined;
     const currentValue = isControlled ? value : internalValue;
     const hasValue = currentValue !== "" && currentValue != null;
-    const shouldFloat = focused || hasValue;
+    const [autofilled, setAutofilled] = React.useState(false);
+    const shouldFloat = focused || hasValue || autofilled;
+
+    const handleAnimationStart = (e: React.AnimationEvent) => {
+      if (e.animationName === "m3-autofill-start") setAutofilled(true);
+      else if (e.animationName === "m3-autofill-cancel") setAutofilled(false);
+    };
 
     const handleFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setFocused(true);
@@ -158,6 +164,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       onChange: handleChange,
       onFocus: handleFocus,
       onBlur: handleBlur,
+      onAnimationStart: handleAnimationStart,
       "aria-invalid": error || undefined,
       "aria-describedby": displayedSupporting ? `${inputId}-supporting` : undefined,
     };
