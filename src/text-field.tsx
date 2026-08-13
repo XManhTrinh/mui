@@ -106,11 +106,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       "text-[16px] leading-6 font-normal tracking-[0.5px]",
       "text-[hsl(var(--on-surface))]",
       "placeholder:text-[hsl(var(--on-surface-variant))]",
-      disabled && "text-[hsl(var(--on-surface)/0.38)] cursor-not-allowed",
-      // Prevent autofill yellow background
-      "[&:-webkit-autofill]:bg-transparent",
-      "[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_1000px_transparent_inset]",
-      "[&:-webkit-autofill]:[-webkit-text-fill-color:hsl(var(--on-surface))]"
+      disabled && "text-[hsl(var(--on-surface)/0.38)] cursor-not-allowed"
     );
 
     if (variant === "filled") {
@@ -315,7 +311,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             aria-hidden="true"
             className={cn(
               "absolute inset-0 rounded pointer-events-none",
-              "px-3",
+              "px-3 m-0",
               "transition-[border-color,border-width] duration-200",
               // Border styles
               focused
