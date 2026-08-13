@@ -220,11 +220,11 @@ select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus,
 select:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--m3-surface-bg, hsl(var(--surface))) inset !important;
   -webkit-text-fill-color: hsl(var(--on-surface)) !important;
-  background-color: transparent !important;
+  background-color: var(--m3-surface-bg, hsl(var(--surface))) !important;
   caret-color: hsl(var(--primary));
-  transition: background-color 9999s ease-in-out 0s, -webkit-box-shadow 9999s ease-in-out 0s;
+  transition: background-color 9999s ease-in-out 0s;
 }
 
 .dark input:-webkit-autofill,
@@ -239,11 +239,11 @@ select:-webkit-autofill:active {
 .dark select:-webkit-autofill:hover,
 .dark select:-webkit-autofill:focus,
 .dark select:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--m3-surface-bg, hsl(var(--surface))) inset !important;
   -webkit-text-fill-color: hsl(var(--on-surface)) !important;
-  background-color: transparent !important;
+  background-color: var(--m3-surface-bg, hsl(var(--surface))) !important;
   caret-color: hsl(var(--primary));
-  transition: background-color 9999s ease-in-out 0s, -webkit-box-shadow 9999s ease-in-out 0s;
+  transition: background-color 9999s ease-in-out 0s;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
