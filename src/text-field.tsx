@@ -83,12 +83,27 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
   ) => {
     const [focused, setFocused] = React.useState(false);
     const [internalValue, setInternalValue] = React.useState(defaultValue ?? "");
+    const [autofilled, setAutofilled] = React.useState(false);
+    const inputRef = React.useRef<HTMLInputElement | null>(null);
     const inputId = id ?? React.useId();
 
     const isControlled = value !== undefined;
     const currentValue = isControlled ? value : internalValue;
     const hasValue = currentValue !== "" && currentValue != null;
-    const isFloating = focused || hasValue;
+    const isFloating = focused || hasValue || autofilled;
+
+    // Detect Chrome autofill via animationstart (CSS @keyframes trick)
+    const handleAnimationStart = (e: React.AnimationEvent) => {
+      if (e.animationName === "m3-autofill-start") setAutofilled(true);
+      if (e.animationName === "m3-autofill-cancel") setAutofilled(false);
+    };
+
+    // Merge refs
+    const setRef = React.useCallback((el: HTMLInputElement | null) => {
+      inputRef.current = el;
+      if (typeof ref === "function") ref(el);
+      else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = el;
+    }, [ref]);
 
     const handleFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setFocused(true);
@@ -248,7 +263,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 />
               ) : (
                 <input
-                  ref={ref}
+                  ref={setRef}
                   id={inputId}
                   data-m3-input=""
                   disabled={disabled}
@@ -258,6 +273,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   onChange={handleChange}
                   onFocus={handleFocus}
                   onBlur={handleBlur}
+                  onAnimationStart={handleAnimationStart}
                   aria-invalid={error || undefined}
                   aria-describedby={displayedSupporting ? `${inputId}-supporting` : undefined}
                   {...inputProps}
@@ -384,7 +400,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               />
             ) : (
               <input
-                ref={ref}
+                ref={setRef}
                 id={inputId}
                 data-m3-input=""
                 disabled={disabled}
@@ -394,6 +410,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 onChange={handleChange}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
+                onAnimationStart={handleAnimationStart}
                 aria-invalid={error || undefined}
                 aria-describedby={displayedSupporting ? `${inputId}-supporting` : undefined}
                 {...inputProps}

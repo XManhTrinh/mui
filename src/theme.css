@@ -193,6 +193,24 @@ fieldset {
   background-color: transparent;
 }
 
+/* ─── Autofill detection keyframes ───────────────────────────────────────────
+   Browsers trigger animationstart when :-webkit-autofill matches.
+   The TextField component listens for these animation names to detect
+   autofill state without polling or timers.
+   ─────────────────────────────────────────────────────────────────────────── */
+@keyframes m3-autofill-start { from {} }
+@keyframes m3-autofill-cancel { from {} }
+
+input:-webkit-autofill,
+textarea:-webkit-autofill {
+  animation-name: m3-autofill-start;
+}
+
+input:not(:-webkit-autofill),
+textarea:not(:-webkit-autofill) {
+  animation-name: m3-autofill-cancel;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
