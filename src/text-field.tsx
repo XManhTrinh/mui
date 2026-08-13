@@ -83,27 +83,33 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
   ) => {
     const [focused, setFocused] = React.useState(false);
     const [internalValue, setInternalValue] = React.useState(defaultValue ?? "");
-    const [autofilled, setAutofilled] = React.useState(false);
-    const inputRef = React.useRef<HTMLInputElement | null>(null);
     const inputId = id ?? React.useId();
 
     const isControlled = value !== undefined;
     const currentValue = isControlled ? value : internalValue;
     const hasValue = currentValue !== "" && currentValue != null;
-    const isFloating = focused || hasValue || autofilled;
+    // isFloating controls label position and prefix/suffix visibility
+    const isFloating = focused || hasValue;
 
-    // Detect Chrome autofill via animationstart (CSS @keyframes trick)
-    const handleAnimationStart = (e: React.AnimationEvent) => {
-      if (e.animationName === "m3-autofill-start") setAutofilled(true);
-      if (e.animationName === "m3-autofill-cancel") setAutofilled(false);
-    };
+    // Detect browser autofill on mount — Chrome fills value without triggering onChange
+    const internalRef = React.useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
+    const [browserFilled, setBrowserFilled] = React.useState(false);
 
-    // Merge refs
-    const setRef = React.useCallback((el: HTMLInputElement | null) => {
-      inputRef.current = el;
-      if (typeof ref === "function") ref(el);
-      else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = el;
-    }, [ref]);
+    React.useEffect(() => {
+      const el = internalRef.current;
+      if (!el) return;
+      // Check after a short delay to let the browser autofill
+      const timer = setTimeout(() => {
+        if (el.matches(":-webkit-autofill")) {
+          setBrowserFilled(true);
+        } else if (el.value && !hasValue) {
+          setBrowserFilled(true);
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    }, []);
+
+    const shouldFloat = isFloating || browserFilled;
 
     const handleFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setFocused(true);
@@ -223,7 +229,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                     "absolute left-0 pointer-events-none select-none z-1",
                     padL,
                     "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)] origin-top-left",
-                    isFloating
+                    shouldFloat
                       ? "top-2 text-xs leading-4 tracking-[0.4px]"
                       : "top-1/2 -translate-y-1/2 text-base leading-6 tracking-[0.5px]",
                     labelColor
@@ -246,38 +252,37 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               {/* Input */}
               {multiline ? (
                 <textarea
-                  ref={ref as unknown as React.Ref<HTMLTextAreaElement>}
+                  ref={(el) => { internalRef.current = el; }}
                   id={inputId}
                   data-m3-input=""
                   disabled={disabled}
                   value={isControlled ? (value as string) : undefined}
                   defaultValue={!isControlled ? (defaultValue as string) : undefined}
-                  placeholder={focused ? placeholder : undefined}
+                  placeholder={placeholder || " "}
                   onChange={handleChange}
                   onFocus={handleFocus}
                   onBlur={handleBlur}
                   rows={rows}
                   aria-invalid={error || undefined}
                   aria-describedby={displayedSupporting ? `${inputId}-supporting` : undefined}
-                  className={cn(inputCx, filledAutofill, "pt-6 pb-2 resize-y")}
+                  className={cn(inputCx, filledAutofill, "peer pt-6 pb-2 resize-y")}
                 />
               ) : (
                 <input
-                  ref={setRef}
+                  ref={(el) => { internalRef.current = el; if (typeof ref === "function") ref(el); else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = el; }}
                   id={inputId}
                   data-m3-input=""
                   disabled={disabled}
                   value={isControlled ? value : undefined}
                   defaultValue={!isControlled ? defaultValue : undefined}
-                  placeholder={focused ? placeholder : undefined}
+                  placeholder={placeholder || " "}
                   onChange={handleChange}
                   onFocus={handleFocus}
                   onBlur={handleBlur}
-                  onAnimationStart={handleAnimationStart}
                   aria-invalid={error || undefined}
                   aria-describedby={displayedSupporting ? `${inputId}-supporting` : undefined}
                   {...inputProps}
-                  className={cn(inputCx, filledAutofill, "pt-6 pb-2")}
+                  className={cn(inputCx, filledAutofill, "peer pt-6 pb-2")}
                 />
               )}
 
@@ -322,7 +327,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               "absolute pointer-events-none select-none z-3",
               "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)] origin-top-left",
               leadingIcon ? "left-13" : "left-4",
-              isFloating
+              shouldFloat
                 ? "top-0 -translate-y-1/2 text-xs leading-4 tracking-[0.4px]"
                 : "top-1/2 -translate-y-1/2 text-base leading-6 tracking-[0.5px]",
               labelColor
@@ -358,7 +363,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               className={cn(
                 "invisible h-0 overflow-hidden block text-xs leading-0",
                 "transition-all duration-200",
-                isFloating ? "px-1 max-w-full" : "px-0 max-w-[0.01px]",
+                shouldFloat ? "px-1 max-w-full" : "px-0 max-w-[0.01px]",
                 leadingIcon ? "ml-9" : "ml-0"
               )}
             >
@@ -383,38 +388,37 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             {/* Input */}
             {multiline ? (
               <textarea
-                ref={ref as unknown as React.Ref<HTMLTextAreaElement>}
+                ref={(el) => { internalRef.current = el; }}
                 id={inputId}
                 data-m3-input=""
                 disabled={disabled}
                 value={isControlled ? (value as string) : undefined}
                 defaultValue={!isControlled ? (defaultValue as string) : undefined}
-                placeholder={focused ? placeholder : undefined}
+                placeholder={placeholder || " "}
                 onChange={handleChange}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 rows={rows}
                 aria-invalid={error || undefined}
                 aria-describedby={displayedSupporting ? `${inputId}-supporting` : undefined}
-                className={cn(inputCx, outlinedAutofill, "py-4 resize-y")}
+                className={cn(inputCx, outlinedAutofill, "peer py-4 resize-y")}
               />
             ) : (
               <input
-                ref={setRef}
+                ref={(el) => { internalRef.current = el; if (typeof ref === "function") ref(el); else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = el; }}
                 id={inputId}
                 data-m3-input=""
                 disabled={disabled}
                 value={isControlled ? value : undefined}
                 defaultValue={!isControlled ? defaultValue : undefined}
-                placeholder={focused ? placeholder : undefined}
+                placeholder={placeholder || " "}
                 onChange={handleChange}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
-                onAnimationStart={handleAnimationStart}
                 aria-invalid={error || undefined}
                 aria-describedby={displayedSupporting ? `${inputId}-supporting` : undefined}
                 {...inputProps}
-                className={cn(inputCx, outlinedAutofill, "py-4")}
+                className={cn(inputCx, outlinedAutofill, "peer py-4")}
               />
             )}
 
