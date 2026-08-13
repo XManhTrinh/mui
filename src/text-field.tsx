@@ -140,9 +140,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
     const inputCx = cn(
       "w-full bg-transparent outline-none",
-      "text-base leading-6 font-normal tracking-[0.5px]",
+      "text-[16px] leading-[24px] font-normal tracking-[0.5px]",
       "text-[hsl(var(--on-surface))] caret-[hsl(var(--primary))]",
-      "placeholder:text-[hsl(var(--on-surface-variant))]",
+      "placeholder:text-[hsl(var(--on-surface-variant))] placeholder:text-[16px]",
       disabled ? "text-[hsl(var(--on-surface)/0.38)] cursor-not-allowed" : "cursor-text"
     );
 
