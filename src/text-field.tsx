@@ -59,12 +59,32 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     const [focused, setFocused] = React.useState(false);
     const [internalValue, setInternalValue] = React.useState(defaultValue ?? "");
     const inputId = id ?? React.useId();
+    const inputElRef = React.useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
     const isControlled = value !== undefined;
     const currentValue = isControlled ? value : internalValue;
     const hasValue = currentValue !== "" && currentValue != null;
     const [autofilled, setAutofilled] = React.useState(false);
     const shouldFloat = focused || hasValue || autofilled;
+
+    // Detect autofill on mount — Chrome autofills before React hydrates
+    React.useEffect(() => {
+      const el = inputElRef.current;
+      if (!el) return;
+      // Poll briefly — Chrome may autofill with a small delay after paint
+      const check = () => {
+        try {
+          if (el.matches(":-webkit-autofill")) {
+            setAutofilled(true);
+          }
+        } catch { /* Firefox throws on :-webkit-autofill */ }
+      };
+      // Check immediately and again after a short delay
+      check();
+      const t1 = setTimeout(check, 120);
+      const t2 = setTimeout(check, 500);
+      return () => { clearTimeout(t1); clearTimeout(t2); };
+    }, []);
 
     const handleAnimationStart = (e: React.AnimationEvent) => {
       if (e.animationName === "m3-autofill-start") setAutofilled(true);
@@ -210,7 +230,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               )}
 
               {multiline ? (
-                <textarea
+                <textarea ref={(el) => { inputElRef.current = el; }}
                   {...sharedProps}
                   value={isControlled ? (value as string) : undefined}
                   defaultValue={!isControlled ? (defaultValue as string) : undefined}
@@ -219,7 +239,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 />
               ) : (
                 <input
-                  ref={ref}
+                  ref={(el) => { inputElRef.current = el; if (typeof ref === "function") ref(el); else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = el; }}
                   {...sharedProps}
                   {...inputProps}
                   value={isControlled ? value : undefined}
@@ -314,7 +334,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             )}
 
             {multiline ? (
-              <textarea
+              <textarea ref={(el) => { inputElRef.current = el; }}
                 {...sharedProps}
                 value={isControlled ? (value as string) : undefined}
                 defaultValue={!isControlled ? (defaultValue as string) : undefined}
@@ -323,7 +343,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               />
             ) : (
               <input
-                ref={ref}
+                ref={(el) => { inputElRef.current = el; if (typeof ref === "function") ref(el); else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = el; }}
                 {...sharedProps}
                 {...inputProps}
                 value={isControlled ? value : undefined}
