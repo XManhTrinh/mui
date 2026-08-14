@@ -24,7 +24,7 @@ import { Icon } from "./icon";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-export interface CarouselProps {
+export type CarouselProps = {
   /** Layout variant */
   variant?: "uncontained" | "hero" | "full-screen";
   /** Gap between items in pixels (default: 8) */
@@ -37,7 +37,7 @@ export interface CarouselProps {
   children: React.ReactNode;
 }
 
-export interface CarouselItemProps {
+export type CarouselItemProps = {
   /** Item width: "large" (dynamic fill), "medium" (half), "small" (40-56dp) */
   size?: "large" | "medium" | "small";
   /** Disabled state (38% opacity) */

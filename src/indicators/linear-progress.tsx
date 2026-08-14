@@ -30,7 +30,7 @@ import { cn } from "../lib/utils";
  * - prefers-reduced-motion: static display, no animation
  */
 
-export interface LinearProgressProps {
+export type LinearProgressProps = {
   /** Progress value 0-100. If undefined, renders indeterminate. */
   value?: number;
   /** Additional className */

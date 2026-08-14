@@ -30,7 +30,7 @@ import { cn } from "../lib/utils";
  * - prefers-reduced-motion: static display, no animation
  */
 
-export interface CircularProgressProps {
+export type CircularProgressProps = {
   /** Progress value 0-100. If undefined, renders indeterminate. */
   value?: number;
   /** Size in px. Default: 48 */

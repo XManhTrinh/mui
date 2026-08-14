@@ -2,7 +2,7 @@
 
 import { cn } from "./lib/utils";
 
-export interface IconProps {
+export type IconProps = {
   /** Material Symbols icon name (e.g., "dashboard", "person", "settings") */
   name: string;
   /**

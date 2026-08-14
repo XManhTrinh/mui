@@ -37,7 +37,7 @@ import { Icon } from "./icon";
  * (M3 menus support grouped items with section headers). Low priority.
  */
 
-export interface MenuProps {
+export type MenuProps = {
   trigger: React.ReactNode;
   children: React.ReactNode;
   align?: "start" | "center" | "end";
@@ -68,7 +68,7 @@ function Menu({ trigger, children, align = "start", side = "bottom", className }
 }
 Menu.displayName = "Menu";
 
-export interface MenuItemProps {
+export type MenuItemProps = {
   leadingIcon?: string;
   trailingIcon?: string;
   trailingText?: string;
@@ -128,7 +128,7 @@ const MenuItem = React.forwardRef<
 );
 MenuItem.displayName = "MenuItem";
 
-export interface MenuDividerProps {
+export type MenuDividerProps = {
   className?: string;
 }
 

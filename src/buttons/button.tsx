@@ -128,9 +128,7 @@ function ButtonSpinner({ className }: { className?: string }) {
   );
 }
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & VariantProps<typeof buttonVariants>& {
   /** Render as child element (Radix Slot pattern) */
   asChild?: boolean;
   /** Use square shape (rounded corners instead of pill) */

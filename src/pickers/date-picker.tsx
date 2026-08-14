@@ -5,7 +5,7 @@ import { cn } from "../lib/utils";
 import { Icon } from "../icon";
 import { IconButton } from "../buttons/icon-button";
 
-export interface DatePickerProps {
+export type DatePickerProps = {
   value?: Date | null;
   onChange?: (date: Date | null) => void;
   min?: Date;

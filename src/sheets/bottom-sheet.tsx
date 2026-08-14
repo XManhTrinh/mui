@@ -29,7 +29,7 @@ export function useBottomSheet(): BottomSheetContextValue {
 
 // --- BottomSheetHandle ---
 
-export interface BottomSheetHandleProps {
+export type BottomSheetHandleProps = {
   className?: string;
 }
 
@@ -50,7 +50,7 @@ BottomSheetHandle.displayName = "BottomSheetHandle";
 
 // --- BottomSheetHeader ---
 
-export interface BottomSheetHeaderProps {
+export type BottomSheetHeaderProps = {
   className?: string;
   children: React.ReactNode;
 }
@@ -69,7 +69,7 @@ BottomSheetHeader.displayName = "BottomSheetHeader";
 
 // --- BottomSheetContent ---
 
-export interface BottomSheetContentProps {
+export type BottomSheetContentProps = {
   className?: string;
   children: React.ReactNode;
 }
@@ -88,7 +88,7 @@ BottomSheetContent.displayName = "BottomSheetContent";
 
 // --- BottomSheetActions ---
 
-export interface BottomSheetActionsProps {
+export type BottomSheetActionsProps = {
   className?: string;
   children: React.ReactNode;
 }
@@ -163,7 +163,7 @@ function hasCompoundChildren(children: React.ReactNode): boolean {
  * - Scrim: fade 150ms
  * - prefers-reduced-motion: instant
  */
-export interface BottomSheetProps {
+export type BottomSheetProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   variant?: "standard" | "modal";

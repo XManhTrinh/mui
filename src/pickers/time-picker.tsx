@@ -3,7 +3,7 @@
 import * as React from "react";
 import { cn } from "../lib/utils";
 
-export interface TimePickerProps {
+export type TimePickerProps = {
   value?: { hours: number; minutes: number } | null;
   onChange?: (time: { hours: number; minutes: number } | null) => void;
   format?: "12h" | "24h";

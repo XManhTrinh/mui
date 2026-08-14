@@ -34,7 +34,7 @@ import { Icon } from "./icon";
  * - Animation: 200ms M3 standard easing, handle grows on press
  */
 
-export interface SwitchProps {
+export type SwitchProps = {
   checked?: boolean;
   defaultChecked?: boolean;
   onCheckedChange?: (checked: boolean) => void;

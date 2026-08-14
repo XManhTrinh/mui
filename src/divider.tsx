@@ -15,7 +15,7 @@ import { cn } from "./lib/utils";
  * - Bottom margin: 8dp (when in a list context)
  */
 
-export interface DividerProps {
+export type DividerProps = {
   variant?: "full" | "inset" | "middle-inset";
   orientation?: "horizontal" | "vertical";
   className?: string;

@@ -53,7 +53,7 @@ function useButtonGroupPosition() {
 
 // ---------- ButtonGroup ----------
 
-export interface ButtonGroupProps {
+export type ButtonGroupProps = {
   /** Variant: standard (spaced) or connected (joined) */
   variant?: "standard" | "connected";
   /** Selection mode */
@@ -265,7 +265,7 @@ ButtonGroup.displayName = "ButtonGroup";
 
 // ---------- ButtonGroupItem ----------
 
-export interface ButtonGroupItemProps {
+export type ButtonGroupItemProps = {
   /** Unique value identifier */
   value: string;
   /** Icon name (Material Symbols) */

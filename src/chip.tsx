@@ -59,9 +59,7 @@ const chipVariants = cva(
   }
 );
 
-export interface ChipProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type">,
-    VariantProps<typeof chipVariants> {
+export type ChipProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type"> & VariantProps<typeof chipVariants>& {
   /** Leading icon name (Material Symbols) */
   leadingIcon?: string;
   /** Trailing icon name (Material Symbols) */

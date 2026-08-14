@@ -12,7 +12,7 @@ import { cn } from "./lib/utils";
  * - Positioning: small offset 6×6dp, large offset 14×12dp from top-trailing corner
  */
 
-export interface BadgeProps {
+export type BadgeProps = {
   /** Badge variant: "dot" for small indicator, "count" for number badge */
   variant?: "dot" | "count";
   /** Number to display (count variant only) */

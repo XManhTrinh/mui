@@ -106,7 +106,7 @@ const trailingWidth = {
 
 // ─── SplitButton.Leading Sub-Component ────────────────────────────────────────
 
-export interface SplitButtonLeadingProps {
+export type SplitButtonLeadingProps = {
   /** Click handler for the leading segment */
   onClick?: (e: React.MouseEvent) => void;
   /** Disabled state for the leading segment */
@@ -136,9 +136,7 @@ SplitButtonLeading.displayName = "SplitButtonLeading";
 
 // ─── SplitButton Root ─────────────────────────────────────────────────────────
 
-export interface SplitButtonProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "children">,
-    VariantProps<typeof splitButtonVariants> {
+export type SplitButtonProps = Omit<React.HTMLAttributes<HTMLDivElement>, "children"> & VariantProps<typeof splitButtonVariants>& {
   /** Leading button icon (legacy prop-based API) */
   icon?: React.ReactNode;
   /** Leading button label (legacy prop-based API) */

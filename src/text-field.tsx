@@ -15,8 +15,7 @@ import { cn } from "./lib/utils";
  * Typography: body-large (16/24/400/0.5) input, body-small (12/16/400/0.4) floating label
  */
 
-export interface TextFieldProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
+export type TextFieldProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">& {
   variant?: "filled" | "outlined";
   label?: string;
   leadingIcon?: React.ReactNode;

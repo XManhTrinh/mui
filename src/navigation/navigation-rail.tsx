@@ -20,7 +20,7 @@ export function useNavigationRail() {
 
 // ─── NavigationRail (Container) ───────────────────────────────────────────────
 
-export interface NavigationRailProps {
+export type NavigationRailProps = {
   /** Controlled expanded state */
   expanded?: boolean;
   /** Additional classes */
@@ -77,7 +77,7 @@ function NavigationRailRoot({
 
 // ─── NavigationRail.Header ────────────────────────────────────────────────────
 
-export interface NavigationRailHeaderProps {
+export type NavigationRailHeaderProps = {
   className?: string;
   children: React.ReactNode;
 }
@@ -92,7 +92,7 @@ function NavigationRailHeader({ className, children }: NavigationRailHeaderProps
 
 // ─── NavigationRail.Content ───────────────────────────────────────────────────
 
-export interface NavigationRailContentProps {
+export type NavigationRailContentProps = {
   className?: string;
   children: React.ReactNode;
 }
@@ -115,7 +115,7 @@ function NavigationRailContent({ className, children }: NavigationRailContentPro
 
 // ─── NavigationRail.Footer ────────────────────────────────────────────────────
 
-export interface NavigationRailFooterProps {
+export type NavigationRailFooterProps = {
   className?: string;
   children: React.ReactNode;
 }
@@ -130,7 +130,7 @@ function NavigationRailFooter({ className, children }: NavigationRailFooterProps
 
 // ─── NavigationRail.Item ──────────────────────────────────────────────────────
 
-export interface NavigationRailItemProps {
+export type NavigationRailItemProps = {
   /** Material Symbols icon name */
   icon: string;
   /** Label text */

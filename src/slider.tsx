@@ -40,7 +40,7 @@ import { cn } from "./lib/utils";
  * Animation: value indicator fade 150ms, handle state 200ms M3 standard easing
  */
 
-export interface SliderProps {
+export type SliderProps = {
   value?: number;
   defaultValue?: number;
   onValueChange?: (value: number) => void;

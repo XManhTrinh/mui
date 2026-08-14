@@ -28,7 +28,7 @@ export function useAppBar(): AppBarContextValue {
 
 // --- AppBarLeading ---
 
-export interface AppBarLeadingProps extends React.HTMLAttributes<HTMLDivElement> {
+export type AppBarLeadingProps = React.HTMLAttributes<HTMLDivElement>& {
   children: React.ReactNode;
 }
 
@@ -54,7 +54,7 @@ AppBarLeading.displayName = "AppBarLeading";
 
 // --- AppBarHeadline ---
 
-export interface AppBarHeadlineProps extends React.HTMLAttributes<HTMLDivElement> {
+export type AppBarHeadlineProps = React.HTMLAttributes<HTMLDivElement>& {
   /** Optional subtitle text displayed below the headline */
   subtitle?: string;
   children?: React.ReactNode;
@@ -97,7 +97,7 @@ AppBarHeadline.displayName = "AppBarHeadline";
 
 // --- AppBarTrailing ---
 
-export interface AppBarTrailingProps extends React.HTMLAttributes<HTMLDivElement> {
+export type AppBarTrailingProps = React.HTMLAttributes<HTMLDivElement>& {
   children: React.ReactNode;
 }
 
@@ -140,7 +140,7 @@ function hasCompoundChildren(children: React.ReactNode): boolean {
 
 // ─── App Bar (M3 Top App Bar — Small variant) ────────────────────────────────
 
-export interface AppBarProps extends React.HTMLAttributes<HTMLElement> {
+export type AppBarProps = React.HTMLAttributes<HTMLElement>& {
   /** Leading content (navigation icon button) — legacy prop API */
   leadingIcon?: React.ReactNode;
   /** Headline text or element — legacy prop API */

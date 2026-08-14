@@ -44,7 +44,7 @@ const tooltipVariants = cva("absolute z-60 pointer-events-none", {
   },
 });
 
-export interface TooltipProps extends VariantProps<typeof tooltipVariants> {
+export type TooltipProps = VariantProps<typeof tooltipVariants>& {
   /** Tooltip text content */
   content: string;
   /** Optional subhead for rich tooltips */

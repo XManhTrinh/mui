@@ -19,7 +19,7 @@ import { cn } from "./lib/utils";
  * - Animation: 100ms, cubic-bezier(0.2, 0, 0, 1)
  */
 
-export interface RadioProps {
+export type RadioProps = {
   checked?: boolean;
   defaultChecked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
@@ -129,7 +129,7 @@ const Radio = React.forwardRef<HTMLButtonElement, RadioProps>(
 );
 Radio.displayName = "Radio";
 
-export interface RadioGroupProps {
+export type RadioGroupProps = {
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;

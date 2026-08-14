@@ -24,7 +24,7 @@ export function useNavigationBar() {
 
 // ─── NavigationBar.Item ───────────────────────────────────────────────────────
 
-export interface NavigationBarItemProps {
+export type NavigationBarItemProps = {
   /** Unique value identifying this item */
   value: string;
   /** Material Symbols icon name */
@@ -140,7 +140,7 @@ export interface NavigationBarItemData {
 
 // ─── NavigationBar Root ───────────────────────────────────────────────────────
 
-export interface NavigationBarProps {
+export type NavigationBarProps = {
   /** Data-driven items array (legacy API) */
   items?: NavigationBarItemData[];
   /** Controlled active value */

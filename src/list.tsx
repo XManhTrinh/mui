@@ -34,7 +34,7 @@ import { cn } from "./lib/utils";
  * but works well with props. No refactor needed.
  */
 
-export interface ListProps {
+export type ListProps = {
   className?: string;
   children: React.ReactNode;
 }
@@ -52,7 +52,7 @@ const List = React.forwardRef<HTMLUListElement, ListProps>(
 );
 List.displayName = "List";
 
-export interface ListItemProps {
+export type ListItemProps = {
   /** Leading element (icon, avatar, image, checkbox, radio) */
   leading?: React.ReactNode;
   /** Trailing element (icon, text, switch, checkbox) */

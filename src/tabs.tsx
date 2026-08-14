@@ -68,7 +68,7 @@ function useTabsContext() {
 
 // --- Tabs (root) ---
 
-export interface TabsProps {
+export type TabsProps = {
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
@@ -130,7 +130,7 @@ function Tabs({
 
 // --- TabList ---
 
-export interface TabListProps {
+export type TabListProps = {
   className?: string;
   children: React.ReactNode;
 }
@@ -253,7 +253,7 @@ function TabList({ className, children }: TabListProps) {
 
 // --- Tab ---
 
-export interface TabProps {
+export type TabProps = {
   value: string;
   icon?: string;
   label: string;
@@ -344,7 +344,7 @@ function Tab({ value: tabValue, icon, label, disabled = false, className }: TabP
 
 // --- TabContent ---
 
-export interface TabContentProps {
+export type TabContentProps = {
   value: string;
   className?: string;
   children: React.ReactNode;

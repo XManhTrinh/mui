@@ -22,7 +22,7 @@ import { cn } from "./lib/utils";
  * - Animation: 100ms, cubic-bezier(0.2, 0, 0, 1)
  */
 
-export interface CheckboxProps {
+export type CheckboxProps = {
   checked?: boolean;
   defaultChecked?: boolean;
   onCheckedChange?: (checked: boolean | "indeterminate") => void;

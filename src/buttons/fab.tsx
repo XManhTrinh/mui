@@ -114,9 +114,7 @@ function FABSpinner({ className }: { className?: string }) {
   );
 }
 
-export interface FABProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof fabVariants> {
+export type FABProps = React.ButtonHTMLAttributes<HTMLButtonElement> & VariantProps<typeof fabVariants>& {
   /** Render as child element (Radix Slot pattern) */
   asChild?: boolean;
   /** Icon to display (React node) */

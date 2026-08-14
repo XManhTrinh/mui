@@ -53,9 +53,7 @@ const cardVariants = cva(
   }
 );
 
-export interface CardProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof cardVariants> {
+export type CardProps = React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof cardVariants>& {
   /** Card style variant */
   variant?: "elevated" | "filled" | "outlined";
   /** Adds state layers + cursor-pointer for clickable cards */

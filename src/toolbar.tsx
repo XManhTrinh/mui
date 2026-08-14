@@ -25,7 +25,7 @@ import { cn } from "./lib/utils";
  * with other compound components, while keeping separate exports for tree-shaking.
  */
 
-export interface ToolbarProps extends React.HTMLAttributes<HTMLDivElement> {
+export type ToolbarProps = React.HTMLAttributes<HTMLDivElement>& {
   /** Toolbar style variant */
   variant?: "docked" | "floating";
   /** Color scheme */
@@ -53,7 +53,7 @@ const Toolbar = React.forwardRef<HTMLDivElement, ToolbarProps>(
 );
 Toolbar.displayName = "Toolbar";
 
-export interface ToolbarLeadingProps extends React.HTMLAttributes<HTMLDivElement> {}
+export type ToolbarLeadingProps = React.HTMLAttributes<HTMLDivElement>& {}
 
 /**
  * Leading slot — typically contains a navigation icon or close button.
@@ -68,7 +68,7 @@ const ToolbarLeading = React.forwardRef<HTMLDivElement, ToolbarLeadingProps>(
 );
 ToolbarLeading.displayName = "ToolbarLeading";
 
-export interface ToolbarHeadlineProps extends React.HTMLAttributes<HTMLDivElement> {}
+export type ToolbarHeadlineProps = React.HTMLAttributes<HTMLDivElement>& {}
 
 /**
  * Headline slot — optional title text in the toolbar.
@@ -87,7 +87,7 @@ const ToolbarHeadline = React.forwardRef<HTMLDivElement, ToolbarHeadlineProps>(
 );
 ToolbarHeadline.displayName = "ToolbarHeadline";
 
-export interface ToolbarActionsProps extends React.HTMLAttributes<HTMLDivElement> {}
+export type ToolbarActionsProps = React.HTMLAttributes<HTMLDivElement>& {}
 
 /**
  * Actions slot — contains trailing IconButtons or other controls.

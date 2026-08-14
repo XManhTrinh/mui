@@ -102,9 +102,7 @@ const shapeClasses = {
   },
 } as const;
 
-export interface IconButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "aria-label">,
-    VariantProps<typeof iconButtonVariants> {
+export type IconButtonProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "aria-label"> & VariantProps<typeof iconButtonVariants>& {
   /** Render as child element (Radix Slot pattern) */
   asChild?: boolean;
   /** Icon button style */

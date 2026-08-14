@@ -33,7 +33,7 @@ export interface SnackbarMessage {
   priority?: "normal" | "urgent";
 }
 
-export interface SnackbarProviderProps {
+export type SnackbarProviderProps = {
   children: React.ReactNode;
   /** Max visible snackbars at once (M3: 1) */
   maxVisible?: number;

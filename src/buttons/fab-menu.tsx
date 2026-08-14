@@ -30,7 +30,7 @@ export interface FABMenuItem {
   "aria-label"?: string;
 }
 
-export interface FABMenuItemComponentProps {
+export type FABMenuItemComponentProps = {
   /** Icon (React node) */
   icon: React.ReactNode;
   /** Label text */
@@ -44,7 +44,7 @@ export interface FABMenuItemComponentProps {
   children?: React.ReactNode;
 }
 
-export interface FABMenuProps {
+export type FABMenuProps = {
   /** Menu items (2-6) — data-driven API */
   items?: FABMenuItem[];
   /** Color set for close button and items */

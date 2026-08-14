@@ -29,7 +29,7 @@ export function useSideSheet(): SideSheetContextValue {
 
 // --- SideSheetHeader ---
 
-export interface SideSheetHeaderProps {
+export type SideSheetHeaderProps = {
   /** Title text for the header */
   headline?: string;
   /** Whether to show the close button */
@@ -80,7 +80,7 @@ SideSheetHeader.displayName = "SideSheetHeader";
 
 // --- SideSheetContent ---
 
-export interface SideSheetContentProps {
+export type SideSheetContentProps = {
   className?: string;
   children: React.ReactNode;
 }
@@ -99,7 +99,7 @@ SideSheetContent.displayName = "SideSheetContent";
 
 // --- SideSheetActions ---
 
-export interface SideSheetActionsProps {
+export type SideSheetActionsProps = {
   className?: string;
   children: React.ReactNode;
 }
@@ -177,7 +177,7 @@ function hasCompoundChildren(children: React.ReactNode): boolean {
  * - Scrim fades in (150ms)
  * - prefers-reduced-motion: instant
  */
-export interface SideSheetProps {
+export type SideSheetProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   variant?: "standard" | "modal";

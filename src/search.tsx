@@ -34,7 +34,7 @@ export function useSearch(): SearchContextValue {
 
 // ─── Search.LeadingIcon ───────────────────────────────────────────────────────
 
-export interface SearchLeadingIconProps {
+export type SearchLeadingIconProps = {
   className?: string;
   children: React.ReactNode;
 }
@@ -58,7 +58,7 @@ SearchLeadingIcon.displayName = "SearchLeadingIcon";
 
 // ─── Search.Input ─────────────────────────────────────────────────────────────
 
-export interface SearchInputProps {
+export type SearchInputProps = {
   placeholder?: string;
   disabled?: boolean;
   "aria-label"?: string;
@@ -108,7 +108,7 @@ SearchInput.displayName = "SearchInput";
 
 // ─── Search.TrailingIcon ──────────────────────────────────────────────────────
 
-export interface SearchTrailingIconProps {
+export type SearchTrailingIconProps = {
   className?: string;
   children: React.ReactNode;
 }
@@ -150,7 +150,7 @@ SearchTrailingIcon.displayName = "SearchTrailingIcon";
  *   Input text: on-surface
  * - States: 8% hover, 10% focus, 10% press
  */
-export interface SearchProps {
+export type SearchProps = {
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;

@@ -17,7 +17,7 @@ import { CircularProgress } from "./circular-progress";
  * - lg: 64dp
  */
 
-export interface LoadingIndicatorProps {
+export type LoadingIndicatorProps = {
   /** Predefined size. Default: "md" */
   size?: "sm" | "md" | "lg";
   /** Additional className */
