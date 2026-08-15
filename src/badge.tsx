@@ -55,13 +55,13 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
         : undefined;
 
     return (
-      <span ref={ref} className="relative inline-flex">
+      <span ref={ref} className="relative inline-flex overflow-visible">
         {children}
         {variant === "dot" && (
           <span
             className={cn(
-              // M3 spec: small dot badge at top-right edge of icon container
-              "absolute top-1 right-1 z-20",
+              // M3 spec: small dot badge at top-right corner, overlapping slightly
+              "absolute -top-0.5 -right-0.5 z-20",
               "h-1.5 w-1.5 rounded-[3px] bg-error",
               className
             )}
@@ -71,8 +71,8 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
         {variant === "count" && displayText && (
           <span
             className={cn(
-              // M3 spec: large badge at top-right edge of icon container
-              "absolute top-0.5 right-0.5 z-20",
+              // M3 spec: large badge at top-right corner, overlapping slightly
+              "absolute -top-1 -right-1 z-20",
               "h-4 min-w-4 rounded-full px-1",
               "bg-error text-error-foreground",
               "text-[11px] leading-4 font-medium tracking-[0.5px]",
