@@ -60,8 +60,8 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
         {variant === "dot" && (
           <span
             className={cn(
-              // M3 spec: small badge 6×6dp from top-trailing icon corner to bottom-leading badge corner
-              "absolute top-0 right-0 translate-x-0.75 -translate-y-0.75 z-20",
+              // M3 spec: small badge anchored to top-right corner of icon
+              "absolute -top-0.5 -right-0.5 z-20",
               "h-1.5 w-1.5 rounded-[3px] bg-error",
               className
             )}
@@ -71,8 +71,8 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
         {variant === "count" && displayText && (
           <span
             className={cn(
-              // M3 spec: large badge 14×12dp from top-trailing icon corner to bottom-leading badge corner
-              "absolute top-0 right-0 translate-x-1.5 -translate-y-1.5 z-20",
+              // M3 spec: large badge anchored to top-right corner of icon
+              "absolute -top-1 -right-1 z-20",
               "h-4 min-w-4 rounded-full px-1",
               "bg-error text-error-foreground",
               "text-[11px] leading-4 font-medium tracking-[0.5px]",

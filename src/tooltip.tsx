@@ -72,8 +72,8 @@ function Tooltip({
   delayHide = 200,
 }: TooltipProps) {
   const [isVisible, setIsVisible] = React.useState(false);
-  const showTimeout = React.useRef<ReturnType<typeof setTimeout>>(null);
-  const hideTimeout = React.useRef<ReturnType<typeof setTimeout>>(null);
+  const showTimeout = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hideTimeout = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const tooltipId = React.useId();
 
   // Reduced motion detection
