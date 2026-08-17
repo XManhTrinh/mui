@@ -35,6 +35,9 @@ export type SelectProps = {
   options: SelectOption[];
   disabled?: boolean;
   error?: boolean;
+  errorText?: string;
+  supportingText?: string;
+  required?: boolean;
   className?: string;
 }
 
@@ -50,6 +53,9 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
       options,
       disabled = false,
       error = false,
+      errorText,
+      supportingText,
+      required = false,
       className,
     },
     ref
@@ -192,6 +198,15 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
               </DropdownMenuPrimitive.Content>
             </DropdownMenuPrimitive.Portal>
           </DropdownMenuPrimitive.Root>
+          {(supportingText || (error && errorText)) && (
+            <p className={cn(
+              "px-4 pt-1 text-[12px] leading-4 tracking-[0.4px]",
+              error ? "text-[hsl(var(--error))]" : "text-[hsl(var(--on-surface-variant))]",
+              disabled && "text-[hsl(var(--on-surface)/0.38)]"
+            )}>
+              {error && errorText ? errorText : supportingText}
+            </p>
+          )}
         </div>
       );
     }
@@ -239,7 +254,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                     hasValue || open ? "px-1 max-w-full" : "px-0 max-w-[0.01px]"
                   )}
                 >
-                  <span>{label}</span>
+                  <span>{label}{required && <span className="text-error ml-0.5">*</span>}</span>
                 </legend>
               </fieldset>
 
@@ -320,6 +335,15 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             </DropdownMenuPrimitive.Content>
           </DropdownMenuPrimitive.Portal>
         </DropdownMenuPrimitive.Root>
+        {(supportingText || (error && errorText)) && (
+          <p className={cn(
+            "px-4 pt-1 text-[12px] leading-4 tracking-[0.4px]",
+            error ? "text-[hsl(var(--error))]" : "text-[hsl(var(--on-surface-variant))]",
+            disabled && "text-[hsl(var(--on-surface)/0.38)]"
+          )}>
+            {error && errorText ? errorText : supportingText}
+          </p>
+        )}
       </div>
     );
   }
