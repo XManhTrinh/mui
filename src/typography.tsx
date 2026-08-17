@@ -101,7 +101,7 @@ type TypographyColor = NonNullable<
   VariantProps<typeof typographyVariants>["color"]
 >;
 
-interface TypographyProps extends React.HTMLAttributes<HTMLElement> {
+type TypographyProps = React.HTMLAttributes<HTMLElement> & {
   /** M3 type scale role. Default: "body-medium" */
   variant?: TypographyVariant;
   /** Override the rendered HTML element */

@@ -50,7 +50,7 @@ import { Icon } from "./icon";
 
 // --- Context ---
 
-interface TabsContextValue {
+type TabsContextValue = {
   value: string;
   onValueChange: (value: string) => void;
   variant: "primary" | "secondary";

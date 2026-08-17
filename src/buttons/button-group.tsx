@@ -14,7 +14,7 @@ import { Icon } from "../icon";
 
 // ---------- Context ----------
 
-interface ButtonGroupContextValue {
+type ButtonGroupContextValue = {
   variant: "standard" | "connected";
   selectionMode: "single" | "multiple" | "selection-required";
   selected: string[];
@@ -24,7 +24,7 @@ interface ButtonGroupContextValue {
   onSelect: (value: string) => void;
 }
 
-interface ButtonGroupPositionContextValue {
+type ButtonGroupPositionContextValue = {
   index: number;
   count: number;
 }

@@ -5,7 +5,7 @@ import { cn } from "./lib/utils";
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 
-export interface AppBarContextValue {
+export type AppBarContextValue = {
   elevated: boolean;
   centered: boolean;
 }

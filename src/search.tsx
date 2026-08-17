@@ -10,7 +10,7 @@ import { Icon } from "./icon";
 /**
  * Shared state between Search root and sub-components.
  */
-export interface SearchContextValue {
+export type SearchContextValue = {
   value: string;
   onValueChange: (value: string) => void;
   isFocused: boolean;

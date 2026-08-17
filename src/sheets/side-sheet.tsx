@@ -8,7 +8,7 @@ import { Icon } from "../icon";
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 
-export interface SideSheetContextValue {
+export type SideSheetContextValue = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   variant: "standard" | "modal";

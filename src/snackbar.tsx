@@ -15,7 +15,7 @@ import { Icon } from "./icon";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-export interface SnackbarMessage {
+export type SnackbarMessage = {
   /** Unique ID (auto-generated if omitted) */
   id?: string;
   /** Supporting text (required) */
@@ -41,7 +41,7 @@ export type SnackbarProviderProps = {
   position?: "bottom-left" | "bottom-center" | "bottom-right";
 }
 
-interface SnackbarContextValue {
+type SnackbarContextValue = {
   show: (message: SnackbarMessage) => string;
   dismiss: (id: string) => void;
   dismissAll: () => void;
@@ -70,7 +70,7 @@ function generateId(): string {
 
 // ─── Individual Snackbar ──────────────────────────────────────────────────────
 
-interface SnackbarItemProps {
+type SnackbarItemProps = {
   item: SnackbarMessage & { id: string };
   onDismiss: (id: string) => void;
   reducedMotion: boolean;

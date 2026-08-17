@@ -6,7 +6,7 @@ import { Icon } from "../icon";
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 
-interface NavigationRailContextValue {
+type NavigationRailContextValue = {
   expanded: boolean;
 }
 

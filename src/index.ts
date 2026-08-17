@@ -119,8 +119,8 @@ export type {
 } from "./menu";
 
 // ─── Select (Exposed Dropdown Menu) ──────────────────────────────────────────
-export { ExposedDropdownMenu } from "./select";
-export type { ExposedDropdownMenuProps, SelectOption } from "./select";
+export { Select } from "./select";
+export type { SelectProps, SelectOption } from "./select";
 
 // ─── Navigation ───────────────────────────────────────────────────────────────
 export { NavigationBar, useNavigationBar } from "./navigation";

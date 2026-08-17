@@ -19,7 +19,7 @@ import { cn } from "../lib/utils";
  * Uses Framer Motion (motion) for orchestrated animations.
  */
 
-export interface FABMenuItem {
+export type FABMenuItem = {
   /** Icon (React node) */
   icon: React.ReactNode;
   /** Label text */

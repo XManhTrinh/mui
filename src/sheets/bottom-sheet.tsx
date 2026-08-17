@@ -7,7 +7,7 @@ import { cn } from "../lib/utils";
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 
-export interface BottomSheetContextValue {
+export type BottomSheetContextValue = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   variant: "standard" | "modal";

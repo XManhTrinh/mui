@@ -17,13 +17,13 @@ import { Icon } from "./icon";
  * Uses Radix DropdownMenu internally for the menu panel.
  */
 
-export interface SelectOption {
+export type SelectOption = {
   value: string;
   label: string;
   disabled?: boolean;
 }
 
-export interface ExposedDropdownMenuProps {
+export type SelectProps = {
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
@@ -36,7 +36,7 @@ export interface ExposedDropdownMenuProps {
   className?: string;
 }
 
-const ExposedDropdownMenu = React.forwardRef<HTMLButtonElement, ExposedDropdownMenuProps>(
+const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
   (
     {
       value,
@@ -165,7 +165,7 @@ const ExposedDropdownMenu = React.forwardRef<HTMLButtonElement, ExposedDropdownM
                 side="bottom"
                 sideOffset={4}
                 className={cn(
-                  "z-50 min-w-28 max-w-70 w-[var(--radix-dropdown-menu-trigger-width)] overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
+                  "z-50 min-w-28 max-w-70 w-(--radix-dropdown-menu-trigger-width) overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
                   "m3-animate-menu"
                 )}
               >
@@ -215,7 +215,7 @@ const ExposedDropdownMenu = React.forwardRef<HTMLButtonElement, ExposedDropdownM
               <fieldset
                 aria-hidden="true"
                 className={cn(
-                  "absolute inset-0 rounded pointer-events-none m-0 px-3 z-[2]",
+                  "absolute inset-0 rounded pointer-events-none m-0 px-3 z-2",
                   "transition-[border-color,border-width] duration-200",
                   open
                     ? error
@@ -260,7 +260,7 @@ const ExposedDropdownMenu = React.forwardRef<HTMLButtonElement, ExposedDropdownM
                 {label && (
                   <span
                     className={cn(
-                      "absolute left-4 pointer-events-none select-none z-[3]",
+                      "absolute left-4 pointer-events-none select-none z-3",
                       "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
                       hasValue || open
                         ? "top-0 -translate-y-1/2 text-xs leading-4 tracking-[0.4px]"
@@ -293,7 +293,7 @@ const ExposedDropdownMenu = React.forwardRef<HTMLButtonElement, ExposedDropdownM
               side="bottom"
               sideOffset={4}
               className={cn(
-                "z-50 min-w-28 max-w-70 w-[var(--radix-dropdown-menu-trigger-width)] overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
+                "z-50 min-w-28 max-w-70 w-(--radix-dropdown-menu-trigger-width) overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
                 "m3-animate-menu"
               )}
             >
@@ -322,6 +322,6 @@ const ExposedDropdownMenu = React.forwardRef<HTMLButtonElement, ExposedDropdownM
     );
   }
 );
-ExposedDropdownMenu.displayName = "ExposedDropdownMenu";
+Select.displayName = "Select";
 
-export { ExposedDropdownMenu };
+export { Select };

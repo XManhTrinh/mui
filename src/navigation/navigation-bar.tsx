@@ -7,7 +7,7 @@ import { Badge } from "../badge";
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 
-export interface NavigationBarContextValue {
+export type NavigationBarContextValue = {
   activeValue: string;
   onSelect: (value: string) => void;
 }
@@ -130,7 +130,7 @@ const NavigationBarItem = React.forwardRef<HTMLButtonElement, NavigationBarItemP
 
 // ─── Legacy data-driven item interface ────────────────────────────────────────
 
-export interface NavigationBarItemData {
+export type NavigationBarItemData = {
   value: string;
   icon: string;
   activeIcon?: string;
