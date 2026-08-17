@@ -107,8 +107,20 @@ export { List, ListItem } from "./list";
 export type { ListProps, ListItemProps } from "./list";
 
 // ─── Menu ─────────────────────────────────────────────────────────────────────
-export { Menu, MenuItem, MenuDivider } from "./menu";
-export type { MenuProps, MenuItemProps, MenuDividerProps } from "./menu";
+export { Menu, MenuItem, MenuHeader, MenuDivider, MenuSub, MenuSubTrigger, MenuSubContent } from "./menu";
+export type {
+  MenuProps,
+  MenuItemProps,
+  MenuHeaderProps,
+  MenuDividerProps,
+  MenuSubProps,
+  MenuSubTriggerProps,
+  MenuSubContentProps,
+} from "./menu";
+
+// ─── Select (Exposed Dropdown Menu) ──────────────────────────────────────────
+export { ExposedDropdownMenu } from "./select";
+export type { ExposedDropdownMenuProps, SelectOption } from "./select";
 
 // ─── Navigation ───────────────────────────────────────────────────────────────
 export { NavigationBar, useNavigationBar } from "./navigation";

@@ -1,0 +1,327 @@
+"use client";
+
+import * as React from "react";
+import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
+import { cn } from "./lib/utils";
+import { Icon } from "./icon";
+
+/**
+ * Material Design 3 — Exposed Dropdown Menu (Select)
+ * https://m3.material.io/components/menus/specs#exposed-dropdown-menu
+ *
+ * An M3 "Exposed Dropdown Menu" is a TextField with a dropdown menu attached.
+ * It uses the same visual container as TextField (56dp height, matching corner radius
+ * per variant) with a trailing dropdown arrow that rotates when open.
+ *
+ * Two variants: filled and outlined (matching TextField).
+ * Uses Radix DropdownMenu internally for the menu panel.
+ */
+
+export interface SelectOption {
+  value: string;
+  label: string;
+  disabled?: boolean;
+}
+
+export interface ExposedDropdownMenuProps {
+  value?: string;
+  defaultValue?: string;
+  onValueChange?: (value: string) => void;
+  label?: string;
+  placeholder?: string;
+  variant?: "filled" | "outlined";
+  options: SelectOption[];
+  disabled?: boolean;
+  error?: boolean;
+  className?: string;
+}
+
+const ExposedDropdownMenu = React.forwardRef<HTMLButtonElement, ExposedDropdownMenuProps>(
+  (
+    {
+      value,
+      defaultValue,
+      onValueChange,
+      label,
+      placeholder,
+      variant = "outlined",
+      options,
+      disabled = false,
+      error = false,
+      className,
+    },
+    ref
+  ) => {
+    const [open, setOpen] = React.useState(false);
+    const [internalValue, setInternalValue] = React.useState(defaultValue ?? "");
+    const inputId = React.useId();
+
+    const isControlled = value !== undefined;
+    const currentValue = isControlled ? value : internalValue;
+    const selectedOption = options.find((o) => o.value === currentValue);
+    const hasValue = !!selectedOption;
+
+    const handleSelect = (optionValue: string) => {
+      if (!isControlled) {
+        setInternalValue(optionValue);
+      }
+      onValueChange?.(optionValue);
+    };
+
+    // ── Tokens ────────────────────────────────────────────────────────────────
+
+    const labelColor = disabled
+      ? "text-[hsl(var(--on-surface)/0.38)]"
+      : error
+        ? "text-[hsl(var(--error))]"
+        : open
+          ? "text-[hsl(var(--primary))]"
+          : "text-[hsl(var(--on-surface-variant))]";
+
+    // ── Filled Variant ────────────────────────────────────────────────────────
+
+    if (variant === "filled") {
+      return (
+        <div className={cn("relative w-full", className)}>
+          <DropdownMenuPrimitive.Root open={open} onOpenChange={setOpen}>
+            <DropdownMenuPrimitive.Trigger asChild disabled={disabled}>
+              <button
+                ref={ref}
+                type="button"
+                id={inputId}
+                disabled={disabled}
+                className={cn(
+                  "group relative flex items-center w-full h-14 overflow-hidden text-left",
+                  "rounded-t rounded-b-none bg-surface-container-highest",
+                  !disabled && "hover:before:absolute hover:before:inset-0 hover:before:bg-[hsl(var(--on-surface)/0.08)]",
+                  disabled && "pointer-events-none cursor-not-allowed bg-[hsl(var(--on-surface)/0.04)]",
+                  "outline-none"
+                )}
+              >
+                {/* Content area */}
+                <div className="relative flex-1 h-full flex items-center pl-4 pr-0">
+                  {/* Selected value text */}
+                  <span
+                    className={cn(
+                      "text-[16px] leading-6 tracking-[0.5px] truncate pt-6 pb-2",
+                      hasValue
+                        ? "text-[hsl(var(--on-surface))]"
+                        : "text-[hsl(var(--on-surface-variant))]",
+                      disabled && "text-[hsl(var(--on-surface)/0.38)]"
+                    )}
+                  >
+                    {selectedOption?.label ?? placeholder ?? ""}
+                  </span>
+
+                  {/* Label */}
+                  {label && (
+                    <span
+                      className={cn(
+                        "absolute left-4 pointer-events-none select-none",
+                        "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
+                        hasValue || open
+                          ? "top-2 translate-y-0 text-xs leading-4 tracking-[0.4px]"
+                          : "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
+                        labelColor
+                      )}
+                    >
+                      {label}
+                    </span>
+                  )}
+                </div>
+
+                {/* Trailing icon */}
+                <span
+                  className={cn(
+                    "shrink-0 flex items-center justify-center w-13 h-full pr-3 transition-transform duration-200",
+                    open && "rotate-180",
+                    error ? "text-[hsl(var(--error))]" : "text-[hsl(var(--on-surface-variant))]",
+                    disabled && "text-[hsl(var(--on-surface)/0.38)]"
+                  )}
+                >
+                  <Icon name="arrow_drop_down" size={24} />
+                </span>
+
+                {/* Active indicator */}
+                <span
+                  className={cn(
+                    "absolute bottom-0 inset-x-0 pointer-events-none transition-[height,background-color] duration-200",
+                    open
+                      ? error
+                        ? "h-0.5 bg-[hsl(var(--error))]"
+                        : "h-0.5 bg-[hsl(var(--primary))]"
+                      : error
+                        ? "h-px bg-[hsl(var(--error))]"
+                        : "h-px bg-[hsl(var(--on-surface))]",
+                    disabled && "h-px bg-[hsl(var(--on-surface)/0.12)]"
+                  )}
+                />
+              </button>
+            </DropdownMenuPrimitive.Trigger>
+
+            <DropdownMenuPrimitive.Portal>
+              <DropdownMenuPrimitive.Content
+                align="start"
+                side="bottom"
+                sideOffset={4}
+                className={cn(
+                  "z-50 min-w-28 max-w-70 w-[var(--radix-dropdown-menu-trigger-width)] overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
+                  "m3-animate-menu"
+                )}
+              >
+                {options.map((option) => (
+                  <DropdownMenuPrimitive.Item
+                    key={option.value}
+                    disabled={option.disabled}
+                    onSelect={() => handleSelect(option.value)}
+                    className={cn(
+                      "flex items-center gap-3 h-12 px-3 text-[16px] leading-6 tracking-[0.5px] text-surface-foreground cursor-pointer select-none outline-none transition-colors",
+                      "focus:bg-[hsl(var(--on-surface)/0.08)] active:bg-[hsl(var(--on-surface)/0.10)]",
+                      option.value === currentValue && "bg-surface-container-highest",
+                      "data-disabled:pointer-events-none data-disabled:opacity-[0.38] data-disabled:cursor-not-allowed"
+                    )}
+                  >
+                    <span className="flex-1 truncate">{option.label}</span>
+                    {option.value === currentValue && (
+                      <Icon name="check" size={24} className="text-primary" />
+                    )}
+                  </DropdownMenuPrimitive.Item>
+                ))}
+              </DropdownMenuPrimitive.Content>
+            </DropdownMenuPrimitive.Portal>
+          </DropdownMenuPrimitive.Root>
+        </div>
+      );
+    }
+
+    // ── Outlined Variant ──────────────────────────────────────────────────────
+
+    return (
+      <div className={cn("relative w-full", className)}>
+        <DropdownMenuPrimitive.Root open={open} onOpenChange={setOpen}>
+          <DropdownMenuPrimitive.Trigger asChild disabled={disabled}>
+            <button
+              ref={ref}
+              type="button"
+              id={inputId}
+              disabled={disabled}
+              className={cn(
+                "group relative flex items-center w-full h-14 rounded text-left",
+                disabled && "pointer-events-none cursor-not-allowed",
+                "outline-none"
+              )}
+            >
+              {/* Border + notch */}
+              <fieldset
+                aria-hidden="true"
+                className={cn(
+                  "absolute inset-0 rounded pointer-events-none m-0 px-3 z-[2]",
+                  "transition-[border-color,border-width] duration-200",
+                  open
+                    ? error
+                      ? "border-2 border-[hsl(var(--error))]"
+                      : "border-2 border-[hsl(var(--primary))]"
+                    : error
+                      ? "border border-[hsl(var(--error))]"
+                      : cn(
+                          "border border-[hsl(var(--outline))]",
+                          !disabled && "group-hover:border-[hsl(var(--on-surface))]"
+                        ),
+                  disabled && "border border-[hsl(var(--on-surface)/0.12)]"
+                )}
+              >
+                <legend
+                  className={cn(
+                    "invisible h-0 overflow-hidden block text-xs leading-0",
+                    "transition-all duration-200",
+                    hasValue || open ? "px-1 max-w-full" : "px-0 max-w-[0.01px]"
+                  )}
+                >
+                  <span>{label}</span>
+                </legend>
+              </fieldset>
+
+              {/* Content area */}
+              <div className="relative flex-1 h-full flex items-center pl-4 pr-0">
+                {/* Selected value text */}
+                <span
+                  className={cn(
+                    "text-[16px] leading-6 tracking-[0.5px] truncate py-4",
+                    hasValue
+                      ? "text-[hsl(var(--on-surface))]"
+                      : "text-[hsl(var(--on-surface-variant))]",
+                    disabled && "text-[hsl(var(--on-surface)/0.38)]"
+                  )}
+                >
+                  {selectedOption?.label ?? placeholder ?? ""}
+                </span>
+
+                {/* Label */}
+                {label && (
+                  <span
+                    className={cn(
+                      "absolute left-4 pointer-events-none select-none z-[3]",
+                      "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
+                      hasValue || open
+                        ? "top-0 -translate-y-1/2 text-xs leading-4 tracking-[0.4px]"
+                        : "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
+                      labelColor
+                    )}
+                  >
+                    {label}
+                  </span>
+                )}
+              </div>
+
+              {/* Trailing icon */}
+              <span
+                className={cn(
+                  "shrink-0 flex items-center justify-center w-13 h-full pr-3 transition-transform duration-200",
+                  open && "rotate-180",
+                  error ? "text-[hsl(var(--error))]" : "text-[hsl(var(--on-surface-variant))]",
+                  disabled && "text-[hsl(var(--on-surface)/0.38)]"
+                )}
+              >
+                <Icon name="arrow_drop_down" size={24} />
+              </span>
+            </button>
+          </DropdownMenuPrimitive.Trigger>
+
+          <DropdownMenuPrimitive.Portal>
+            <DropdownMenuPrimitive.Content
+              align="start"
+              side="bottom"
+              sideOffset={4}
+              className={cn(
+                "z-50 min-w-28 max-w-70 w-[var(--radix-dropdown-menu-trigger-width)] overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
+                "m3-animate-menu"
+              )}
+            >
+              {options.map((option) => (
+                <DropdownMenuPrimitive.Item
+                  key={option.value}
+                  disabled={option.disabled}
+                  onSelect={() => handleSelect(option.value)}
+                  className={cn(
+                    "flex items-center gap-3 h-12 px-3 text-[16px] leading-6 tracking-[0.5px] text-surface-foreground cursor-pointer select-none outline-none transition-colors",
+                    "focus:bg-[hsl(var(--on-surface)/0.08)] active:bg-[hsl(var(--on-surface)/0.10)]",
+                    option.value === currentValue && "bg-surface-container-highest",
+                    "data-disabled:pointer-events-none data-disabled:opacity-[0.38] data-disabled:cursor-not-allowed"
+                  )}
+                >
+                  <span className="flex-1 truncate">{option.label}</span>
+                  {option.value === currentValue && (
+                    <Icon name="check" size={24} className="text-primary" />
+                  )}
+                </DropdownMenuPrimitive.Item>
+              ))}
+            </DropdownMenuPrimitive.Content>
+          </DropdownMenuPrimitive.Portal>
+        </DropdownMenuPrimitive.Root>
+      </div>
+    );
+  }
+);
+ExposedDropdownMenu.displayName = "ExposedDropdownMenu";
+
+export { ExposedDropdownMenu };

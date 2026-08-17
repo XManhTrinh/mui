@@ -28,14 +28,16 @@ import { Icon } from "./icon";
  * - Divider: outline-variant
  * - State layer: on-surface 8% opacity
  *
+ * Typography:
+ * - Menu item label: Body Large (16px/24px/400/0.5px tracking)
+ * - Menu header label: Label Medium (12px/16px/500/0.5px tracking)
+ *
  * Animation:
  * - Enter: fade in + scale (150ms, ease-out)
  * - Exit: fade out (75ms, linear)
- *
- * @m3-audit VERIFIED — Menu, MenuItem, MenuDivider all present with Radix integration.
- * Recommendation: Consider adding MenuHeader/MenuLabel sub-component for section titles
- * (M3 menus support grouped items with section headers). Low priority.
  */
+
+// ─── Menu (Root) ──────────────────────────────────────────────────────────────
 
 export type MenuProps = {
   trigger: React.ReactNode;
@@ -43,7 +45,7 @@ export type MenuProps = {
   align?: "start" | "center" | "end";
   side?: "top" | "bottom" | "left" | "right";
   className?: string;
-}
+};
 
 function Menu({ trigger, children, align = "start", side = "bottom", className }: MenuProps) {
   return (
@@ -68,6 +70,8 @@ function Menu({ trigger, children, align = "start", side = "bottom", className }
 }
 Menu.displayName = "Menu";
 
+// ─── MenuItem ─────────────────────────────────────────────────────────────────
+
 export type MenuItemProps = {
   leadingIcon?: string;
   trailingIcon?: string;
@@ -77,7 +81,7 @@ export type MenuItemProps = {
   onSelect?: () => void;
   children: React.ReactNode;
   className?: string;
-}
+};
 
 const MenuItem = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.Item>,
@@ -101,7 +105,7 @@ const MenuItem = React.forwardRef<
       disabled={disabled}
       onSelect={onSelect}
       className={cn(
-        "flex items-center gap-3 h-12 px-3 text-[14px] leading-5 text-surface-foreground cursor-pointer select-none outline-none transition-colors",
+        "flex items-center gap-3 h-12 px-3 text-[16px] leading-6 tracking-[0.5px] text-surface-foreground cursor-pointer select-none outline-none transition-colors",
         // State layers
         "focus:bg-[hsl(var(--on-surface)/0.08)] active:bg-[hsl(var(--on-surface)/0.10)]",
         // Selected state
@@ -128,9 +132,34 @@ const MenuItem = React.forwardRef<
 );
 MenuItem.displayName = "MenuItem";
 
+// ─── MenuHeader ───────────────────────────────────────────────────────────────
+
+export type MenuHeaderProps = {
+  children: React.ReactNode;
+  className?: string;
+};
+
+const MenuHeader = React.forwardRef<
+  React.ComponentRef<typeof DropdownMenuPrimitive.Label>,
+  MenuHeaderProps
+>(({ children, className }, ref) => (
+  <DropdownMenuPrimitive.Label
+    ref={ref}
+    className={cn(
+      "px-3 pt-3 pb-1.5 text-[12px] leading-4 font-medium tracking-[0.5px] text-surface-variant-foreground select-none",
+      className
+    )}
+  >
+    {children}
+  </DropdownMenuPrimitive.Label>
+));
+MenuHeader.displayName = "MenuHeader";
+
+// ─── MenuDivider ──────────────────────────────────────────────────────────────
+
 export type MenuDividerProps = {
   className?: string;
-}
+};
 
 const MenuDivider = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.Separator>,
@@ -143,4 +172,83 @@ const MenuDivider = React.forwardRef<
 ));
 MenuDivider.displayName = "MenuDivider";
 
-export { Menu, MenuItem, MenuDivider };
+// ─── MenuSub (Submenu wrapper) ────────────────────────────────────────────────
+
+export type MenuSubProps = {
+  children: React.ReactNode;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+};
+
+function MenuSub({ children, open, defaultOpen, onOpenChange }: MenuSubProps) {
+  return (
+    <DropdownMenuPrimitive.Sub open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
+      {children}
+    </DropdownMenuPrimitive.Sub>
+  );
+}
+MenuSub.displayName = "MenuSub";
+
+// ─── MenuSubTrigger ───────────────────────────────────────────────────────────
+
+export type MenuSubTriggerProps = {
+  leadingIcon?: string;
+  disabled?: boolean;
+  children: React.ReactNode;
+  className?: string;
+};
+
+const MenuSubTrigger = React.forwardRef<
+  React.ComponentRef<typeof DropdownMenuPrimitive.SubTrigger>,
+  MenuSubTriggerProps
+>(({ leadingIcon, disabled = false, children, className }, ref) => (
+  <DropdownMenuPrimitive.SubTrigger
+    ref={ref}
+    disabled={disabled}
+    className={cn(
+      "flex items-center gap-3 h-12 px-3 text-[16px] leading-6 tracking-[0.5px] text-surface-foreground cursor-pointer select-none outline-none transition-colors",
+      "focus:bg-[hsl(var(--on-surface)/0.08)] active:bg-[hsl(var(--on-surface)/0.10)]",
+      "data-disabled:pointer-events-none data-disabled:opacity-[0.38] data-disabled:cursor-not-allowed",
+      className
+    )}
+  >
+    {leadingIcon && (
+      <Icon name={leadingIcon} size={24} className="text-surface-variant-foreground" />
+    )}
+    <span className="flex-1 truncate">{children}</span>
+    <Icon name="chevron_right" size={24} className="text-surface-variant-foreground" />
+  </DropdownMenuPrimitive.SubTrigger>
+));
+MenuSubTrigger.displayName = "MenuSubTrigger";
+
+// ─── MenuSubContent ───────────────────────────────────────────────────────────
+
+export type MenuSubContentProps = {
+  children: React.ReactNode;
+  className?: string;
+};
+
+const MenuSubContent = React.forwardRef<
+  React.ComponentRef<typeof DropdownMenuPrimitive.SubContent>,
+  MenuSubContentProps
+>(({ children, className }, ref) => (
+  <DropdownMenuPrimitive.Portal>
+    <DropdownMenuPrimitive.SubContent
+      ref={ref}
+      sideOffset={4}
+      className={cn(
+        "z-50 min-w-28 max-w-70 overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
+        "m3-animate-menu",
+        className
+      )}
+    >
+      {children}
+    </DropdownMenuPrimitive.SubContent>
+  </DropdownMenuPrimitive.Portal>
+));
+MenuSubContent.displayName = "MenuSubContent";
+
+// ─── Exports ──────────────────────────────────────────────────────────────────
+
+export { Menu, MenuItem, MenuHeader, MenuDivider, MenuSub, MenuSubTrigger, MenuSubContent };
