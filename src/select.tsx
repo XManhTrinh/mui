@@ -20,6 +20,8 @@ import { Icon } from "./icon";
 export type SelectOption = {
   value: string;
   label: string;
+  icon?: string;          // leading Material Symbols icon name
+  trailingText?: string;  // trailing secondary text
   disabled?: boolean;
 }
 
@@ -181,7 +183,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                       "data-disabled:pointer-events-none data-disabled:opacity-[0.38] data-disabled:cursor-not-allowed"
                     )}
                   >
-                    <span className="flex-1 truncate">{option.label}</span>
+                    {option.icon && (<Icon name={option.icon} size={24} className="text-surface-variant-foreground" />)}<span className="flex-1 truncate">{option.label}</span>{option.trailingText && (<span className="text-[14px] leading-5 text-surface-variant-foreground">{option.trailingText}</span>)}
                     {option.value === currentValue && (
                       <Icon name="check" size={24} className="text-primary" />
                     )}
@@ -309,7 +311,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                     "data-disabled:pointer-events-none data-disabled:opacity-[0.38] data-disabled:cursor-not-allowed"
                   )}
                 >
-                  <span className="flex-1 truncate">{option.label}</span>
+                  {option.icon && (<Icon name={option.icon} size={24} className="text-surface-variant-foreground" />)}<span className="flex-1 truncate">{option.label}</span>{option.trailingText && (<span className="text-[14px] leading-5 text-surface-variant-foreground">{option.trailingText}</span>)}
                   {option.value === currentValue && (
                     <Icon name="check" size={24} className="text-primary" />
                   )}
