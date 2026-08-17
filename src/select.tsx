@@ -41,6 +41,92 @@ export type SelectProps = {
   className?: string;
 }
 
+// ─── Internal Helpers ─────────────────────────────────────────────────────────
+
+/** Renders the label text with an optional required asterisk. */
+function LabelText({ label, required }: { label: string; required: boolean }) {
+  return (
+    <>
+      {label}
+      {required && <span className="text-error ml-0.5">*</span>}
+    </>
+  );
+}
+
+/** Renders a single option item within the dropdown menu. */
+function SelectOptionItem({
+  option,
+  isSelected,
+  onSelect,
+}: {
+  option: SelectOption;
+  isSelected: boolean;
+  onSelect: () => void;
+}) {
+  return (
+    <DropdownMenuPrimitive.Item
+      key={option.value}
+      disabled={option.disabled}
+      onSelect={onSelect}
+      className={cn(
+        "flex items-center gap-3 h-12 px-3 text-[16px] leading-6 tracking-[0.5px] text-surface-foreground cursor-pointer select-none outline-none transition-colors",
+        "focus:bg-[hsl(var(--on-surface)/0.08)] active:bg-[hsl(var(--on-surface)/0.10)]",
+        isSelected && "bg-surface-container-highest",
+        "data-disabled:pointer-events-none data-disabled:opacity-[0.38] data-disabled:cursor-not-allowed"
+      )}
+    >
+      {option.icon && (
+        <Icon name={option.icon} size={24} className="text-surface-variant-foreground" />
+      )}
+      <span className="flex-1 truncate">{option.label}</span>
+      {option.trailingText && (
+        <span className="text-[14px] leading-5 text-surface-variant-foreground">
+          {option.trailingText}
+        </span>
+      )}
+      {isSelected && (
+        <Icon name="check" size={24} className="text-primary" />
+      )}
+    </DropdownMenuPrimitive.Item>
+  );
+}
+
+/** Renders the dropdown menu content with all options. */
+function SelectMenu({
+  options,
+  currentValue,
+  onSelect,
+}: {
+  options: SelectOption[];
+  currentValue: string;
+  onSelect: (value: string) => void;
+}) {
+  return (
+    <DropdownMenuPrimitive.Portal>
+      <DropdownMenuPrimitive.Content
+        align="start"
+        side="bottom"
+        sideOffset={4}
+        className={cn(
+          "z-50 min-w-28 max-w-70 w-(--radix-dropdown-menu-trigger-width) overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
+          "m3-animate-menu"
+        )}
+      >
+        {options.map((option) => (
+          <SelectOptionItem
+            key={option.value}
+            option={option}
+            isSelected={option.value === currentValue}
+            onSelect={() => onSelect(option.value)}
+          />
+        ))}
+      </DropdownMenuPrimitive.Content>
+    </DropdownMenuPrimitive.Portal>
+  );
+}
+
+// ─── Select Component ─────────────────────────────────────────────────────────
+
 const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
   (
     {
@@ -69,14 +155,19 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
     const selectedOption = options.find((o) => o.value === currentValue);
     const hasValue = !!selectedOption;
 
-    const handleSelect = (optionValue: string) => {
-      if (!isControlled) {
-        setInternalValue(optionValue);
-      }
-      onValueChange?.(optionValue);
-    };
+    const handleSelect = React.useCallback(
+      (optionValue: string) => {
+        if (!isControlled) {
+          setInternalValue(optionValue);
+        }
+        onValueChange?.(optionValue);
+      },
+      [isControlled, onValueChange]
+    );
 
-    // ── Tokens ────────────────────────────────────────────────────────────────
+    const displayedSupportingText = error && errorText ? errorText : supportingText;
+
+    // ── Tokens ──────────────────────────────────────────────────────────────
 
     const labelColor = disabled
       ? "text-[hsl(var(--on-surface)/0.38)]"
@@ -86,7 +177,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
           ? "text-[hsl(var(--primary))]"
           : "text-[hsl(var(--on-surface-variant))]";
 
-    // ── Filled Variant ────────────────────────────────────────────────────────
+    // ── Filled Variant ──────────────────────────────────────────────────────
 
     if (variant === "filled") {
       return (
@@ -133,7 +224,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                         labelColor
                       )}
                     >
-                      {label}
+                      <LabelText label={label} required={required} />
                     </span>
                   )}
                 </div>
@@ -167,51 +258,28 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
               </button>
             </DropdownMenuPrimitive.Trigger>
 
-            <DropdownMenuPrimitive.Portal>
-              <DropdownMenuPrimitive.Content
-                align="start"
-                side="bottom"
-                sideOffset={4}
-                className={cn(
-                  "z-50 min-w-28 max-w-70 w-(--radix-dropdown-menu-trigger-width) overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
-                  "m3-animate-menu"
-                )}
-              >
-                {options.map((option) => (
-                  <DropdownMenuPrimitive.Item
-                    key={option.value}
-                    disabled={option.disabled}
-                    onSelect={() => handleSelect(option.value)}
-                    className={cn(
-                      "flex items-center gap-3 h-12 px-3 text-[16px] leading-6 tracking-[0.5px] text-surface-foreground cursor-pointer select-none outline-none transition-colors",
-                      "focus:bg-[hsl(var(--on-surface)/0.08)] active:bg-[hsl(var(--on-surface)/0.10)]",
-                      option.value === currentValue && "bg-surface-container-highest",
-                      "data-disabled:pointer-events-none data-disabled:opacity-[0.38] data-disabled:cursor-not-allowed"
-                    )}
-                  >
-                    {option.icon && (<Icon name={option.icon} size={24} className="text-surface-variant-foreground" />)}<span className="flex-1 truncate">{option.label}</span>{option.trailingText && (<span className="text-[14px] leading-5 text-surface-variant-foreground">{option.trailingText}</span>)}
-                    {option.value === currentValue && (
-                      <Icon name="check" size={24} className="text-primary" />
-                    )}
-                  </DropdownMenuPrimitive.Item>
-                ))}
-              </DropdownMenuPrimitive.Content>
-            </DropdownMenuPrimitive.Portal>
+            <SelectMenu
+              options={options}
+              currentValue={currentValue}
+              onSelect={handleSelect}
+            />
           </DropdownMenuPrimitive.Root>
           {(supportingText || (error && errorText)) && (
-            <p className={cn(
-              "px-4 pt-1 text-[12px] leading-4 tracking-[0.4px]",
-              error ? "text-[hsl(var(--error))]" : "text-[hsl(var(--on-surface-variant))]",
-              disabled && "text-[hsl(var(--on-surface)/0.38)]"
-            )}>
-              {error && errorText ? errorText : supportingText}
+            <p
+              className={cn(
+                "px-4 pt-1 text-[12px] leading-4 tracking-[0.4px]",
+                error ? "text-[hsl(var(--error))]" : "text-[hsl(var(--on-surface-variant))]",
+                disabled && "text-[hsl(var(--on-surface)/0.38)]"
+              )}
+            >
+              {displayedSupportingText}
             </p>
           )}
         </div>
       );
     }
 
-    // ── Outlined Variant ──────────────────────────────────────────────────────
+    // ── Outlined Variant ────────────────────────────────────────────────────
 
     return (
       <div className={cn("relative w-full", className)}>
@@ -254,7 +322,9 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                     hasValue || open ? "px-1 max-w-full" : "px-0 max-w-[0.01px]"
                   )}
                 >
-                  <span>{label}{required && <span className="text-error ml-0.5">*</span>}</span>
+                  <span>
+                    <LabelText label={label ?? ""} required={required} />
+                  </span>
                 </legend>
               </fieldset>
 
@@ -285,7 +355,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                       labelColor
                     )}
                   >
-                    {label}
+                    <LabelText label={label} required={required} />
                   </span>
                 )}
               </div>
@@ -304,44 +374,21 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             </button>
           </DropdownMenuPrimitive.Trigger>
 
-          <DropdownMenuPrimitive.Portal>
-            <DropdownMenuPrimitive.Content
-              align="start"
-              side="bottom"
-              sideOffset={4}
-              className={cn(
-                "z-50 min-w-28 max-w-70 w-(--radix-dropdown-menu-trigger-width) overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
-                "m3-animate-menu"
-              )}
-            >
-              {options.map((option) => (
-                <DropdownMenuPrimitive.Item
-                  key={option.value}
-                  disabled={option.disabled}
-                  onSelect={() => handleSelect(option.value)}
-                  className={cn(
-                    "flex items-center gap-3 h-12 px-3 text-[16px] leading-6 tracking-[0.5px] text-surface-foreground cursor-pointer select-none outline-none transition-colors",
-                    "focus:bg-[hsl(var(--on-surface)/0.08)] active:bg-[hsl(var(--on-surface)/0.10)]",
-                    option.value === currentValue && "bg-surface-container-highest",
-                    "data-disabled:pointer-events-none data-disabled:opacity-[0.38] data-disabled:cursor-not-allowed"
-                  )}
-                >
-                  {option.icon && (<Icon name={option.icon} size={24} className="text-surface-variant-foreground" />)}<span className="flex-1 truncate">{option.label}</span>{option.trailingText && (<span className="text-[14px] leading-5 text-surface-variant-foreground">{option.trailingText}</span>)}
-                  {option.value === currentValue && (
-                    <Icon name="check" size={24} className="text-primary" />
-                  )}
-                </DropdownMenuPrimitive.Item>
-              ))}
-            </DropdownMenuPrimitive.Content>
-          </DropdownMenuPrimitive.Portal>
+          <SelectMenu
+            options={options}
+            currentValue={currentValue}
+            onSelect={handleSelect}
+          />
         </DropdownMenuPrimitive.Root>
         {(supportingText || (error && errorText)) && (
-          <p className={cn(
-            "px-4 pt-1 text-[12px] leading-4 tracking-[0.4px]",
-            error ? "text-[hsl(var(--error))]" : "text-[hsl(var(--on-surface-variant))]",
-            disabled && "text-[hsl(var(--on-surface)/0.38)]"
-          )}>
-            {error && errorText ? errorText : supportingText}
+          <p
+            className={cn(
+              "px-4 pt-1 text-[12px] leading-4 tracking-[0.4px]",
+              error ? "text-[hsl(var(--error))]" : "text-[hsl(var(--on-surface-variant))]",
+              disabled && "text-[hsl(var(--on-surface)/0.38)]"
+            )}
+          >
+            {displayedSupportingText}
           </p>
         )}
       </div>

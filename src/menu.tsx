@@ -47,6 +47,14 @@ export type MenuProps = {
   className?: string;
 };
 
+/**
+ * Menu root component.
+ *
+ * Not wrapped in forwardRef because the component itself doesn't render a single
+ * DOM element that a ref could meaningfully point to — the trigger already accepts
+ * its own ref via `asChild`, and the menu content is portalled. Consumers should
+ * attach refs directly to the trigger element they pass in.
+ */
 function Menu({ trigger, children, align = "start", side = "bottom", className }: MenuProps) {
   return (
     <DropdownMenuPrimitive.Root>
@@ -181,6 +189,11 @@ export type MenuSubProps = {
   onOpenChange?: (open: boolean) => void;
 };
 
+/**
+ * Submenu wrapper — a logical grouping component that delegates to Radix's
+ * `DropdownMenu.Sub`. Does not render its own DOM element, so forwardRef
+ * is intentionally omitted.
+ */
 function MenuSub({ children, open, defaultOpen, onOpenChange }: MenuSubProps) {
   return (
     <DropdownMenuPrimitive.Sub open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
