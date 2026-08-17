@@ -156,7 +156,7 @@ const DialogHeader = ({
 }: React.HTMLAttributes<HTMLDivElement> & { centered?: boolean }) => (
   <div
     className={cn(
-      "flex flex-col gap-4",
+      "flex flex-col gap-4 mb-4",
       centered && "items-center text-center",
       className
     )}
