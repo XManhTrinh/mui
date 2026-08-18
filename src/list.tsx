@@ -158,7 +158,7 @@ const ListItem = React.forwardRef<HTMLLIElement, ListItemProps>(
           )}
           <p
             className={cn(
-              "list-label text-[14px] leading-5 text-surface-foreground truncate",
+              "list-label text-[16px] leading-6 tracking-[0.5px] text-surface-foreground truncate",
               selected && "text-primary-container-foreground"
             )}
           >

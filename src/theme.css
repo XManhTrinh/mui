@@ -49,6 +49,7 @@
   /* Inverse */
   --color-inverse-surface: hsl(var(--inverse-surface));
   --color-inverse-on-surface: hsl(var(--inverse-on-surface));
+  --color-inverse-primary: hsl(var(--inverse-primary));
 
   /* Outline */
   --color-outline: hsl(var(--outline));

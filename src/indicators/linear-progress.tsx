@@ -22,7 +22,7 @@ import { cn } from "../lib/utils";
  *
  * Colors (via CSS custom properties):
  * - Active indicator: primary
- * - Track: secondary-container
+ * - Track: surface-container-highest
  *
  * Animation:
  * - Determinate: smooth width transition (200ms M3 standard easing)
@@ -55,7 +55,7 @@ const LinearProgress = React.forwardRef<HTMLDivElement, LinearProgressProps>(
         aria-valuenow={clampedValue}
         aria-label={ariaLabel}
         className={cn(
-          "relative w-full h-1 rounded-full overflow-hidden bg-secondary-container",
+          "relative w-full h-1 rounded-full overflow-hidden bg-surface-container-highest",
           className
         )}
       >
@@ -66,8 +66,8 @@ const LinearProgress = React.forwardRef<HTMLDivElement, LinearProgressProps>(
           />
         ) : (
           <>
-            <div className="absolute inset-y-0 left-0 w-full origin-left rounded-full bg-primary will-change-transform animate-[m3-linear-indeterminate-1_2s_ease-in-out_infinite]" />
-            <div className="absolute inset-y-0 left-0 w-full origin-left rounded-full bg-primary will-change-transform animate-[m3-linear-indeterminate-2_2s_ease-in-out_0.8s_infinite]" />
+            <div className="absolute inset-y-0 left-0 w-full origin-left rounded-full bg-primary will-change-transform animate-[m3-linear-indeterminate-1_2s_cubic-bezier(0.2,0,0,1)_infinite]" />
+            <div className="absolute inset-y-0 left-0 w-full origin-left rounded-full bg-primary will-change-transform animate-[m3-linear-indeterminate-2_2s_cubic-bezier(0.2,0,0,1)_0.8s_infinite]" />
           </>
         )}
       </div>

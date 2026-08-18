@@ -25,7 +25,7 @@ const tooltipVariants = cva("absolute z-60 pointer-events-none", {
     variant: {
       plain: [
         // M3 spec: container height 24dp, padding 8dp horizontal, 4dp corner radius
-        "h-6 max-w-50 px-2 rounded-[4px]",
+        "h-6 max-w-50 px-2 rounded-sm",
         "bg-inverse-surface text-inverse-on-surface",
         "text-[12px] leading-4 font-normal tracking-[0.4px] whitespace-nowrap",
         "flex items-center",

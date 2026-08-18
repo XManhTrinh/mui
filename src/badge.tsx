@@ -60,9 +60,9 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
         {variant === "dot" && (
           <span
             className={cn(
-              // M3 spec: small dot badge at top-right corner, overlapping slightly
+              // M3 spec: small dot badge 6×6dp at top-right corner
               "absolute -top-0.5 -right-0.5 z-20",
-              "h-1.5 w-1.5 rounded-[3px] bg-error",
+              "size-1.5 rounded-full bg-error",
               className
             )}
             aria-hidden="true"
