@@ -28,7 +28,8 @@ export default function NavigationBarPage() {
         </h1>
         <p className="text-[16px] leading-6 text-surface-variant-foreground">
           Navigation bars let people switch between UI views on smaller devices.
-          Use for 3–5 destinations.
+          Use for 3–5 destinations. Follows M3 Expressive specs: active indicator
+          is 64×32dp pill, no drop shadow (tonal elevation only).
         </p>
       </div>
 

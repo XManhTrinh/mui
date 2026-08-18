@@ -3,6 +3,33 @@
 import * as React from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Button, Icon, Chip, Switch } from "@mui/index";
 import { Showcase, Playground } from "@/components/showcase";
+import { PropsTable, type PropDef } from "@/components/props-table";
+
+const cardProps: PropDef[] = [
+  {
+    name: "variant",
+    type: '"elevated" | "filled" | "outlined"',
+    default: '"elevated"',
+    description: "Card surface style per M3 Expressive specs",
+  },
+  {
+    name: "interactive",
+    type: "boolean",
+    default: "false",
+    description: "Enable hover/press state layer for clickable cards",
+  },
+  {
+    name: "className",
+    type: "string",
+    description: "Additional Tailwind classes",
+  },
+  {
+    name: "children",
+    type: "ReactNode",
+    description: "Card sub-components (CardHeader, CardContent, CardFooter)",
+    required: true,
+  },
+];
 
 export default function CardsPage() {
   // Playground state
@@ -26,6 +53,7 @@ export default function CardsPage() {
         <p className="text-[16px] leading-6 text-surface-variant-foreground">
           Cards contain content and actions about a single subject. They are
           surfaces that display content and actions on a single topic.
+          Follows M3 Expressive specs with corner-medium (12dp, <code>rounded-xl</code>) shape.
         </p>
       </div>
 
@@ -74,7 +102,7 @@ export default function CardsPage() {
           <Card variant="elevated" className="w-72">
             <CardHeader>
               <CardTitle>Elevated Card</CardTitle>
-              <CardDescription>A card with elevation shadow</CardDescription>
+              <CardDescription>bg-surface-container-low + Level 1 shadow</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm">This card uses shadow to create a sense of depth and hierarchy.</p>
@@ -88,10 +116,10 @@ export default function CardsPage() {
           <Card variant="filled" className="w-72">
             <CardHeader>
               <CardTitle>Filled Card</CardTitle>
-              <CardDescription>A card with filled background</CardDescription>
+              <CardDescription>bg-surface-container-highest</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm">Filled cards use a container color for distinction.</p>
+              <p className="text-sm">Filled cards use surface-container-highest for distinction.</p>
             </CardContent>
             <CardFooter>
               <Button variant="text">Action</Button>
@@ -102,10 +130,10 @@ export default function CardsPage() {
           <Card variant="outlined" className="w-72">
             <CardHeader>
               <CardTitle>Outlined Card</CardTitle>
-              <CardDescription>A card with outline border</CardDescription>
+              <CardDescription>bg-surface + border-outline-variant</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm">Outlined cards use a border for visual separation.</p>
+              <p className="text-sm">Outlined cards use a border for visual separation on surface background.</p>
             </CardContent>
             <CardFooter>
               <Button variant="text">Details</Button>
@@ -137,6 +165,19 @@ export default function CardsPage() {
           </Card>
         </Showcase>
       </section>
+
+      {/* M3 Expressive Specs */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">M3 Expressive Specs</h2>
+        <div className="rounded-xl border border-outline-variant p-4 space-y-2 text-sm text-surface-variant-foreground">
+          <p><strong>Shape:</strong> corner-medium (12dp, rounded-xl)</p>
+          <p><strong>Filled:</strong> bg-surface-container-highest (updated from surface-container-high)</p>
+          <p><strong>Elevated:</strong> bg-surface-container-low + Level 1 shadow</p>
+          <p><strong>Outlined:</strong> bg-surface + border-outline-variant</p>
+        </div>
+      </section>
+
+      <PropsTable componentName="Card" props={cardProps} />
     </div>
   );
 }

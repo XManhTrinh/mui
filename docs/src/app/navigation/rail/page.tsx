@@ -3,6 +3,53 @@
 import * as React from "react";
 import { NavigationRail } from "@mui/index";
 import { Showcase } from "@/components/showcase";
+import { PropsTable, type PropDef } from "@/components/props-table";
+
+const railProps: PropDef[] = [
+  {
+    name: "expanded",
+    type: "boolean",
+    default: "false",
+    description: "Whether the rail is expanded (shows labels inline) or collapsed (80dp width)",
+  },
+  {
+    name: "className",
+    type: "string",
+    description: "Additional CSS classes",
+  },
+  {
+    name: "children",
+    type: "ReactNode",
+    description: "NavigationRail.Header, NavigationRail.Content, NavigationRail.Footer",
+    required: true,
+  },
+];
+
+const railItemProps: PropDef[] = [
+  {
+    name: "icon",
+    type: "string",
+    description: "Material Symbols icon name",
+    required: true,
+  },
+  {
+    name: "label",
+    type: "string",
+    description: "Label text (Label Medium: 12/16/500/0.5)",
+    required: true,
+  },
+  {
+    name: "active",
+    type: "boolean",
+    default: "false",
+    description: "Whether this item is currently active",
+  },
+  {
+    name: "onClick",
+    type: "() => void",
+    description: "Click handler for navigation",
+  },
+];
 
 export default function NavigationRailPage() {
   const [activeItem, setActiveItem] = React.useState("home");
@@ -17,6 +64,8 @@ export default function NavigationRailPage() {
         <p className="text-[16px] leading-6 text-surface-variant-foreground">
           Navigation rails provide access to primary destinations in apps when
           using tablet and desktop screens. Composable — wrap items in links, add headers, footers, dividers.
+          Follows M3 Expressive specs: collapsed width is 80dp (updated from 96dp).
+          Label uses Label Medium (12/16/500/0.5) typography.
         </p>
       </div>
 
@@ -86,6 +135,19 @@ export default function NavigationRailPage() {
           </div>
         </Showcase>
       </section>
+
+      {/* M3 Expressive Specs */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">M3 Expressive Specs</h2>
+        <div className="rounded-xl border border-outline-variant p-4 space-y-2 text-sm text-surface-variant-foreground">
+          <p><strong>Collapsed width:</strong> 80dp (updated from 96dp)</p>
+          <p><strong>Label:</strong> Label Medium (12/16/500/0.5)</p>
+          <p><strong>Active indicator:</strong> Pill shape with primary-container fill</p>
+        </div>
+      </section>
+
+      <PropsTable componentName="NavigationRail" props={railProps} />
+      <PropsTable componentName="NavigationRail.Item" props={railItemProps} />
     </div>
   );
 }

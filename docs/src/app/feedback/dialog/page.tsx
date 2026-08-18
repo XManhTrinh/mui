@@ -67,6 +67,7 @@ export default function DialogPage() {
         <p className="text-[16px] leading-6 text-surface-variant-foreground">
           Dialogs provide important prompts in a user flow. They can require an
           action, communicate information, or help users accomplish a task.
+          Follows M3 Expressive specs with alert mode and scrollable content support.
         </p>
       </div>
 

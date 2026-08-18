@@ -14,6 +14,61 @@ import {
   Switch,
 } from "@mui/index";
 import { Showcase, Playground } from "@/components/showcase";
+import { PropsTable, type PropDef } from "@/components/props-table";
+
+const buttonProps: PropDef[] = [
+  {
+    name: "variant",
+    type: '"filled" | "outlined" | "text" | "elevated" | "tonal"',
+    default: '"filled"',
+    description: "Visual variant controlling color and elevation",
+  },
+  {
+    name: "size",
+    type: '"xs" | "s" | "m" | "l" | "xl"',
+    default: '"m"',
+    description: "Button height: xs(32dp), s(36dp), m(40dp), l(48dp), xl(56dp)",
+  },
+  {
+    name: "square",
+    type: "boolean",
+    default: "false",
+    description: "Use square corners instead of rounded (corner-full)",
+  },
+  {
+    name: "icon",
+    type: "ReactNode",
+    description: "Leading icon element",
+  },
+  {
+    name: "trailingIcon",
+    type: "ReactNode",
+    description: "Trailing icon element",
+  },
+  {
+    name: "loading",
+    type: "boolean",
+    default: "false",
+    description: "Show loading spinner and disable interaction",
+  },
+  {
+    name: "disabled",
+    type: "boolean",
+    default: "false",
+    description: "Disable button interaction",
+  },
+  {
+    name: "children",
+    type: "ReactNode",
+    description: "Button label content",
+    required: true,
+  },
+  {
+    name: "className",
+    type: "string",
+    description: "Additional Tailwind classes",
+  },
+];
 
 export default function ButtonsPage() {
   const [loading, setLoading] = React.useState(false);
@@ -38,6 +93,8 @@ export default function ButtonsPage() {
         </h1>
         <p className="text-[16px] leading-6 text-surface-variant-foreground">
           Buttons help people initiate actions, from sending an email, to sharing a document, to liking a post.
+          Follows M3 Expressive specs with shape morph on press (<code>active:rounded-xl</code>).
+          Default size is <code>m</code> (40dp).
         </p>
       </div>
 
@@ -232,6 +289,19 @@ export default function ButtonsPage() {
           <Button variant="text" disabled>Text</Button>
         </Showcase>
       </section>
+
+      {/* M3 Expressive Specs */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">M3 Expressive Specs</h2>
+        <div className="rounded-xl border border-outline-variant p-4 space-y-2 text-sm text-surface-variant-foreground">
+          <p><strong>Sizes:</strong> xs (32dp) · s (36dp) · m (40dp, default) · l (48dp) · xl (56dp)</p>
+          <p><strong>Shape:</strong> corner-full (rounded-full) at rest → <code>active:rounded-xl</code> on press (shape morph)</p>
+          <p><strong>Variants:</strong> filled, outlined, tonal, text, elevated</p>
+          <p><strong>Elevation:</strong> Elevated variant uses Level 1 shadow at rest, Level 2 on hover</p>
+        </div>
+      </section>
+
+      <PropsTable componentName="Button" props={buttonProps} />
     </div>
   );
 }

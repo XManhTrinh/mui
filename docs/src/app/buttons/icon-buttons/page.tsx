@@ -3,6 +3,72 @@
 import * as React from "react";
 import { IconButton, Icon, Chip, Switch } from "@mui/index";
 import { Showcase, Playground } from "@/components/showcase";
+import { PropsTable, type PropDef } from "@/components/props-table";
+
+const iconButtonProps: PropDef[] = [
+  {
+    name: "icon",
+    type: "string",
+    description: "Material Symbols icon name (shorthand). Auto-sizes proportionally.",
+  },
+  {
+    name: "iconSize",
+    type: "number",
+    default: "auto",
+    description: "Override icon size (px). Defaults to proportional (18→20→24→28→32).",
+  },
+  {
+    name: "iconFilled",
+    type: "boolean",
+    default: "false",
+    description: "Fill the icon. In toggle mode, auto-tracks pressed state.",
+  },
+  {
+    name: "variant",
+    type: '"standard" | "filled" | "filled-tonal" | "outlined"',
+    default: '"standard"',
+    description: "Visual variant (colors and container fill)",
+  },
+  {
+    name: "size",
+    type: '"xs" | "s" | "m" | "l" | "xl"',
+    default: '"s"',
+    description: "Container size: xs(32dp), s(40dp, 24dp icon), m(48dp), l(56dp), xl(64dp)",
+  },
+  {
+    name: "shape",
+    type: '"round" | "square"',
+    default: '"round"',
+    description: "Corner shape with morph on press",
+  },
+  {
+    name: "toggle",
+    type: "boolean",
+    default: "false",
+    description: "Enable toggle behavior with shape inversion on pressed state",
+  },
+  {
+    name: "pressed",
+    type: "boolean",
+    description: "Controlled pressed state (toggle mode)",
+  },
+  {
+    name: "onPressedChange",
+    type: "(pressed: boolean) => void",
+    description: "Callback when toggle state changes",
+  },
+  {
+    name: "disabled",
+    type: "boolean",
+    default: "false",
+    description: "Disables the button",
+  },
+  {
+    name: "children",
+    type: "ReactNode",
+    description: "Custom icon content (takes priority over `icon` prop)",
+  },
+];
 
 export default function IconButtonsPage() {
   const [togglePressed, setTogglePressed] = React.useState(false);
@@ -26,6 +92,8 @@ export default function IconButtonsPage() {
         <p className="text-[16px] leading-6 text-surface-variant-foreground">
           Icon buttons help people take supplementary actions with a single tap.
           They come in four variants with different emphasis levels.
+          Follows M3 Expressive specs with default size <code>s</code> (40dp container, 24dp icon).
+          Toggle support includes shape inversion on pressed state.
         </p>
       </div>
 
@@ -146,87 +214,16 @@ export default function IconButtonsPage() {
       </Showcase>
 
       {/* Props Table */}
+      <PropsTable componentName="IconButton" props={iconButtonProps} />
+
+      {/* M3 Expressive Specs */}
       <section className="space-y-4">
-        <h2 className="text-[22px] leading-7 font-normal">Props</h2>
-        <div className="overflow-x-auto rounded-xl border border-outline-variant">
-          <table className="w-full text-sm">
-            <thead className="bg-surface-container">
-              <tr>
-                <th className="text-left px-4 py-2 font-medium">Prop</th>
-                <th className="text-left px-4 py-2 font-medium">Type</th>
-                <th className="text-left px-4 py-2 font-medium">Default</th>
-                <th className="text-left px-4 py-2 font-medium">Description</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-outline-variant">
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">icon</td>
-                <td className="px-4 py-2 font-mono text-xs">string</td>
-                <td className="px-4 py-2 font-mono text-xs">—</td>
-                <td className="px-4 py-2">Material Symbols icon name (shorthand). Auto-sizes proportionally.</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">iconSize</td>
-                <td className="px-4 py-2 font-mono text-xs">number</td>
-                <td className="px-4 py-2 font-mono text-xs">auto</td>
-                <td className="px-4 py-2">Override icon size (px). Defaults to proportional (18→20→24→28→32).</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">iconFilled</td>
-                <td className="px-4 py-2 font-mono text-xs">boolean</td>
-                <td className="px-4 py-2 font-mono text-xs">false</td>
-                <td className="px-4 py-2">Fill the icon. In toggle mode, auto-tracks pressed state.</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">variant</td>
-                <td className="px-4 py-2 font-mono text-xs">{`"standard" | "filled" | "filled-tonal" | "outlined"`}</td>
-                <td className="px-4 py-2 font-mono text-xs">{`"standard"`}</td>
-                <td className="px-4 py-2">Visual variant (colors and container fill)</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">size</td>
-                <td className="px-4 py-2 font-mono text-xs">{`"xs" | "s" | "m" | "l" | "xl"`}</td>
-                <td className="px-4 py-2 font-mono text-xs">{`"s"`}</td>
-                <td className="px-4 py-2">Container size (32→40→48→56→64dp)</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">shape</td>
-                <td className="px-4 py-2 font-mono text-xs">{`"round" | "square"`}</td>
-                <td className="px-4 py-2 font-mono text-xs">{`"round"`}</td>
-                <td className="px-4 py-2">Corner shape with morph on press</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">toggle</td>
-                <td className="px-4 py-2 font-mono text-xs">boolean</td>
-                <td className="px-4 py-2 font-mono text-xs">false</td>
-                <td className="px-4 py-2">Enable toggle behavior</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">pressed</td>
-                <td className="px-4 py-2 font-mono text-xs">boolean</td>
-                <td className="px-4 py-2 font-mono text-xs">—</td>
-                <td className="px-4 py-2">Controlled pressed state (toggle mode)</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">onPressedChange</td>
-                <td className="px-4 py-2 font-mono text-xs">{`(pressed: boolean) => void`}</td>
-                <td className="px-4 py-2 font-mono text-xs">—</td>
-                <td className="px-4 py-2">Callback when toggle state changes</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">disabled</td>
-                <td className="px-4 py-2 font-mono text-xs">boolean</td>
-                <td className="px-4 py-2 font-mono text-xs">false</td>
-                <td className="px-4 py-2">Disables the button</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-mono text-xs">children</td>
-                <td className="px-4 py-2 font-mono text-xs">ReactNode</td>
-                <td className="px-4 py-2 font-mono text-xs">—</td>
-                <td className="px-4 py-2">Custom icon content (takes priority over `icon` prop)</td>
-              </tr>
-            </tbody>
-          </table>
+        <h2 className="text-[22px] leading-7 font-normal">M3 Expressive Specs</h2>
+        <div className="rounded-xl border border-outline-variant p-4 space-y-2 text-sm text-surface-variant-foreground">
+          <p><strong>Default size:</strong> s (40dp container, 24dp icon)</p>
+          <p><strong>Variants:</strong> standard, filled, filled-tonal, outlined</p>
+          <p><strong>Toggle:</strong> Shape inversion on pressed state (round↔square)</p>
+          <p><strong>Shape morph:</strong> <code>active:rounded-xl</code> on press for non-round shapes</p>
         </div>
       </section>
     </div>

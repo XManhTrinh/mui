@@ -17,6 +17,8 @@ export default function FABsPage() {
         <p className="text-[16px] leading-6 text-surface-variant-foreground">
           FABs represent the most important action on a screen. They come in
           standard and extended variants with multiple sizes and colors.
+          Follows M3 Expressive specs: corner-large (<code>rounded-2xl</code>) at rest with
+          shape morph (<code>active:rounded-xl</code>) on press. Elevation Level 3 at rest, Level 4 on hover.
         </p>
       </div>
 
@@ -110,9 +112,9 @@ export default function FABsPage() {
       <PropsTable
         componentName="FAB"
         props={[
-          { name: "size", type: '"m" | "l" | "xl"', default: '"l"', description: "FAB size" },
+          { name: "size", type: '"m" | "l" | "xl" | "extended"', default: '"l"', description: "FAB size: m(48dp/small), l(56dp/medium, default), xl(96dp/large), extended(56dp height)" },
           { name: "color", type: '"primary" | "secondary" | "tertiary"', default: '"primary"', description: "Color scheme" },
-          { name: "shape", type: '"square" | "round"', default: '"square"', description: "Border radius shape" },
+          { name: "shape", type: '"square" | "round"', default: '"square"', description: "Corner shape: corner-large (rounded-2xl) at rest, active:rounded-xl on press" },
           { name: "icon", type: "ReactNode", description: "Icon element", required: true },
           { name: "aria-label", type: "string", description: "Accessible label", required: true },
         ]}
@@ -121,7 +123,7 @@ export default function FABsPage() {
       <PropsTable
         componentName="ExtendedFAB"
         props={[
-          { name: "size", type: '"small" | "medium" | "large"', default: '"medium"', description: "Extended FAB size" },
+          { name: "size", type: '"small" | "medium" | "large"', default: '"small"', description: "Extended FAB size (56dp/80dp/96dp height)" },
           { name: "color", type: '"primary" | "secondary" | "tertiary"', default: '"primary"', description: "Color scheme" },
           { name: "icon", type: "ReactNode | null", description: "Optional leading icon" },
           { name: "label", type: "string", description: "Text label", required: true },
@@ -149,6 +151,17 @@ export default function FABsPage() {
           { name: "aria-label", type: "string", description: "Optional aria-label override" },
         ]}
       />
+
+      {/* M3 Expressive Specs */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">M3 Expressive Specs</h2>
+        <div className="rounded-xl border border-outline-variant p-4 space-y-2 text-sm text-surface-variant-foreground">
+          <p><strong>Sizes:</strong> m (48dp) · l (56dp, default) · xl (96dp) · extended (56dp height)</p>
+          <p><strong>Shape:</strong> corner-large (rounded-2xl) at rest → <code>active:rounded-xl</code> on press</p>
+          <p><strong>Elevation:</strong> Level 3 at rest, Level 4 on hover</p>
+          <p><strong>Color:</strong> Uses primary-container, secondary-container, or tertiary-container surfaces</p>
+        </div>
+      </section>
 
       {/* Accessibility */}
       <AccessibilityNotes
