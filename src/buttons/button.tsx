@@ -56,16 +56,16 @@ const buttonVariants = cva(
           "bg-secondary-container text-secondary-container-foreground hover:shadow-[0_1px_3px_var(--elevation-1)]",
       },
       size: {
-        xs: "h-8 px-3 gap-1.5 [&_svg]:size-[18px]",
-        s: "h-9 px-4 gap-2 [&_svg]:size-[18px]",
-        m: "h-10 px-6 gap-2 [&_svg]:size-5",
-        l: "h-12 px-7 gap-2 [&_svg]:size-6",
-        xl: "h-14 px-8 gap-2 [&_svg]:size-6",
+        xs: "h-8 px-4 gap-1.5 [&_svg]:size-[18px]",
+        s: "h-10 px-6 gap-2 [&_svg]:size-5",
+        m: "h-12 px-7 gap-2 [&_svg]:size-6",
+        l: "h-14 px-8 gap-2 [&_svg]:size-6",
+        xl: "h-16 px-8 gap-3 [&_svg]:size-7",
       },
     },
     defaultVariants: {
       variant: "filled",
-      size: "m",
+      size: "s",
     },
   }
 );
@@ -159,7 +159,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const Comp = asChild ? Slot : "button";
-    const resolvedSize = size ?? "m";
+    const resolvedSize = size ?? "s";
     const shape = square ? "square" : "round";
 
     // Determine asymmetric padding
