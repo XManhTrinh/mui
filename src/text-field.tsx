@@ -263,7 +263,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           <fieldset
             aria-hidden="true"
             className={cn(
-              "absolute -inset-x-0 -top-2 bottom-0 rounded pointer-events-none m-0 px-3",
+              "absolute inset-x-0 -top-2 bottom-0 rounded pointer-events-none m-0 px-3",
               "transition-[border-color,border-width] duration-200",
               focused
                 ? error ? "border-2 border-[hsl(var(--error))]" : "border-2 border-[hsl(var(--primary))]"
