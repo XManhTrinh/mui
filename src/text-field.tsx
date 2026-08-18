@@ -4,18 +4,20 @@ import * as React from "react";
 import { cn } from "./lib/utils";
 
 /**
- * Material Design 3 — Text Field (CSS-only label floating)
+ * Material Design 3 Expressive — Text Field
  * https://m3.material.io/components/text-fields/specs
  *
- * Key pattern: input comes BEFORE label in DOM. Label floats via CSS sibling
- * selectors (:focus, :not(:placeholder-shown), :-webkit-autofill).
- * No JS needed for autofill detection — the browser handles it natively.
+ * Architecture:
+ * - Single root element with NO positioning constraints (consumer controls layout)
+ * - className prop applied to root — consumer can set position, width, margin, etc.
+ * - Internal structure is self-contained (isolate stacking context)
+ * - Floating label uses CSS peer selectors (no JS for float detection)
  *
- * Container: 56dp height, 4dp corner radius
+ * Container: 56dp height, corner-extra-small (4px) radius
  * Typography: body-large (16/24/400/0.5) input, body-small (12/16/400/0.4) floating label
  */
 
-export type TextFieldProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">& {
+export type TextFieldProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> & {
   variant?: "filled" | "outlined";
   label?: string;
   leadingIcon?: React.ReactNode;
@@ -85,7 +87,6 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
     const displayedSupporting = error && errorText ? errorText : supportingText;
 
-    // Label color determined by JS (focus state needed for primary color)
     const labelColor = disabled
       ? "text-[hsl(var(--on-surface)/0.38)]"
       : error
@@ -94,13 +95,10 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           ? "text-[hsl(var(--primary))]"
           : "text-[hsl(var(--on-surface-variant))]";
 
-    // Input text styles
     const inputCx = cn(
-      // peer class enables CSS-only label floating via peer selectors
       "peer w-full bg-transparent outline-none",
       "text-[16px] leading-6 font-normal tracking-[0.5px]",
       "text-[hsl(var(--on-surface))] caret-[hsl(var(--primary))]",
-      // Invisible placeholder — browser still tracks :placeholder-shown state
       "placeholder:text-transparent",
       disabled ? "text-[hsl(var(--on-surface)/0.38)] cursor-not-allowed" : "cursor-text"
     );
@@ -112,7 +110,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
     const leadingEl = leadingIcon && (
       <span className={cn(
-        "shrink-0 flex items-center justify-center w-13 h-full pl-3",
+        "shrink-0 flex items-center justify-center w-12 h-full pl-3",
         "text-[hsl(var(--on-surface-variant))]",
         disabled && "text-[hsl(var(--on-surface)/0.38)]"
       )}>
@@ -122,7 +120,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
     const trailingEl = trailingIcon && (
       <span className={cn(
-        "shrink-0 flex items-center justify-center w-13 h-full pr-3",
+        "shrink-0 flex items-center justify-center w-12 h-full pr-3",
         error ? "text-[hsl(var(--error))]" : "text-[hsl(var(--on-surface-variant))]",
         disabled && "text-[hsl(var(--on-surface)/0.38)]"
       )}>
@@ -155,11 +153,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       </div>
     );
 
-    // Common props for input/textarea
     const sharedProps = {
       id: inputId,
       disabled,
-      // Always render a space placeholder — makes :placeholder-shown work for autofill
       placeholder: placeholder || " ",
       onChange: handleChange,
       onFocus: handleFocus,
@@ -168,7 +164,6 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       "aria-describedby": displayedSupporting ? `${inputId}-supporting` : undefined,
     };
 
-    // For prefix/suffix visibility (JS-based since they affect layout)
     const showAffixes = focused || hasValue;
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -176,7 +171,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     // ═══════════════════════════════════════════════════════════════════════════
     if (variant === "filled") {
       return (
-        <div className={cn("relative w-full", className)}>
+        <div className={cn("isolate", className)}>
           <div className={cn(
             "group relative flex items-center overflow-hidden",
             multiline ? "min-h-14" : "h-14",
@@ -193,7 +188,6 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 </span>
               )}
 
-              {/* Input BEFORE label — enables peer selectors */}
               {multiline ? (
                 <textarea
                   {...sharedProps}
@@ -213,7 +207,6 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 />
               )}
 
-              {/* Label — uses peer selectors for CSS-only floating */}
               {label && (
                 <label
                   htmlFor={inputId}
@@ -221,9 +214,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                     "absolute left-0 pointer-events-none select-none z-1",
                     padL,
                     "origin-top-left transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
-                    // Resting state (default)
                     "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
-                    // Floating state — triggered by peer:focus, peer:not(:placeholder-shown), or peer autofill
                     "peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
                     "peer-not-placeholder-shown:top-2 peer-not-placeholder-shown:translate-y-0 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
                     "peer-[:-webkit-autofill]:top-2 peer-[:-webkit-autofill]:translate-y-0 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]",
@@ -262,9 +253,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     // OUTLINED VARIANT
     // ═══════════════════════════════════════════════════════════════════════════
     return (
-      <div className={cn("relative w-full pt-2", className)}>
+      <div className={cn("isolate", className)}>
         <div className={cn(
-          "group relative flex items-center rounded overflow-visible",
+          "group relative flex items-center rounded",
           multiline ? "min-h-14" : "h-14",
           disabled && "pointer-events-none cursor-not-allowed"
         )}>
@@ -272,7 +263,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           <fieldset
             aria-hidden="true"
             className={cn(
-              "absolute inset-0 rounded pointer-events-none m-0 px-3 z-2",
+              "absolute -inset-x-0 -top-2 bottom-0 rounded pointer-events-none m-0 px-3",
               "transition-[border-color,border-width] duration-200",
               focused
                 ? error ? "border-2 border-[hsl(var(--error))]" : "border-2 border-[hsl(var(--primary))]"
@@ -300,7 +291,6 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               </span>
             )}
 
-            {/* Input BEFORE label — enables peer selectors */}
             {multiline ? (
               <textarea
                 {...sharedProps}
@@ -320,29 +310,27 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               />
             )}
 
-            {/* Label — floats via CSS peer selectors */}
+            {/* Label — floats into the fieldset notch area */}
             {label && (
               <label
                 htmlFor={inputId}
                 className={cn(
-                  "absolute pointer-events-none select-none z-3",
+                  "absolute pointer-events-none select-none",
                   "origin-top-left transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
-                  // Resting: align with input text start
+                  // Resting: align with input text
                   leadingIcon ? "left-0" : "left-4",
                   "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
-                  // Floating: move to border notch position (relative to content div)
-                  // Without icon: left-4 stays same (aligns with fieldset px-3 + legend start)
-                  // With icon: move left to align with notch at ~16px from container (content div starts at 52px → need left: -36px)
+                  // Floating: move up into the fieldset notch (which extends 8px above the container via -top-2)
                   leadingIcon
                     ? cn(
-                        "peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:left-[-36px] peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
-                        "peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:left-[-36px] peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
-                        "peer-[:-webkit-autofill]:top-0 peer-[:-webkit-autofill]:-translate-y-1/2 peer-[:-webkit-autofill]:left-[-36px] peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]"
+                        "peer-focus:-top-2 peer-focus:-translate-y-1/2 peer-focus:left-1 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
+                        "peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:left-1 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
+                        "peer-[:-webkit-autofill]:-top-2 peer-[:-webkit-autofill]:-translate-y-1/2 peer-[:-webkit-autofill]:left-1 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]"
                       )
                     : cn(
-                        "peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
-                        "peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
-                        "peer-[:-webkit-autofill]:top-0 peer-[:-webkit-autofill]:-translate-y-1/2 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]"
+                        "peer-focus:-top-2 peer-focus:-translate-y-1/2 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
+                        "peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
+                        "peer-[:-webkit-autofill]:-top-2 peer-[:-webkit-autofill]:-translate-y-1/2 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]"
                       ),
                   labelColor
                 )}
