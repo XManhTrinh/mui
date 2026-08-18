@@ -285,8 +285,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             <legend className={cn(
               "invisible h-0 overflow-hidden block text-xs leading-0",
               "transition-all duration-200",
-              (focused || hasValue) ? "px-1 max-w-full" : "px-0 max-w-[0.01px]",
-              leadingIcon ? "ml-9" : "ml-0"
+              (focused || hasValue) ? "px-1 max-w-full" : "px-0 max-w-[0.01px]"
             )}>
               <span>{label}</span>
             </legend>
@@ -328,13 +327,23 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 className={cn(
                   "absolute pointer-events-none select-none z-3",
                   "origin-top-left transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
-                  leadingIcon ? "left-13" : "left-4",
-                  // Resting state
+                  // Resting: align with input text start
+                  leadingIcon ? "left-0" : "left-4",
                   "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
-                  // Floating states via CSS peer selectors
-                  "peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
-                  "peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
-                  "peer-[:-webkit-autofill]:top-0 peer-[:-webkit-autofill]:-translate-y-1/2 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]",
+                  // Floating: move to border notch position (relative to content div)
+                  // Without icon: left-4 stays same (aligns with fieldset px-3 + legend start)
+                  // With icon: move left to align with notch at ~16px from container (content div starts at 52px → need left: -36px)
+                  leadingIcon
+                    ? cn(
+                        "peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:left-[-36px] peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
+                        "peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:left-[-36px] peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
+                        "peer-[:-webkit-autofill]:top-0 peer-[:-webkit-autofill]:-translate-y-1/2 peer-[:-webkit-autofill]:left-[-36px] peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]"
+                      )
+                    : cn(
+                        "peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
+                        "peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
+                        "peer-[:-webkit-autofill]:top-0 peer-[:-webkit-autofill]:-translate-y-1/2 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]"
+                      ),
                   labelColor
                 )}
               >
