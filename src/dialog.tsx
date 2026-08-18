@@ -373,9 +373,9 @@ const DialogHeader = ({
     <div
       className={cn(
         "flex flex-col px-6 pb-[13px]",
-        // When icon is present, the 16dp gap is handled by the icon's pb-4;
-        // when no icon, apply the M3 headline section top padding
-        !hasIcon && "pt-[6px]",
+        // Without icon: 24px top padding from container edge (M3 spec)
+        // With icon: 0px top (icon section provides its own top spacing + 16px gap)
+        !hasIcon && "pt-6",
         isCentered && "items-center text-center",
         className
       )}
