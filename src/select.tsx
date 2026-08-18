@@ -206,7 +206,9 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                       hasValue
                         ? "text-[hsl(var(--on-surface))]"
                         : "text-[hsl(var(--on-surface-variant))]",
-                      disabled && "text-[hsl(var(--on-surface)/0.38)]"
+                      disabled && "text-[hsl(var(--on-surface)/0.38)]",
+                      // Hide placeholder when label is in resting position (prevents overlap)
+                      !hasValue && !open && label && "text-transparent"
                     )}
                   >
                     {selectedOption?.label ?? placeholder ?? ""}
@@ -337,7 +339,9 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                     hasValue
                       ? "text-[hsl(var(--on-surface))]"
                       : "text-[hsl(var(--on-surface-variant))]",
-                    disabled && "text-[hsl(var(--on-surface)/0.38)]"
+                    disabled && "text-[hsl(var(--on-surface)/0.38)]",
+                    // Hide placeholder when label is in resting position (prevents overlap)
+                    !hasValue && !open && label && "text-transparent"
                   )}
                 >
                   {selectedOption?.label ?? placeholder ?? ""}
