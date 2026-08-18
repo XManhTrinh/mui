@@ -326,7 +326,7 @@ const DialogContent = React.forwardRef<
           <div
             ref={scrollRef}
             className={cn(
-              "min-h-0 flex-1 overflow-y-auto",
+              "min-h-0 flex-1 overflow-y-auto pt-1",
               bodyElements.length > 0 && "px-6"
             )}
           >
