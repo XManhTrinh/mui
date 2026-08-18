@@ -262,9 +262,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     // OUTLINED VARIANT
     // ═══════════════════════════════════════════════════════════════════════════
     return (
-      <div className={cn("relative w-full", className)}>
+      <div className={cn("relative w-full pt-2", className)}>
         <div className={cn(
-          "group relative flex items-center rounded",
+          "group relative flex items-center rounded overflow-visible",
           multiline ? "min-h-14" : "h-14",
           disabled && "pointer-events-none cursor-not-allowed"
         )}>
