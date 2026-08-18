@@ -84,7 +84,7 @@ export type NavigationRailHeaderProps = {
 
 function NavigationRailHeader({ className, children }: NavigationRailHeaderProps) {
   return (
-    <div className={cn("flex items-center justify-center shrink-0 px-3 pt-3 pb-10", className)}>
+    <div className={cn("flex flex-col items-center justify-center shrink-0 px-4 pt-1 pb-10 gap-4", className)}>
       {children}
     </div>
   );
@@ -104,7 +104,7 @@ function NavigationRailContent({ className, children }: NavigationRailContentPro
     <div
       className={cn(
         "flex-1 flex flex-col overflow-y-auto overflow-x-hidden",
-        expanded ? "gap-0 px-3" : "gap-1 px-0",
+        expanded ? "gap-0 px-3" : "gap-1.5 px-0",
         className
       )}
     >
@@ -122,7 +122,7 @@ export type NavigationRailFooterProps = {
 
 function NavigationRailFooter({ className, children }: NavigationRailFooterProps) {
   return (
-    <div className={cn("flex items-center justify-center shrink-0 px-3 pb-3 pt-2", className)}>
+    <div className={cn("flex items-center justify-center shrink-0 h-14 px-4", className)}>
       {children}
     </div>
   );
@@ -168,7 +168,7 @@ function NavigationRailItem({
       onClick={onClick}
       className={cn(
         "group relative flex flex-col items-center justify-center w-full cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full",
-        expanded ? "py-0" : "pt-1 pb-1",
+        expanded ? "py-0" : "pt-1 pb-2.5",
         className
       )}
     >
