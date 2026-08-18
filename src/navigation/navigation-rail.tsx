@@ -64,7 +64,7 @@ function NavigationRailRoot({
           "z-40 flex flex-col bg-surface-container shrink-0",
           "shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
           "transition-[width] duration-300 ease-[cubic-bezier(0.2,0,0,1)] overflow-hidden",
-          expanded ? "w-90" : "w-24",
+          expanded ? "w-90" : "w-20",
           className
         )}
         aria-label="Main navigation"
@@ -232,11 +232,11 @@ function NavigationRailItem({
       {/* Second label — below pill, appears from behind icon when collapsed */}
       <span
         className={cn(
-          "relative z-10 block text-[14px] leading-5 font-medium tracking-[0.1px] truncate text-center overflow-hidden",
+          "relative z-10 block text-[12px] leading-4 font-medium tracking-[0.5px] truncate text-center overflow-hidden",
           "transition-[opacity,transform,height] duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
           expanded
             ? "opacity-0 -translate-y-4 h-0"
-            : "opacity-100 translate-y-0 h-5 mt-1",
+            : "opacity-100 translate-y-0 h-4 mt-1",
           active
             ? "text-secondary"
             : "text-surface-variant-foreground"

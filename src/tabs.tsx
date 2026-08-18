@@ -303,25 +303,24 @@ function Tab({ value: tabValue, icon, label, disabled = false, className }: TabP
       data-tab-value={tabValue}
       onClick={handleClick}
       className={cn(
-        "relative flex-1 flex items-center justify-center gap-1 min-w-12 px-4",
+        "relative overflow-hidden flex-1 flex items-center justify-center gap-2 min-w-12 px-4",
         layoutDirection,
         "select-none transition-colors duration-200",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset",
-        // Hover state
-        !disabled && "hover:bg-[hsl(var(--on-surface)/0.08)]",
+        "focus-visible:outline-none",
+        // State layer via before pseudo-element
+        "before:absolute before:inset-0 before:bg-current before:opacity-0 before:transition-opacity before:duration-200 before:pointer-events-none",
+        // Hover state layer (8%)
+        !disabled && "hover:before:opacity-[0.08]",
+        // Focus state layer (10%)
+        !disabled && "focus-visible:before:opacity-[0.10]",
+        // Press state layer (10%)
+        !disabled && "active:before:opacity-[0.10]",
         // Disabled
         disabled && "opacity-[0.38] cursor-not-allowed",
         !disabled && "cursor-pointer",
         className
       )}
     >
-      {/* State layer for focus/press */}
-      <span
-        className={cn(
-          "absolute inset-0 rounded-none transition-colors duration-200 pointer-events-none",
-          !disabled && "focus-visible:bg-[hsl(var(--on-surface)/0.10)] active:bg-[hsl(var(--on-surface)/0.10)]"
-        )}
-      />
 
       {/* Icon */}
       {icon && (

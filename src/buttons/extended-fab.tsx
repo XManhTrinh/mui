@@ -68,7 +68,7 @@ const extendedFabVariants = cva(
     },
     defaultVariants: {
       color: "primary",
-      size: "medium",
+      size: "small",
     },
   }
 );

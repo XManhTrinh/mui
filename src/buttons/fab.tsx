@@ -76,7 +76,7 @@ const fabVariants = cva(
  */
 const shapeClasses = {
   rounded: {
-    m: "rounded-xl active:rounded-lg",
+    m: "rounded-2xl active:rounded-xl",
     l: "rounded-2xl active:rounded-xl",
     xl: "rounded-[28px] active:rounded-[20px]",
     extended: "rounded-2xl active:rounded-xl",

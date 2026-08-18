@@ -76,16 +76,16 @@ const NavigationBarItem = React.forwardRef<HTMLButtonElement, NavigationBarItemP
         aria-label={label}
         onClick={() => onSelect(value)}
         className={cn(
-          "group relative flex w-full flex-col items-center justify-center gap-1 h-16 min-h-12 outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset",
+          "group relative flex w-full flex-col items-center justify-center gap-1 h-20 min-h-12 outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset",
           className
         )}
       >
-        {/* Indicator container */}
-        <div className="relative flex items-center justify-center w-14 h-8">
-          {/* Active indicator pill — animates from center outward */}
+        {/* Indicator container — 64×32dp pill per M3 Expressive */}
+        <div className="relative flex items-center justify-center w-16 h-8">
+          {/* Active indicator pill — spring-based scale from center */}
           <div
             className={cn(
-              "absolute inset-0 rounded-full bg-secondary-container transition-transform duration-200 ease-[cubic-bezier(0.2,0,0,1)] origin-center",
+              "absolute inset-0 rounded-full bg-secondary-container transition-[transform,opacity] duration-200 ease-[cubic-bezier(0.2,0,0,1)] origin-center",
               isActive ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
             )}
           />
@@ -151,6 +151,8 @@ export type NavigationBarProps = {
   activeValue?: string;
   /** Callback when active value changes */
   onValueChange?: (value: string) => void;
+  /** When true, renders with position:fixed at bottom of viewport */
+  fixed?: boolean;
   /** Additional classes */
   className?: string;
   /** Composable NavigationBar.Item children (new API) */
@@ -169,10 +171,10 @@ export type NavigationBarProps = {
  * @see https://m3.material.io/components/navigation-bar/specs
  *
  * Specs:
- * - Full-width bar fixed to bottom of screen
+ * - Full-width bar fixed to bottom of screen (when fixed prop is true)
  * - 3-5 items, equal width
- * - Container height: 64dp (flexible)
- * - Container bg: surface-container
+ * - Container height: 80dp (M3 Expressive)
+ * - Container bg: surface-container (tonal elevation, no drop shadow)
  * - Active indicator: 64×32dp pill, secondary-container
  * - Active icon: on-secondary-container, filled
  * - Active label: secondary (flexible variant)
@@ -180,7 +182,7 @@ export type NavigationBarProps = {
  * - Label: Label Medium (12px, 500, 16px line-height, 0.5px tracking)
  * - Touch target: 48dp min height per item
  * - State layers: 8% hover, 10% focus, 10% press
- * - Active indicator animates between items (200ms M3 standard easing)
+ * - Active indicator animates between items (200ms M3 standard easing, spring-approximated)
  */
 function NavigationBarRoot({
   items,
@@ -188,6 +190,7 @@ function NavigationBarRoot({
   defaultValue,
   activeValue: activeValueProp,
   onValueChange,
+  fixed,
   className,
   children,
 }: NavigationBarProps) {
@@ -216,8 +219,8 @@ function NavigationBarRoot({
     return (
       <nav
         className={cn(
-          "fixed bottom-0 left-0 right-0 z-40 h-16 bg-surface-container",
-          "shadow-[0_-1px_3px_0_hsl(var(--elevation-1))]",
+          "h-20 bg-surface-container",
+          fixed && "fixed bottom-0 left-0 right-0 z-40",
           className
         )}
         aria-label="Bottom navigation"
@@ -247,14 +250,14 @@ function NavigationBarRoot({
                   aria-selected={isActive}
                   aria-label={item.label}
                   onClick={() => handleSelect(item.value)}
-                  className="group relative flex w-full flex-col items-center justify-center gap-1 h-16 min-h-12 outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
+                  className="group relative flex w-full flex-col items-center justify-center gap-1 h-20 min-h-12 outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
                 >
-                  {/* Indicator container */}
-                  <div className="relative flex items-center justify-center w-14 h-8">
-                    {/* Active indicator pill */}
+                  {/* Indicator container — 64×32dp pill per M3 Expressive */}
+                  <div className="relative flex items-center justify-center w-16 h-8">
+                    {/* Active indicator pill — spring-based scale from center */}
                     <div
                       className={cn(
-                        "absolute inset-0 rounded-full bg-secondary-container transition-transform duration-200 ease-[cubic-bezier(0.2,0,0,1)] origin-center",
+                        "absolute inset-0 rounded-full bg-secondary-container transition-[transform,opacity] duration-200 ease-[cubic-bezier(0.2,0,0,1)] origin-center",
                         isActive ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
                       )}
                     />
@@ -311,8 +314,8 @@ function NavigationBarRoot({
     <NavigationBarContext.Provider value={contextValue}>
       <nav
         className={cn(
-          "fixed bottom-0 left-0 right-0 z-40 h-16 bg-surface-container",
-          "shadow-[0_-1px_3px_0_hsl(var(--elevation-1))]",
+          "h-20 bg-surface-container",
+          fixed && "fixed bottom-0 left-0 right-0 z-40",
           className
         )}
         aria-label="Bottom navigation"

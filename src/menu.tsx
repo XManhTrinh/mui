@@ -65,7 +65,7 @@ function Menu({ trigger, children, align = "start", side = "bottom", className }
           side={side}
           sideOffset={4}
           className={cn(
-            "z-50 min-w-28 max-w-70 overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
+            "z-50 min-w-28 max-w-70 overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_3px_6px_var(--elevation-2)]",
             "m3-animate-menu",
             className
           )}
@@ -251,7 +251,7 @@ const MenuSubContent = React.forwardRef<
       ref={ref}
       sideOffset={4}
       className={cn(
-        "z-50 min-w-28 max-w-70 overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
+        "z-50 min-w-28 max-w-70 overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_3px_6px_var(--elevation-2)]",
         "m3-animate-menu",
         className
       )}

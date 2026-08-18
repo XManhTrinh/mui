@@ -13,7 +13,7 @@ import { cn } from "../lib/utils";
  * icon support, loading state, and shape morph on press.
  *
  * Shapes: round (default) or square (pass `square` prop).
- * Sizes: xs (32dp), s (40dp, default), m (48dp), l (56dp), xl (64dp).
+ * Sizes: xs (32dp), s (36dp), m (40dp, default), l (48dp), xl (56dp).
  */
 
 const buttonVariants = cva(
@@ -65,7 +65,7 @@ const buttonVariants = cva(
     },
     defaultVariants: {
       variant: "filled",
-      size: "s",
+      size: "m",
     },
   }
 );
@@ -159,7 +159,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const Comp = asChild ? Slot : "button";
-    const resolvedSize = size ?? "s";
+    const resolvedSize = size ?? "m";
     const shape = square ? "square" : "round";
 
     // Determine asymmetric padding

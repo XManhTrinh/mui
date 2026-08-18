@@ -42,7 +42,7 @@ const AppBarLeading = React.forwardRef<HTMLDivElement, AppBarLeadingProps>(
     return (
       <div
         ref={ref}
-        className={cn("flex items-center justify-center w-12 h-12 shrink-0", className)}
+        className={cn("flex items-center justify-center w-12 h-12 shrink-0 [&_svg]:size-6", className)}
         {...props}
       >
         {children}
@@ -109,7 +109,7 @@ const AppBarTrailing = React.forwardRef<HTMLDivElement, AppBarTrailingProps>(
     return (
       <div
         ref={ref}
-        className={cn("flex items-center shrink-0", className)}
+        className={cn("flex items-center shrink-0 [&_svg]:size-6", className)}
         {...props}
       >
         {children}
@@ -238,9 +238,9 @@ const AppBarRoot = React.forwardRef<HTMLElement, AppBarProps>(
           ) : (
             // ─── Legacy prop-based layout ─────────────────────────────
             <>
-              {/* Leading icon slot — 48dp touch target */}
+              {/* Leading icon slot — 48dp touch target, 24dp icons */}
               {leadingIcon && (
-                <div className="flex items-center justify-center w-12 h-12 shrink-0">
+                <div className="flex items-center justify-center w-12 h-12 shrink-0 [&_svg]:size-6">
                   {leadingIcon}
                 </div>
               )}
@@ -275,9 +275,9 @@ const AppBarRoot = React.forwardRef<HTMLElement, AppBarProps>(
                 </div>
               )}
 
-              {/* Trailing actions slot */}
+              {/* Trailing actions slot — 24dp icons */}
               {trailingIcons && (
-                <div className="flex items-center shrink-0">
+                <div className="flex items-center shrink-0 [&_svg]:size-6">
                   {trailingIcons}
                 </div>
               )}

@@ -70,7 +70,7 @@ function SelectOptionItem({
       onSelect={onSelect}
       className={cn(
         "flex items-center gap-3 h-12 px-3 text-[16px] leading-6 tracking-[0.5px] text-surface-foreground cursor-pointer select-none outline-none transition-colors",
-        "focus:bg-[hsl(var(--on-surface)/0.08)] active:bg-[hsl(var(--on-surface)/0.10)]",
+        "hover:bg-[hsl(var(--on-surface)/0.08)] focus:bg-[hsl(var(--on-surface)/0.08)] active:bg-[hsl(var(--on-surface)/0.10)]",
         isSelected && "bg-surface-container-highest",
         "data-disabled:pointer-events-none data-disabled:opacity-[0.38] data-disabled:cursor-not-allowed"
       )}
@@ -108,7 +108,7 @@ function SelectMenu({
         side="bottom"
         sideOffset={4}
         className={cn(
-          "z-50 min-w-28 max-w-70 w-(--radix-dropdown-menu-trigger-width) overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
+          "z-50 min-w-28 max-w-70 w-(--radix-dropdown-menu-trigger-width) overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_3px_6px_var(--elevation-2),0_1px_3px_var(--elevation-2)]",
           "m3-animate-menu"
         )}
       >
@@ -293,7 +293,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
               id={inputId}
               disabled={disabled}
               className={cn(
-                "group relative flex items-center w-full h-14 rounded text-left",
+                "group relative flex items-center w-full h-14 rounded-sm text-left",
                 disabled && "pointer-events-none cursor-not-allowed",
                 "outline-none"
               )}
@@ -302,7 +302,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
               <fieldset
                 aria-hidden="true"
                 className={cn(
-                  "absolute inset-0 rounded pointer-events-none m-0 px-3 z-2",
+                  "absolute inset-0 rounded-sm pointer-events-none m-0 px-3 z-2",
                   "transition-[border-color,border-width] duration-200",
                   open
                     ? error

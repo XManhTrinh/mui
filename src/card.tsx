@@ -11,7 +11,7 @@ import { cn } from "./lib/utils";
  * M3 Specs (m3.material.io/components/cards/specs):
  * - 3 variants: elevated, filled, outlined
  * - Elevated: bg surface-container-low, Level 1 shadow, no border
- * - Filled: bg surface-container-high (surface-container-highest per spec), no border, no elevation
+ * - Filled: bg surface-container-highest, no border, no elevation
  * - Outlined: bg surface, border outline-variant, no elevation
  * - Corner radius: 12dp
  * - Left/right padding: 16dp
@@ -30,7 +30,7 @@ const cardVariants = cva(
       variant: {
         elevated:
           "bg-surface-container-low shadow-[0_1px_3px_1px_hsl(var(--elevation-1)),0_1px_2px_0_hsl(var(--elevation-1))]",
-        filled: "bg-surface-container-high",
+        filled: "bg-surface-container-highest",
         outlined: "bg-surface border border-outline-variant",
       },
       interactive: {

@@ -153,7 +153,7 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
         {/* Track — 52×32dp pill shape */}
         <span
           className={cn(
-            "relative w-13 h-8 rounded-full transition-colors duration-200",
+            "relative w-13 h-8 rounded-full transition-colors duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
             // Selected
             isChecked && !disabled && "bg-primary",
             // Unselected
@@ -184,9 +184,9 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
               "absolute top-1/2 -translate-y-1/2 rounded-full flex items-center justify-center",
               "transition-[left,width,height,background-color] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
               // Selected colors
-              isChecked && !disabled && (isPressed ? "bg-primary-container" : "bg-[hsl(var(--on-primary))]"),
+              isChecked && !disabled && (isPressed ? "bg-primary-container" : "bg-primary-foreground"),
               // Unselected colors
-              !isChecked && !disabled && (isPressed ? "bg-[hsl(var(--on-surface-variant))]" : "bg-outline"),
+              !isChecked && !disabled && (isPressed ? "bg-surface-variant-foreground" : "bg-outline"),
               // Disabled
               disabled && "bg-[hsl(var(--on-surface)/0.38)]"
             )}

@@ -151,7 +151,7 @@ function SnackbarItem({ item, onDismiss, reducedMotion }: SnackbarItemProps) {
       className={cn(
         "flex items-center min-h-12 gap-2 rounded-sm",
         "bg-inverse-surface text-inverse-on-surface",
-        "shadow-[0_3px_5px_-1px_hsl(var(--elevation-3)),0_6px_10px_0_hsl(var(--elevation-3)),0_1px_18px_0_hsl(var(--elevation-3))]",
+        "shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
         // Padding
         "pl-4 py-3",
         action || showClose ? "pr-2" : "pr-4"

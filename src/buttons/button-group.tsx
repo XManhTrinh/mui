@@ -368,6 +368,66 @@ function getStandardRadiusStyle(
   return { borderRadius: innerRadiusValues[size] };
 }
 
+/**
+ * Pressed radius for connected variant — reduces outer corners to inner size.
+ * M3 Expressive: on press, outer corners morph smaller (spring shape morph).
+ */
+function getConnectedPressedRadiusStyle(
+  index: number,
+  count: number,
+  size: "xs" | "s" | "m" | "l" | "xl"
+): React.CSSProperties {
+  const innerRadius = innerRadiusValues[size];
+  // On press, outer corners reduce to match inner radius (shape contracts)
+  const pressedOuterRadius = Math.max(innerRadius, 12); // Morph to at least 12dp
+
+  const isFirst = index === 0;
+  const isLast = index === count - 1;
+  const isOnly = count === 1;
+
+  if (isOnly) {
+    return { borderRadius: pressedOuterRadius };
+  }
+
+  if (isFirst) {
+    return {
+      borderTopLeftRadius: pressedOuterRadius,
+      borderBottomLeftRadius: pressedOuterRadius,
+      borderTopRightRadius: innerRadius,
+      borderBottomRightRadius: innerRadius,
+    };
+  }
+
+  if (isLast) {
+    return {
+      borderTopLeftRadius: innerRadius,
+      borderBottomLeftRadius: innerRadius,
+      borderTopRightRadius: pressedOuterRadius,
+      borderBottomRightRadius: pressedOuterRadius,
+    };
+  }
+
+  // Middle items: all inner (no change on press)
+  return { borderRadius: innerRadius };
+}
+
+/**
+ * Pressed radius for standard variant — reduces pill shape to rounded-xl equivalent.
+ * M3 Expressive: on press, outer corners morph smaller (spring shape morph).
+ */
+function getStandardPressedRadiusStyle(
+  shape: "round" | "square",
+  size: "xs" | "s" | "m" | "l" | "xl"
+): React.CSSProperties {
+  if (shape === "round") {
+    // Round: pill → 16dp (rounded-xl) on press, matching Button's active:rounded-xl
+    return { borderRadius: 16 };
+  }
+  // Square: reduce slightly
+  const innerRadius = innerRadiusValues[size];
+  return { borderRadius: Math.max(innerRadius - 4, 4) };
+}
+
 const ButtonGroupItem = React.forwardRef<HTMLButtonElement, ButtonGroupItemProps>(
   ({ value, icon, label, disabled = false, className }, ref) => {
     const ctx = useButtonGroup();
@@ -383,9 +443,23 @@ const ButtonGroupItem = React.forwardRef<HTMLButtonElement, ButtonGroupItemProps
         ? getConnectedRadiusStyle(index, count, ctx.size, ctx.shape)
         : getStandardRadiusStyle(ctx.shape, ctx.size);
 
-    // Gap for connected variant (2dp between items)
+    // Pressed (morph) radius — reduces outer corners on press (M3 Expressive spring shape morph)
+    const pressedRadiusStyle =
+      ctx.variant === "connected"
+        ? getConnectedPressedRadiusStyle(index, count, ctx.size)
+        : getStandardPressedRadiusStyle(ctx.shape, ctx.size);
+
+    // Connected variant: overlap borders so adjacent items share a single divider line (M3 segmented button)
     const gapClass =
-      ctx.variant === "connected" && !isFirst ? "ml-0.5" : "";
+      ctx.variant === "connected" && !isFirst ? "-ml-px" : "";
+
+    // Z-index for connected variant: ensure selected/focused items render above overlapping borders
+    const zClass =
+      ctx.variant === "connected"
+        ? isSelected
+          ? "z-10"
+          : "hover:z-10 focus-visible:z-10"
+        : "";
 
     // Width class
     const widthClass = ctx.equalWidth ? "flex-1" : "";
@@ -397,9 +471,9 @@ const ButtonGroupItem = React.forwardRef<HTMLButtonElement, ButtonGroupItemProps
         ? "bg-transparent text-surface-foreground"
         : "bg-surface-container-low text-surface-foreground";
 
-    // Border for connected variant
+    // Border for connected variant — M3 uses outline-variant for segment dividers
     const borderClass =
-      ctx.variant === "connected" ? "border border-outline" : "";
+      ctx.variant === "connected" ? "border border-outline-variant" : "";
 
     // Disabled
     const disabledClass = disabled
@@ -425,6 +499,22 @@ const ButtonGroupItem = React.forwardRef<HTMLButtonElement, ButtonGroupItemProps
       }
     };
 
+    // Shape morph on press — applies reduced radius on pointerdown, restores on pointerup
+    const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+      const el = e.currentTarget;
+      Object.assign(el.style, pressedRadiusStyle);
+    };
+
+    const handlePointerUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+      const el = e.currentTarget;
+      Object.assign(el.style, radiusStyle);
+    };
+
+    const handlePointerLeave = (e: React.PointerEvent<HTMLButtonElement>) => {
+      const el = e.currentTarget;
+      Object.assign(el.style, radiusStyle);
+    };
+
     return (
       <button
         ref={ref}
@@ -435,6 +525,9 @@ const ButtonGroupItem = React.forwardRef<HTMLButtonElement, ButtonGroupItemProps
         tabIndex={disabled ? -1 : 0}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={handlePointerLeave}
         style={radiusStyle}
         className={cn(
           // Base layout
@@ -442,8 +535,8 @@ const ButtonGroupItem = React.forwardRef<HTMLButtonElement, ButtonGroupItemProps
           "cursor-pointer select-none",
           // Typography: Label Large
           "text-[14px] font-medium leading-5 tracking-[0.1px]",
-          // Transition
-          "transition-colors duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
+          // Transition: matches standard Button — includes border-radius for M3 Expressive spring shape morph
+          "transition-[border-radius,box-shadow] duration-100 ease-out",
           // State layer via ::before pseudo-element
           "overflow-hidden",
           "before:absolute before:inset-0 before:rounded-[inherit]",
@@ -462,6 +555,7 @@ const ButtonGroupItem = React.forwardRef<HTMLButtonElement, ButtonGroupItemProps
           // Variant-specific styling
           borderClass,
           gapClass,
+          zClass,
           widthClass,
           selectionClass,
           disabledClass,

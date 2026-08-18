@@ -70,7 +70,7 @@ const Radio = React.forwardRef<HTMLButtonElement, RadioProps>(
         disabled={disabled}
         onClick={handleClick}
         className={cn(
-          "group relative inline-flex items-center justify-center w-12 h-12 select-none",
+          "group relative inline-flex items-center justify-center size-12 select-none",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
           disabled ? "cursor-not-allowed" : "cursor-pointer",
           className
@@ -93,7 +93,7 @@ const Radio = React.forwardRef<HTMLButtonElement, RadioProps>(
         {/* State layer — 40dp circle */}
         <span
           className={cn(
-            "absolute w-10 h-10 rounded-full transition-colors duration-200 pointer-events-none",
+            "absolute size-10 rounded-full transition-colors duration-200 pointer-events-none",
             !disabled && !isChecked && "group-hover:bg-[hsl(var(--on-surface)/0.08)] group-focus-visible:bg-[hsl(var(--on-surface)/0.10)] group-active:bg-[hsl(var(--on-surface)/0.10)]",
             !disabled && isChecked && "group-hover:bg-[hsl(var(--primary)/0.08)] group-focus-visible:bg-[hsl(var(--primary)/0.10)] group-active:bg-[hsl(var(--primary)/0.10)]"
           )}
@@ -102,7 +102,7 @@ const Radio = React.forwardRef<HTMLButtonElement, RadioProps>(
         {/* Outer circle — 20dp, 2dp border */}
         <span
           className={cn(
-            "relative z-10 flex items-center justify-center w-5 h-5 rounded-full border-2",
+            "relative z-10 flex items-center justify-center size-5 rounded-full border-2",
             "transition-colors duration-100 ease-[cubic-bezier(0.2,0,0,1)]",
             // Selected
             isChecked && !disabled && "border-primary",
@@ -115,7 +115,7 @@ const Radio = React.forwardRef<HTMLButtonElement, RadioProps>(
           {/* Inner dot — 10dp, scales in/out on selection */}
           <span
             className={cn(
-              "w-2.5 h-2.5 rounded-full",
+              "size-2.5 rounded-full",
               "transition-transform duration-100 ease-[cubic-bezier(0.2,0,0,1)]",
               isChecked && !disabled && "bg-primary scale-100",
               isChecked && disabled && "bg-[hsl(var(--on-surface)/0.38)] scale-100",

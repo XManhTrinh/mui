@@ -18,7 +18,7 @@ import { cn } from "../lib/utils";
  */
 
 const splitButtonVariants = cva(
-  "relative inline-flex items-center gap-[2px]",
+  "relative inline-flex items-center",
   {
     variants: {
       variant: {
@@ -256,7 +256,8 @@ const SplitButtonRoot = React.forwardRef<HTMLDivElement, SplitButtonProps>(
               segmentColors[resolvedVariant],
               segmentHoverElevation[resolvedVariant],
               // Outer corners: full pill on left, inner radius on right
-              "rounded-l-full",
+              // Press shape morph: reduce outer radius on press (M3 Expressive spring morph)
+              "rounded-l-full active:rounded-l-xl",
               // Transition
               "transition-[border-radius,box-shadow] duration-100 ease-out",
               // State layer
@@ -310,6 +311,12 @@ const SplitButtonRoot = React.forwardRef<HTMLDivElement, SplitButtonProps>(
             {leadingContent}
           </button>
 
+          {/* Divider between segments — M3: uses outline-variant */}
+          <span
+            className="w-px self-stretch bg-outline-variant"
+            aria-hidden="true"
+          />
+
           {/* Trailing segment (menu trigger) */}
           <DropdownMenu.Trigger asChild>
             <button
@@ -324,7 +331,8 @@ const SplitButtonRoot = React.forwardRef<HTMLDivElement, SplitButtonProps>(
                 segmentColors[resolvedVariant],
                 segmentHoverElevation[resolvedVariant],
                 // Outer corners: full pill on right, inner radius on left
-                "rounded-r-full",
+                // Press shape morph: reduce outer radius on press (M3 Expressive spring morph)
+                "rounded-r-full active:rounded-r-xl",
                 // Transition
                 "transition-[border-radius,box-shadow] duration-100 ease-out",
                 // State layer
@@ -400,9 +408,9 @@ const SplitButtonRoot = React.forwardRef<HTMLDivElement, SplitButtonProps>(
             align="end"
             sideOffset={4}
             className={cn(
-              "z-50 min-w-40 rounded-xl p-1",
-              "bg-surface-container-high text-surface-foreground",
-              "shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
+              "z-50 min-w-40 rounded-sm p-1",
+              "bg-surface-container text-surface-foreground",
+              "shadow-[0_3px_6px_var(--elevation-2),0_1px_2px_var(--elevation-2)]",
               "m3-animate-menu"
             )}
           >

@@ -27,8 +27,8 @@ const iconButtonVariants = cva(
     "relative inline-flex items-center justify-center",
     // Cursor & interaction
     "cursor-pointer select-none",
-    // Transition for shape morph
-    "transition-[border-radius] duration-100 ease-out",
+    // Transition for shape morph + elevation
+    "transition-[border-radius,box-shadow] duration-100 ease-out",
     // Focus ring
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
     // State layer via ::before pseudo-element
@@ -48,15 +48,16 @@ const iconButtonVariants = cva(
     variants: {
       variant: {
         standard: "bg-transparent text-surface-variant-foreground",
-        filled: "bg-primary text-primary-foreground",
+        filled:
+          "bg-primary text-primary-foreground hover:shadow-[0_1px_3px_var(--elevation-1)]",
         "filled-tonal":
-          "bg-secondary-container text-secondary-container-foreground",
+          "bg-secondary-container text-secondary-container-foreground hover:shadow-[0_1px_3px_var(--elevation-1)]",
         outlined:
           "bg-transparent border border-outline text-surface-variant-foreground",
       },
       size: {
         xs: "size-8 [&_svg]:size-[18px]",
-        s: "size-10 [&_svg]:size-5",
+        s: "size-10 [&_svg]:size-6",
         m: "size-12 [&_svg]:size-6",
         l: "size-14 [&_svg]:size-7",
         xl: "size-16 [&_svg]:size-8",
@@ -74,7 +75,7 @@ const iconButtonVariants = cva(
  */
 const iconSizeMap = {
   xs: 18,
-  s: 20,
+  s: 24,
   m: 24,
   l: 28,
   xl: 32,
@@ -88,7 +89,7 @@ const iconSizeMap = {
 const shapeClasses = {
   round: {
     xs: "rounded-full active:rounded-lg",
-    s: "rounded-full active:rounded-lg",
+    s: "rounded-full active:rounded-xl",
     m: "rounded-full active:rounded-xl",
     l: "rounded-full active:rounded-2xl",
     xl: "rounded-full active:rounded-2xl",
