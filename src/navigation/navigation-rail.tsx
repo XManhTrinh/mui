@@ -168,7 +168,7 @@ function NavigationRailItem({
       onClick={onClick}
       className={cn(
         "group relative flex flex-col items-center justify-center w-full cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full",
-        expanded ? "py-0" : "pt-1 pb-2.5",
+        expanded ? "py-0" : "py-1.5",
         className
       )}
     >
