@@ -20,8 +20,8 @@ const buttonVariants = cva(
   [
     // Layout
     "relative inline-flex items-center justify-center whitespace-nowrap",
-    // Typography: Label Large
-    "text-[14px] font-medium leading-5 tracking-[0.1px]",
+    // Typography: font-weight and tracking shared, size per variant
+    "font-medium tracking-[0.1px]",
     // Cursor & interaction
     "cursor-pointer select-none",
     // Transition: fast spring-like for shape morph (M3: motionSpringFastSpatial)
@@ -56,11 +56,11 @@ const buttonVariants = cva(
           "bg-secondary-container text-secondary-container-foreground hover:shadow-[0_1px_3px_var(--elevation-1)]",
       },
       size: {
-        xs: "h-8 px-4 gap-1.5 [&_svg]:size-[18px]",
-        s: "h-10 px-6 gap-2 [&_svg]:size-5",
-        m: "h-12 px-7 gap-2 [&_svg]:size-6",
-        l: "h-14 px-8 gap-2 [&_svg]:size-6",
-        xl: "h-16 px-8 gap-3 [&_svg]:size-7",
+        xs: "h-8 px-4 gap-1.5 text-[12px] leading-4 [&_svg]:size-[18px]",
+        s: "h-10 px-6 gap-2 text-[14px] leading-5 [&_svg]:size-5",
+        m: "h-12 px-7 gap-2 text-[14px] leading-5 [&_svg]:size-6",
+        l: "h-14 px-8 gap-2 text-[16px] leading-6 [&_svg]:size-6",
+        xl: "h-16 px-8 gap-3 text-[16px] leading-6 [&_svg]:size-7",
       },
     },
     defaultVariants: {
@@ -94,12 +94,12 @@ const shapeClasses = {
   },
 } as const;
 
-// Asymmetric padding when icon is present (icon-side gets less padding)
+// Asymmetric padding when icon is present (icon-side gets less padding per M3 spec: -8dp)
 const iconPaddingMap = {
-  xs: { icon: "pl-2 pr-3", trailing: "pl-3 pr-2" },
-  s: { icon: "pl-3 pr-4", trailing: "pl-4 pr-3" },
-  m: { icon: "pl-4 pr-6", trailing: "pl-6 pr-4" },
-  l: { icon: "pl-5 pr-7", trailing: "pl-7 pr-5" },
+  xs: { icon: "pl-2 pr-4", trailing: "pl-4 pr-2" },
+  s: { icon: "pl-4 pr-6", trailing: "pl-6 pr-4" },
+  m: { icon: "pl-5 pr-7", trailing: "pl-7 pr-5" },
+  l: { icon: "pl-6 pr-8", trailing: "pl-8 pr-6" },
   xl: { icon: "pl-6 pr-8", trailing: "pl-8 pr-6" },
 } as const;
 
