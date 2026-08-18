@@ -181,7 +181,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
 
     if (variant === "filled") {
       return (
-        <div className={cn("relative w-full", className)}>
+        <div className={cn("isolate", className)}>
           <DropdownMenuPrimitive.Root open={open} onOpenChange={setOpen}>
             <DropdownMenuPrimitive.Trigger asChild disabled={disabled}>
               <button
@@ -284,7 +284,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
     // ── Outlined Variant ────────────────────────────────────────────────────
 
     return (
-      <div className={cn("relative w-full", className)}>
+      <div className={cn("isolate", className)}>
         <DropdownMenuPrimitive.Root open={open} onOpenChange={setOpen}>
           <DropdownMenuPrimitive.Trigger asChild disabled={disabled}>
             <button

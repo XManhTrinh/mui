@@ -237,7 +237,7 @@ const DialogContent = React.forwardRef<
               // ── Desktop (sm+): centered dialog fallback ──
               "sm:inset-auto sm:left-[50%] sm:top-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%]",
               "sm:w-full sm:min-w-70 sm:max-w-140 sm:max-h-[90vh]",
-              "sm:rounded-[var(--corner-extra-large,28px)]",
+              "sm:rounded-(--corner-extra-large,28px)",
               className
             )}
           >
@@ -304,10 +304,10 @@ const DialogContent = React.forwardRef<
             "fixed z-50",
             "left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]",
             "w-[calc(100%-2rem)] sm:w-full",
-            "min-w-[280px] max-w-[560px]",
+            "min-w-70 max-w-140",
             "max-h-[90vh]",
             "flex flex-col",
-            "rounded-[var(--corner-extra-large,28px)] bg-surface-container-high shadow-none",
+            "rounded-(--corner-extra-large,28px) bg-surface-container-high shadow-none",
             className
           )}
         >
@@ -382,7 +382,7 @@ const DialogHeader = ({
   return (
     <div
       className={cn(
-        "flex flex-col px-6 pb-[13px]",
+        "flex flex-col px-6 pb-3.25",
         // Without icon: 24px top padding from container edge (M3 spec)
         // With icon: 0px top (icon section provides its own top spacing + 16px gap)
         !hasIcon && "pt-6",

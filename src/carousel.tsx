@@ -98,7 +98,7 @@ function Carousel({
 
   return (
     <div
-      className={cn("relative w-full group/carousel", className)}
+      className={cn("isolate relative group/carousel", className)}
       role="region"
       aria-roledescription="carousel"
       aria-label="Carousel"

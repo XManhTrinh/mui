@@ -109,7 +109,7 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
     return (
       <div
         className={cn(
-          "relative flex items-center w-full h-12 select-none group",
+          "isolate relative flex items-center h-12 select-none group",
           disabled && "pointer-events-none cursor-not-allowed",
           className
         )}
