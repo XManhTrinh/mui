@@ -287,25 +287,34 @@ const DialogContent = React.forwardRef<
       <DialogPrimitive.Content
         ref={ref}
         role={alert ? "alertdialog" : undefined}
+        asChild
         {...alertHandlers}
-        className={cn(
-          "fixed z-50",
-          "duration-200",
-          "left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]",
-          "w-[calc(100%-2rem)] sm:w-full",
-          "min-w-[280px] max-w-[560px]",
-          "max-h-[90vh]",
-          "flex flex-col",
-          "rounded-[var(--corner-extra-large,28px)] bg-surface-container-high shadow-none",
-          "m3-animate-dialog",
-          className
-        )}
         {...restProps}
       >
+        <motion.div
+          initial={reducedMotion ? false : { opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={reducedMotion ? undefined : { opacity: 0, scale: 0.9 }}
+          transition={
+            reducedMotion
+              ? { duration: 0 }
+              : { type: "spring", stiffness: 500, damping: 30, mass: 1 }
+          }
+          className={cn(
+            "fixed z-50",
+            "left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]",
+            "w-[calc(100%-2rem)] sm:w-full",
+            "min-w-[280px] max-w-[560px]",
+            "max-h-[90vh]",
+            "flex flex-col",
+            "rounded-[var(--corner-extra-large,28px)] bg-surface-container-high shadow-none",
+            className
+          )}
+        >
         <DialogIconContext.Provider value={hasIcon}>
           {/* ── Hero icon (basic with icon) ── */}
           {hasIcon && (
-            <div className="flex justify-center pt-[6px] px-6 pb-4 shrink-0">
+            <div className="flex justify-center pt-6 px-6 pb-4 shrink-0">
               <Icon name={icon} size={24} className="text-secondary" />
             </div>
           )}
@@ -326,8 +335,8 @@ const DialogContent = React.forwardRef<
           <div
             ref={scrollRef}
             className={cn(
-              "min-h-0 flex-1 overflow-y-auto pt-5",
-              bodyElements.length > 0 && "px-6"
+              "min-h-0 flex-1 overflow-y-auto",
+              bodyElements.length > 0 && "pt-5 px-6"
             )}
           >
             {bodyElements.length > 0 ? bodyElements : (!headerElement && !footerElement) && children}
@@ -353,6 +362,7 @@ const DialogContent = React.forwardRef<
             </DialogPrimitive.Close>
           )}
         </DialogIconContext.Provider>
+      </motion.div>
       </DialogPrimitive.Content>
     </DialogPortal>
   );
