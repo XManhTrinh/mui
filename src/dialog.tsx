@@ -326,7 +326,7 @@ const DialogContent = React.forwardRef<
           <div
             ref={scrollRef}
             className={cn(
-              "min-h-0 flex-1 overflow-y-auto pt-1",
+              "min-h-0 flex-1 overflow-y-auto pt-5",
               bodyElements.length > 0 && "px-6"
             )}
           >
@@ -393,7 +393,7 @@ const DialogFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     data-dialog-footer=""
-    className={cn("flex justify-end gap-2 pt-4 px-6 pb-6", className)}
+    className={cn("flex justify-end gap-2 py-4 px-6", className)}
     {...props}
   />
 );
@@ -421,7 +421,7 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn("pt-5 text-[14px] leading-5 font-normal tracking-[0.25px] text-surface-variant-foreground", className)}
+    className={cn("mt-4 text-[14px] leading-5 font-normal tracking-[0.25px] text-surface-variant-foreground", className)}
     {...props}
   />
 ));
