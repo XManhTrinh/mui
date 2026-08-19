@@ -314,7 +314,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             <legend className={cn(
               "invisible h-0 overflow-hidden block text-xs leading-0",
               "transition-all duration-200",
-              (focused || hasValue) ? "px-1 max-w-full" : "px-0 max-w-[0.01px]"
+              (focused || hasValue) ? "px-1 max-w-full" : "px-0 max-w-0"
             )}>
               <span>{label}</span>
             </legend>
