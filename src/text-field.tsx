@@ -110,7 +110,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
     const leadingEl = leadingIcon && (
       <span className={cn(
-        "shrink-0 flex items-center justify-center w-12 h-full pl-3",
+        "shrink-0 flex items-center justify-center w-13 h-full pl-3 pr-4",
         "text-[hsl(var(--on-surface-variant))]",
         disabled && "text-[hsl(var(--on-surface)/0.38)]"
       )}>
@@ -120,7 +120,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
     const trailingEl = trailingIcon && (
       <span className={cn(
-        "shrink-0 flex items-center justify-center w-12 h-full pr-3",
+        "shrink-0 flex items-center justify-center w-13 h-full pl-4 pr-3",
         error ? "text-[hsl(var(--error))]" : "text-[hsl(var(--on-surface-variant))]",
         disabled && "text-[hsl(var(--on-surface)/0.38)]"
       )}>
@@ -323,9 +323,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   // Floating: move up into the fieldset notch (which extends 8px above the container via -top-2)
                   leadingIcon
                     ? cn(
-                        "peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:-left-8 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
-                        "peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:-left-8 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
-                        "peer-[:-webkit-autofill]:top-0 peer-[:-webkit-autofill]:-translate-y-1/2 peer-[:-webkit-autofill]:-left-8 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]"
+                        "peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:-left-9 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
+                        "peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:-left-9 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
+                        "peer-[:-webkit-autofill]:top-0 peer-[:-webkit-autofill]:-translate-y-1/2 peer-[:-webkit-autofill]:-left-9 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]"
                       )
                     : cn(
                         "peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
