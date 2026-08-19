@@ -181,8 +181,8 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           )}>
             {leadingEl}
 
-            <div className={cn("relative flex-1 h-full flex", multiline ? "items-start" : "items-center", padL, padR)}>
-              {prefix && showAffixes && (
+            <div className={cn("relative flex-1 h-full flex", multiline ? "flex-col pt-6 pb-2" : "items-center", padL, padR)}>
+              {prefix && showAffixes && !multiline && (
                 <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 mr-1 pt-6 pb-2">
                   {prefix}
                 </span>
@@ -194,7 +194,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   value={isControlled ? (value as string) : undefined}
                   defaultValue={!isControlled ? (defaultValue as string) : undefined}
                   rows={rows}
-                  className={cn(inputCx, "pt-6 pb-2 resize-y")}
+                  className={cn(inputCx, "resize-y")}
                 />
               ) : (
                 <input
@@ -286,8 +286,8 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
           {leadingEl}
 
-          <div className={cn("relative flex-1 h-full flex", multiline ? "items-start" : "items-center", padL, padR)}>
-            {prefix && showAffixes && (
+          <div className={cn("relative flex-1 h-full flex", multiline ? "flex-col py-4" : "items-center", padL, padR)}>
+            {prefix && showAffixes && !multiline && (
               <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 mr-1">
                 {prefix}
               </span>
@@ -299,7 +299,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 value={isControlled ? (value as string) : undefined}
                 defaultValue={!isControlled ? (defaultValue as string) : undefined}
                 rows={rows}
-                className={cn(inputCx, "py-4 resize-y")}
+                className={cn(inputCx, "resize-y")}
               />
             ) : (
               <input
