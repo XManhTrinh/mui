@@ -363,7 +363,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                       "absolute left-4 pointer-events-none select-none z-3",
                       "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
                       hasValue || open
-                        ? "top-0 -translate-y-1/2 text-xs leading-4 tracking-[0.4px]"
+                        ? "top-0 -translate-y-1/2 text-xs leading-4 tracking-[0.4px] px-1 -ml-1 bg-[hsl(var(--surface))]"
                         : "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
                       labelColor
                     )}
