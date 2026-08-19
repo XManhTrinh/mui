@@ -181,7 +181,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           )}>
             {leadingEl}
 
-            <div className={cn("relative flex-1 h-full flex items-center", padL, padR)}>
+            <div className={cn("relative flex-1 h-full flex", multiline ? "items-start" : "items-center", padL, padR)}>
               {prefix && showAffixes && (
                 <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 mr-1 pt-6 pb-2">
                   {prefix}
@@ -214,7 +214,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                     "absolute left-0 pointer-events-none select-none z-1",
                     padL,
                     "origin-top-left transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
-                    "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
+                    multiline
+                      ? "top-4 text-[16px] leading-6 tracking-[0.5px]"
+                      : "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
                     "peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
                     "peer-not-placeholder-shown:top-2 peer-not-placeholder-shown:translate-y-0 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
                     "peer-[:-webkit-autofill]:top-2 peer-[:-webkit-autofill]:translate-y-0 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]",
@@ -284,7 +286,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
           {leadingEl}
 
-          <div className={cn("relative flex-1 h-full flex items-center", padL, padR)}>
+          <div className={cn("relative flex-1 h-full flex", multiline ? "items-start" : "items-center", padL, padR)}>
             {prefix && showAffixes && (
               <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 mr-1">
                 {prefix}
@@ -319,7 +321,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   "origin-top-left transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
                   // Resting: align with input text
                   leadingIcon ? "left-0" : "left-4",
-                  "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
+                  multiline
+                    ? "top-4 text-[16px] leading-6 tracking-[0.5px]"
+                    : "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
                   // Floating: move up into the fieldset notch (which extends 8px above the container via -top-2)
                   leadingIcon
                     ? cn(
