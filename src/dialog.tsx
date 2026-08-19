@@ -403,7 +403,7 @@ const DialogFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     data-dialog-footer=""
-    className={cn("flex justify-end gap-2 pt-6 pb-6 px-6", className)}
+    className={cn("flex justify-end gap-2 pt-2 pb-6 px-6", className)}
     {...props}
   />
 );
