@@ -304,7 +304,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             aria-hidden="true"
             className={cn(
               "absolute inset-0 z-10 rounded pointer-events-none m-0 px-0",
-              "top-[-5px] pt-[5px]",
+              "-top-1.25 pt-1.25",
               "transition-[border-color,border-width] duration-200",
               focused
                 ? error ? "border-2 border-[hsl(var(--error))]" : "border-2 border-[hsl(var(--primary))]"
@@ -315,7 +315,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             )}
           >
             <legend className={cn(
-              "h-[11px] block text-xs leading-[11px] ml-[12px]",
+              "h-2.75 block text-xs leading-2.75 ml-3",
               "transition-[max-width,padding] duration-200",
               (focused || hasValue) ? "px-1 max-w-full" : "px-0 max-w-[0.01px]"
             )}>

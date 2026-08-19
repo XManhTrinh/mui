@@ -296,7 +296,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
               id={inputId}
               disabled={disabled}
               className={cn(
-                "group relative flex items-center w-full rounded-sm text-left",
+                "group relative flex items-center w-full rounded text-left",
                 isCompact ? "h-full" : "h-14",
                 disabled && "pointer-events-none cursor-not-allowed",
                 "outline-none"
@@ -306,8 +306,8 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
               <fieldset
                 aria-hidden="true"
                 className={cn(
-                  "absolute inset-0 rounded-sm pointer-events-none m-0 px-0 z-2",
-                  "top-[-5px] pt-[5px]",
+                  "absolute inset-0 rounded pointer-events-none m-0 px-0 z-2",
+                  "-top-1.25 pt-1.25",
                   "transition-[border-color,border-width] duration-200",
                   open
                     ? error
@@ -325,7 +325,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                 {!isCompact && (
                   <legend
                     className={cn(
-                      "h-[11px] block text-xs leading-[11px] ml-[12px]",
+                      "h-2.75 block text-xs leading-2.75 ml-3",
                       "transition-[max-width,padding] duration-200",
                       hasValue || open ? "px-1 max-w-full" : "px-0 max-w-[0.01px]"
                     )}
