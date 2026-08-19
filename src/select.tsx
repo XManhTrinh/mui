@@ -325,12 +325,12 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                 {!isCompact && (
                   <legend
                     className={cn(
-                      "invisible h-0 overflow-hidden block text-xs leading-0",
+                      "invisible h-0 overflow-hidden block text-xs leading-[11px]",
                       "transition-all duration-200",
                       hasValue || open ? "px-1 max-w-full" : "px-0 max-w-0"
                     )}
                   >
-                    <span>{label}</span>
+                    <span className="inline-block opacity-0 whitespace-nowrap">{label}{required && " *"}</span>
                   </legend>
                 )}
               </fieldset>
