@@ -108,7 +108,7 @@ function SelectMenu({
         side="bottom"
         sideOffset={4}
         className={cn(
-          "z-50 min-w-28 max-w-70 w-(--radix-dropdown-menu-trigger-width) overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_3px_6px_var(--elevation-2),0_1px_3px_var(--elevation-2)]",
+          "z-50 min-w-28 max-w-70 w-(--radix-dropdown-menu-trigger-width) overflow-y-auto max-h-[min(var(--radix-dropdown-menu-content-available-height,300px),300px)] rounded-sm bg-surface-container py-2 shadow-[0_3px_6px_var(--elevation-2),0_1px_3px_var(--elevation-2)]",
           "m3-animate-menu"
         )}
       >
