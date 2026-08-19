@@ -63,11 +63,38 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     const [focused, setFocused] = React.useState(false);
     const [internalValue, setInternalValue] = React.useState(defaultValue ?? "");
     const [autofilled, setAutofilled] = React.useState(false);
+    const inputRef = React.useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
     const inputId = id ?? React.useId();
 
     const isControlled = value !== undefined;
     const currentValue = isControlled ? value : internalValue;
-    const hasValue = currentValue !== "" && currentValue != null || autofilled;
+    const hasValue = (currentValue !== "" && currentValue != null) || autofilled;
+
+    // Fallback autofill detection: check on mount after a short delay
+    React.useEffect(() => {
+      const el = inputRef.current;
+      if (!el) return;
+      const checkAutofill = () => {
+        try {
+          if (el.matches(":-webkit-autofill")) {
+            setAutofilled(true);
+          }
+        } catch {}
+      };
+      // Check after browser has time to autofill
+      const timer = setTimeout(checkAutofill, 100);
+      return () => clearTimeout(timer);
+    }, []);
+
+    // Merge forwarded ref with internal ref
+    const mergedRef = React.useCallback(
+      (node: HTMLInputElement | null) => {
+        inputRef.current = node;
+        if (typeof ref === "function") ref(node);
+        else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = node;
+      },
+      [ref]
+    );
 
     const handleFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setFocused(true);
@@ -207,7 +234,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 />
               ) : (
                 <input
-                  ref={ref}
+                  ref={mergedRef}
                   {...sharedProps}
                   {...inputProps}
                   value={isControlled ? value : undefined}
@@ -312,7 +339,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               />
             ) : (
               <input
-                ref={ref}
+                ref={mergedRef}
                 {...sharedProps}
                 {...inputProps}
                 value={isControlled ? value : undefined}
