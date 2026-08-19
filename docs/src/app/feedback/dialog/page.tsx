@@ -73,7 +73,7 @@ export default function DialogPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Basic Dialog</h2>
-        <Showcase title="Basic" code={`<Dialog>\n  <DialogTrigger asChild>\n    <Button variant="filled">Open Dialog</Button>\n  </DialogTrigger>\n  <DialogContent>\n    <DialogHeader>\n      <DialogTitle>Discard draft?</DialogTitle>\n      <DialogDescription>Your changes have not been saved.</DialogDescription>\n    </DialogHeader>\n    <DialogFooter>\n      <DialogClose asChild>\n        <Button variant="text">Cancel</Button>\n      </DialogClose>\n      <Button variant="filled">Discard</Button>\n    </DialogFooter>\n  </DialogContent>\n</Dialog>`}>
+        <Showcase title="Basic" code={`<Dialog>\n  <DialogTrigger asChild>\n    <Button variant="filled">Open Dialog</Button>\n  </DialogTrigger>\n  <DialogContent>\n    <DialogHeader>\n      <DialogTitle>Discard draft?</DialogTitle>\n      <DialogDescription>Your changes have not been saved.</DialogDescription>\n    </DialogHeader>\n    <DialogFooter>\n      <DialogClose asChild>\n        <Button variant="text">Cancel</Button>\n      </DialogClose>\n      <Button variant="text">Discard</Button>\n    </DialogFooter>\n  </DialogContent>\n</Dialog>`}>
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="filled">Open Dialog</Button>
@@ -90,7 +90,7 @@ export default function DialogPage() {
                 <DialogClose asChild>
                   <Button variant="text">Cancel</Button>
                 </DialogClose>
-                <Button variant="filled">Discard</Button>
+                <Button variant="text">Discard</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
@@ -99,7 +99,7 @@ export default function DialogPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">With Icon</h2>
-        <Showcase title="Icon Dialog" code={`<Dialog>\n  <DialogTrigger asChild>\n    <Button variant="outlined">Delete Item</Button>\n  </DialogTrigger>\n  <DialogContent>\n    <DialogHeader>\n      <Icon name="delete" size={24} />\n      <DialogTitle>Delete file?</DialogTitle>\n      <DialogDescription>This action cannot be undone.</DialogDescription>\n    </DialogHeader>\n    <DialogFooter>\n      <DialogClose asChild>\n        <Button variant="text">Cancel</Button>\n      </DialogClose>\n      <Button variant="filled">Delete</Button>\n    </DialogFooter>\n  </DialogContent>\n</Dialog>`}>
+        <Showcase title="Icon Dialog" code={`<Dialog>\n  <DialogTrigger asChild>\n    <Button variant="outlined">Delete Item</Button>\n  </DialogTrigger>\n  <DialogContent>\n    <DialogHeader>\n      <Icon name="delete" size={24} />\n      <DialogTitle>Delete file?</DialogTitle>\n      <DialogDescription>This action cannot be undone.</DialogDescription>\n    </DialogHeader>\n    <DialogFooter>\n      <DialogClose asChild>\n        <Button variant="text">Cancel</Button>\n      </DialogClose>\n      <Button variant="text">Delete</Button>\n    </DialogFooter>\n  </DialogContent>\n</Dialog>`}>
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="outlined">Delete Item</Button>
@@ -119,7 +119,7 @@ export default function DialogPage() {
                 <DialogClose asChild>
                   <Button variant="text">Cancel</Button>
                 </DialogClose>
-                <Button variant="filled">Delete</Button>
+                <Button variant="text">Delete</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
@@ -128,7 +128,7 @@ export default function DialogPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Full-Screen Dialog</h2>
-        <Showcase title="Full-Screen" code={`<Dialog>\n  <DialogTrigger asChild>\n    <Button variant="tonal">Open Full-Screen</Button>\n  </DialogTrigger>\n  <DialogContent fullScreen>\n    <DialogHeader>\n      <DialogTitle>New Event</DialogTitle>\n    </DialogHeader>\n    <DialogFooter>\n      <DialogClose asChild>\n        <Button variant="text">Cancel</Button>\n      </DialogClose>\n      <Button variant="filled">Save</Button>\n    </DialogFooter>\n  </DialogContent>\n</Dialog>`}>
+        <Showcase title="Full-Screen" code={`<Dialog>\n  <DialogTrigger asChild>\n    <Button variant="tonal">Open Full-Screen</Button>\n  </DialogTrigger>\n  <DialogContent fullScreen>\n    <DialogHeader>\n      <DialogTitle>New Event</DialogTitle>\n    </DialogHeader>\n    <DialogFooter>\n      <DialogClose asChild>\n        <Button variant="text">Cancel</Button>\n      </DialogClose>\n      <Button variant="text">Save</Button>\n    </DialogFooter>\n  </DialogContent>\n</Dialog>`}>
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="tonal">Open Full-Screen</Button>
@@ -150,7 +150,7 @@ export default function DialogPage() {
                 <DialogClose asChild>
                   <Button variant="text">Cancel</Button>
                 </DialogClose>
-                <Button variant="filled">Save</Button>
+                <Button variant="text">Save</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
@@ -165,7 +165,7 @@ export default function DialogPage() {
         </p>
         <Showcase
           title="Alert Dialog"
-          code={`<Dialog>\n  <DialogTrigger asChild>\n    <Button variant="filled">Delete Account</Button>\n  </DialogTrigger>\n  <DialogContent alert>\n    <DialogHeader>\n      <DialogTitle>Delete account?</DialogTitle>\n      <DialogDescription>\n        This action is permanent and cannot be undone.\n        All your data will be erased.\n      </DialogDescription>\n    </DialogHeader>\n    <DialogFooter>\n      <DialogClose asChild>\n        <Button variant="text">Cancel</Button>\n      </DialogClose>\n      <DialogClose asChild>\n        <Button variant="filled">Delete</Button>\n      </DialogClose>\n    </DialogFooter>\n  </DialogContent>\n</Dialog>`}
+          code={`<Dialog>\n  <DialogTrigger asChild>\n    <Button variant="filled">Delete Account</Button>\n  </DialogTrigger>\n  <DialogContent alert>\n    <DialogHeader>\n      <DialogTitle>Delete account?</DialogTitle>\n      <DialogDescription>\n        This action is permanent and cannot be undone.\n        All your data will be erased.\n      </DialogDescription>\n    </DialogHeader>\n    <DialogFooter>\n      <DialogClose asChild>\n        <Button variant="text">Cancel</Button>\n      </DialogClose>\n      <DialogClose asChild>\n        <Button variant="text">Delete</Button>\n      </DialogClose>\n    </DialogFooter>\n  </DialogContent>\n</Dialog>`}
         >
           <Dialog>
             <DialogTrigger asChild>
@@ -185,7 +185,7 @@ export default function DialogPage() {
                   <Button variant="text">Cancel</Button>
                 </DialogClose>
                 <DialogClose asChild>
-                  <Button variant="filled">Delete</Button>
+                  <Button variant="text">Delete</Button>
                 </DialogClose>
               </DialogFooter>
             </DialogContent>
@@ -202,7 +202,7 @@ export default function DialogPage() {
         </p>
         <Showcase
           title="Scrollable Content"
-          code={`<Dialog>\n  <DialogTrigger asChild>\n    <Button variant="outlined">View Terms</Button>\n  </DialogTrigger>\n  <DialogContent>\n    <DialogHeader>\n      <DialogTitle>Terms of Service</DialogTitle>\n      <DialogDescription>Please read and accept the terms.</DialogDescription>\n    </DialogHeader>\n    {/* Long content triggers scrollable behavior */}\n    <div className="space-y-4">\n      <p>Section 1: Lorem ipsum dolor sit amet...</p>\n      <p>Section 2: Consectetur adipiscing elit...</p>\n      <p>Section 3: Sed do eiusmod tempor...</p>\n      {/* More sections */}\n    </div>\n    <DialogFooter>\n      <DialogClose asChild>\n        <Button variant="text">Decline</Button>\n      </DialogClose>\n      <DialogClose asChild>\n        <Button variant="filled">Accept</Button>\n      </DialogClose>\n    </DialogFooter>\n  </DialogContent>\n</Dialog>`}
+          code={`<Dialog>\n  <DialogTrigger asChild>\n    <Button variant="outlined">View Terms</Button>\n  </DialogTrigger>\n  <DialogContent>\n    <DialogHeader>\n      <DialogTitle>Terms of Service</DialogTitle>\n      <DialogDescription>Please read and accept the terms.</DialogDescription>\n    </DialogHeader>\n    {/* Long content triggers scrollable behavior */}\n    <div className="space-y-4">\n      <p>Section 1: Lorem ipsum dolor sit amet...</p>\n      <p>Section 2: Consectetur adipiscing elit...</p>\n      <p>Section 3: Sed do eiusmod tempor...</p>\n      {/* More sections */}\n    </div>\n    <DialogFooter>\n      <DialogClose asChild>\n        <Button variant="text">Decline</Button>\n      </DialogClose>\n      <DialogClose asChild>\n        <Button variant="text">Accept</Button>\n      </DialogClose>\n    </DialogFooter>\n  </DialogContent>\n</Dialog>`}
         >
           <Dialog>
             <DialogTrigger asChild>
@@ -270,7 +270,7 @@ export default function DialogPage() {
                   <Button variant="text">Decline</Button>
                 </DialogClose>
                 <DialogClose asChild>
-                  <Button variant="filled">Accept</Button>
+                  <Button variant="text">Accept</Button>
                 </DialogClose>
               </DialogFooter>
             </DialogContent>
