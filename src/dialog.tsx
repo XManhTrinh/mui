@@ -336,7 +336,7 @@ const DialogContent = React.forwardRef<
             ref={scrollRef}
             className={cn(
               "min-h-0 flex-1 overflow-y-auto",
-              bodyElements.length > 0 && "pt-5 px-6"
+              bodyElements.length > 0 && "pt-4 px-6"
             )}
           >
             {bodyElements.length > 0 ? bodyElements : (!headerElement && !footerElement) && children}
@@ -382,7 +382,7 @@ const DialogHeader = ({
   return (
     <div
       className={cn(
-        "flex flex-col px-6 pb-3.25",
+        "flex flex-col px-6",
         // Without icon: 24px top padding from container edge (M3 spec)
         // With icon: 0px top (icon section provides its own top spacing + 16px gap)
         !hasIcon && "pt-6",
@@ -403,7 +403,7 @@ const DialogFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     data-dialog-footer=""
-    className={cn("flex justify-end gap-2 py-4 px-6", className)}
+    className={cn("flex justify-end gap-2 pt-6 pb-6 px-6", className)}
     {...props}
   />
 );
