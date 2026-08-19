@@ -283,6 +283,9 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
 
     // ── Outlined Variant ────────────────────────────────────────────────────
 
+    // Compact mode: no label means shorter field (no notch needed)
+    const isCompact = !label;
+
     return (
       <div className={cn("isolate", className)}>
         <DropdownMenuPrimitive.Root open={open} onOpenChange={setOpen}>
@@ -293,7 +296,8 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
               id={inputId}
               disabled={disabled}
               className={cn(
-                "group relative flex items-center w-full h-14 rounded-sm text-left",
+                "group relative flex items-center w-full rounded-sm text-left",
+                isCompact ? "h-full" : "h-14",
                 disabled && "pointer-events-none cursor-not-allowed",
                 "outline-none"
               )}
@@ -302,7 +306,8 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
               <fieldset
                 aria-hidden="true"
                 className={cn(
-                  "absolute inset-0 rounded-sm pointer-events-none m-0 px-3 z-2",
+                  "absolute inset-0 rounded-sm pointer-events-none m-0 z-2",
+                  isCompact ? "px-0" : "px-3",
                   "transition-[border-color,border-width] duration-200",
                   open
                     ? error
@@ -317,25 +322,31 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                   disabled && "border border-[hsl(var(--on-surface)/0.12)]"
                 )}
               >
-                <legend
-                  className={cn(
-                    "invisible h-0 overflow-hidden block text-xs leading-0",
-                    "transition-all duration-200",
-                    hasValue || open ? "px-1 max-w-full" : "px-0 max-w-[0.01px]"
-                  )}
-                >
-                  <span>
-                    <LabelText label={label ?? ""} required={required} />
-                  </span>
-                </legend>
+                {!isCompact && (
+                  <legend
+                    className={cn(
+                      "invisible h-0 overflow-hidden block text-xs leading-0",
+                      "transition-all duration-200",
+                      hasValue || open ? "px-1 max-w-full" : "px-0 max-w-[0.01px]"
+                    )}
+                  >
+                    <span>
+                      <LabelText label={label ?? ""} required={required} />
+                    </span>
+                  </legend>
+                )}
               </fieldset>
 
               {/* Content area */}
-              <div className="relative flex-1 h-full flex items-center pl-4 pr-0">
+              <div className={cn(
+                "relative flex-1 h-full flex items-center pr-0",
+                isCompact ? "pl-3" : "pl-4"
+              )}>
                 {/* Selected value text */}
                 <span
                   className={cn(
-                    "text-[16px] leading-6 tracking-[0.5px] truncate py-4",
+                    "leading-6 tracking-[0.5px] truncate",
+                    isCompact ? "text-[14px] py-1" : "text-[16px] py-4",
                     hasValue
                       ? "text-[hsl(var(--on-surface))]"
                       : "text-[hsl(var(--on-surface-variant))]",
@@ -367,13 +378,14 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
               {/* Trailing icon */}
               <span
                 className={cn(
-                  "shrink-0 flex items-center justify-center w-13 h-full pr-3 transition-transform duration-200",
+                  "shrink-0 flex items-center justify-center h-full pr-2 transition-transform duration-200",
+                  isCompact ? "w-8" : "w-13 pr-3",
                   open && "rotate-180",
                   error ? "text-[hsl(var(--error))]" : "text-[hsl(var(--on-surface-variant))]",
                   disabled && "text-[hsl(var(--on-surface)/0.38)]"
                 )}
               >
-                <Icon name="arrow_drop_down" size={24} />
+                <Icon name="arrow_drop_down" size={isCompact ? 20 : 24} />
               </span>
             </button>
           </DropdownMenuPrimitive.Trigger>
