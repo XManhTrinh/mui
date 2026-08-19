@@ -212,6 +212,14 @@ textarea:not(:-webkit-autofill) {
   animation-name: m3-autofill-cancel;
 }
 
+/* CSS-only notch opening when autofill is detected (no JS needed) */
+.group:has(input:-webkit-autofill) > fieldset > legend,
+.group:has(textarea:-webkit-autofill) > fieldset > legend {
+  padding-left: 4px;
+  padding-right: 4px;
+  max-width: 100% !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
