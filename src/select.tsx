@@ -325,12 +325,12 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                 {!isCompact && (
                   <legend
                     className={cn(
-                      "invisible h-0 overflow-hidden block text-xs leading-[11px]",
-                      "transition-all duration-200",
-                      hasValue || open ? "px-1 max-w-full" : "px-0 max-w-0"
+                      "h-[11px] block text-xs leading-[11px]",
+                      "transition-[max-width,padding] duration-200",
+                      hasValue || open ? "px-1 max-w-full" : "px-0 max-w-[0.01px]"
                     )}
                   >
-                    <span className="inline-block opacity-0 whitespace-nowrap">{label}{required && " *"}</span>
+                    <span className="invisible whitespace-nowrap">{label}{required && " *"}</span>
                   </legend>
                 )}
               </fieldset>
@@ -363,7 +363,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                       "absolute left-4 pointer-events-none select-none z-3",
                       "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
                       hasValue || open
-                        ? "top-0 -translate-y-1/2 text-xs leading-4 tracking-[0.4px] px-1 -ml-1 bg-[hsl(var(--surface))]"
+                        ? "top-0 -translate-y-1/2 text-xs leading-4 tracking-[0.4px]"
                         : "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
                       labelColor
                     )}
