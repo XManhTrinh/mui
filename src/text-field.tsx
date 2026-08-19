@@ -128,6 +128,8 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       "text-[16px] leading-6 font-normal tracking-[0.5px]",
       "text-[hsl(var(--on-surface))] caret-[hsl(var(--primary))]",
       "placeholder:text-transparent",
+      // Override browser autofill background to prevent it from covering the fieldset border
+      "[&:-webkit-autofill]:shadow-[inset_0_0_0_9999px_hsl(var(--surface))] [&:-webkit-autofill]:[-webkit-text-fill-color:hsl(var(--on-surface))]",
       disabled ? "text-[hsl(var(--on-surface)/0.38)] cursor-not-allowed" : "cursor-text"
     );
 
@@ -301,7 +303,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           <fieldset
             aria-hidden="true"
             className={cn(
-              "absolute inset-0 rounded pointer-events-none m-0 px-3",
+              "absolute inset-0 z-10 rounded pointer-events-none m-0 px-3",
               "transition-[border-color,border-width] duration-200",
               focused
                 ? error ? "border-2 border-[hsl(var(--error))]" : "border-2 border-[hsl(var(--primary))]"
