@@ -325,7 +325,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                 {!isCompact && (
                   <legend
                     className={cn(
-                      "h-[11px] block text-xs leading-[11px] ml-[13px]",
+                      "h-[11px] block text-xs leading-[11px] ml-[12px]",
                       "transition-[max-width,padding] duration-200",
                       hasValue || open ? "px-1 max-w-full" : "px-0 max-w-[0.01px]"
                     )}
