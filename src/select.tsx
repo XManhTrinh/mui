@@ -327,12 +327,10 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                     className={cn(
                       "invisible h-0 overflow-hidden block text-xs leading-0",
                       "transition-all duration-200",
-                      hasValue || open ? "px-1 max-w-full" : "px-0 max-w-[0.01px]"
+                      hasValue || open ? "px-1 max-w-full" : "px-0 max-w-0"
                     )}
                   >
-                    <span>
-                      <LabelText label={label ?? ""} required={required} />
-                    </span>
+                    <span>{label}</span>
                   </legend>
                 )}
               </fieldset>
