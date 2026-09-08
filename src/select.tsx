@@ -198,7 +198,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                 )}
               >
                 {/* Content area */}
-                <div className="relative flex-1 h-full flex items-center pl-4 pr-0">
+                <div className="relative flex-1 min-w-0 h-full flex items-center pl-4 pr-0">
                   {/* Selected value text */}
                   <span
                     className={cn(
@@ -337,7 +337,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
 
               {/* Content area */}
               <div className={cn(
-                "relative flex-1 h-full flex items-center pr-0",
+                "relative flex-1 min-w-0 h-full flex items-center pr-0",
                 isCompact ? "pl-3" : "pl-4"
               )}>
                 {/* Selected value text */}
