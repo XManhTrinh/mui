@@ -47,7 +47,7 @@ type NavCategory = {
   icon: string;
   label: string;
   href: string;
-  children: { label: string; href: string }[];
+  children: { label: string; href: string; badge?: string }[];
 };
 
 const categories: NavCategory[] = [
@@ -130,7 +130,7 @@ const categories: NavCategory[] = [
       { label: "Bottom Sheet", href: "/layout/bottom-sheet" },
       { label: "Side Sheet", href: "/layout/side-sheet" },
       { label: "Toolbar", href: "/layout/toolbar" },
-      { label: "Carousel (coming soon)", href: "/layout/carousel" },
+      { label: "Carousel", href: "/layout/carousel", badge: "Soon" },
       { label: "Typography", href: "/layout/typography" },
     ],
   },
@@ -453,6 +453,11 @@ export default function RootLayout({
                         ].join(" ")}
                       >
                         {child.label}
+                        {child.badge && (
+                          <span className="ms-auto inline-flex items-center h-5 px-1.5 rounded-full bg-tertiary-container text-tertiary-container-foreground text-[10px] font-medium tracking-[0.5px]">
+                            {child.badge}
+                          </span>
+                        )}
                       </Link>
                     );
                   })}
