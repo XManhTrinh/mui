@@ -34,8 +34,8 @@ const extendedFabVariants = cva(
     // Focus ring
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
     // Elevation Level 3 rest, Level 4 hover
-    "shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
-    "hover:shadow-[0_6px_12px_var(--elevation-4),0_2px_4px_var(--elevation-4)]",
+    "shadow-[0_4px_8px_hsl(var(--elevation-3)),0_1px_3px_hsl(var(--elevation-3))]",
+    "hover:shadow-[0_6px_12px_hsl(var(--elevation-4)),0_2px_4px_hsl(var(--elevation-4))]",
     // State layer via ::before pseudo-element
     "overflow-hidden",
     "before:absolute before:inset-0 before:rounded-[inherit]",

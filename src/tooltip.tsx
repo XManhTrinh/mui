@@ -155,7 +155,7 @@ const tooltipVariants = cva(
           "bg-surface-container text-surface-variant-foreground",
           "text-sm leading-5 font-normal whitespace-normal text-left",
           "flex flex-col items-start",
-          "shadow-[0_2px_6px_var(--elevation-2),0_1px_2px_var(--elevation-1)]",
+          "shadow-[0_2px_6px_hsl(var(--elevation-2)),0_1px_2px_hsl(var(--elevation-1))]",
           "pointer-events-auto", // WCAG 1.4.13
         ].join(" "),
       },

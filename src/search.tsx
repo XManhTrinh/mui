@@ -455,7 +455,7 @@ const SearchViewRoot = React.forwardRef<HTMLDivElement, SearchViewProps>(
                 // sm+: docked panel anchored top-center
                 "sm:inset-auto sm:left-[50%] sm:top-4 sm:translate-x-[-50%]",
                 "sm:w-full sm:min-w-90 sm:max-w-180 sm:max-h-[min(560px,90vh)]",
-                "sm:rounded-2xl sm:shadow-[0_3px_6px_var(--elevation-2)]",
+                "sm:rounded-2xl sm:shadow-[0_3px_6px_hsl(var(--elevation-2))]",
                 className
               )}
             >

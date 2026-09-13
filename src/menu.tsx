@@ -101,7 +101,7 @@ function Menu({ trigger, children, align = "start", side = "bottom", dense = fal
           side={side}
           sideOffset={4}
           className={cn(
-            "z-50 min-w-28 max-w-70 overflow-hidden rounded-sm bg-surface-container shadow-[0_3px_6px_var(--elevation-2)]",
+            "z-50 min-w-28 max-w-70 overflow-hidden rounded-sm bg-surface-container shadow-[0_3px_6px_hsl(var(--elevation-2))]",
             // Dense menus tighten the container's vertical padding to match rows
             dense ? "py-1" : "py-2",
             "m3-animate-menu",
@@ -316,7 +316,7 @@ const MenuSubContent = React.forwardRef<
         ref={ref}
         sideOffset={4}
         className={cn(
-          "z-50 min-w-28 max-w-70 overflow-hidden rounded-sm bg-surface-container shadow-[0_3px_6px_var(--elevation-2)]",
+          "z-50 min-w-28 max-w-70 overflow-hidden rounded-sm bg-surface-container shadow-[0_3px_6px_hsl(var(--elevation-2))]",
           density === "dense" ? "py-1" : "py-2",
           "m3-animate-menu",
           className

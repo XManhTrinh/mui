@@ -50,7 +50,7 @@ export const buttonVariantColors = {
     "bg-transparent border border-outline text-primary disabled:border-[hsl(var(--on-surface)/0.12)]",
   text: "bg-transparent text-primary",
   elevated:
-    "bg-surface-container-low text-primary shadow-[0_1px_3px_var(--elevation-1)] disabled:shadow-none",
+    "bg-surface-container-low text-primary shadow-[0_1px_3px_hsl(var(--elevation-1))] disabled:shadow-none",
   tonal: "bg-secondary-container text-secondary-container-foreground",
 } as const;
 
@@ -59,11 +59,11 @@ export const buttonVariantColors = {
  * elevate (e.g. text) or need custom hover behavior can opt in/out.
  */
 export const buttonVariantHoverElevation = {
-  filled: "hover:shadow-[0_1px_3px_var(--elevation-1)] disabled:shadow-none",
+  filled: "hover:shadow-[0_1px_3px_hsl(var(--elevation-1))] disabled:shadow-none",
   outlined: "",
   text: "",
-  elevated: "hover:shadow-[0_3px_6px_var(--elevation-2)] disabled:shadow-none",
-  tonal: "hover:shadow-[0_1px_3px_var(--elevation-1)]",
+  elevated: "hover:shadow-[0_3px_6px_hsl(var(--elevation-2))] disabled:shadow-none",
+  tonal: "hover:shadow-[0_1px_3px_hsl(var(--elevation-1))]",
 } as const;
 
 export type ButtonVariant = keyof typeof buttonVariantColors;

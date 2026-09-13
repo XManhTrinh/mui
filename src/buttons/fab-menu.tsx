@@ -335,7 +335,7 @@ const FABMenuRoot: React.FC<FABMenuProps> = ({
                   // Focus ring
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
                   // Elevation
-                  "shadow-[0_2px_4px_var(--elevation-2),0_1px_2px_var(--elevation-1)]",
+                  "shadow-[0_2px_4px_hsl(var(--elevation-2)),0_1px_2px_hsl(var(--elevation-2))]",
                   // Icon sizing
                   "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-6",
                   "[&_.material-symbols-rounded]:pointer-events-none",

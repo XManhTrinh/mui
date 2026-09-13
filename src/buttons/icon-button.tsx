@@ -52,9 +52,9 @@ const iconButtonVariants = cva(
       variant: {
         standard: "bg-transparent text-surface-variant-foreground",
         filled:
-          "bg-primary text-primary-foreground hover:shadow-[0_1px_3px_var(--elevation-1)]",
+          "bg-primary text-primary-foreground hover:shadow-[0_1px_3px_hsl(var(--elevation-1))]",
         "filled-tonal":
-          "bg-secondary-container text-secondary-container-foreground hover:shadow-[0_1px_3px_var(--elevation-1)]",
+          "bg-secondary-container text-secondary-container-foreground hover:shadow-[0_1px_3px_hsl(var(--elevation-1))]",
         outlined:
           "bg-transparent border border-outline text-surface-variant-foreground",
       },

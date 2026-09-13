@@ -294,7 +294,7 @@ function BottomSheetRoot({
                 "mt-18",
                 "rounded-t-[28px]",
                 "bg-surface-container-low",
-                "shadow-[0_-4px_16px_var(--elevation-3)]",
+                "shadow-[0_-4px_16px_hsl(var(--elevation-3))]",
                 // Responsive: wider viewport adjustments
                 "min-[640px]:mx-auto min-[640px]:mt-14",
                 isComposable && "flex flex-col",
