@@ -42,7 +42,7 @@ export const BottomSheetHandle = React.forwardRef<
       ref={ref}
       className={cn("flex items-center justify-center py-5.5", className)}
     >
-      <div className="h-1 w-8 rounded-full bg-[hsl(var(--on-surface-variant)/0.4)]" />
+      <div className="h-1 w-8 rounded-full bg-surface-variant-foreground" />
     </div>
   );
 });
@@ -294,7 +294,7 @@ function BottomSheetRoot({
                 "mt-18",
                 "rounded-t-[28px]",
                 "bg-surface-container-low",
-                "shadow-[0_-4px_16px_hsl(var(--elevation-3))]",
+                "shadow-[0_-1px_3px_hsl(var(--elevation-1))]",
                 // Responsive: wider viewport adjustments
                 "min-[640px]:mx-auto min-[640px]:mt-14",
                 isComposable && "flex flex-col",
@@ -309,7 +309,7 @@ function BottomSheetRoot({
                 <>
                   {showDragHandle && (
                     <div className="flex items-center justify-center py-5.5">
-                      <div className="h-1 w-8 rounded-full bg-[hsl(var(--on-surface-variant)/0.4)]" />
+                      <div className="h-1 w-8 rounded-full bg-surface-variant-foreground" />
                     </div>
                   )}
                   <div className="overflow-y-auto px-4 pb-4">{children}</div>

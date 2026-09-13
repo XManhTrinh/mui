@@ -117,7 +117,7 @@ const AppBarHeadline = React.forwardRef<HTMLDivElement, AppBarHeadlineProps>(
           children
         )}
         {subtitle && (
-          <p className="text-[14px] leading-5 font-normal tracking-[0.25px] text-surface-variant-foreground truncate">
+          <p className="text-[12px] leading-4 font-medium tracking-[0.5px] text-surface-variant-foreground truncate">
             {subtitle}
           </p>
         )}
@@ -348,7 +348,7 @@ const FlexibleAppBarContent = React.forwardRef<
         className={cn(
           "overflow-hidden transition-[background-color,box-shadow] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
           "bg-surface",
-          isScrolled && "bg-surface-container shadow-[0_1px_3px_hsl(var(--elevation-1))]",
+          isScrolled && "bg-surface-container shadow-[0_1px_3px_hsl(var(--elevation-2)),0_4px_8px_hsl(var(--elevation-2))]",
           className
         )}
         style={{
@@ -605,7 +605,7 @@ const AppBarRoot = React.forwardRef<HTMLElement, AppBarProps>(
             "flex items-center h-16 px-1 transition-[background-color,box-shadow] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
             "bg-surface",
             elevated &&
-              "bg-surface-container shadow-[0_1px_3px_hsl(var(--elevation-1))]",
+              "bg-surface-container shadow-[0_1px_3px_hsl(var(--elevation-2)),0_4px_8px_hsl(var(--elevation-2))]",
             className
           )}
           {...props}
@@ -637,7 +637,7 @@ const AppBarRoot = React.forwardRef<HTMLElement, AppBarProps>(
                     headline
                   )}
                   {subtitle && (
-                    <p className="text-[14px] leading-5 font-normal tracking-[0.25px] text-surface-variant-foreground truncate">
+                    <p className="text-[12px] leading-4 font-medium tracking-[0.5px] text-surface-variant-foreground truncate">
                       {subtitle}
                     </p>
                   )}
