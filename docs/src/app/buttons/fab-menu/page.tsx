@@ -1,11 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { FABMenu, Icon } from "@mui/index";
+import { FABMenu, Icon, Chip } from "@mui/index";
 import { Showcase } from "@/components/showcase";
 import { PropsTable } from "@/components/props-table";
 
 export default function FABMenuPage() {
+  const [lastAction, setLastAction] = React.useState<string | null>(null);
+
   return (
     <div className="max-w-5xl space-y-8">
       {/* Hero */}
@@ -14,24 +16,55 @@ export default function FABMenuPage() {
           FAB Menu
         </h1>
         <p className="text-[16px] leading-6 text-surface-variant-foreground">
-          A speed-dial overlay that opens from a FAB to display related actions.
-          Use <code>FABMenu.Item</code> sub-components to compose each action.
-          Supports staggered M3 Expressive spring animation, scrim backdrop, and
-          keyboard navigation.
+          A speed-dial overlay that opens from a FAB to display 2–6 related
+          actions. Click the FAB to expand, then click an action item. The menu
+          closes automatically after selection.
         </p>
       </div>
 
-      {/* Composable API — Primary */}
-      <Showcase
-        title="Composable API — Primary"
-        code={`<FABMenu triggerIcon={<Icon name="add" />} triggerLabel="Actions">\n  <FABMenu.Item icon={<Icon name="edit" />} label="Edit" onClick={() => {}} />\n  <FABMenu.Item icon={<Icon name="share" />} label="Share" onClick={() => {}} />\n  <FABMenu.Item icon={<Icon name="delete" />} label="Delete" onClick={() => {}} />\n</FABMenu>`}
-      >
-        <FABMenu triggerIcon={<Icon name="add" />} triggerLabel="Actions">
-          <FABMenu.Item icon={<Icon name="edit" />} label="Edit" onClick={() => {}} />
-          <FABMenu.Item icon={<Icon name="share" />} label="Share" onClick={() => {}} />
-          <FABMenu.Item icon={<Icon name="delete" />} label="Delete" onClick={() => {}} />
-        </FABMenu>
-      </Showcase>
+      {/* Interactive Example */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">Interactive Example</h2>
+        <p className="text-[14px] text-surface-variant-foreground">
+          Click the FAB, then pick an action. The selected action shows below.
+        </p>
+        <Showcase
+          title="Click an action"
+          code={`<FABMenu triggerIcon={<Icon name="add" />} triggerLabel="Actions">
+  <FABMenu.Item icon={<Icon name="edit" />} label="Edit" onClick={() => setAction("Edit")} />
+  <FABMenu.Item icon={<Icon name="share" />} label="Share" onClick={() => setAction("Share")} />
+  <FABMenu.Item icon={<Icon name="delete" />} label="Delete" onClick={() => setAction("Delete")} />
+</FABMenu>`}
+        >
+          <div className="flex items-end gap-6">
+            <FABMenu triggerIcon={<Icon name="add" />} triggerLabel="Actions">
+              <FABMenu.Item icon={<Icon name="edit" />} label="Edit" onClick={() => setLastAction("Edit")} />
+              <FABMenu.Item icon={<Icon name="share" />} label="Share" onClick={() => setLastAction("Share")} />
+              <FABMenu.Item icon={<Icon name="delete" />} label="Delete" onClick={() => setLastAction("Delete")} />
+            </FABMenu>
+            {lastAction && (
+              <Chip variant="filter" selected className="animate-in fade-in-0 zoom-in-95">
+                Action: {lastAction}
+              </Chip>
+            )}
+          </div>
+        </Showcase>
+      </section>
+
+      {/* Color Sets */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">Color Sets</h2>
+
+        <Showcase
+          title="Primary (default)"
+          code={`<FABMenu triggerIcon={<Icon name="add" />} triggerLabel="Actions">\n  <FABMenu.Item icon={<Icon name="edit" />} label="Edit" onClick={() => {}} />\n  <FABMenu.Item icon={<Icon name="share" />} label="Share" onClick={() => {}} />\n  <FABMenu.Item icon={<Icon name="delete" />} label="Delete" onClick={() => {}} />\n</FABMenu>`}
+        >
+          <FABMenu triggerIcon={<Icon name="add" />} triggerLabel="Actions">
+            <FABMenu.Item icon={<Icon name="edit" />} label="Edit" onClick={() => {}} />
+            <FABMenu.Item icon={<Icon name="share" />} label="Share" onClick={() => {}} />
+            <FABMenu.Item icon={<Icon name="delete" />} label="Delete" onClick={() => {}} />
+          </FABMenu>
+        </Showcase>
 
       {/* Secondary Color */}
       <Showcase
@@ -63,7 +96,8 @@ export default function FABMenuPage() {
           <FABMenu.Item icon={<Icon name="text_fields" />} label="Text" onClick={() => {}} />
           <FABMenu.Item icon={<Icon name="image" />} label="Image" onClick={() => {}} />
         </FABMenu>
-      </Showcase>
+        </Showcase>
+      </section>
 
       {/* Props Tables */}
       <PropsTable
