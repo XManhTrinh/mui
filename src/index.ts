@@ -219,6 +219,7 @@ export {
 } from "./toolbar";
 export type {
   ToolbarProps,
+  ToolbarComponentProps,
   ToolbarLeadingProps,
   ToolbarHeadlineProps,
   ToolbarActionsProps,
@@ -226,7 +227,7 @@ export type {
 
 // ─── Slider ───────────────────────────────────────────────────────────────────
 export { Slider } from "./slider";
-export type { SliderProps, SliderSize } from "./slider";
+export type { SliderProps, SliderSize, SliderComponentProps } from "./slider";
 
 // ─── Text Field ───────────────────────────────────────────────────────────────
 export { TextField } from "./text-field";
