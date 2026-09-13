@@ -138,6 +138,14 @@ function SnackbarItem({ item, onDismiss, reducedMotion }: SnackbarItemProps) {
   return (
     <motion.div
       layout
+      drag="x"
+      dragConstraints={{ left: 0, right: 0 }}
+      dragElastic={0.5}
+      onDragEnd={(_, info) => {
+        if (Math.abs(info.offset.x) > 100 || Math.abs(info.velocity.x) > 500) {
+          onDismiss(id);
+        }
+      }}
       initial={{ y: reducedMotion ? 0 : "100%", opacity: reducedMotion ? 1 : 0 }}
       animate={{ y: 0, opacity: 1, transition: { duration: reducedMotion ? 0 : 0.2, ease: [0.2, 0, 0, 1] } }}
       exit={{ opacity: 0, transition: { duration: reducedMotion ? 0 : 0.15, ease: [0.4, 0, 1, 1] } }}
@@ -147,7 +155,7 @@ function SnackbarItem({ item, onDismiss, reducedMotion }: SnackbarItemProps) {
       role={role}
       aria-live={ariaLive}
       className={cn(
-        "flex items-center min-h-12 gap-2 rounded",
+        "flex items-center min-h-12 gap-2 rounded cursor-grab active:cursor-grabbing",
         "bg-inverse-surface text-inverse-on-surface",
         "shadow-[0_4px_8px_hsl(var(--elevation-3)),0_1px_3px_hsl(var(--elevation-3))]",
         // Padding

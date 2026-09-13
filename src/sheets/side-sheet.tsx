@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useMotionValue, useTransform } from "motion/react";
 
 import { cn } from "../lib/utils";
 import { Icon } from "../icon";
@@ -254,6 +254,29 @@ function SideSheetRoot({
 
   const slideFrom = side === "right" ? "100%" : "-100%";
 
+  // ── Drag-to-dismiss for modal side sheets ───────────────────────
+  const dragX = useMotionValue(0);
+  const sheetRef = React.useRef<HTMLDivElement>(null);
+  const scrimOpacity = useTransform(
+    dragX,
+    side === "right" ? [0, 300] : [-300, 0],
+    side === "right" ? [1, 0] : [0, 1]
+  );
+
+  const handleDragEnd = React.useCallback(
+    (_: unknown, info: { offset: { x: number }; velocity: { x: number } }) => {
+      const sheetWidth = sheetRef.current?.offsetWidth ?? 400;
+      const threshold = sheetWidth * 0.3;
+      const dismissRight = side === "right" && (info.offset.x > threshold || info.velocity.x > 500);
+      const dismissLeft = side === "left" && (info.offset.x < -threshold || info.velocity.x < -500);
+      if (dismissRight || dismissLeft) {
+        onOpenChange(false);
+      }
+      dragX.set(0);
+    },
+    [onOpenChange, dragX, side]
+  );
+
   const contextValue = React.useMemo<SideSheetContextValue>(
     () => ({ open, onOpenChange, variant, side }),
     [open, onOpenChange, variant, side]
@@ -275,6 +298,7 @@ function SideSheetRoot({
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: reducedMotion ? 0 : 0.15 }}
+                    style={{ opacity: scrimOpacity }}
                     className="fixed inset-0 z-50 bg-[hsl(var(--on-surface)/0.32)]"
                   />
                 </DialogPrimitive.Overlay>
@@ -285,6 +309,12 @@ function SideSheetRoot({
                   aria-label={headline || "Side sheet"}
                 >
                   <motion.div
+                    ref={sheetRef}
+                    drag="x"
+                    dragConstraints={{ left: 0, right: 0 }}
+                    dragElastic={side === "right" ? { left: 0, right: 0.5 } : { left: 0.5, right: 0 }}
+                    onDragEnd={handleDragEnd}
+                    style={{ x: dragX }}
                     initial={{ x: reducedMotion ? 0 : slideFrom }}
                     animate={{ x: 0 }}
                     exit={{ x: reducedMotion ? 0 : slideFrom }}
@@ -294,7 +324,7 @@ function SideSheetRoot({
                       ease: [0.2, 0, 0, 1],
                     }}
                     className={cn(
-                      "fixed top-0 bottom-0 z-50 outline-none",
+                      "fixed top-0 bottom-0 z-50 outline-none touch-none",
                       side === "right" ? "right-0" : "left-0"
                     )}
                   >

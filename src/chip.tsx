@@ -62,6 +62,8 @@ const chipVariants = cva(
 export type ChipProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type"> & VariantProps<typeof chipVariants>& {
   /** Leading icon name (Material Symbols) */
   leadingIcon?: string;
+  /** Leading element (avatar, image, or custom React node — overrides leadingIcon) */
+  leadingElement?: React.ReactNode;
   /** Trailing icon name (Material Symbols) */
   trailingIcon?: string;
   /** Whether chip is selected (filter/input variants) */
@@ -83,6 +85,7 @@ const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
       selected = false,
       elevated = false,
       leadingIcon,
+      leadingElement,
       trailingIcon,
       onDismiss,
       disabled,
@@ -93,7 +96,7 @@ const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
   ) => {
     const showCheckmark = variant === "filter" && selected;
     const showDismiss = variant === "input" && !!onDismiss;
-    const hasLeading = !!(leadingIcon || showCheckmark);
+    const hasLeading = !!(leadingIcon || leadingElement || showCheckmark);
     const hasTrailing = !!(trailingIcon || showDismiss);
 
     const stateLayer = cn(
@@ -109,7 +112,12 @@ const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
         {showCheckmark && (
           <Icon name="check" size={18} className="me-2 relative z-10" />
         )}
-        {!showCheckmark && leadingIcon && (
+        {!showCheckmark && leadingElement && (
+          <span className="relative z-10 me-2 inline-flex items-center justify-center size-4.5 rounded-full overflow-hidden shrink-0">
+            {leadingElement}
+          </span>
+        )}
+        {!showCheckmark && !leadingElement && leadingIcon && (
           <Icon
             name={leadingIcon}
             size={18}

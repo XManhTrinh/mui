@@ -128,6 +128,43 @@ function Carousel({
     }
   };
 
+  // ── Mouse-drag-to-scroll (desktop) ──────────────────────────────
+  // On touch devices native scroll works; on desktop we need pointer
+  // event handling to allow click-and-drag scrolling.
+  const isDragging = React.useRef(false);
+  const dragStart = React.useRef({ x: 0, scrollLeft: 0 });
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    // Only handle primary button, skip touch (native scroll handles it)
+    if (e.pointerType === "touch" || e.button !== 0) return;
+    const el = scrollRef.current;
+    if (!el) return;
+    isDragging.current = true;
+    dragStart.current = { x: e.clientX, scrollLeft: el.scrollLeft };
+    el.style.scrollBehavior = "auto";
+    el.style.cursor = "grabbing";
+    el.setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDragging.current) return;
+    const el = scrollRef.current;
+    if (!el) return;
+    const dx = e.clientX - dragStart.current.x;
+    el.scrollLeft = dragStart.current.scrollLeft - dx;
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+    const el = scrollRef.current;
+    if (el) {
+      el.style.scrollBehavior = "";
+      el.style.cursor = "";
+      el.releasePointerCapture(e.pointerId);
+    }
+  };
+
   const contextValue = React.useMemo<CarouselContextValue>(
     () => ({
       variant,
@@ -157,10 +194,14 @@ function Carousel({
         ref={scrollRef}
         onScroll={updateScrollState}
         onKeyDown={handleKeyDown}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
         tabIndex={0}
         role="list"
         className={cn(
-          "flex overflow-x-auto",
+          "flex overflow-x-auto cursor-grab active:cursor-grabbing",
           "scroll-smooth snap-x snap-mandatory",
           "[-webkit-overflow-scrolling:touch] scrollbar-none",
           "[&::-webkit-scrollbar]:hidden",

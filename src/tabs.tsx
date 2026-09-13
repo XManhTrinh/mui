@@ -215,7 +215,7 @@ function TabList({ className, children }: TabListProps) {
       role="tablist"
       onKeyDown={handleKeyDown}
       className={cn(
-        "relative flex bg-surface border-b border-outline-variant",
+        "relative flex overflow-x-auto scrollbar-none bg-surface border-b border-outline-variant",
         hasIcons ? "h-16" : "h-12",
         className
       )}
@@ -288,7 +288,7 @@ function Tab({ value: tabValue, icon, label, disabled = false, className }: TabP
       data-tab-value={tabValue}
       onClick={handleClick}
       className={cn(
-        "relative overflow-hidden flex-1 flex items-center justify-center gap-2 min-w-12 px-4",
+        "relative overflow-hidden flex-1 shrink-0 flex items-center justify-center gap-2 min-w-12 px-4",
         layoutDirection,
         "select-none transition-colors duration-200",
         "focus-visible:outline-none",
