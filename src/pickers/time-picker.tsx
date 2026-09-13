@@ -154,7 +154,7 @@ function TimePickerInput({
           disabled={disabled}
           aria-label="Hour"
           className={cn(
-            "h-20 w-24 rounded-lg bg-surface-container-highest text-center text-[45px] leading-none font-normal text-surface-foreground cursor-text",
+            "h-20 w-24 rounded-lg bg-surface-container-highest text-center text-[57px] leading-none font-normal text-surface-foreground cursor-text",
             "outline-none focus-visible:ring-2 focus-visible:ring-primary",
             "transition-colors duration-100"
           )}
@@ -162,7 +162,7 @@ function TimePickerInput({
       </div>
 
       {/* Separator */}
-      <span className="mx-1 mt-5 text-[45px] leading-none font-normal text-surface-foreground">
+      <span className="mx-1 mt-5 text-[57px] leading-none font-normal text-surface-foreground">
         :
       </span>
 
@@ -180,7 +180,7 @@ function TimePickerInput({
           disabled={disabled}
           aria-label="Minute"
           className={cn(
-            "h-20 w-24 rounded-lg bg-surface-container-highest text-center text-[45px] leading-none font-normal text-surface-foreground cursor-text",
+            "h-20 w-24 rounded-lg bg-surface-container-highest text-center text-[57px] leading-none font-normal text-surface-foreground cursor-text",
             "outline-none focus-visible:ring-2 focus-visible:ring-primary",
             "transition-colors duration-100"
           )}
@@ -393,7 +393,7 @@ function TimePickerDial({
 
   const timeFieldCx = (active: boolean) =>
     cn(
-      "flex h-20 w-24 items-center justify-center rounded-lg text-[45px] leading-none font-normal cursor-pointer transition-colors duration-100",
+      "flex h-20 w-24 items-center justify-center rounded-lg text-[57px] leading-none font-normal cursor-pointer transition-colors duration-100",
       "outline-none focus-visible:ring-2 focus-visible:ring-primary",
       active
         ? "bg-primary-container text-primary-container-foreground"
@@ -422,7 +422,7 @@ function TimePickerDial({
         >
           {value ? fmt(displayHour) : "--"}
         </button>
-        <span className="mt-5 text-[45px] leading-none font-normal text-surface-foreground">:</span>
+        <span className="mt-5 text-[57px] leading-none font-normal text-surface-foreground">:</span>
         <button
           type="button"
           disabled={disabled}
@@ -471,7 +471,7 @@ function TimePickerDial({
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
-        className="relative touch-none select-none rounded-full bg-surface-variant"
+        className="relative touch-none select-none rounded-full bg-surface-container-highest"
         style={{ width: DIAL_SIZE, height: DIAL_SIZE }}
       >
         {/* Center dot */}

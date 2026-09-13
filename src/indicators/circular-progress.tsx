@@ -15,10 +15,9 @@ import { cn } from "../lib/utils";
  * 1. Track circle (background ring)
  * 2. Active indicator arc (filled portion or animated arc)
  *
- * Measurements:
- * - Default container size: 48dp × 48dp
- * - Stroke width: 4dp
- * - Circular track diameter: 40dp (48 - 2×4dp padding)
+ * Measurements (per md.comp.progress-indicator.circular):
+ * - Default container size: 40dp × 40dp (48dp is the wave/expressive size)
+ * - Track thickness (stroke): 4dp
  *
  * Colors (via CSS custom properties):
  * - Active indicator: primary
@@ -33,7 +32,7 @@ import { cn } from "../lib/utils";
 export type CircularProgressProps = {
   /** Progress value 0-100. If undefined, renders indeterminate. */
   value?: number;
-  /** Size in px. Default: 48 */
+  /** Size in px. Default: 40 (M3 baseline; use 48 for the wave/expressive style) */
   size?: number;
   /** Stroke width in px. Default: 4 */
   strokeWidth?: number;
@@ -47,7 +46,7 @@ const CircularProgress = React.forwardRef<HTMLDivElement, CircularProgressProps>
   (
     {
       value,
-      size = 48,
+      size = 40,
       strokeWidth = 4,
       className,
       "aria-label": ariaLabel,
