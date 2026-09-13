@@ -368,8 +368,9 @@ function TabContent({ value: contentValue, className, children }: TabContentProp
   if (activeValue !== contentValue) return null;
 
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    // Only swipe on touch — mouse drag is for text selection
+    if (e.pointerType === "mouse") return;
     swipeStart.current = { x: e.clientX, y: e.clientY };
-    // Capture the pointer so pointerUp fires even if the cursor leaves the element
     e.currentTarget.setPointerCapture(e.pointerId);
   };
 
