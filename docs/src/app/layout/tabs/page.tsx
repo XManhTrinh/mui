@@ -162,7 +162,7 @@ export default function TabsPage() {
   <TabContent value="mon">Monday content</TabContent>
 </Tabs>`}>
           <div className="max-w-sm w-full overflow-hidden">
-            <Tabs defaultValue="mon" variant="secondary">
+            <Tabs defaultValue="mon" variant="secondary" scrollable>
             <TabList>
               <Tab value="mon" label="Monday" />
               <Tab value="tue" label="Tuesday" />

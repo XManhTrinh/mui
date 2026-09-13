@@ -55,6 +55,8 @@ type TabsContextValue = {
   value: string;
   onValueChange: (value: string) => void;
   variant: "primary" | "secondary";
+  /** When true, tabs use natural width and scroll. When false, tabs divide equally (fixed). */
+  scrollable: boolean;
 }
 
 const TabsContext = React.createContext<TabsContextValue | null>(null);
@@ -72,6 +74,11 @@ export type TabsProps = {
   defaultValue?: string;
   onValueChange?: (value: string) => void;
   variant?: "primary" | "secondary";
+  /**
+   * When true, tabs use their natural width and scroll horizontally.
+   * When false (default), tabs divide the container width equally (M3 "fixed" layout).
+   */
+  scrollable?: boolean;
   className?: string;
   children: React.ReactNode;
 }
@@ -81,6 +88,7 @@ function Tabs({
   defaultValue = "",
   onValueChange,
   variant = "primary",
+  scrollable = false,
   className,
   children,
 }: TabsProps) {
@@ -101,8 +109,9 @@ function Tabs({
       value: currentValue,
       onValueChange: handleValueChange,
       variant,
+      scrollable,
     }),
-    [currentValue, handleValueChange, variant]
+    [currentValue, handleValueChange, variant, scrollable]
   );
 
   return (
@@ -268,7 +277,7 @@ export type TabProps = {
 }
 
 function Tab({ value: tabValue, icon, label, disabled = false, className }: TabProps) {
-  const { value: activeValue, onValueChange, variant } = useTabsContext();
+  const { value: activeValue, onValueChange, variant, scrollable } = useTabsContext();
   const isActive = activeValue === tabValue;
 
   const handleClick = () => {
@@ -304,7 +313,8 @@ function Tab({ value: tabValue, icon, label, disabled = false, className }: TabP
       data-tab-value={tabValue}
       onClick={handleClick}
       className={cn(
-        "relative overflow-hidden flex-none flex items-center justify-center gap-2 min-w-20 px-4",
+        "relative overflow-hidden flex items-center justify-center gap-2 min-w-20 px-4",
+        scrollable ? "flex-none" : "flex-1",
         layoutDirection,
         "select-none transition-colors duration-200",
         "focus-visible:outline-none",
