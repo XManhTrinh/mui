@@ -36,6 +36,10 @@ const facebookThemeCSS = `
 :root:root{--primary:211 73% 39%;--on-primary:0 0% 100%;--primary-container:219 100% 92%;--on-primary-container:212 100% 12%;--secondary:219 14% 39%;--on-secondary:0 0% 100%;--secondary-container:221 69% 91%;--on-secondary-container:216 41% 12%;--tertiary:285 16% 40%;--on-tertiary:0 0% 100%;--tertiary-container:289 95% 92%;--on-tertiary-container:283 42% 13%;--surface:240 100% 99%;--on-surface:220 10% 11%;--surface-variant:225 23% 90%;--on-surface-variant:218 8% 28%;--outline:220 5% 47%;--outline-variant:220 11% 79%;--inverse-surface:230 6% 20%;--inverse-on-surface:240 30% 95%;--inverse-primary:217 100% 82%;--surface-container-lowest:0 0% 100%;--surface-container-low:240 41% 97%;--surface-container:240 24% 94%;--surface-container-high:240 18% 92%;--surface-container-highest:240 14% 90%;--surface-bright:240 100% 99%;--surface-dim:249 10% 86%}
 :root:root.dark{--primary:217 100% 82%;--on-primary:210 100% 19%;--primary-container:208 100% 26%;--on-primary-container:219 100% 92%;--secondary:221 31% 80%;--on-secondary:217 25% 20%;--secondary-container:218 18% 29%;--on-secondary-container:221 69% 91%;--tertiary:287 39% 81%;--on-tertiary:283 27% 21%;--tertiary-container:284 19% 31%;--on-tertiary-container:289 95% 92%;--surface:225 10% 8%;--on-surface:240 14% 90%;--surface-variant:218 8% 28%;--on-surface-variant:220 11% 79%;--outline:220 6% 58%;--outline-variant:218 8% 28%;--inverse-surface:240 14% 90%;--inverse-on-surface:230 6% 20%;--inverse-primary:211 73% 39%;--surface-container-lowest:225 13% 6%;--surface-container-low:220 10% 11%;--surface-container:220 9% 13%;--surface-container-high:220 7% 17%;--surface-container-highest:220 6% 21%;--surface-bright:220 5% 23%;--surface-dim:225 10% 8%}`;
 
+const whatsappThemeCSS = `
+:root:root{--primary:152 100% 21%;--on-primary:0 0% 100%;--primary-container:141 99% 68%;--on-primary-container:145 100% 6%;--secondary:137 12% 35%;--on-secondary:0 0% 100%;--secondary-container:133 34% 86%;--on-secondary-container:144 48% 8%;--tertiary:194 31% 34%;--on-tertiary:0 0% 100%;--tertiary-container:195 78% 86%;--on-tertiary-container:194 100% 8%;--surface:111 47% 97%;--on-surface:130 12% 10%;--surface-variant:114 16% 88%;--on-surface-variant:133 7% 27%;--outline:133 4% 46%;--outline-variant:120 8% 77%;--inverse-surface:120 6% 18%;--inverse-on-surface:111 21% 94%;--inverse-primary:146 75% 52%;--surface-container-lowest:0 0% 100%;--surface-container-low:111 26% 95%;--surface-container:111 18% 92%;--surface-container-high:120 14% 90%;--surface-container-highest:111 11% 88%;--surface-bright:111 47% 97%;--surface-dim:111 9% 85%}
+:root:root.dark{--primary:146 75% 52%;--on-primary:149 100% 11%;--primary-container:151 100% 16%;--on-primary-container:141 99% 68%;--secondary:133 18% 75%;--on-secondary:143 25% 17%;--secondary-container:138 15% 25%;--on-secondary-container:133 34% 86%;--tertiary:195 44% 75%;--on-tertiary:192 91% 14%;--tertiary-container:193 44% 24%;--on-tertiary-container:195 78% 86%;--surface:130 17% 7%;--on-surface:111 11% 88%;--surface-variant:133 7% 27%;--on-surface-variant:120 8% 77%;--outline:127 4% 56%;--outline-variant:133 7% 27%;--inverse-surface:111 11% 88%;--inverse-on-surface:120 6% 18%;--inverse-primary:152 100% 21%;--surface-container-lowest:130 23% 5%;--surface-container-low:130 12% 10%;--surface-container:130 10% 12%;--surface-container-high:120 7% 16%;--surface-container-highest:129 7% 20%;--surface-bright:120 5% 22%;--surface-dim:130 17% 7%}`;
+
 // ─── Navigation data ──────────────────────────────────────────────────────────
 
 type NavCategory = {
@@ -204,6 +208,7 @@ export default function RootLayout({
       red: redThemeCSS,
       amber: amberThemeCSS,
       facebook: facebookThemeCSS,
+      whatsapp: whatsappThemeCSS,
     };
 
     const css = themeMap[name];
@@ -363,6 +368,7 @@ export default function RootLayout({
                   { name: "red", color: "#B8232A", tokens: "red" },
                   { name: "amber", color: "#795900", tokens: "amber" },
                   { name: "facebook", color: "#1877F2", tokens: "facebook" },
+                  { name: "whatsapp", color: "#25D366", tokens: "whatsapp" },
                 ] as const).map((t) => (
                   <button
                     key={t.name}

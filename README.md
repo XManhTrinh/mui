@@ -453,6 +453,7 @@ Six color schemes are available out of the box. The default (purple) is built in
 | Red | `#B8232A` | `@import "@vkieu/mui/themes/theme-red.css";` |
 | Amber | `#795900` | `@import "@vkieu/mui/themes/theme-amber.css";` |
 | Facebook | `#1877F2` | `@import "@vkieu/mui/themes/theme-facebook.css";` |
+| WhatsApp | `#25D366` | `@import "@vkieu/mui/themes/theme-whatsapp.css";` |
 
 ```css
 @import "tailwindcss";
@@ -639,6 +640,7 @@ src/
 │   ├── theme-red.css       # Red preset (#B8232A)
 │   ├── theme-amber.css     # Amber preset (#795900)
 │   ├── theme-facebook.css  # Facebook preset (#1877F2)
+│   ├── theme-whatsapp.css # WhatsApp preset (#25D366)
 │   └── index.ts            # Theme preset metadata
 ├── app-bar.tsx             # Top app bar
 ├── badge.tsx               # Badge (dot/count)

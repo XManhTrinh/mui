@@ -1,0 +1,73 @@
+/**
+ * @vkieu/mui — WhatsApp theme preset
+ * Source: #25D366 (WhatsApp Green)
+ * Usage: @import "@vkieu/mui/themes/theme-whatsapp.css"; (after theme.css)
+ */
+:root {
+  --primary: 152 100% 21%;
+  --on-primary: 0 0% 100%;
+  --primary-container: 141 99% 68%;
+  --on-primary-container: 145 100% 6%;
+  --secondary: 137 12% 35%;
+  --on-secondary: 0 0% 100%;
+  --secondary-container: 133 34% 86%;
+  --on-secondary-container: 144 48% 8%;
+  --tertiary: 194 31% 34%;
+  --on-tertiary: 0 0% 100%;
+  --tertiary-container: 195 78% 86%;
+  --on-tertiary-container: 194 100% 8%;
+  --error: 0 75% 42%;
+  --on-error: 0 0% 100%;
+  --error-container: 6 100% 92%;
+  --on-error-container: 358 100% 13%;
+  --surface: 111 47% 97%;
+  --on-surface: 130 12% 10%;
+  --surface-variant: 114 16% 88%;
+  --on-surface-variant: 133 7% 27%;
+  --outline: 133 4% 46%;
+  --outline-variant: 120 8% 77%;
+  --inverse-surface: 120 6% 18%;
+  --inverse-on-surface: 111 21% 94%;
+  --inverse-primary: 146 75% 52%;
+  --surface-container-lowest: 0 0% 100%;
+  --surface-container-low: 111 26% 95%;
+  --surface-container: 111 18% 92%;
+  --surface-container-high: 120 14% 90%;
+  --surface-container-highest: 111 11% 88%;
+  --surface-bright: 111 47% 97%;
+  --surface-dim: 111 9% 85%;
+}
+.dark {
+  --primary: 146 75% 52%;
+  --on-primary: 149 100% 11%;
+  --primary-container: 151 100% 16%;
+  --on-primary-container: 141 99% 68%;
+  --secondary: 133 18% 75%;
+  --on-secondary: 143 25% 17%;
+  --secondary-container: 138 15% 25%;
+  --on-secondary-container: 133 34% 86%;
+  --tertiary: 195 44% 75%;
+  --on-tertiary: 192 91% 14%;
+  --tertiary-container: 193 44% 24%;
+  --on-tertiary-container: 195 78% 86%;
+  --error: 6 100% 84%;
+  --on-error: 357 100% 21%;
+  --error-container: 356 100% 29%;
+  --on-error-container: 6 100% 92%;
+  --surface: 130 17% 7%;
+  --on-surface: 111 11% 88%;
+  --surface-variant: 133 7% 27%;
+  --on-surface-variant: 120 8% 77%;
+  --outline: 127 4% 56%;
+  --outline-variant: 133 7% 27%;
+  --inverse-surface: 111 11% 88%;
+  --inverse-on-surface: 120 6% 18%;
+  --inverse-primary: 152 100% 21%;
+  --surface-container-lowest: 130 23% 5%;
+  --surface-container-low: 130 12% 10%;
+  --surface-container: 130 10% 12%;
+  --surface-container-high: 120 7% 16%;
+  --surface-container-highest: 129 7% 20%;
+  --surface-bright: 120 5% 22%;
+  --surface-dim: 130 17% 7%;
+}
