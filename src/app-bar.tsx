@@ -141,7 +141,12 @@ const AppBarTrailing = React.forwardRef<HTMLDivElement, AppBarTrailingProps>(
     return (
       <div
         ref={ref}
-        className={cn("flex items-center shrink-0 [&_svg]:size-6", className)}
+        className={cn(
+          // ms-auto anchors trailing actions to the end even when no headline
+          // slot is present to push them there.
+          "flex items-center shrink-0 ms-auto [&_svg]:size-6",
+          className
+        )}
         {...props}
       >
         {children}
@@ -650,6 +655,9 @@ const AppBarRoot = React.forwardRef<HTMLElement, AppBarProps>(
                   {children}
                 </div>
               )}
+
+              {/* Spacer: with no headline/children, push trailing actions to the end */}
+              {!headline && !children && <div className="flex-1" />}
 
               {/* Trailing actions slot — 24dp icons */}
               {trailingIcons && (
