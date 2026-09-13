@@ -157,9 +157,20 @@ export default function RootLayout({
     [pathname]
   );
 
+  // On component pages the drawer is "pinned" — stays open and pushes content.
+  // On the homepage there's no active category so nothing is pinned.
+  const isPinned = pathname !== "/" && !!activeCategory;
+
+  // Auto-set the drawer to the active category on navigation
+  React.useEffect(() => {
+    if (isPinned) {
+      setOpenDrawer(activeCategory!);
+    } else {
+      setOpenDrawer(null);
+    }
+  }, [isPinned, activeCategory]);
+
   // ── Hover logic ─────────────────────────────────────────────────
-  // Open instantly, close with a grace period so the cursor can travel
-  // from the rail item to the drawer without it snapping shut.
 
   const cancelClose = () => {
     if (closeTimer.current) {
@@ -173,9 +184,17 @@ export default function RootLayout({
     setOpenDrawer(value);
   };
 
+  // Only schedule a close if not pinned. When pinned, the drawer
+  // snaps back to the active category instead of closing.
   const scheduleClose = () => {
     cancelClose();
-    closeTimer.current = setTimeout(() => setOpenDrawer(null), 250);
+    closeTimer.current = setTimeout(() => {
+      if (isPinned) {
+        setOpenDrawer(activeCategory!);
+      } else {
+        setOpenDrawer(null);
+      }
+    }, 250);
   };
 
   // The drawer content for the currently hovered category (if any).
@@ -343,7 +362,15 @@ export default function RootLayout({
         </div>
 
         {/* ── Main content ─────────────────────────────────────────── */}
-        <div className="ml-20">
+        <div
+          className={[
+            "transition-[margin-left] duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
+            // When drawer is pinned (component page), push content right.
+            // Rail = 80px, drawer = 224px → total 304px.
+            // When only rail visible → 80px.
+            isDrawerVisible && isPinned ? "ml-[304px]" : "ml-20",
+          ].join(" ")}
+        >
           <main className="p-8 max-w-240">{children}</main>
         </div>
       </body>
