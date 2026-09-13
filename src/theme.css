@@ -366,6 +366,13 @@ textarea:-webkit-autofill:active {
   100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; }
 }
 
+/* M3 Expressive wavy linear progress — scrolls the sine-wave active indicator.
+   One wavelength = 40dp; the pattern translates by one wavelength per cycle. */
+@keyframes m3-linear-wave {
+  from { transform: translateX(0); }
+  to { transform: translateX(-40px); }
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════════
    6. KEYFRAMES — Radix UI component animations
    ═══════════════════════════════════════════════════════════════════════════════ */
