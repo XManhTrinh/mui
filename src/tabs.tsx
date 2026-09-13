@@ -363,28 +363,22 @@ export type TabContentProps = {
 function TabContent({ value: contentValue, className, children }: TabContentProps) {
   const { value: activeValue, onValueChange } = useTabsContext();
   const panelRef = React.useRef<HTMLDivElement>(null);
-  const swipeStart = React.useRef<{ x: number; y: number; t: number } | null>(null);
+  const swipeStart = React.useRef<{ x: number; y: number } | null>(null);
 
   if (activeValue !== contentValue) return null;
 
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    swipeStart.current = { x: e.clientX, y: e.clientY, t: Date.now() };
-    e.currentTarget.setPointerCapture(e.pointerId);
+    if (e.pointerType !== "touch") return;
+    swipeStart.current = { x: e.clientX, y: e.clientY };
   };
 
   const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!swipeStart.current) return;
     const dx = e.clientX - swipeStart.current.x;
     const dy = e.clientY - swipeStart.current.y;
-    const dt = Date.now() - swipeStart.current.t;
     swipeStart.current = null;
 
-    // Swipe detection: must be fast (< 500ms) and clearly horizontal.
-    // This avoids triggering during slow text-selection drags.
-    const velocity = Math.abs(dx) / (dt || 1) * 1000; // px/s
-    const isSwipe = Math.abs(dx) > 80 && Math.abs(dx) > Math.abs(dy) * 2 && velocity > 200;
-
-    if (isSwipe) {
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
       // Find the tablist that belongs to the same Tabs container (sibling, not global)
       const panel = panelRef.current;
       const tabsRoot = panel?.closest(".flex.flex-col");
