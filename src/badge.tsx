@@ -63,7 +63,7 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
           <span
             className={cn(
               // M3 spec: small dot badge 6×6dp at top-right corner
-              "absolute -top-0.5 -right-0.5 z-20",
+              "absolute -inset-t-0.5 -inset-r-0.5 z-20",
               "size-1.5 rounded-full bg-error",
               className
             )}
@@ -74,7 +74,7 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
           <span
             className={cn(
               // M3 spec: large badge at top-right corner, overlapping slightly
-              "absolute -top-1 -right-1 z-20",
+              "absolute -inset-t-1 -inset-r-1 z-20",
               "h-4 min-w-4 rounded-full px-1",
               "bg-error text-error-foreground",
               "text-[11px] leading-4 font-medium tracking-[0.5px]",

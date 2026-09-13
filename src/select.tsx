@@ -225,11 +225,11 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                     <span
                       id={labelId}
                       className={cn(
-                        "absolute start-4 pointer-events-none select-none",
+                        "absolute inset-s-4 pointer-events-none select-none",
                         "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
                         hasValue || open
-                          ? "top-2 translate-y-0 text-xs leading-4 tracking-[0.4px]"
-                          : "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
+                          ? "inset-t-2 translate-y-0 text-xs leading-4 tracking-[0.4px]"
+                          : "inset-t-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
                         labelColor
                       )}
                     >
@@ -253,7 +253,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                 {/* Active indicator */}
                 <span
                   className={cn(
-                    "absolute bottom-0 inset-x-0 pointer-events-none transition-[height,background-color] duration-200",
+                    "absolute inset-b-0 inset-x-0 pointer-events-none transition-[height,background-color] duration-200",
                     open
                       ? error
                         ? "h-0.5 bg-[hsl(var(--error))]"
@@ -319,7 +319,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                 aria-hidden="true"
                 className={cn(
                   "absolute inset-0 rounded pointer-events-none m-0 px-0 z-2",
-                  "-top-1.25 pt-1.25",
+                  "-inset-t-1.25 pt-1.25",
                   "transition-[border-color,border-width] duration-200",
                   open
                     ? error
@@ -373,11 +373,11 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                   <span
                     id={labelId}
                     className={cn(
-                      "absolute start-4 pointer-events-none select-none z-3",
+                      "absolute inset-s-4 pointer-events-none select-none z-3",
                       "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
                       hasValue || open
-                        ? "top-0 -translate-y-1/2 text-xs leading-4 tracking-[0.4px]"
-                        : "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
+                        ? "inset-t-0 -translate-y-1/2 text-xs leading-4 tracking-[0.4px]"
+                        : "inset-t-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
                       labelColor
                     )}
                   >

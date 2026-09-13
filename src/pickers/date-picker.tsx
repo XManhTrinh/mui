@@ -389,7 +389,7 @@ function CalendarView({
                       className={cn(
                         "absolute inset-y-0 w-1/2 bg-secondary-container",
                         // start endpoint's band extends toward the end side; vice versa
-                        isBandStartEndpoint ? "end-0" : "start-0"
+                        isBandStartEndpoint ? "inset-e-0" : "inset-s-0"
                       )}
                     />
                   )}
@@ -586,7 +586,7 @@ export function DatePickerModal({
             exit={reducedMotion ? undefined : { opacity: 0, scale: 0.9 }}
             transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 500, damping: 30, mass: 1 }}
             className={cn(
-              "fixed z-50 left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]",
+              "fixed z-50 inset-l-[50%] inset-t-[50%] translate-x-[-50%] translate-y-[-50%]",
               "flex flex-col overflow-hidden rounded-[28px] bg-surface-container-high shadow-none",
               "max-h-[90vh]",
               className

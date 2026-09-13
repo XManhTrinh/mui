@@ -303,7 +303,7 @@ function BottomSheetRoot({
                 ease: [0.2, 0, 0, 1], // M3 standard easing
               }}
               className={cn(
-                "fixed bottom-0 left-0 right-0 z-50",
+                "fixed inset-b-0 inset-l-0 inset-r-0 z-50",
                 "mx-0 max-w-160",
                 "mt-18",
                 "rounded-t-[28px]",

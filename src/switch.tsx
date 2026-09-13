@@ -162,7 +162,7 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
           {/* State layer — 40dp circle on handle position */}
           <span
             className={cn(
-              "absolute top-1/2 -translate-y-1/2 w-10 h-10 rounded-full transition-colors duration-200 pointer-events-none",
+              "absolute inset-t-1/2 -translate-y-1/2 w-10 h-10 rounded-full transition-colors duration-200 pointer-events-none",
               !disabled && !isChecked && "group-hover:bg-[hsl(var(--on-surface)/0.08)] group-focus-visible:bg-[hsl(var(--on-surface)/0.10)]",
               !disabled && isChecked && "group-hover:bg-[hsl(var(--primary)/0.08)] group-focus-visible:bg-[hsl(var(--primary)/0.10)]",
               isPressed && !isChecked && !disabled && "bg-[hsl(var(--on-surface)/0.10)]",
@@ -176,7 +176,7 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
           {/* Handle (thumb) */}
           <span
             className={cn(
-              "absolute top-1/2 -translate-y-1/2 rounded-full flex items-center justify-center",
+              "absolute inset-t-1/2 -translate-y-1/2 rounded-full flex items-center justify-center",
               "transition-[left,width,height,background-color] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
               // Selected colors
               isChecked && !disabled && (isPressed ? "bg-primary-container" : "bg-primary-foreground"),

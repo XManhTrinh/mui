@@ -453,7 +453,7 @@ const SearchViewRoot = React.forwardRef<HTMLDivElement, SearchViewProps>(
                 // Mobile: full-screen search view (0dp radius)
                 "inset-0 rounded-none",
                 // sm+: docked panel anchored top-center
-                "sm:inset-auto sm:left-[50%] sm:top-4 sm:translate-x-[-50%]",
+                "sm:inset-auto sm:inset-l-[50%] sm:inset-t-4 sm:translate-x-[-50%]",
                 "sm:w-full sm:min-w-90 sm:max-w-180 sm:max-h-[min(560px,90vh)]",
                 "sm:rounded-[28px] sm:shadow-[0_4px_8px_hsl(var(--elevation-3)),0_1px_3px_hsl(var(--elevation-3))]",
                 className

@@ -255,15 +255,15 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 <label
                   htmlFor={inputId}
                   className={cn(
-                    "absolute start-0 pointer-events-none select-none z-1",
+                    "absolute inset-s-0 pointer-events-none select-none z-1",
                     padL,
                     "origin-top-left transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
                     multiline
-                      ? "top-4 text-[16px] leading-6 tracking-[0.5px]"
-                      : "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
-                    "peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
-                    "peer-not-placeholder-shown:top-2 peer-not-placeholder-shown:translate-y-0 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
-                    "peer-[:-webkit-autofill]:top-2 peer-[:-webkit-autofill]:translate-y-0 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]",
+                      ? "inset-t-4 text-[16px] leading-6 tracking-[0.5px]"
+                      : "inset-t-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
+                    "peer-focus:inset-t-2 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
+                    "peer-not-placeholder-shown:inset-t-2 peer-not-placeholder-shown:translate-y-0 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
+                    "peer-[:-webkit-autofill]:inset-t-2 peer-[:-webkit-autofill]:translate-y-0 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]",
                     labelColor
                   )}
                 >
@@ -282,7 +282,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
             {/* Active indicator */}
             <span className={cn(
-              "absolute bottom-0 inset-x-0 pointer-events-none transition-[height,background-color] duration-200",
+              "absolute inset-b-0 inset-x-0 pointer-events-none transition-[height,background-color] duration-200",
               focused
                 ? error ? "h-0.5 bg-[hsl(var(--error))]" : "h-0.5 bg-[hsl(var(--primary))]"
                 : error ? "h-px bg-[hsl(var(--error))]" : "h-px bg-[hsl(var(--on-surface))]",
@@ -310,7 +310,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             aria-hidden="true"
             className={cn(
               "absolute inset-0 z-10 rounded pointer-events-none m-0 px-0",
-              "-top-1.25 pt-1.25",
+              "-inset-t-1.25 pt-1.25",
               "transition-[border-color,border-width] duration-200",
               focused
                 ? error ? "border-2 border-[hsl(var(--error))]" : "border-2 border-[hsl(var(--primary))]"
@@ -367,21 +367,21 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   "absolute pointer-events-none select-none",
                   "origin-top-left transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
                   // Resting: align with input text (logical start inset for RTL)
-                  leadingIcon ? "start-0" : "start-4",
+                  leadingIcon ? "inset-s-0" : "inset-s-4",
                   multiline
-                    ? "top-4 text-[16px] leading-6 tracking-[0.5px]"
-                    : "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
-                  // Floating: move up into the fieldset notch (which extends 8px above the container via -top-2)
+                    ? "inset-t-4 text-[16px] leading-6 tracking-[0.5px]"
+                    : "inset-t-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
+                  // Floating: move up into the fieldset notch (which extends 8px above the container via -inset-t-2)
                   leadingIcon
                     ? cn(
-                        "peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:-start-9 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
-                        "peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:-start-9 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
-                        "peer-[:-webkit-autofill]:top-0 peer-[:-webkit-autofill]:-translate-y-1/2 peer-[:-webkit-autofill]:-start-9 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]"
+                        "peer-focus:inset-t-0 peer-focus:-translate-y-1/2 peer-focus:-inset-s-9 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
+                        "peer-not-placeholder-shown:inset-t-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:-inset-s-9 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
+                        "peer-[:-webkit-autofill]:inset-t-0 peer-[:-webkit-autofill]:-translate-y-1/2 peer-[:-webkit-autofill]:-inset-s-9 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]"
                       )
                     : cn(
-                        "peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
-                        "peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
-                        "peer-[:-webkit-autofill]:top-0 peer-[:-webkit-autofill]:-translate-y-1/2 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]"
+                        "peer-focus:inset-t-0 peer-focus:-translate-y-1/2 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
+                        "peer-not-placeholder-shown:inset-t-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
+                        "peer-[:-webkit-autofill]:inset-t-0 peer-[:-webkit-autofill]:-translate-y-1/2 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]"
                       ),
                   labelColor
                 )}

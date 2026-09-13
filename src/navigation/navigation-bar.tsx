@@ -220,7 +220,7 @@ function NavigationBarRoot({
       <nav
         className={cn(
           "h-16 bg-surface-container",
-          fixed && "fixed bottom-0 left-0 right-0 z-40",
+          fixed && "fixed inset-b-0 inset-l-0 inset-r-0 z-40",
           className
         )}
         aria-label="Bottom navigation"
@@ -315,7 +315,7 @@ function NavigationBarRoot({
       <nav
         className={cn(
           "h-16 bg-surface-container",
-          fixed && "fixed bottom-0 left-0 right-0 z-40",
+          fixed && "fixed inset-b-0 inset-l-0 inset-r-0 z-40",
           className
         )}
         aria-label="Bottom navigation"

@@ -106,12 +106,12 @@ const LinearProgress = React.forwardRef<HTMLDivElement, LinearProgressProps>(
         >
           {/* Inactive track — straight rounded bar centered vertically */}
           <div
-            className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-1 rounded-full bg-secondary-container"
+            className="absolute inset-x-0 inset-t-1/2 -translate-y-1/2 h-1 rounded-full bg-secondary-container"
             style={{ width: `${100 - clampedValue!}%`, insetInlineEnd: 0, left: "auto" }}
           />
           {/* Active wave — clipped to value width, scrolls one wavelength per cycle */}
           <div
-            className="absolute inset-y-0 start-0 overflow-hidden"
+            className="absolute inset-y-0 inset-s-0 overflow-hidden"
             style={{ width: `${clampedValue}%` }}
           >
             <svg
@@ -149,13 +149,13 @@ const LinearProgress = React.forwardRef<HTMLDivElement, LinearProgressProps>(
       >
         {isDeterminate ? (
           <div
-            className="absolute inset-y-0 start-0 rounded-full bg-primary transition-[width] duration-200 ease-[cubic-bezier(0.2,0,0,1)]"
+            className="absolute inset-y-0 inset-s-0 rounded-full bg-primary transition-[width] duration-200 ease-[cubic-bezier(0.2,0,0,1)]"
             style={{ width: `${clampedValue}%` }}
           />
         ) : (
           <>
-            <div className="absolute inset-y-0 left-0 w-full origin-left rounded-full bg-primary will-change-transform animate-[m3-linear-indeterminate-1_2s_cubic-bezier(0.2,0,0,1)_infinite]" />
-            <div className="absolute inset-y-0 left-0 w-full origin-left rounded-full bg-primary will-change-transform animate-[m3-linear-indeterminate-2_2s_cubic-bezier(0.2,0,0,1)_0.8s_infinite]" />
+            <div className="absolute inset-y-0 inset-l-0 w-full origin-left rounded-full bg-primary will-change-transform animate-[m3-linear-indeterminate-1_2s_cubic-bezier(0.2,0,0,1)_infinite]" />
+            <div className="absolute inset-y-0 inset-l-0 w-full origin-left rounded-full bg-primary will-change-transform animate-[m3-linear-indeterminate-2_2s_cubic-bezier(0.2,0,0,1)_0.8s_infinite]" />
           </>
         )}
       </div>
