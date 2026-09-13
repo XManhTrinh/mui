@@ -196,7 +196,17 @@ function TabList({ className, children }: TabListProps) {
     measureIndicator();
 
     const container = containerRef.current;
-    if (!container || typeof ResizeObserver === "undefined") return;
+    if (!container) return;
+
+    // Auto-scroll the active tab into view (e.g. after content swipe)
+    const activeTab = container.querySelector(
+      `[data-tab-value="${value}"]`
+    ) as HTMLElement | null;
+    if (activeTab) {
+      activeTab.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
+    }
+
+    if (typeof ResizeObserver === "undefined") return;
 
     const observer = new ResizeObserver(() => measureIndicator());
     observer.observe(container);
