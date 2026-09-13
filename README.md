@@ -435,13 +435,35 @@ function TabExample() {
 ### How it works
 
 All components use CSS custom properties for colors. The `theme.css` file provides:
-1. Default light-mode values on `:root`
-2. Dark-mode overrides on `.dark`
-3. Tailwind v4 `@theme` color mappings
+1. M3 baseline color tokens (source: `#6750A4` purple) for light and dark modes
+2. Tailwind v4 `@theme` color mappings
+3. Motion, shape, typography, and elevation tokens
+4. Keyframes and animation utilities
 
-### Customizing your theme
+### Preset themes
 
-Override the CSS variables in `:root` to rebrand:
+Six color schemes are available out of the box. The default (purple) is built into `theme.css`. The others are optional CSS files you import after it:
+
+| Theme | Source | Import |
+|-------|--------|--------|
+| **Purple** (default) | `#6750A4` | Built into `theme.css` |
+| Blue | `#0B57D0` | `@import "@vkieu/mui/themes/theme-blue.css";` |
+| Teal | `#006A6A` | `@import "@vkieu/mui/themes/theme-teal.css";` |
+| Green | `#006C4C` | `@import "@vkieu/mui/themes/theme-green.css";` |
+| Red | `#B8232A` | `@import "@vkieu/mui/themes/theme-red.css";` |
+| Amber | `#795900` | `@import "@vkieu/mui/themes/theme-amber.css";` |
+
+```css
+@import "tailwindcss";
+@import "@vkieu/mui/theme.css";
+@import "@vkieu/mui/themes/theme-blue.css"; /* swap in any preset */
+```
+
+All preset values are generated from the Material Theme Builder HCT algorithm — proper contrast ratios for both light and dark modes are guaranteed.
+
+### Custom theme
+
+Override the CSS variables in `:root` to use any brand color:
 
 ```css
 :root {
@@ -467,7 +489,7 @@ Use the [Material Theme Builder](https://material-foundation.github.io/material-
 Tokens use HSL values **without** the `hsl()` wrapper:
 
 ```css
---primary: 214 89% 52%;  /* H S% L% */
+--primary: 256 34% 48%;  /* H S% L% */
 ```
 
 This allows Tailwind's opacity modifier to work: `bg-primary/50`.
@@ -607,7 +629,15 @@ src/
 │   ├── time-picker.tsx     # Time input picker
 │   └── index.ts
 ├── lib/
-│   └── utils.ts            # cn() helper (clsx + tailwind-merge)
+│   ├── utils.ts            # cn() helper (clsx + tailwind-merge)
+│   └── motion.ts           # M3 motion utilities
+├── themes/
+│   ├── theme-blue.css      # Blue preset (#0B57D0)
+│   ├── theme-teal.css      # Teal preset (#006A6A)
+│   ├── theme-green.css     # Green preset (#006C4C)
+│   ├── theme-red.css       # Red preset (#B8232A)
+│   ├── theme-amber.css     # Amber preset (#795900)
+│   └── index.ts            # Theme preset metadata
 ├── app-bar.tsx             # Top app bar
 ├── badge.tsx               # Badge (dot/count)
 ├── card.tsx                # Card (elevated/filled/outlined)
