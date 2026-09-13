@@ -253,7 +253,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   value={isControlled ? (value as string) : undefined}
                   defaultValue={!isControlled ? (defaultValue as string) : undefined}
                   rows={rows}
-                  className={cn(inputCx, autoGrow ? "[field-sizing:content] min-h-[calc(theme(lineHeight.6)*3)]" : "resize-y")}
+                  className={cn(inputCx, autoGrow ? "field-sizing-content min-h-[calc(theme(lineHeight.6)*3)]" : "resize-y")}
                   style={autoGrow ? { minHeight: `calc(${rows} * 1.5rem)` } : undefined}
                 />
               ) : (
@@ -362,7 +362,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 value={isControlled ? (value as string) : undefined}
                 defaultValue={!isControlled ? (defaultValue as string) : undefined}
                 rows={rows}
-                className={cn(inputCx, autoGrow ? "[field-sizing:content] min-h-[calc(theme(lineHeight.6)*3)]" : "resize-y")}
+                className={cn(inputCx, autoGrow ? "field-sizing-content min-h-[calc(theme(lineHeight.6)*3)]" : "resize-y")}
                 style={autoGrow ? { minHeight: `calc(${rows} * 1.5rem)` } : undefined}
               />
             ) : (
