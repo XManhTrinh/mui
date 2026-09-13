@@ -9,6 +9,7 @@ import {
   buttonBase,
   buttonVariantColors,
   buttonVariantHoverElevation,
+  buttonVariantToggleColors,
 } from "./button-primitives";
 
 /**
@@ -125,6 +126,14 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & Varian
   trailingIcon?: React.ReactNode;
   /** Loading state — shows spinner, disables interaction */
   loading?: boolean;
+  /** Enable toggle (selection) behavior — applies M3 selected/unselected colors + shape morph */
+  toggle?: boolean;
+  /** Controlled selected state (used with toggle) */
+  selected?: boolean;
+  /** Default selected state (uncontrolled) */
+  defaultSelected?: boolean;
+  /** Callback when the selected state changes (toggle mode) */
+  onSelectedChange?: (selected: boolean) => void;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -139,6 +148,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       trailingIcon,
       loading = false,
       disabled,
+      toggle = false,
+      selected: selectedProp,
+      defaultSelected = false,
+      onSelectedChange,
+      onClick,
       children,
       ...props
     },
@@ -146,13 +160,40 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const Comp = asChild ? Slot : "button";
     const resolvedSize = size ?? "s";
-    const shape = square ? "square" : "round";
+    const resolvedVariant = variant ?? "filled";
+
+    // Toggle (selection) state — controlled or uncontrolled.
+    const isControlled = selectedProp !== undefined;
+    const [internalSelected, setInternalSelected] = React.useState(defaultSelected);
+    const isSelected = toggle ? (isControlled ? selectedProp : internalSelected) : false;
+
+    const handleClick = React.useCallback(
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        if (toggle) {
+          const next = !isSelected;
+          if (!isControlled) setInternalSelected(next);
+          onSelectedChange?.(next);
+        }
+        onClick?.(event);
+      },
+      [toggle, isSelected, isControlled, onSelectedChange, onClick]
+    );
+
+    // M3 toggle: the shape inverts (round↔square) when selected.
+    const baseShape = square ? "square" : "round";
+    const shape = toggle && isSelected ? (baseShape === "round" ? "square" : "round") : baseShape;
+
+    // In toggle mode the selected/unselected color spec overrides the variant color.
+    const toggleColorClass = toggle
+      ? buttonVariantToggleColors[resolvedVariant][isSelected ? "selected" : "unselected"]
+      : "";
 
     return (
       <Comp
         className={cn(
           buttonVariants({ variant, size }),
           shapeClasses[shape][resolvedSize],
+          toggleColorClass,
           loading && "pointer-events-none",
           className
         )}
@@ -160,6 +201,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled}
         aria-disabled={disabled ? true : undefined}
         aria-busy={loading ? true : undefined}
+        aria-pressed={toggle ? isSelected : undefined}
+        onClick={handleClick}
         {...props}
       >
         {loading && <ButtonSpinner />}

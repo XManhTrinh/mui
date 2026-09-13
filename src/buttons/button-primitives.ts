@@ -67,3 +67,33 @@ export const buttonVariantHoverElevation = {
 } as const;
 
 export type ButtonVariant = keyof typeof buttonVariantColors;
+
+/**
+ * Toggle (selection) color mappings per the M3 buttons color spec.
+ * A toggle button shows an "unselected" treatment and a distinct "selected"
+ * treatment. Text buttons are not toggleable in the spec (no toggle columns),
+ * so they fall back to their default color.
+ */
+export const buttonVariantToggleColors = {
+  elevated: {
+    unselected: "bg-surface-container-low text-primary",
+    selected: "bg-primary text-primary-foreground",
+  },
+  filled: {
+    unselected: "bg-surface-container text-surface-variant-foreground",
+    selected: "bg-primary text-primary-foreground",
+  },
+  tonal: {
+    unselected: "bg-secondary-container text-secondary-container-foreground",
+    selected: "bg-secondary text-secondary-foreground",
+  },
+  outlined: {
+    unselected:
+      "bg-transparent border border-outline-variant text-surface-variant-foreground",
+    selected: "bg-inverse-surface border-transparent text-inverse-on-surface",
+  },
+  text: {
+    unselected: "bg-transparent text-primary",
+    selected: "bg-transparent text-primary",
+  },
+} as const;
