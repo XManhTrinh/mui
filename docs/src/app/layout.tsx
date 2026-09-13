@@ -130,7 +130,7 @@ const categories: NavCategory[] = [
       { label: "Bottom Sheet", href: "/layout/bottom-sheet" },
       { label: "Side Sheet", href: "/layout/side-sheet" },
       { label: "Toolbar", href: "/layout/toolbar" },
-      { label: "Carousel", href: "/layout/carousel" },
+      { label: "Carousel (coming soon)", href: "/layout/carousel" },
       { label: "Typography", href: "/layout/typography" },
     ],
   },
