@@ -121,13 +121,14 @@ function SelectMenu({
         side="bottom"
         sideOffset={4}
         className={cn(
-          "z-50 min-w-28 max-w-70 w-(--radix-dropdown-menu-trigger-width) overflow-y-auto max-h-[min(var(--radix-dropdown-menu-content-available-height,300px),300px)] rounded bg-surface-container py-2 shadow-[0_3px_6px_hsl(var(--elevation-2)),0_1px_3px_hsl(var(--elevation-2))]",
-          "m3-animate-menu"
+          "z-50 min-w-28 max-w-70 w-(--radix-dropdown-menu-trigger-width) max-h-[min(var(--radix-dropdown-menu-content-available-height,300px),300px)] rounded bg-surface-container py-2 shadow-[0_3px_6px_hsl(var(--elevation-2)),0_1px_3px_hsl(var(--elevation-2))]",
+          "m3-animate-menu",
+          "flex flex-col"
         )}
         onCloseAutoFocus={() => setFilter("")}
       >
         {searchable && (
-          <div className="px-3 pb-2">
+          <div className="sticky top-0 z-10 px-3 pb-2 bg-surface-container">
             <div className="flex items-center gap-2 h-10 px-3 rounded-full bg-surface-container-high">
               <Icon name="search" size={20} className="shrink-0 text-[hsl(var(--on-surface-variant))]" />
               <input
@@ -138,6 +139,7 @@ function SelectMenu({
                 placeholder="Search..."
                 className="flex-1 bg-transparent text-[14px] leading-5 tracking-[0.25px] text-surface-foreground placeholder:text-[hsl(var(--on-surface-variant))] outline-none"
                 autoFocus
+                // Stop Radix typeahead AND keyboard nav from firing while typing
                 onKeyDown={(e) => e.stopPropagation()}
               />
               {filter && (
@@ -153,19 +155,21 @@ function SelectMenu({
             </div>
           </div>
         )}
-        {filteredOptions.map((option) => (
-          <SelectOptionItem
-            key={option.value}
-            option={option}
-            isSelected={option.value === currentValue}
-            onSelect={() => onSelect(option.value)}
-          />
-        ))}
-        {searchable && filteredOptions.length === 0 && (
-          <div className="px-3 py-3 text-[14px] text-[hsl(var(--on-surface-variant))]">
+        <div className="overflow-y-auto flex-1">
+          {filteredOptions.map((option) => (
+            <SelectOptionItem
+              key={option.value}
+              option={option}
+              isSelected={option.value === currentValue}
+              onSelect={() => onSelect(option.value)}
+            />
+          ))}
+          {searchable && filteredOptions.length === 0 && (
+            <div className="px-3 py-3 text-[14px] text-[hsl(var(--on-surface-variant))]">
             No results
           </div>
-        )}
+          )}
+        </div>
       </DropdownMenuPrimitive.Content>
     </DropdownMenuPrimitive.Portal>
   );
