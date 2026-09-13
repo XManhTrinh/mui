@@ -88,36 +88,34 @@ function SnackbarItem({ item, onDismiss, reducedMotion }: SnackbarItemProps) {
   const remainingRef = React.useRef(effectiveDuration);
   const startTimeRef = React.useRef(Date.now());
 
-  // Auto-dismiss timer with pause/resume on hover
+  // Auto-dismiss timer with pause/resume on hover.
+  //
+  // All timing lives in this effect so re-renders (e.g. a new `onDismiss`
+  // identity) can't reset or prematurely fire the timer: on every run we
+  // schedule for whatever time is left, and on cleanup we debit the elapsed
+  // time back into `remainingRef`. Toggling `paused` re-runs the effect,
+  // which is what pauses (cleanup debits) and resumes (re-schedules).
   React.useEffect(() => {
-    if (isPersistent) return;
+    if (isPersistent || paused) return;
 
-    const startTimer = () => {
-      startTimeRef.current = Date.now();
-      timerRef.current = setTimeout(() => {
-        onDismiss(id);
-      }, remainingRef.current);
-    };
-
-    if (!paused) {
-      startTimer();
-    }
+    startTimeRef.current = Date.now();
+    timerRef.current = setTimeout(() => {
+      onDismiss(id);
+    }, remainingRef.current);
 
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
+        timerRef.current = null;
       }
+      const elapsed = Date.now() - startTimeRef.current;
+      remainingRef.current = Math.max(0, remainingRef.current - elapsed);
     };
   }, [id, isPersistent, paused, onDismiss]);
 
   const handleMouseEnter = () => {
     if (isPersistent) return;
     setPaused(true);
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-      const elapsed = Date.now() - startTimeRef.current;
-      remainingRef.current = Math.max(0, remainingRef.current - elapsed);
-    }
   };
 
   const handleMouseLeave = () => {
@@ -230,7 +228,17 @@ export function SnackbarProvider({
 
   const show = React.useCallback((msg: SnackbarMessage): string => {
     const id = msg.id ?? generateId();
-    setQueue((prev) => [...prev, { ...msg, id }]);
+    setQueue((prev) => {
+      // Guard against duplicate ids (React key collision): update the
+      // existing entry in place rather than appending a second one.
+      const existingIndex = prev.findIndex((item) => item.id === id);
+      if (existingIndex !== -1) {
+        const next = [...prev];
+        next[existingIndex] = { ...msg, id };
+        return next;
+      }
+      return [...prev, { ...msg, id }];
+    });
     return id;
   }, []);
 
