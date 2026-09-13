@@ -143,6 +143,94 @@ export default function TabsPage() {
 
       {/* M3 Expressive Specs */}
       <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">Scroll Overflow</h2>
+        <p className="text-[14px] text-surface-variant-foreground">
+          When tabs don't fit, the tab list scrolls horizontally. Try resizing the browser or use the arrow keys to navigate.
+        </p>
+        <Showcase title="Many Tabs (scrollable)" className="flex-col items-stretch" code={`<Tabs defaultValue="mon">
+  <TabList>
+    <Tab value="mon" label="Monday" />
+    <Tab value="tue" label="Tuesday" />
+    <Tab value="wed" label="Wednesday" />
+    <Tab value="thu" label="Thursday" />
+    <Tab value="fri" label="Friday" />
+    <Tab value="sat" label="Saturday" />
+    <Tab value="sun" label="Sunday" />
+    <Tab value="hol" label="Holidays" />
+    <Tab value="vac" label="Vacation" />
+  </TabList>
+  <TabContent value="mon">Monday content</TabContent>
+</Tabs>`}>
+          <Tabs defaultValue="mon" variant="secondary">
+            <TabList>
+              <Tab value="mon" label="Monday" />
+              <Tab value="tue" label="Tuesday" />
+              <Tab value="wed" label="Wednesday" />
+              <Tab value="thu" label="Thursday" />
+              <Tab value="fri" label="Friday" />
+              <Tab value="sat" label="Saturday" />
+              <Tab value="sun" label="Sunday" />
+              <Tab value="hol" label="Holidays" />
+              <Tab value="vac" label="Vacation" />
+            </TabList>
+            <TabContent value="mon"><p className="p-4 text-sm">Monday plans</p></TabContent>
+            <TabContent value="tue"><p className="p-4 text-sm">Tuesday plans</p></TabContent>
+            <TabContent value="wed"><p className="p-4 text-sm">Wednesday plans</p></TabContent>
+            <TabContent value="thu"><p className="p-4 text-sm">Thursday plans</p></TabContent>
+            <TabContent value="fri"><p className="p-4 text-sm">Friday plans</p></TabContent>
+            <TabContent value="sat"><p className="p-4 text-sm">Saturday plans</p></TabContent>
+            <TabContent value="sun"><p className="p-4 text-sm">Sunday plans</p></TabContent>
+            <TabContent value="hol"><p className="p-4 text-sm">Holiday schedule</p></TabContent>
+            <TabContent value="vac"><p className="p-4 text-sm">Vacation days</p></TabContent>
+          </Tabs>
+        </Showcase>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">Content Swipe</h2>
+        <p className="text-[14px] text-surface-variant-foreground">
+          On touch devices (or Chrome DevTools device emulation), swipe left/right on the content area below to switch tabs.
+        </p>
+        <Showcase title="Swipe between content" className="flex-col items-stretch" code={`<Tabs defaultValue="a">
+  <TabList>
+    <Tab value="a" label="Panel A" />
+    <Tab value="b" label="Panel B" />
+    <Tab value="c" label="Panel C" />
+  </TabList>
+  <TabContent value="a">Swipe left →</TabContent>
+  <TabContent value="b">← Swipe right or left →</TabContent>
+  <TabContent value="c">← Swipe right</TabContent>
+</Tabs>`}>
+          <Tabs defaultValue="a">
+            <TabList>
+              <Tab value="a" label="Panel A" />
+              <Tab value="b" label="Panel B" />
+              <Tab value="c" label="Panel C" />
+            </TabList>
+            <TabContent value="a">
+              <div className="p-6 text-center text-surface-variant-foreground">
+                <p className="text-lg">Panel A</p>
+                <p className="text-sm mt-1">Swipe left → to go to Panel B</p>
+              </div>
+            </TabContent>
+            <TabContent value="b">
+              <div className="p-6 text-center text-surface-variant-foreground">
+                <p className="text-lg">Panel B</p>
+                <p className="text-sm mt-1">← Swipe right or left →</p>
+              </div>
+            </TabContent>
+            <TabContent value="c">
+              <div className="p-6 text-center text-surface-variant-foreground">
+                <p className="text-lg">Panel C</p>
+                <p className="text-sm mt-1">← Swipe right to go back</p>
+              </div>
+            </TabContent>
+          </Tabs>
+        </Showcase>
+      </section>
+
+      {/* M3 Expressive Specs */}
+      <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">M3 Expressive Specs</h2>
         <div className="rounded-xl border border-outline-variant p-4 space-y-2 text-sm text-surface-variant-foreground">
           <p><strong>Primary indicator:</strong> 3dp height, spans label text only</p>
