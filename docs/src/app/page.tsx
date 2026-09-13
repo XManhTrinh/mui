@@ -8,13 +8,13 @@ const categories = [
     title: "Buttons",
     icon: "buttons_alt",
     href: "/buttons",
-    components: ["Button", "IconButton", "FAB", "ExtendedFAB", "SplitButton", "ButtonGroup"],
+    components: ["Button", "IconButton", "FAB", "ExtendedFAB", "FABMenu", "SplitButton", "ButtonGroup"],
   },
   {
     title: "Inputs & Selection",
     icon: "input",
     href: "/inputs/text-fields",
-    components: ["TextField", "Checkbox", "Radio", "Switch", "Slider", "Search"],
+    components: ["TextField", "Select", "Checkbox", "Radio", "Switch", "Slider", "Search"],
   },
   {
     title: "Data Display",
@@ -26,7 +26,7 @@ const categories = [
     title: "Feedback",
     icon: "feedback",
     href: "/feedback/dialog",
-    components: ["Dialog", "Snackbar", "Menu", "Progress"],
+    components: ["Dialog", "Snackbar", "Menu", "Progress", "LoadingIndicator"],
   },
   {
     title: "Navigation",
@@ -38,13 +38,13 @@ const categories = [
     title: "Layout & Containment",
     icon: "view_sidebar",
     href: "/layout/app-bar",
-    components: ["AppBar", "Tabs", "BottomSheet", "SideSheet", "Toolbar", "Carousel"],
+    components: ["AppBar", "Tabs", "BottomSheet", "SideSheet", "Toolbar", "Carousel", "Typography"],
   },
   {
     title: "Date & Time",
     icon: "calendar_month",
     href: "/pickers/date",
-    components: ["DatePicker", "TimePicker"],
+    components: ["DatePicker", "DatePickerModal", "TimePicker"],
   },
 ];
 
@@ -58,7 +58,7 @@ export default function HomePage() {
         </h1>
         <p className="text-[16px] leading-6 text-surface-variant-foreground max-w-160">
           A Material Design 3 Expressive component library for React and Next.js.
-          36 components built per official m3.material.io specifications with
+          37+ components built per official m3.material.io specifications with
           Tailwind CSS v4 and Radix primitives.
         </p>
       </div>
@@ -94,10 +94,10 @@ export default function HomePage() {
 
       {/* Quick stats */}
       <div className="flex flex-wrap gap-6 pt-4">
-        <Stat value="36" label="Components" />
+        <Stat value="37+" label="Components" />
         <Stat value="7" label="Categories" />
         <Stat value="100%" label="Theme-driven" />
-        <Stat value="0" label="Dependencies" />
+        <Stat value="0" label="Config required" />
       </div>
     </div>
   );
