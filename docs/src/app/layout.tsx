@@ -335,7 +335,10 @@ export default function RootLayout({
             ].join(" ")}
           >
             {drawerCat && (
-              <div className="w-56 h-full flex flex-col">
+              <div
+                key={drawerCat.value}
+                className="w-56 h-full flex flex-col animate-[drawer-fade-in_150ms_ease-out]"
+              >
                 {/* Category title */}
                 <div className="px-4 pt-4 pb-2">
                   <span className="text-[11px] font-medium tracking-[0.5px] uppercase text-[hsl(var(--on-surface-variant))]">
