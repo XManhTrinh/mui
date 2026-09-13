@@ -128,17 +128,29 @@ function SelectMenu({
       >
         {searchable && (
           <div className="px-3 pb-2">
-            <input
-              ref={inputRef}
-              type="text"
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              placeholder="Search..."
-              className="w-full h-10 px-3 rounded bg-surface-container-highest text-[14px] leading-5 text-surface-foreground placeholder:text-[hsl(var(--on-surface-variant))] outline-none focus:ring-2 focus:ring-primary"
-              autoFocus
-              // Prevent Radix from closing the menu when typing
-              onKeyDown={(e) => e.stopPropagation()}
-            />
+            <div className="flex items-center gap-2 h-10 px-3 rounded-full bg-surface-container-high">
+              <Icon name="search" size={20} className="shrink-0 text-[hsl(var(--on-surface-variant))]" />
+              <input
+                ref={inputRef}
+                type="text"
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                placeholder="Search..."
+                className="flex-1 bg-transparent text-[14px] leading-5 tracking-[0.25px] text-surface-foreground placeholder:text-[hsl(var(--on-surface-variant))] outline-none"
+                autoFocus
+                onKeyDown={(e) => e.stopPropagation()}
+              />
+              {filter && (
+                <button
+                  type="button"
+                  onClick={() => setFilter("")}
+                  className="shrink-0 flex items-center justify-center size-6 rounded-full cursor-pointer text-[hsl(var(--on-surface-variant))] hover:bg-[hsl(var(--on-surface)/0.08)]"
+                  aria-label="Clear search"
+                >
+                  <Icon name="close" size={18} />
+                </button>
+              )}
+            </div>
           </div>
         )}
         {filteredOptions.map((option) => (
