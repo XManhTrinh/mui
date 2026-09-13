@@ -43,9 +43,10 @@ import { Icon } from "./icon";
  * States: 8% hover, 10% focus, 10% press
  * Animation: Active indicator slides between tabs (200ms M3 standard easing)
  *
- * @m3-audit VERIFIED — Tabs, TabList, Tab, TabContent all present with context (TabsContext).
- * Controlled/uncontrolled state management via value/defaultValue/onValueChange. Complete per M3.
- * No gaps found.
+ * Compound API: Tabs / TabList / Tab / TabContent, sharing state via TabsContext.
+ * Controlled/uncontrolled via value/defaultValue/onValueChange. TabList implements
+ * roving-tabindex keyboard navigation (Arrow/Home/End) and a resize-aware active
+ * indicator.
  */
 
 // --- Context ---
@@ -54,8 +55,6 @@ type TabsContextValue = {
   value: string;
   onValueChange: (value: string) => void;
   variant: "primary" | "secondary";
-  registerTab: (value: string, element: HTMLButtonElement | null) => void;
-  unregisterTab: (value: string) => void;
 }
 
 const TabsContext = React.createContext<TabsContextValue | null>(null);
@@ -89,8 +88,6 @@ function Tabs({
   const isControlled = controlledValue !== undefined;
   const currentValue = isControlled ? controlledValue : internalValue;
 
-  const tabRefs = React.useRef<Map<string, HTMLButtonElement | null>>(new Map());
-
   const handleValueChange = React.useCallback(
     (newValue: string) => {
       if (!isControlled) setInternalValue(newValue);
@@ -99,26 +96,13 @@ function Tabs({
     [isControlled, onValueChange]
   );
 
-  const registerTab = React.useCallback(
-    (tabValue: string, element: HTMLButtonElement | null) => {
-      tabRefs.current.set(tabValue, element);
-    },
-    []
-  );
-
-  const unregisterTab = React.useCallback((tabValue: string) => {
-    tabRefs.current.delete(tabValue);
-  }, []);
-
   const contextValue = React.useMemo(
     () => ({
       value: currentValue,
       onValueChange: handleValueChange,
       variant,
-      registerTab,
-      unregisterTab,
     }),
-    [currentValue, handleValueChange, variant, registerTab, unregisterTab]
+    [currentValue, handleValueChange, variant]
   );
 
   return (
@@ -181,44 +165,47 @@ function TabList({ className, children }: TabListProps) {
     []
   );
 
-  // Update indicator position when active value changes
-  React.useEffect(() => {
+  // Measure and position the active indicator under the current tab.
+  const measureIndicator = React.useCallback(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const activeTab = container.querySelector(
       `[data-tab-value="${value}"]`
     ) as HTMLElement | null;
+    if (!activeTab) return;
 
-    if (activeTab) {
-      const containerRect = container.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
 
-      if (variant === "primary") {
-        // Primary: indicator spans content width (label element), not full tab
-        const labelEl = activeTab.querySelector("[data-tab-label]") as HTMLElement | null;
-        if (labelEl) {
-          const labelRect = labelEl.getBoundingClientRect();
-          setIndicatorStyle({
-            left: labelRect.left - containerRect.left,
-            width: labelRect.width,
-          });
-        } else {
-          const tabRect = activeTab.getBoundingClientRect();
-          setIndicatorStyle({
-            left: tabRect.left - containerRect.left,
-            width: tabRect.width,
-          });
-        }
-      } else {
-        // Secondary: indicator spans full tab width
-        const tabRect = activeTab.getBoundingClientRect();
-        setIndicatorStyle({
-          left: tabRect.left - containerRect.left,
-          width: tabRect.width,
-        });
-      }
-    }
+    // Primary: indicator spans the label content width; Secondary: full tab.
+    const target =
+      variant === "primary"
+        ? (activeTab.querySelector("[data-tab-label]") as HTMLElement | null) ?? activeTab
+        : activeTab;
+    const rect = target.getBoundingClientRect();
+
+    setIndicatorStyle({
+      left: rect.left - containerRect.left,
+      width: rect.width,
+    });
   }, [value, variant]);
+
+  // Reposition when the active value/variant changes, and whenever the
+  // container or its tabs are resized (responsive layout, font load, etc.).
+  React.useEffect(() => {
+    measureIndicator();
+
+    const container = containerRef.current;
+    if (!container || typeof ResizeObserver === "undefined") return;
+
+    const observer = new ResizeObserver(() => measureIndicator());
+    observer.observe(container);
+    container
+      .querySelectorAll("[data-tab-value]")
+      .forEach((tab) => observer.observe(tab));
+
+    return () => observer.disconnect();
+  }, [measureIndicator]);
 
   const indicatorHeight = variant === "primary" ? 3 : 2;
 
@@ -235,18 +222,21 @@ function TabList({ className, children }: TabListProps) {
     >
       {children}
 
-      {/* Active indicator — slides between tabs */}
-      <span
-        className="absolute bottom-0 bg-primary transition-[left,width] duration-200 ease-[cubic-bezier(0.2,0,0,1)]"
-        style={{
-          left: `${indicatorStyle.left}px`,
-          width: `${indicatorStyle.width}px`,
-          height: `${indicatorHeight}px`,
-          borderTopLeftRadius: variant === "primary" ? `${indicatorHeight}px` : "0",
-          borderTopRightRadius: variant === "primary" ? `${indicatorHeight}px` : "0",
-          minWidth: "24px",
-        }}
-      />
+      {/* Active indicator — slides between tabs. Hidden until measured so it
+          doesn't flash a phantom 24dp stub at the origin before layout. */}
+      {indicatorStyle.width > 0 && (
+        <span
+          className="absolute bottom-0 bg-primary transition-[left,width] duration-200 ease-[cubic-bezier(0.2,0,0,1)]"
+          style={{
+            left: `${indicatorStyle.left}px`,
+            width: `${indicatorStyle.width}px`,
+            height: `${indicatorHeight}px`,
+            borderTopLeftRadius: variant === "primary" ? `${indicatorHeight}px` : "0",
+            borderTopRightRadius: variant === "primary" ? `${indicatorHeight}px` : "0",
+            minWidth: "24px",
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -262,15 +252,8 @@ export type TabProps = {
 }
 
 function Tab({ value: tabValue, icon, label, disabled = false, className }: TabProps) {
-  const { value: activeValue, onValueChange, variant, registerTab, unregisterTab } =
-    useTabsContext();
-  const buttonRef = React.useRef<HTMLButtonElement>(null);
+  const { value: activeValue, onValueChange, variant } = useTabsContext();
   const isActive = activeValue === tabValue;
-
-  React.useEffect(() => {
-    registerTab(tabValue, buttonRef.current);
-    return () => unregisterTab(tabValue);
-  }, [tabValue, registerTab, unregisterTab]);
 
   const handleClick = () => {
     if (!disabled) onValueChange(tabValue);
@@ -294,12 +277,14 @@ function Tab({ value: tabValue, icon, label, disabled = false, className }: TabP
 
   return (
     <button
-      ref={buttonRef}
       type="button"
       role="tab"
       aria-selected={isActive}
       aria-disabled={disabled || undefined}
       disabled={disabled}
+      // Roving tabindex: only the active tab is in the tab order; the rest are
+      // reached via arrow keys (handled by TabList).
+      tabIndex={isActive ? 0 : -1}
       data-tab-value={tabValue}
       onClick={handleClick}
       className={cn(
