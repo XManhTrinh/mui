@@ -109,6 +109,16 @@ export default function BottomSheetPage() {
         </Showcase>
       </section>
 
+      {/* Drag to Dismiss */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">Drag to Dismiss</h2>
+        <p className="text-sm text-surface-variant-foreground">
+          The bottom sheet supports drag-to-dismiss via the drag handle. Drag the sheet down past
+          30% of its height (or flick downward) to dismiss. The scrim fades proportionally as you
+          drag.
+        </p>
+      </section>
+
       {/* Props Tables */}
       <PropsTable
         componentName="BottomSheet"
@@ -151,6 +161,14 @@ export default function BottomSheetPage() {
           { name: "className", type: "string", description: "Additional CSS classes" },
         ]}
       />
+
+      {/* M3 Specs */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">M3 Specs</h2>
+        <div className="rounded-xl border border-outline-variant p-4 space-y-2 text-sm text-surface-variant-foreground">
+          <p><strong>Drag-to-dismiss:</strong> The drag handle enables swipe-down gesture dismissal. Dismissal threshold is 30% of sheet height or a downward flick velocity. The scrim opacity interpolates from full to zero during the drag.</p>
+        </div>
+      </section>
 
       {/* Accessibility */}
       <AccessibilityNotes

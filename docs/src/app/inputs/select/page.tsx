@@ -13,6 +13,17 @@ const fruits = [
   { value: "elderberry", label: "Elderberry", disabled: true },
 ];
 
+const countries = [
+  { value: "us", label: "United States" },
+  { value: "ca", label: "Canada" },
+  { value: "mx", label: "Mexico" },
+  { value: "br", label: "Brazil" },
+  { value: "gb", label: "United Kingdom" },
+  { value: "de", label: "Germany" },
+  { value: "jp", label: "Japan" },
+  { value: "au", label: "Australia" },
+];
+
 const selectProps: PropDef[] = [
   {
     name: "options",
@@ -78,6 +89,12 @@ const selectProps: PropDef[] = [
     type: "boolean",
     default: "false",
     description: "Show required asterisk on label",
+  },
+  {
+    name: "searchable",
+    type: "boolean",
+    default: "false",
+    description: "Enable typeahead search input inside the dropdown",
   },
 ];
 
@@ -216,6 +233,19 @@ export default function SelectPage() {
         >
           <div className="w-64">
             <Select label="Fruit" options={fruits} disabled />
+          </div>
+        </Showcase>
+      </section>
+
+      {/* Searchable */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">Searchable</h2>
+        <Showcase
+          title="Searchable dropdown"
+          code={`const countries = [\n  { value: "us", label: "United States" },\n  { value: "ca", label: "Canada" },\n  { value: "mx", label: "Mexico" },\n  { value: "br", label: "Brazil" },\n  { value: "gb", label: "United Kingdom" },\n  { value: "de", label: "Germany" },\n  { value: "jp", label: "Japan" },\n  { value: "au", label: "Australia" },\n];\n\n<Select label="Country" options={countries} searchable />`}
+        >
+          <div className="w-64">
+            <Select label="Country" options={countries} searchable />
           </div>
         </Showcase>
       </section>

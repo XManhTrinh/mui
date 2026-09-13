@@ -16,6 +16,7 @@ const textFieldProps: PropDef[] = [
   { name: "prefix", type: "string", default: "—", description: "Text displayed before the input value (e.g. currency symbol)." },
   { name: "suffix", type: "string", default: "—", description: "Text displayed after the input value (e.g. unit)." },
   { name: "multiline", type: "boolean", default: "false", description: "When true, renders a textarea instead of an input." },
+  { name: "autoGrow", type: "boolean", default: "false", description: "Auto-grow the textarea height as the user types (multiline only)" },
   { name: "rows", type: "number", default: "3", description: "Number of visible text rows when multiline is true." },
   { name: "characterCount", type: "{ current: number; max: number }", default: "—", description: "Displays a character counter below the field showing current/max." },
   { name: "disabled", type: "boolean", default: "false", description: "When true, prevents interaction and applies muted styling." },
@@ -23,6 +24,9 @@ const textFieldProps: PropDef[] = [
 ];
 
 export default function TextFieldsPage() {
+  // Character Counter state
+  const [text, setText] = React.useState("Hello world");
+
   // Playground state
   const [pgVariant, setPgVariant] = React.useState<"outlined" | "filled">("outlined");
   const [pgError, setPgError] = React.useState(false);
@@ -202,6 +206,31 @@ export default function TextFieldsPage() {
         >
           <TextField variant="outlined" label="Description" multiline rows={4} placeholder="Enter a description..." />
           <TextField variant="filled" label="Notes" multiline rows={3} defaultValue={"Line one\nLine two\nLine three"} />
+        </Showcase>
+      </section>
+
+      {/* Auto-grow Textarea */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">Auto-grow Textarea</h2>
+        <Showcase title="Auto-grow Textarea" className="flex-col items-stretch" code={`<TextField label="Notes" multiline autoGrow />`}>
+          <TextField label="Notes" multiline autoGrow placeholder="Type to see it grow..." />
+        </Showcase>
+      </section>
+
+      {/* Character Counter with Error */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">Character Counter with Error</h2>
+        <Showcase
+          title="Counter turns red when exceeding max"
+          code={`const [text, setText] = React.useState("Hello world");\n\n<TextField\n  label="Bio"\n  multiline\n  value={text}\n  onChange={(e) => setText(e.target.value)}\n  characterCount={{ current: text.length, max: 50 }}\n/>`}
+        >
+          <TextField
+            label="Bio"
+            multiline
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            characterCount={{ current: text.length, max: 50 }}
+          />
         </Showcase>
       </section>
 

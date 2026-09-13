@@ -133,6 +133,16 @@ export default function SideSheetPage() {
         </Showcase>
       </section>
 
+      {/* Swipe to Dismiss */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">Swipe to Dismiss</h2>
+        <p className="text-sm text-surface-variant-foreground">
+          Modal side sheets support swipe-to-dismiss. Drag the sheet in its dismiss direction
+          (right for right-side, left for left-side) past 30% of the sheet width to close. The
+          scrim fades proportionally.
+        </p>
+      </section>
+
       {/* Props Tables */}
       <PropsTable
         componentName="SideSheet"

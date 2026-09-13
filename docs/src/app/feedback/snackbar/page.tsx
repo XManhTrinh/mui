@@ -40,6 +40,12 @@ const snackbarMessageProps: PropDef[] = [
     default: '"normal"',
     description: 'Affects aria-live: "normal" uses polite, "urgent" uses assertive',
   },
+  {
+    name: "swipeToDismiss",
+    type: "boolean",
+    default: "true",
+    description: "Enable horizontal swipe-to-dismiss gesture. Drag past 100px or flick to dismiss.",
+  },
 ];
 
 const snackbarProviderProps: PropDef[] = [
@@ -269,6 +275,15 @@ dismissAll();`}
         </Showcase>
       </section>
 
+      {/* Swipe to Dismiss */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">Swipe to Dismiss</h2>
+        <p className="text-sm text-surface-variant-foreground">
+          Snackbars can be dismissed by swiping horizontally (left or right). Drag past 100px or
+          flick fast enough to dismiss.
+        </p>
+      </section>
+
       {/* M3 Expressive Specs */}
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">M3 Expressive Specs</h2>
@@ -279,6 +294,7 @@ dismissAll();`}
           <p><strong>Text:</strong> inverse-on-surface</p>
           <p><strong>Default duration:</strong> 6000ms (action snackbars are persistent by default)</p>
           <p><strong>Max visible:</strong> 1 (M3 recommended)</p>
+          <p><strong>Swipe-to-dismiss:</strong> Horizontal swipe (left or right) past 100px or fast flick dismisses the snackbar</p>
         </div>
       </section>
 

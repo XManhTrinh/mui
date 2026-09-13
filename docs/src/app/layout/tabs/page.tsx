@@ -148,6 +148,7 @@ export default function TabsPage() {
           <p><strong>Primary indicator:</strong> 3dp height, spans label text only</p>
           <p><strong>Secondary indicator:</strong> 2dp height, full tab width</p>
           <p><strong>Icon-label gap:</strong> 8dp vertical spacing between icon and label</p>
+          <p><strong>Touch gesture:</strong> On touch devices, swipe left/right on the tab content to navigate between tabs.</p>
         </div>
       </section>
 

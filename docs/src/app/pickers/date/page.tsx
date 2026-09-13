@@ -30,6 +30,9 @@ export default function DatePickerPage() {
 
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Basic</h2>
+        <p className="text-sm text-surface-variant-foreground">
+          On touch devices, swipe left/right on the calendar grid to navigate between months.
+        </p>
         <Showcase title="Default Date Picker" code={`<DatePicker value={date} onChange={setDate} />`}>
           <DatePicker value={date} onChange={setDate} />
         </Showcase>
