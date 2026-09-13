@@ -163,3 +163,30 @@ built to spec; downstream consumers adapt.)
 - **ExtendedFAB** ✅ per efab_tokens: small 56/Title Medium/24 icon/corner-large(16)/16 pad/8 gap; medium 80/Title Large/28 icon/corner-large-increased(20)/26 pad/12 gap; large 96/Headline Small/36 icon/corner-extra-large(28)/28 pad/16 gap. Fixed flat typography/icon/padding/gap and the medium shape (was 16dp, now 20dp).
 - Exported `FABColor` type.
 - **B4/B5 — TimePicker exact field size (45 vs 57px) and CircularProgress diameter (comment 40dp vs computed 44dp).** Low risk; confirm exact spec then align.
+
+---
+
+## Phase 1 — Full token-correctness sweep (September 13, 2026)
+
+Verified every component against its authoritative MDC `tokens.xml` (fetched from
+`material-components-android` on GitHub). "Compliant" = code token values match
+the spec; "Fixed" = corrected a wrong value.
+
+**Fixed:**
+- **TimePicker**: dial bg `surface-variant` → `surface-container-highest`; time-selector label Display Large `45px` → `57px` (input fields, both separators, dial fields).
+- **CircularProgress**: default size `48` → `40` (M3 baseline; 48 = wave/expressive size).
+- **BottomSheet**: container elevation level3 → **level1**; drag-handle color `on-surface-variant/0.4` → full `surface-variant-foreground`.
+- **AppBar**: small subtitle Body Medium (14) → **Label Medium (12)**; on-scroll elevation level1 → **level2**.
+- **Snackbar**: container radius `rounded-sm` (2px) → `rounded` (4px, corner-extra-small).
+- **Menu / MenuSubContent**: container radius `rounded-sm` (2px) → `rounded` (4px).
+
+**Verified compliant (no change):** DatePicker, LinearProgress, Switch, Slider, Radio, Checkbox, Chip (all 4), TextField, Select, Card, Dialog, Divider, List, NavigationBar, NavigationRail, Tabs, Toolbar, Badge, Tooltip, Search, Typography (all 15 type-scale roles), Icon.
+
+Both workspaces (`mui`, `strata/apps/web`) compile clean after the sweep.
+
+### Phase 2 backlog — Expressive feature additions (not token deviations)
+These are net-new Expressive variants/features the components don't yet offer:
+- **Slider**: Expressive size scale (xsmall 16 / small 24 / medium 40 / large 56 / xlarge 96dp track heights).
+- **Progress indicators**: wavy/expressive active-indicator variants; circular "with wave" 48dp size.
+- **Checkbox**: error state (`error` container / `on-error` icon).
+- **NavigationBar**: optional level2 elevation (currently flat tonal).
