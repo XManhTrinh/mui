@@ -170,7 +170,7 @@ export default function HomePage() {
             </span>
           </div>
 
-          <h1 className="text-[45px] leading-[52px] font-normal tracking-normal text-primary-container-foreground sm:text-[57px] sm:leading-[64px] sm:tracking-[-0.25px]">
+          <h1 className="text-[45px] leading-13 font-normal tracking-normal text-primary-container-foreground sm:text-[57px] sm:leading-16 sm:tracking-[-0.25px]">
             Material Design 3
             <br />
             for React
