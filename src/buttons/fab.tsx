@@ -178,7 +178,7 @@ const FAB = React.forwardRef<HTMLButtonElement, FABProps>(
     return (
       <Comp
         className={cn(
-          fabVariants({ color, size }),
+          fabVariants({ color, size: resolvedSize }),
           shapeClass,
           loading && "pointer-events-none",
           // When rendered `asChild` (e.g. as a link) the native `disabled`

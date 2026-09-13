@@ -214,15 +214,18 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const button = (
       <Comp
         className={cn(
-          buttonVariants({ variant, size }),
+          buttonVariants({ variant: resolvedVariant, size: resolvedSize }),
           shapeClasses[shape][resolvedSize],
           toggleColorClass,
           outlinedBorderClass,
           loading && "pointer-events-none",
+          // Native `disabled` is ignored when slotted onto a non-button
+          // element (e.g. a link), so enforce the affordance in CSS.
+          asChild && disabled && "opacity-[0.38] pointer-events-none cursor-not-allowed",
           className
         )}
         ref={ref}
-        disabled={disabled}
+        disabled={asChild ? undefined : disabled}
         aria-disabled={disabled ? true : undefined}
         aria-busy={loading ? true : undefined}
         aria-pressed={toggle ? isSelected : undefined}

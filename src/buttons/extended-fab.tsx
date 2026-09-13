@@ -166,7 +166,7 @@ const ExtendedFAB = React.forwardRef<HTMLButtonElement, ExtendedFABProps>(
     return (
       <Comp
         className={cn(
-          extendedFabVariants({ color, size }),
+          extendedFabVariants({ color, size: resolvedSize }),
           loading && "pointer-events-none",
           // Native `disabled` is ignored when slotted onto a non-button
           // element (e.g. a link), so enforce the affordance in CSS.

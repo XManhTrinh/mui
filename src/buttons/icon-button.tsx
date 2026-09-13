@@ -241,7 +241,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     const button = (
       <Comp
         className={cn(
-          iconButtonVariants({ variant: effectiveVariant, size }),
+          iconButtonVariants({ variant: effectiveVariant, size: resolvedSize }),
           shapeClass,
           // Native `disabled` is ignored when slotted onto a non-button
           // element (e.g. a link), so enforce the affordance in CSS.
