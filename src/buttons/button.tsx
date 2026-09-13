@@ -134,6 +134,12 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & Varian
   defaultSelected?: boolean;
   /** Callback when the selected state changes (toggle mode) */
   onSelectedChange?: (selected: boolean) => void;
+  /**
+   * Remove the 48dp touch-target expander on xs/s sizes for dense layouts.
+   * By default xs (32dp) and s (40dp) buttons are wrapped so their hit area
+   * reaches the M3-required 48×48dp minimum.
+   */
+  compact?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -152,6 +158,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       selected: selectedProp,
       defaultSelected = false,
       onSelectedChange,
+      compact = false,
       onClick,
       children,
       ...props
@@ -188,7 +195,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       ? buttonVariantToggleColors[resolvedVariant][isSelected ? "selected" : "unselected"]
       : "";
 
-    return (
+    const button = (
       <Comp
         className={cn(
           buttonVariants({ variant, size }),
@@ -211,6 +218,23 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {trailingIcon}
       </Comp>
     );
+
+    // M3 target areas: xs (32dp) and s (40dp) must reach a 48×48dp touch target.
+    // Wrap in a transparent expander that adds the missing vertical space
+    // (xs +8dp each side, s +4dp) without changing the button's visual size.
+    const needsTouchTarget = !compact && (resolvedSize === "xs" || resolvedSize === "s");
+    if (needsTouchTarget) {
+      return (
+        <span
+          className="inline-flex items-center justify-center align-middle"
+          style={{ paddingBlock: resolvedSize === "xs" ? "8px" : "4px" }}
+        >
+          {button}
+        </span>
+      );
+    }
+
+    return button;
   }
 );
 Button.displayName = "Button";
