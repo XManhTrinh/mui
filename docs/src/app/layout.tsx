@@ -60,6 +60,7 @@ const categories: NavCategory[] = [
       { label: "Common Buttons", href: "/buttons" },
       { label: "Icon Buttons", href: "/buttons/icon-buttons" },
       { label: "FABs", href: "/buttons/fabs" },
+      { label: "FAB Menu", href: "/buttons/fab-menu" },
       { label: "Split Button", href: "/buttons/split-button" },
       { label: "Button Group", href: "/buttons/button-group" },
     ],
@@ -103,7 +104,9 @@ const categories: NavCategory[] = [
       { label: "Dialog", href: "/feedback/dialog" },
       { label: "Snackbar", href: "/feedback/snackbar" },
       { label: "Menu", href: "/feedback/menu" },
-      { label: "Progress", href: "/feedback/progress" },
+      { label: "Linear Progress", href: "/feedback/linear-progress" },
+      { label: "Circular Progress", href: "/feedback/circular-progress" },
+      { label: "Loading Indicator", href: "/feedback/loading-indicator" },
     ],
   },
   {
