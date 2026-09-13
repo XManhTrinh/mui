@@ -442,7 +442,7 @@ All components use CSS custom properties for colors. The `theme.css` file provid
 
 ### Preset themes
 
-Six color schemes are available out of the box. The default (purple) is built into `theme.css`. The others are optional CSS files you import after it:
+Eight color schemes are available out of the box. The default (purple) is built into `theme.css`. The others are optional CSS files you import after it:
 
 | Theme | Source | Import |
 |-------|--------|--------|
