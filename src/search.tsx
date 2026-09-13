@@ -2,11 +2,9 @@
 
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { motion } from "motion/react";
 
 import { cn } from "./lib/utils";
 import { Icon } from "./icon";
-import { spring } from "./lib/motion";
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 
@@ -400,15 +398,6 @@ const SearchViewRoot = React.forwardRef<HTMLDivElement, SearchViewProps>(
 
     const handleClose = React.useCallback(() => onOpenChange(false), [onOpenChange]);
 
-    const [reducedMotion, setReducedMotion] = React.useState(false);
-    React.useEffect(() => {
-      const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
-      setReducedMotion(mql.matches);
-      const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
-      mql.addEventListener("change", handler);
-      return () => mql.removeEventListener("change", handler);
-    }, []);
-
     const contextValue = React.useMemo<SearchViewContextValue>(
       () => ({ value: currentValue, onValueChange: handleValueChange, onClose: handleClose }),
       [currentValue, handleValueChange, handleClose]
@@ -418,36 +407,26 @@ const SearchViewRoot = React.forwardRef<HTMLDivElement, SearchViewProps>(
       <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
         <DialogPrimitive.Portal>
           {/* Scrim */}
-          <DialogPrimitive.Overlay asChild>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ type: "spring", ...spring.defaultEffects }}
-              className="fixed inset-0 z-50 bg-[hsl(var(--on-surface)/0.32)] m3-animate-overlay-spring-close"
-            />
-          </DialogPrimitive.Overlay>
+          <DialogPrimitive.Overlay
+            className="fixed inset-0 z-50 bg-[hsl(var(--on-surface)/0.32)] m3-animate-overlay data-[state=closed]:m3-animate-overlay-spring-close"
+          />
 
           <DialogPrimitive.Content
             ref={ref}
             aria-label={ariaLabel}
-            asChild
-            // The internal input receives focus; suppress default auto-focus ring jump
             onOpenAutoFocus={(e) => {
               e.preventDefault();
               const content = e.currentTarget as HTMLElement;
-              content.querySelector<HTMLInputElement>("input")?.focus();
+              requestAnimationFrame(() => {
+                content.querySelector<HTMLInputElement>("input")?.focus();
+              });
+            }}
+            onInteractOutside={(e) => {
+              // Prevent Radix from closing on scrim click if you want — but let it close:
+              onOpenChange(false);
             }}
           >
-            <motion.div
-              initial={
-                reducedMotion ? false : { opacity: 0, scaleY: 0.9, y: -8 }
-              }
-              animate={{ opacity: 1, scaleY: 1, y: 0 }}
-              exit={reducedMotion ? undefined : { opacity: 0, scaleY: 0.95, y: -8 }}
-              transition={
-                reducedMotion ? { duration: 0 } : { type: "spring", ...spring.defaultSpatial }
-              }
-              style={{ transformOrigin: "top center" }}
+            <div
               className={cn(
                 "fixed z-50 flex flex-col overflow-hidden bg-surface-container-high",
                 // Mobile: full-screen search view (0dp radius)
@@ -464,7 +443,7 @@ const SearchViewRoot = React.forwardRef<HTMLDivElement, SearchViewProps>(
               <SearchViewContext.Provider value={contextValue}>
                 {children}
               </SearchViewContext.Provider>
-            </motion.div>
+            </div>
           </DialogPrimitive.Content>
         </DialogPrimitive.Portal>
       </DialogPrimitive.Root>
