@@ -374,9 +374,9 @@ const FABMenuRoot: React.FC<FABMenuProps> = ({
       {isOpen ? (
         <FAB
           ref={closeRef}
-          size="l"
+          size="fab"
           shape="round"
-          color={colorSet}
+          color={`${colorSet}-container`}
           className="mt-1"
           aria-label={closeLabel}
           icon={
@@ -414,9 +414,9 @@ const FABMenuRoot: React.FC<FABMenuProps> = ({
       ) : (
         <FAB
           ref={triggerRef}
-          size="l"
+          size="fab"
           shape="rounded"
-          color={colorSet}
+          color={`${colorSet}-container`}
           aria-haspopup="menu"
           aria-expanded={isOpen}
           aria-label={triggerLabel}

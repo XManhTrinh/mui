@@ -153,5 +153,13 @@ built to spec; downstream consumers adapt.)
 ### Resolved (September 13, 2026 — Expressive scale applied)
 - **A2 / B1 — Button & IconButton height scale** ✅ — Applied the M3 Expressive tall scale to **Button** and **IconButton**: heights XS 32 / S 40 (default) / M 56 / L 96 / XL 136dp, with typography scaling (xs/s Label Large 14, m Title Medium 16, l Headline Small 24, xl Headline Large 32), icon glyphs (20/24[button m 24]/32/40), horizontal padding (12/16/24/48/64dp), asymmetric icon padding, and round pressed-morph radii growing for the tall sizes. Strata (the main consumer) uses only the default `s` size on buttons and no explicit `m/l/xl`, so there is no layout regression there; the change affects only consumers who opt into the larger sizes.
 - **SplitButton / ButtonGroup scale — intentionally NOT raised.** These are segmented/connected controls, not common buttons; M3 does not give them the 96/136dp common-button heights. They keep their compact segmented-control scale (xs32/s36/m40/l48/xl56). Documented as a deliberate distinction rather than an inconsistency to "fix."
-- **B2 — FAB small (40dp).** The prior audit contradicted itself (add vs. deprecated). MDC does not list a 40dp small FAB in the Expressive FAB set; current FAB (m48/l56/xl96) is defensible. Confirm intent before adding/removing.
+- **B2 — FAB small (40dp)** ✅ RESOLVED via `fab_tokens.xml` + FAB docs: the small FAB is **deprecated** in M3 Expressive; FAB has three sizes — FAB 56 / medium 80 / large 96dp. See FAB section below.
+
+### FAB / ExtendedFAB — verified against fab_tokens.xml + efab_tokens.xml
+- **FAB size scale** ✅ corrected to the M3 set: `fab` 56dp (icon 24, corner-large 16), `medium` 80dp (icon 28, corner-large-increased 20), `large` 96dp (icon 36, corner-extra-large 28). Removed the old `m`(48)/`l`(56)/`xl`(96) scale and the `extended` size (ExtendedFAB owns that). Default `fab`; shape morphs on press.
+- **FAB colors** ✅ restructured to spec: `primary-container` (default) / `secondary-container` / `tertiary-container` + tones `primary` / `secondary` / `tertiary`. `surface` kept but deprecated. Icon colors are the on-* pairs.
+- **FAB elevation** ✅ level3 rest / level4 hover (matches tokens; hsl-wrapped).
+- **FABMenu** ✅ updated to `size="fab"` and `color="${colorSet}-container"`.
+- **ExtendedFAB** ✅ per efab_tokens: small 56/Title Medium/24 icon/corner-large(16)/16 pad/8 gap; medium 80/Title Large/28 icon/corner-large-increased(20)/26 pad/12 gap; large 96/Headline Small/36 icon/corner-extra-large(28)/28 pad/16 gap. Fixed flat typography/icon/padding/gap and the medium shape (was 16dp, now 20dp).
+- Exported `FABColor` type.
 - **B4/B5 — TimePicker exact field size (45 vs 57px) and CircularProgress diameter (comment 40dp vs computed 44dp).** Low risk; confirm exact spec then align.

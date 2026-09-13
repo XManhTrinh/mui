@@ -20,6 +20,7 @@ export type {
   ButtonProps,
   IconButtonProps,
   FABProps,
+  FABColor,
   ExtendedFABProps,
   FABMenuItem,
   FABMenuProps,

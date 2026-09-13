@@ -24,9 +24,7 @@ import { cn } from "../lib/utils";
 const extendedFabVariants = cva(
   [
     // Layout
-    "relative inline-flex items-center justify-center",
-    // Typography: Label Large (14px / 500 / 20px / 0.1px)
-    "text-[14px] font-medium leading-5 tracking-[0.1px]",
+    "relative inline-flex items-center justify-center font-medium",
     // Cursor & interaction
     "cursor-pointer select-none",
     // Transition for elevation + shape morph
@@ -45,10 +43,8 @@ const extendedFabVariants = cva(
     "hover:before:opacity-[0.08]",
     "focus-visible:before:opacity-[0.10]",
     "active:before:opacity-[0.10]",
-    // Min width
-    "min-w-20",
-    // Icon sizing: 24dp for all sizes
-    "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-6",
+    // Icon defaults (size set per size variant)
+    "[&_svg]:pointer-events-none [&_svg]:shrink-0",
     "[&_.material-symbols-rounded]:pointer-events-none",
     // Disabled
     "disabled:opacity-[0.38] disabled:pointer-events-none disabled:cursor-not-allowed disabled:shadow-none disabled:before:opacity-0!",
@@ -63,10 +59,17 @@ const extendedFabVariants = cva(
         "secondary-fixed": "bg-secondary text-secondary-foreground",
         "tertiary-fixed": "bg-tertiary text-tertiary-foreground",
       },
+      // Per md.comp.extended-fab: height / label type / icon / shape / leading+trailing / gap
       size: {
-        small: "h-14 ps-4 pe-5 gap-2 rounded-2xl active:rounded-xl",
-        medium: "h-20 ps-4 pe-5 gap-2 rounded-2xl active:rounded-xl",
-        large: "h-24 ps-4 pe-5 gap-2 rounded-[28px] active:rounded-2xl",
+        // 56dp · Title Medium · 24 icon · corner-large(16) · 16 pad · 8 gap
+        small:
+          "h-14 px-4 gap-2 text-[16px] leading-6 tracking-[0.15px] rounded-2xl active:rounded-xl [&_svg]:size-6",
+        // 80dp · Title Large · 28 icon · corner-large-increased(20) · 26 pad · 12 gap
+        medium:
+          "h-20 px-[26px] gap-3 text-[22px] leading-7 tracking-normal rounded-[20px] active:rounded-2xl [&_svg]:size-7",
+        // 96dp · Headline Small · 36 icon · corner-extra-large(28) · 28 pad · 16 gap
+        large:
+          "h-24 px-7 gap-4 text-[24px] leading-8 tracking-normal rounded-[28px] active:rounded-2xl [&_svg]:size-9",
       },
     },
     defaultVariants: {
@@ -76,10 +79,17 @@ const extendedFabVariants = cva(
   }
 );
 
+/** Spinner size per extended-FAB size (matches icon size). */
+const efabSpinnerSize = {
+  small: "size-6",
+  medium: "size-7",
+  large: "size-9",
+} as const;
+
 function ExtendedFABSpinner({ className }: { className?: string }) {
   return (
     <svg
-      className={cn("animate-spin size-6", className)}
+      className={cn("animate-spin", className)}
       viewBox="0 0 24 24"
       fill="none"
       aria-hidden="true"
@@ -138,6 +148,7 @@ const ExtendedFAB = React.forwardRef<HTMLButtonElement, ExtendedFABProps>(
     ref
   ) => {
     const Comp = asChild ? Slot : "button";
+    const resolvedSize = size ?? "small";
 
     return (
       <Comp
@@ -152,7 +163,7 @@ const ExtendedFAB = React.forwardRef<HTMLButtonElement, ExtendedFABProps>(
         tabIndex={disabled ? -1 : undefined}
         {...props}
       >
-        {loading ? <ExtendedFABSpinner /> : icon}
+        {loading ? <ExtendedFABSpinner className={efabSpinnerSize[resolvedSize]} /> : icon}
         <span>{label}</span>
       </Comp>
     );

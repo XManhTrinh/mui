@@ -5,7 +5,7 @@ export { IconButton, iconButtonVariants } from "./icon-button";
 export type { IconButtonProps } from "./icon-button";
 
 export { FAB, fabVariants } from "./fab";
-export type { FABProps } from "./fab";
+export type { FABProps, FABColor } from "./fab";
 
 export { ExtendedFAB, extendedFabVariants } from "./extended-fab";
 export type { ExtendedFABProps } from "./extended-fab";

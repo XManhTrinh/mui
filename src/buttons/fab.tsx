@@ -9,16 +9,20 @@ import { cn } from "../lib/utils";
 /**
  * Material Design 3 Floating Action Button (FAB)
  *
- * Implements small, medium, large, and extended FAB sizes with
- * primary, secondary, tertiary, and surface color variants.
- * Supports shape morph on press, loading state,
- * and accessible touch targets.
+ * Three M3 sizes (verified against md.comp.fab):
+ *   - fab    — 56dp, 24dp icon, corner-large (16dp)      [default]
+ *   - medium — 80dp, 28dp icon, corner-large-increased (20dp)
+ *   - large  — 96dp, 36dp icon, corner-extra-large (28dp)
+ * (The small FAB is deprecated in M3 Expressive.)
+ *
+ * Colors: tone-container (primary-container default / secondary-container /
+ * tertiary-container) and tone (primary / secondary / tertiary). Surface is
+ * deprecated. Elevation level 3 at rest, level 4 on hover.
+ *
+ * For an extended (label + icon) FAB, use the ExtendedFAB component.
  *
  * Positioning is the consumer's responsibility — use className to add
  * fixed/absolute/sticky positioning as needed.
- *
- * State layers use a ::before pseudo-element with `bg-current` to inherit
- * the text color (which is the on-color for each variant).
  */
 
 const fabVariants = cva(
@@ -41,7 +45,7 @@ const fabVariants = cva(
     "before:absolute before:inset-0 before:rounded-[inherit]",
     "before:bg-current before:opacity-0",
     "before:transition-opacity before:duration-200 before:pointer-events-none",
-    // State layer opacities (M3: 8% hover, 10% focus, 10% press for FABs)
+    // State layer opacities (M3: 8% hover, 10% focus, 10% press)
     "hover:before:opacity-[0.08]",
     "focus-visible:before:opacity-[0.10]",
     "active:before:opacity-[0.10]",
@@ -52,44 +56,54 @@ const fabVariants = cva(
   {
     variants: {
       color: {
-        primary: "bg-primary-container text-primary-container-foreground",
-        secondary: "bg-secondary-container text-secondary-container-foreground",
-        tertiary: "bg-tertiary-container text-tertiary-container-foreground",
+        // Tone-container styles (default set)
+        "primary-container": "bg-primary-container text-primary-container-foreground",
+        "secondary-container": "bg-secondary-container text-secondary-container-foreground",
+        "tertiary-container": "bg-tertiary-container text-tertiary-container-foreground",
+        // Tone styles (M3 Expressive additions)
+        primary: "bg-primary text-primary-foreground",
+        secondary: "bg-secondary text-secondary-foreground",
+        tertiary: "bg-tertiary text-tertiary-foreground",
+        // Deprecated in M3 Expressive — kept for back-compat
         surface: "bg-surface-container-high text-primary",
       },
       size: {
-        m: "size-12 [&_svg]:size-6",
-        l: "size-14 [&_svg]:size-6",
-        xl: "size-24 [&_svg]:size-9",
-        extended:
-          "h-14 w-auto ps-4 pe-5 gap-2 [&_svg]:size-6",
+        // fab 56dp / medium 80dp / large 96dp
+        fab: "size-14 [&_svg]:size-6",
+        medium: "size-20 [&_svg]:size-7",
+        large: "size-24 [&_svg]:size-9",
       },
     },
     defaultVariants: {
-      color: "primary",
-      size: "l",
+      color: "primary-container",
+      size: "fab",
     },
   }
 );
 
 /**
- * Shape classes for rounded and round shapes at each size.
- * Each entry includes the resting radius and the active (morphed) radius.
- * Morph reduces border-radius by ~20-30% on :active.
+ * Shape classes for round and rounded shapes at each size.
+ * Resting radii per M3: fab 16dp, medium 20dp, large 28dp.
+ * Pressed morph steps the radius down one shape token.
  */
 const shapeClasses = {
   rounded: {
-    m: "rounded-2xl active:rounded-xl",
-    l: "rounded-2xl active:rounded-xl",
-    xl: "rounded-[28px] active:rounded-[20px]",
-    extended: "rounded-2xl active:rounded-xl",
+    fab: "rounded-2xl active:rounded-xl",
+    medium: "rounded-[20px] active:rounded-2xl",
+    large: "rounded-[28px] active:rounded-[20px]",
   },
   round: {
-    m: "rounded-full active:rounded-xl",
-    l: "rounded-full active:rounded-2xl",
-    xl: "rounded-full active:rounded-[28px]",
-    extended: "rounded-full active:rounded-2xl",
+    fab: "rounded-full active:rounded-2xl",
+    medium: "rounded-full active:rounded-[20px]",
+    large: "rounded-full active:rounded-[28px]",
   },
+} as const;
+
+/** Icon spinner size per FAB size. */
+const spinnerSize = {
+  fab: "size-6",
+  medium: "size-7",
+  large: "size-9",
 } as const;
 
 function FABSpinner({ className }: { className?: string }) {
@@ -117,15 +131,22 @@ function FABSpinner({ className }: { className?: string }) {
   );
 }
 
+export type FABColor =
+  | "primary-container"
+  | "secondary-container"
+  | "tertiary-container"
+  | "primary"
+  | "secondary"
+  | "tertiary"
+  | "surface";
+
 export type FABProps = React.ButtonHTMLAttributes<HTMLButtonElement> & VariantProps<typeof fabVariants>& {
   /** Render as child element (Radix Slot pattern) */
   asChild?: boolean;
   /** Icon to display (React node) */
   icon: React.ReactNode;
-  /** Label text (required for extended, provides accessible name) */
-  label?: string;
-  /** Color scheme */
-  color?: "primary" | "secondary" | "tertiary" | "surface";
+  /** Color scheme (default: primary-container). Tone-container + tone options; `surface` is deprecated. */
+  color?: FABColor;
   /** Shape variant */
   shape?: "rounded" | "round";
   /** Loading state */
@@ -141,7 +162,6 @@ const FAB = React.forwardRef<HTMLButtonElement, FABProps>(
       shape = "rounded",
       asChild = false,
       icon,
-      label,
       loading = false,
       disabled = false,
       children,
@@ -150,7 +170,7 @@ const FAB = React.forwardRef<HTMLButtonElement, FABProps>(
     ref
   ) => {
     const Comp = asChild ? Slot : "button";
-    const resolvedSize = size ?? "l";
+    const resolvedSize = size ?? "fab";
 
     // Shape classes for resting + active morph
     const shapeClass = shapeClasses[shape][resolvedSize];
@@ -169,18 +189,7 @@ const FAB = React.forwardRef<HTMLButtonElement, FABProps>(
         tabIndex={disabled ? -1 : undefined}
         {...props}
       >
-        {loading ? (
-          <FABSpinner
-            className={resolvedSize === "xl" ? "size-9" : "size-6"}
-          />
-        ) : (
-          icon
-        )}
-        {resolvedSize === "extended" && label && (
-          <span className="text-[14px] font-medium leading-5 tracking-[0.1px]">
-            {label}
-          </span>
-        )}
+        {loading ? <FABSpinner className={spinnerSize[resolvedSize]} /> : icon}
         {children}
       </Comp>
     );
