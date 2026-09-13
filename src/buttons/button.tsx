@@ -47,11 +47,11 @@ const buttonVariants = cva(
       // M3 Expressive size scale: heights 32/40/56/96/136dp with typography and
       // icon size scaling up per size (Label Large → Title Medium → Headline).
       size: {
-        xs: "h-8 px-3 gap-2 text-[14px] leading-5 tracking-[0.1px] [&_svg]:size-5",
+        xs: "h-8 px-3 gap-1 text-[14px] leading-5 tracking-[0.1px] [&_svg]:size-5",
         s: "h-10 px-4 gap-2 text-[14px] leading-5 tracking-[0.1px] [&_svg]:size-5",
         m: "h-14 px-6 gap-2 text-[16px] leading-6 tracking-[0.15px] [&_svg]:size-6",
         l: "h-24 px-12 gap-3 text-[24px] leading-8 tracking-normal [&_svg]:size-8",
-        xl: "h-34 px-16 gap-3 text-[32px] leading-10 tracking-normal [&_svg]:size-10",
+        xl: "h-34 px-16 gap-4 text-[32px] leading-10 tracking-normal [&_svg]:size-10",
       },
     },
     defaultVariants: {
@@ -73,8 +73,8 @@ const shapeClasses = {
     xs: "rounded-full active:rounded-lg",
     s: "rounded-full active:rounded-lg",
     m: "rounded-full active:rounded-xl",
-    l: "rounded-full active:rounded-[28px]",
-    xl: "rounded-full active:rounded-[28px]",
+    l: "rounded-full active:rounded-2xl",
+    xl: "rounded-full active:rounded-2xl",
   },
   square: {
     xs: "rounded-xl active:rounded-lg",
@@ -85,17 +85,9 @@ const shapeClasses = {
   },
 } as const;
 
-// Asymmetric padding when icon is present (icon-side gets less padding per M3 spec: -8dp).
-// Logical padding (ps = padding-inline-start, pe = padding-inline-end) so leading/
-// trailing icon padding mirrors correctly under RTL. Format is always "ps-* pe-*"
-// (start first, end second) — the combined leading+trailing case below relies on it.
-const iconPaddingMap = {
-  xs: { icon: "ps-2 pe-3", trailing: "ps-3 pe-2" },
-  s: { icon: "ps-3 pe-4", trailing: "ps-4 pe-3" },
-  m: { icon: "ps-4 pe-6", trailing: "ps-6 pe-4" },
-  l: { icon: "ps-10 pe-12", trailing: "ps-12 pe-10" },
-  xl: { icon: "ps-14 pe-16", trailing: "ps-16 pe-14" },
-} as const;
+// NOTE: M3 Expressive uses symmetric horizontal padding regardless of icon
+// presence (per the buttons size spec) — the icon simply sits inside with the
+// per-size icon→label gap. No asymmetric icon-padding override is applied.
 
 function ButtonSpinner({ className }: { className?: string }) {
   return (
@@ -156,25 +148,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const resolvedSize = size ?? "s";
     const shape = square ? "square" : "round";
 
-    // Determine asymmetric padding
-    const hasLeadingIcon = loading || !!icon;
-    const hasTrailingIcon = !!trailingIcon;
-
-    let paddingOverride = "";
-    if (hasLeadingIcon && !hasTrailingIcon) {
-      paddingOverride = iconPaddingMap[resolvedSize].icon;
-    } else if (hasTrailingIcon && !hasLeadingIcon) {
-      paddingOverride = iconPaddingMap[resolvedSize].trailing;
-    } else if (hasLeadingIcon && hasTrailingIcon) {
-      paddingOverride = `${iconPaddingMap[resolvedSize].icon.split(" ")[0]} ${iconPaddingMap[resolvedSize].trailing.split(" ")[1]}`;
-    }
-
     return (
       <Comp
         className={cn(
           buttonVariants({ variant, size }),
           shapeClasses[shape][resolvedSize],
-          paddingOverride,
           loading && "pointer-events-none",
           className
         )}

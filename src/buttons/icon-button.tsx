@@ -95,8 +95,8 @@ const shapeClasses = {
     xs: "rounded-full active:rounded-lg",
     s: "rounded-full active:rounded-xl",
     m: "rounded-full active:rounded-xl",
-    l: "rounded-full active:rounded-[28px]",
-    xl: "rounded-full active:rounded-[28px]",
+    l: "rounded-full active:rounded-2xl",
+    xl: "rounded-full active:rounded-2xl",
   },
   square: {
     xs: "rounded-xl active:rounded-lg",
