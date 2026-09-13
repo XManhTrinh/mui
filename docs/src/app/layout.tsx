@@ -6,7 +6,7 @@ import "./globals.css";
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Icon, IconButton, AppBar, NavigationRail } from "@mui/index";
+import { Icon, IconButton } from "@mui/index";
 
 // ─── Navigation data with child routes ────────────────────────────────────────
 
@@ -112,6 +112,12 @@ const navItems: NavItem[] = [
   },
 ];
 
+// Rail collapsed width: 80px (w-20). Expanded drawer width: 280px (w-70).
+const RAIL_W = "w-20";
+const RAIL_ML = "ml-20";
+const DRAWER_W = "w-70";
+const DRAWER_ML = "ml-70";
+
 // ─── Root layout ──────────────────────────────────────────────────────────────
 
 export default function RootLayout({
@@ -121,12 +127,31 @@ export default function RootLayout({
 }) {
   const pathname = usePathname();
   const [dark, setDark] = React.useState(false);
-  const [hoveredCategory, setHoveredCategory] = React.useState<string | null>(null);
-  const closeTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Which category drawer is open — null means collapsed rail only
+  const [openCategory, setOpenCategory] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     setDark(document.documentElement.classList.contains("dark"));
   }, []);
+
+  // Auto-expand the drawer for the active category on route change
+  React.useEffect(() => {
+    if (pathname === "/") {
+      setOpenCategory(null);
+      return;
+    }
+    for (const item of navItems) {
+      if (
+        pathname === item.href ||
+        pathname.startsWith(item.href + "/") ||
+        pathname.startsWith("/" + item.value + "/") ||
+        pathname === "/" + item.value
+      ) {
+        setOpenCategory(item.value);
+        return;
+      }
+    }
+  }, [pathname]);
 
   const toggleTheme = () => {
     const next = !dark;
@@ -134,7 +159,6 @@ export default function RootLayout({
     document.documentElement.classList.toggle("dark", next);
   };
 
-  // Which top-level category is active based on the current route
   const activeValue = React.useMemo(() => {
     for (const item of navItems) {
       if (
@@ -148,94 +172,169 @@ export default function RootLayout({
     return undefined;
   }, [pathname]);
 
-  // Open the flyout immediately, cancel any pending close
-  const openFlyout = (value: string) => {
-    if (closeTimerRef.current) {
-      clearTimeout(closeTimerRef.current);
-      closeTimerRef.current = null;
-    }
-    setHoveredCategory(value);
+  const handleCategoryClick = (value: string) => {
+    // Toggle: clicking the same category collapses back to rail
+    setOpenCategory((prev) => (prev === value ? null : value));
   };
 
-  // Close with a short grace period so the user can move from the rail item
-  // to the flyout panel without it disappearing
-  const closeFlyout = () => {
-    closeTimerRef.current = setTimeout(() => {
-      setHoveredCategory(null);
-    }, 180);
-  };
-
-  const hoveredItem = navItems.find((n) => n.value === hoveredCategory);
+  const drawerItem = navItems.find((n) => n.value === openCategory);
+  const isExpanded = !!drawerItem;
 
   return (
     <html lang="en" className={dark ? "dark" : ""}>
       <body className="bg-surface text-surface-foreground min-h-screen">
-        {/* ── Sidebar: collapsed rail + flyout sub-nav ──────────────── */}
-        <div className="fixed inset-t-0 inset-l-0 h-screen z-40 flex">
-          {/* Primary rail — always collapsed (w-24 = 96px) */}
-          <NavigationRail className="h-full shrink-0">
-            <NavigationRail.Header>
-              <Link href="/">
-                <IconButton icon="home" variant="standard" aria-label="Home" />
-              </Link>
-            </NavigationRail.Header>
+        {/* ── Sidebar ──────────────────────────────────────────────── */}
+        <aside
+          className={[
+            "fixed inset-t-0 inset-l-0 h-screen z-40 flex flex-col bg-surface-container",
+            "transition-[width] duration-300 ease-[cubic-bezier(0.2,0,0,1)] overflow-hidden",
+            isExpanded ? DRAWER_W : RAIL_W,
+          ].join(" ")}
+        >
+          {/* ── Collapsed rail view ────────────────────────────────── */}
+          {!isExpanded && (
+            <div className="flex flex-col h-full">
+              {/* Home button */}
+              <div className="flex items-center justify-center pt-3 pb-6">
+                <Link href="/">
+                  <IconButton icon="home" variant="standard" aria-label="Home" />
+                </Link>
+              </div>
 
-            <NavigationRail.Content>
-              {navItems.map((item) => (
-                <div
-                  key={item.value}
-                  onMouseEnter={() => openFlyout(item.value)}
-                  onMouseLeave={closeFlyout}
+              {/* Category items */}
+              <nav className="flex-1 flex flex-col items-center gap-1 overflow-y-auto">
+                {navItems.map((item) => {
+                  const isActive = activeValue === item.value;
+                  return (
+                    <button
+                      key={item.value}
+                      onClick={() => handleCategoryClick(item.value)}
+                      className={[
+                        "group relative flex flex-col items-center justify-center w-full py-1 cursor-pointer outline-none",
+                        "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset rounded-lg",
+                      ].join(" ")}
+                    >
+                      {/* Indicator pill */}
+                      <span className="relative flex items-center justify-center w-14 h-8">
+                        <span
+                          className={[
+                            "absolute inset-0 rounded-full transition-[transform,opacity] duration-200 ease-[cubic-bezier(0.2,0,0,1)] origin-center",
+                            isActive
+                              ? "bg-secondary-container scale-x-100 opacity-100"
+                              : "scale-x-0 opacity-0",
+                          ].join(" ")}
+                        />
+                        {/* State layer */}
+                        <span
+                          className={[
+                            "absolute inset-0 rounded-full transition-colors duration-200",
+                            isActive
+                              ? "group-hover:bg-[hsl(var(--on-secondary-container)/0.08)]"
+                              : "group-hover:bg-[hsl(var(--on-surface-variant)/0.08)]",
+                          ].join(" ")}
+                        />
+                        <Icon
+                          name={item.icon}
+                          size={24}
+                          filled={isActive}
+                          className={[
+                            "relative z-10 transition-colors duration-200",
+                            isActive
+                              ? "text-secondary-container-foreground"
+                              : "text-[hsl(var(--on-surface-variant))]",
+                          ].join(" ")}
+                        />
+                      </span>
+                      {/* Label */}
+                      <span
+                        className={[
+                          "text-[12px] leading-4 font-medium tracking-[0.5px] truncate mt-0.5",
+                          isActive ? "text-secondary" : "text-[hsl(var(--on-surface-variant))]",
+                        ].join(" ")}
+                      >
+                        {item.label}
+                      </span>
+                    </button>
+                  );
+                })}
+              </nav>
+
+              {/* Theme toggle */}
+              <div className="flex items-center justify-center py-4">
+                <IconButton
+                  icon={dark ? "light_mode" : "dark_mode"}
+                  variant="standard"
+                  aria-label="Toggle theme"
+                  onClick={toggleTheme}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* ── Expanded drawer view ───────────────────────────────── */}
+          {isExpanded && drawerItem && (
+            <div className="flex flex-col h-full">
+              {/* Header: back arrow to collapse + category title */}
+              <div className="flex items-center gap-2 px-3 pt-3 pb-2">
+                <button
+                  onClick={() => setOpenCategory(null)}
+                  className="flex items-center justify-center size-10 rounded-full cursor-pointer hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  aria-label="Collapse navigation"
                 >
-                  <Link href={item.href} className="no-underline">
-                    <NavigationRail.Item
-                      icon={item.icon}
-                      label={item.label}
-                      active={activeValue === item.value}
-                    />
-                  </Link>
-                </div>
-              ))}
-            </NavigationRail.Content>
+                  <Icon name="arrow_back" size={24} className="text-[hsl(var(--on-surface-variant))]" />
+                </button>
+                <span className="text-[14px] font-medium text-surface-foreground truncate">
+                  {drawerItem.label}
+                </span>
+              </div>
 
-            <NavigationRail.Footer>
-              <IconButton
-                icon={dark ? "light_mode" : "dark_mode"}
-                variant="standard"
-                aria-label="Toggle theme"
-                onClick={toggleTheme}
-              />
-            </NavigationRail.Footer>
-          </NavigationRail>
+              {/* Category items — compact icons row to switch categories */}
+              <div className="flex items-center gap-1 px-3 pb-3 overflow-x-auto">
+                {navItems.map((item) => {
+                  const isCurrent = item.value === openCategory;
+                  return (
+                    <button
+                      key={item.value}
+                      onClick={() => handleCategoryClick(item.value)}
+                      className={[
+                        "flex items-center justify-center size-10 shrink-0 rounded-full cursor-pointer transition-colors outline-none",
+                        "focus-visible:ring-2 focus-visible:ring-primary",
+                        isCurrent
+                          ? "bg-secondary-container"
+                          : "hover:bg-[hsl(var(--on-surface)/0.08)]",
+                      ].join(" ")}
+                      aria-label={item.label}
+                      title={item.label}
+                    >
+                      <Icon
+                        name={item.icon}
+                        size={20}
+                        filled={isCurrent}
+                        className={
+                          isCurrent
+                            ? "text-secondary-container-foreground"
+                            : "text-[hsl(var(--on-surface-variant))]"
+                        }
+                      />
+                    </button>
+                  );
+                })}
+              </div>
 
-          {/* Flyout sub-nav panel — appears on hover */}
-          {hoveredItem && (
-            <div
-              onMouseEnter={() => openFlyout(hoveredItem.value)}
-              onMouseLeave={closeFlyout}
-              className="h-full w-56 shrink-0 border-e border-outline-variant bg-surface-container py-3 px-2 overflow-y-auto animate-in slide-in-from-left-2 duration-150"
-            >
-              {/* Category heading */}
-              <Link
-                href={hoveredItem.href}
-                className="no-underline flex items-center gap-2 px-3 py-2 mb-1 rounded-full text-[14px] font-medium text-surface-foreground hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors"
-              >
-                <Icon name={hoveredItem.icon} size={20} className="text-primary" />
-                {hoveredItem.label}
-              </Link>
+              {/* Divider */}
+              <div className="h-px bg-outline-variant mx-3" />
 
               {/* Child links */}
-              <nav className="flex flex-col gap-0.5">
-                {hoveredItem.children.map((child) => {
+              <nav className="flex-1 flex flex-col gap-0.5 px-3 py-2 overflow-y-auto">
+                {drawerItem.children.map((child) => {
                   const isChildActive = pathname === child.href;
                   return (
                     <Link
                       key={child.href}
                       href={child.href}
-                      onClick={() => setHoveredCategory(null)}
                       className={[
-                        "no-underline flex items-center gap-3 px-3 py-2.5 rounded-full",
-                        "text-[13px] leading-5 transition-colors",
+                        "no-underline flex items-center px-4 py-2.5 rounded-full",
+                        "text-[14px] leading-5 transition-colors",
                         isChildActive
                           ? "bg-secondary-container text-secondary-container-foreground font-medium"
                           : "text-[hsl(var(--on-surface-variant))] hover:bg-[hsl(var(--on-surface)/0.08)]",
@@ -246,24 +345,27 @@ export default function RootLayout({
                   );
                 })}
               </nav>
+
+              {/* Footer: theme toggle */}
+              <div className="flex items-center px-3 py-3 border-t border-outline-variant">
+                <IconButton
+                  icon={dark ? "light_mode" : "dark_mode"}
+                  variant="standard"
+                  aria-label="Toggle theme"
+                  onClick={toggleTheme}
+                />
+              </div>
             </div>
           )}
-        </div>
+        </aside>
 
-        {/* ── Main content ─────────────────────────────────────────── */}
-        <div className="ml-24">
-          <AppBar
-            className="sticky inset-t-0 z-30"
-            headline={
-              <Link
-                href="/"
-                className="text-[22px] leading-7 font-normal text-surface-foreground no-underline"
-              >
-                M3 Components
-              </Link>
-            }
-          />
-
+        {/* ── Main content — pushes over with the sidebar ──────────── */}
+        <div
+          className={[
+            "transition-[margin-left] duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
+            isExpanded ? DRAWER_ML : RAIL_ML,
+          ].join(" ")}
+        >
           <main className="p-8 max-w-240">{children}</main>
         </div>
       </body>
