@@ -288,7 +288,7 @@ function Tab({ value: tabValue, icon, label, disabled = false, className }: TabP
       data-tab-value={tabValue}
       onClick={handleClick}
       className={cn(
-        "relative overflow-hidden flex-1 shrink-0 flex items-center justify-center gap-2 min-w-12 px-4",
+        "relative overflow-hidden shrink-0 flex items-center justify-center gap-2 min-w-20 px-4",
         layoutDirection,
         "select-none transition-colors duration-200",
         "focus-visible:outline-none",
@@ -341,7 +341,6 @@ function TabContent({ value: contentValue, className, children }: TabContentProp
   if (activeValue !== contentValue) return null;
 
   const handlePointerDown = (e: React.PointerEvent) => {
-    if (e.pointerType === "mouse") return;
     swipeStart.current = { x: e.clientX, y: e.clientY };
   };
 
