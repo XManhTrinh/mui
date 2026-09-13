@@ -35,6 +35,16 @@ Work on this library must meet Fellow/VP-level engineering standards:
 - **Disabled states must be bulletproof** — no hover, no shadow change, no press, no state layer, cursor-not-allowed, pointer-events-none, M3 opacity (38% content, 12% container).
 - **No layout positioning in components** — components never set position/z-index/inset. Consumer's responsibility. Only exception: portal overlays (Dialog, Tooltip, Sheet scrims).
 - **Tailwind v4 canonical classes** — use canonical classes over arbitrary values when they exist. Arbitrary values only for M3-specific tokens with no Tailwind equivalent.
+- **Radix UI first** — for any component that needs positioning (tooltips, popovers, menus), focus trapping (dialogs, sheets), portal rendering, or polymorphic element support (`asChild`), use the corresponding Radix UI primitive. Never write custom positioning, focus trap, or portal logic when a Radix primitive exists. Installed: `@radix-ui/react-dialog`, `@radix-ui/react-dropdown-menu`, `@radix-ui/react-slot`, `@radix-ui/react-tooltip`.
+
+## Tech Stack
+
+- **React 18+** with Next.js App Router (`"use client"` directives)
+- **Tailwind CSS v4** (CSS-native `@theme` config, `@source` directive, no tailwind.config.js)
+- **Radix UI** primitives for positioning, focus management, portals, and polymorphism
+- **Framer Motion** (`motion/react`) for spring physics, staggered animations, and AnimatePresence
+- **class-variance-authority** (CVA) for multi-variant component styling
+- **clsx + tailwind-merge** via `cn()` utility
 
 ## Design Principles
 
