@@ -265,6 +265,20 @@ function SideSheetRoot({
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [open, isModal, onOpenChange]);
 
+  // Modal: restore focus to the trigger on close and lock body scroll while open.
+  React.useEffect(() => {
+    if (!open || !isModal) return;
+
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      previouslyFocused?.focus?.();
+    };
+  }, [open, isModal]);
+
   // Close on Escape for standard variant
   React.useEffect(() => {
     if (!open || isModal) return;

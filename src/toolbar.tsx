@@ -19,10 +19,8 @@ import { cn } from "./lib/utils";
  * Usage: Toolbar is a simple container — place IconButtons, FABs,
  * or any other M3 components inside as children.
  *
- * @m3-audit VERIFIED — ToolbarLeading, ToolbarHeadline, ToolbarActions all present and correctly typed.
- * Minor: Does not use Object.assign namespace pattern (exports sub-components separately).
- * Consider adding `Object.assign(Toolbar, { Leading, Headline, Actions })` for API consistency
- * with other compound components, while keeping separate exports for tree-shaking.
+ * Layout: ToolbarActions carries `ms-auto` so it stays pinned to the trailing
+ * edge even when the (flex-1) ToolbarHeadline slot is omitted.
  */
 
 export type ToolbarProps = React.HTMLAttributes<HTMLDivElement>& {
@@ -97,7 +95,9 @@ const ToolbarActions = React.forwardRef<HTMLDivElement, ToolbarActionsProps>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn("flex items-center shrink-0", className)}
+      // `ms-auto` pushes actions to the trailing edge even when no
+      // ToolbarHeadline (the flex-1 spacer) is present.
+      className={cn("flex items-center shrink-0 ms-auto", className)}
       {...props}
     />
   )
