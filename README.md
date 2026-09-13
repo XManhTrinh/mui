@@ -4,7 +4,7 @@ Material Design 3 Expressive component library for React & Next.js.
 
 Built per official [m3.material.io](https://m3.material.io) specifications (May 2025 Expressive update). 37+ components, zero runtime config, theme-driven via CSS custom properties.
 
-📖 **[Live Documentation & Playground →](https://kieuv-mui.vercel.app)** 
+📖 **[Live Documentation & Playground →](https://vkieu-mui.vercel.app)** 
 
 ---
 
