@@ -18,7 +18,14 @@ import {
  * icon support, loading state, and shape morph on press.
  *
  * Shapes: round (default) or square (pass `square` prop).
- * Sizes: xs (32dp), s (36dp), m (40dp, default), l (48dp), xl (56dp).
+ * Sizes: xs (32dp), s (40dp, default), m (48dp), l (56dp), xl (64dp).
+ *
+ * NOTE: M3 Expressive defines a taller reference height scale (commonly cited
+ * XS 32 / S 40 / M 56 / L 96 / XL 136dp). This library ships a more compact
+ * scale (XS 32 / S 40 / M 48 / L 56 / XL 64) that matches XS/S exactly. Raising
+ * M/L/XL to the tall Expressive values is a deliberate, high-blast-radius change
+ * that must be confirmed against the spec + consumers before changing — see
+ * `.kiro/specs/m3-expressive-full-audit/token-sweep-2026-09.md` (item A2/B1).
  */
 
 const buttonVariants = cva(
