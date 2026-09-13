@@ -123,7 +123,7 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
               "absolute -top-12 -translate-x-1/2 pointer-events-none z-10",
               "flex items-center justify-center w-12 h-11 rounded-full",
               "bg-inverse-surface text-inverse-on-surface",
-              "text-[14px] leading-5 font-medium",
+              "text-[12px] leading-4 font-medium tracking-[0.5px]",
               "transition-opacity duration-150 ease-[cubic-bezier(0.2,0,0,1)]",
               showIndicator ? "opacity-100" : "opacity-0"
             )}
