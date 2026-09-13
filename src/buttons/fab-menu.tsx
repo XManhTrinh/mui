@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { motion, AnimatePresence } from "motion/react";
 
 import { cn } from "../lib/utils";
@@ -10,85 +11,54 @@ import { FAB } from "./fab";
  * Material Design 3 FAB Menu
  *
  * A speed-dial overlay that opens from a FAB to display 2–6 related action
- * items. Features staggered entry/exit animations, focus trapping, keyboard
- * navigation, and full ARIA menu semantics.
+ * items. Features staggered entry/exit animations, keyboard navigation,
+ * and full ARIA menu semantics.
+ *
+ * Uses Radix Popover for portal rendering, focus management, Escape dismiss,
+ * and click-outside handling. Framer Motion provides staggered animations.
  *
  * Supports two APIs:
- * 1. Data-driven: Pass an `items` array prop (original API)
+ * 1. Data-driven: Pass an `items` array prop
  * 2. Composable: Use `<FABMenu.Item>` sub-components as children
- *
- * Uses Framer Motion (motion) for orchestrated animations.
  */
 
 export type FABMenuItem = {
-  /** Icon (React node) */
   icon: React.ReactNode;
-  /** Label text */
   label: string;
-  /** Action callback */
   onClick: () => void;
-  /** Optional aria-label override */
   "aria-label"?: string;
 }
 
 export type FABMenuItemComponentProps = {
-  /** Icon (React node) */
   icon: React.ReactNode;
-  /** Label text */
   label: string;
-  /** Action callback */
   onClick: () => void;
-  /** Optional aria-label override */
   "aria-label"?: string;
-  /** Additional className */
   className?: string;
   children?: React.ReactNode;
 }
 
 export type FABMenuProps = {
-  /** Menu items (2-6) — data-driven API */
   items?: FABMenuItem[];
-  /** Color set for close button and items */
   colorSet?: "primary" | "secondary" | "tertiary";
-  /** Controlled open state */
   open?: boolean;
-  /** Default open state (uncontrolled) */
   defaultOpen?: boolean;
-  /** Callback when open state changes */
   onOpenChange?: (open: boolean) => void;
-  /** Close button accessible label */
   closeLabel?: string;
-  /** The FAB trigger icon */
   triggerIcon: React.ReactNode;
-  /** The FAB trigger aria-label */
   triggerLabel: string;
-  /** Additional className for the container */
   className?: string;
-  /** Children (composable API — FABMenu.Item elements) */
   children?: React.ReactNode;
 }
 
 // ─── FABMenu.Item Sub-Component ───────────────────────────────────────────────
 
-/**
- * FABMenu.Item — Composable sub-component for FABMenu.
- *
- * When used as a child of FABMenu (without the `items` prop), these elements
- * are collected and rendered in the same animated layout as the data-driven items.
- *
- * Note: This component does not render anything on its own — FABMenu extracts
- * its props and renders them using the shared animation layout.
- */
 const FABMenuItemComponent = React.forwardRef<
   HTMLButtonElement,
   FABMenuItemComponentProps
 >(function FABMenuItemComponent(_props, _ref) {
-  // This component is not rendered directly — FABMenu extracts its props
-  // and renders them in the animated menu layout. If somehow rendered
-  // standalone, return null.
   return null;
 });
-
 FABMenuItemComponent.displayName = "FABMenuItemComponent";
 
 // ─── Color Mappings ───────────────────────────────────────────────────────────
@@ -99,7 +69,7 @@ const menuItemColors = {
   tertiary: "bg-surface-container-high text-tertiary",
 } as const;
 
-// ─── Dual-API Detection Helpers ───────────────────────────────────────────────
+// ─── Dual-API Detection ───────────────────────────────────────────────────────
 
 function isValidFABMenuItemChild(
   child: React.ReactNode
@@ -111,9 +81,7 @@ function isValidFABMenuItemChild(
   );
 }
 
-function extractItemsFromChildren(
-  children: React.ReactNode
-): FABMenuItem[] {
+function extractItemsFromChildren(children: React.ReactNode): FABMenuItem[] {
   const items: FABMenuItem[] = [];
   React.Children.forEach(children, (child) => {
     if (isValidFABMenuItemChild(child)) {
@@ -138,50 +106,13 @@ const FABMenuRoot: React.FC<FABMenuProps> = ({
   className,
   children,
 }) => {
-  // ─── Dual-API Detection ───────────────────────────────────────────────
   const composableItems = React.useMemo(
     () => extractItemsFromChildren(children),
     [children]
   );
 
   const hasItemsProp = items !== undefined && items.length > 0;
-  const hasComposableChildren = composableItems.length > 0;
-
-  // Warn if both APIs are used simultaneously
-  React.useEffect(() => {
-    if (hasItemsProp && hasComposableChildren) {
-      console.warn(
-        "[FABMenu] Both `items` prop and FABMenu.Item children are provided. " +
-          "The `items` prop takes precedence. Remove one API to silence this warning."
-      );
-    }
-  }, [hasItemsProp, hasComposableChildren]);
-
-  // Resolve final items: items prop takes precedence
-  const resolvedItems: FABMenuItem[] = hasItemsProp
-    ? items!
-    : composableItems;
-
-  // ─── Controlled / Uncontrolled State ──────────────────────────────────
-  const isControlled = openProp !== undefined;
-  const [internalOpen, setInternalOpen] = React.useState(defaultOpen);
-  const isOpen = isControlled ? openProp : internalOpen;
-
-  const setOpen = React.useCallback(
-    (value: boolean) => {
-      if (!isControlled) {
-        setInternalOpen(value);
-      }
-      onOpenChange?.(value);
-    },
-    [isControlled, onOpenChange]
-  );
-
-  // Refs for focus management
-  const triggerRef = React.useRef<HTMLButtonElement>(null);
-  const closeRef = React.useRef<HTMLButtonElement>(null);
-  const itemRefs = React.useRef<(HTMLButtonElement | null)[]>([]);
-  const containerRef = React.useRef<HTMLDivElement>(null);
+  const resolvedItems: FABMenuItem[] = hasItemsProp ? items! : composableItems;
 
   // Clamp items to 2-6
   const validItems = React.useMemo(() => {
@@ -199,237 +130,108 @@ const FABMenuRoot: React.FC<FABMenuProps> = ({
     return () => mql.removeEventListener("change", handler);
   }, []);
 
-  // Focus close button when menu opens
-  React.useEffect(() => {
-    if (isOpen) {
-      // Small delay to allow animation to start
-      requestAnimationFrame(() => {
-        closeRef.current?.focus();
-      });
-    }
-  }, [isOpen]);
-
-  // Click outside handler
-  React.useEffect(() => {
-    if (!isOpen) return;
-
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        setOpen(false);
-        triggerRef.current?.focus();
-      }
-    };
-
-    // Use mousedown for earlier dismissal
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen, setOpen]);
-
-  // Keyboard navigation
-  const handleKeyDown = React.useCallback(
-    (e: React.KeyboardEvent) => {
-      if (!isOpen) return;
-
-      const focusableElements = [
-        closeRef.current,
-        ...itemRefs.current.filter(Boolean),
-      ] as HTMLButtonElement[];
-
-      const currentIndex = focusableElements.indexOf(
-        document.activeElement as HTMLButtonElement
-      );
-
-      switch (e.key) {
-        case "Escape":
-          e.preventDefault();
-          setOpen(false);
-          triggerRef.current?.focus();
-          break;
-        case "ArrowDown": {
-          e.preventDefault();
-          const nextIndex =
-            currentIndex + 1 < focusableElements.length
-              ? currentIndex + 1
-              : 0;
-          focusableElements[nextIndex]?.focus();
-          break;
-        }
-        case "ArrowUp": {
-          e.preventDefault();
-          const prevIndex =
-            currentIndex - 1 >= 0
-              ? currentIndex - 1
-              : focusableElements.length - 1;
-          focusableElements[prevIndex]?.focus();
-          break;
-        }
-        case "Tab": {
-          // Focus trap: keep Tab / Shift+Tab cycling within the menu.
-          if (focusableElements.length === 0) break;
-          e.preventDefault();
-          const delta = e.shiftKey ? -1 : 1;
-          const from = currentIndex === -1 ? 0 : currentIndex;
-          const nextIndex =
-            (from + delta + focusableElements.length) % focusableElements.length;
-          focusableElements[nextIndex]?.focus();
-          break;
-        }
-      }
-    },
-    [isOpen, setOpen]
-  );
-
-  // Item activation
-  const handleItemClick = React.useCallback(
-    (item: FABMenuItem) => {
-      item.onClick();
-      setOpen(false);
-      triggerRef.current?.focus();
-    },
-    [setOpen]
-  );
-
-  // Animation variants
-  const staggerDelay = reducedMotion ? 0 : 0.05; // 50ms per item
-  const animationDuration = reducedMotion ? 0 : 0.2; // 200ms
+  const staggerDelay = reducedMotion ? 0 : 0.05;
+  const animationDuration = reducedMotion ? 0 : 0.2;
 
   return (
-    <div ref={containerRef} className={cn("relative inline-flex flex-col items-center", className)}>
-      {/* Menu overlay (when open) */}
-      <AnimatePresence mode="wait">
-        {isOpen && validItems.length > 0 && (
-          <motion.div
-            role="menu"
-            className="flex flex-col items-center gap-1"
-            onKeyDown={handleKeyDown}
-            initial="closed"
-            animate="open"
-            exit="closed"
-            variants={{
-              open: {
-                transition: {
-                  staggerChildren: staggerDelay,
-                },
-              },
-              closed: {
-                transition: {
-                  staggerChildren: staggerDelay,
-                  staggerDirection: -1,
-                },
-              },
-            }}
-          >
-            {/* Menu items (appear above close button) */}
-            {validItems.map((item, index) => (
-              <motion.button
-                key={index}
-                ref={(el) => {
-                  itemRefs.current[index] = el;
-                }}
-                type="button"
-                role="menuitem"
-                className={cn(
-                  "relative h-12 min-w-40 inline-flex items-center gap-3 px-4 rounded-2xl",
-                  "cursor-pointer select-none",
-                  "text-[14px] font-medium leading-5 tracking-[0.1px]",
-                  // State layer
-                  "overflow-hidden",
-                  "before:absolute before:inset-0 before:rounded-[inherit]",
-                  "before:bg-current before:opacity-0",
-                  "before:transition-opacity before:duration-200 before:pointer-events-none",
-                  "hover:before:opacity-[0.08]",
-                  "focus-visible:before:opacity-[0.10]",
-                  "active:before:opacity-[0.10]",
-                  // Focus ring
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-                  // Elevation
-                  "shadow-[0_2px_4px_hsl(var(--elevation-2)),0_1px_2px_hsl(var(--elevation-2))]",
-                  // Icon sizing
-                  "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-6",
-                  "[&_.material-symbols-rounded]:pointer-events-none",
-                  menuItemColors[colorSet]
-                )}
-                aria-label={item["aria-label"] || undefined}
-                onClick={() => handleItemClick(item)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    handleItemClick(item);
-                  }
-                }}
-                variants={{
-                  open: {
-                    opacity: 1,
-                    y: 0,
-                    transition: { duration: animationDuration, ease: [0.2, 0, 0, 1] },
-                  },
-                  closed: {
-                    opacity: 0,
-                    y: 8,
-                    transition: { duration: reducedMotion ? 0 : 0.15, ease: [0.2, 0, 0, 1] },
-                  },
-                }}
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </motion.button>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Close button / FAB trigger — composed from the FAB component */}
-      {isOpen ? (
+    <PopoverPrimitive.Root
+      open={openProp}
+      defaultOpen={defaultOpen}
+      onOpenChange={onOpenChange}
+    >
+      <PopoverPrimitive.Trigger asChild>
         <FAB
-          ref={closeRef}
-          size="fab"
-          shape="round"
-          color={`${colorSet}-container`}
-          className="mt-1"
-          aria-label={closeLabel}
-          icon={
-            /* X close icon */
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          }
-          onClick={() => {
-            setOpen(false);
-            triggerRef.current?.focus();
-          }}
-          // Escape / Arrow / Tab handling all lives in the container-level
-          // handleKeyDown so it stays in one place (no duplicate Escape).
-          onKeyDown={handleKeyDown}
-        />
-      ) : (
-        <FAB
-          ref={triggerRef}
           size="fab"
           shape="rounded"
           color={`${colorSet}-container`}
-          aria-haspopup="menu"
-          aria-expanded={isOpen}
           aria-label={triggerLabel}
           icon={triggerIcon}
-          onClick={() => setOpen(true)}
         />
-      )}
-    </div>
+      </PopoverPrimitive.Trigger>
+
+      <AnimatePresence>
+        {(openProp ?? defaultOpen) !== false && (
+          <PopoverPrimitive.Portal forceMount>
+            <PopoverPrimitive.Content
+              side="top"
+              sideOffset={8}
+              align="center"
+              className={cn(
+                "z-50 flex flex-col items-center gap-1 outline-none",
+                className
+              )}
+              // Keep the speed-dial menu focused
+              onOpenAutoFocus={(e) => e.preventDefault()}
+            >
+              <motion.div
+                role="menu"
+                className="flex flex-col items-center gap-1"
+                initial="closed"
+                animate="open"
+                exit="closed"
+                variants={{
+                  open: { transition: { staggerChildren: staggerDelay } },
+                  closed: {
+                    transition: {
+                      staggerChildren: staggerDelay,
+                      staggerDirection: -1,
+                    },
+                  },
+                }}
+              >
+                {validItems.map((item, index) => (
+                  <motion.button
+                    key={index}
+                    type="button"
+                    role="menuitem"
+                    className={cn(
+                      "relative h-12 min-w-40 inline-flex items-center gap-3 px-4 rounded-2xl",
+                      "cursor-pointer select-none",
+                      "text-[14px] font-medium leading-5 tracking-[0.1px]",
+                      "overflow-hidden",
+                      "before:absolute before:inset-0 before:rounded-[inherit]",
+                      "before:bg-current before:opacity-0",
+                      "before:transition-opacity before:duration-200 before:pointer-events-none",
+                      "hover:before:opacity-[0.08]",
+                      "focus-visible:before:opacity-[0.10]",
+                      "active:before:opacity-[0.10]",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                      "shadow-[0_2px_4px_hsl(var(--elevation-2)),0_1px_2px_hsl(var(--elevation-2))]",
+                      "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-6",
+                      "[&_.material-symbols-rounded]:pointer-events-none",
+                      menuItemColors[colorSet]
+                    )}
+                    aria-label={item["aria-label"] || undefined}
+                    onClick={() => {
+                      item.onClick();
+                      onOpenChange?.(false);
+                    }}
+                    variants={{
+                      open: {
+                        opacity: 1,
+                        y: 0,
+                        transition: { duration: animationDuration, ease: [0.2, 0, 0, 1] },
+                      },
+                      closed: {
+                        opacity: 0,
+                        y: 8,
+                        transition: {
+                          duration: reducedMotion ? 0 : 0.15,
+                          ease: [0.2, 0, 0, 1],
+                        },
+                      },
+                    }}
+                  >
+                    {item.icon}
+                    <span>{item.label}</span>
+                  </motion.button>
+                ))}
+              </motion.div>
+            </PopoverPrimitive.Content>
+          </PopoverPrimitive.Portal>
+        )}
+      </AnimatePresence>
+    </PopoverPrimitive.Root>
   );
 };
 

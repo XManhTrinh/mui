@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { motion, AnimatePresence } from "motion/react";
 
 import { cn } from "../lib/utils";
@@ -27,16 +28,12 @@ export function useSideSheet(): SideSheetContextValue {
 
 // ─── Sub-Components ───────────────────────────────────────────────────────────
 
-// --- SideSheetHeader ---
-
 export type SideSheetHeaderProps = {
-  /** Title text for the header */
   headline?: string;
-  /** Whether to show the close button */
   showClose?: boolean;
   className?: string;
   children?: React.ReactNode;
-}
+};
 
 export const SideSheetHeader = React.forwardRef<
   HTMLDivElement,
@@ -54,9 +51,9 @@ export const SideSheetHeader = React.forwardRef<
       ) : (
         <>
           {headline ? (
-            <h2 className="flex-1 text-[14px] leading-5 font-medium tracking-[0.1px] text-[hsl(var(--on-surface-variant))]">
+            <DialogPrimitive.Title className="flex-1 text-[14px] leading-5 font-medium tracking-[0.1px] text-[hsl(var(--on-surface-variant))]">
               {headline}
-            </h2>
+            </DialogPrimitive.Title>
           ) : (
             <div className="flex-1" />
           )}
@@ -64,26 +61,25 @@ export const SideSheetHeader = React.forwardRef<
       )}
 
       {showClose && (
-        <button
-          type="button"
-          onClick={() => onOpenChange(false)}
-          className="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer text-[hsl(var(--on-surface-variant))] hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          aria-label="Close"
-        >
-          <Icon name="close" size={24} />
-        </button>
+        <DialogPrimitive.Close asChild>
+          <button
+            type="button"
+            className="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer text-[hsl(var(--on-surface-variant))] hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            aria-label="Close"
+          >
+            <Icon name="close" size={24} />
+          </button>
+        </DialogPrimitive.Close>
       )}
     </div>
   );
 });
 SideSheetHeader.displayName = "SideSheetHeader";
 
-// --- SideSheetContent ---
-
 export type SideSheetContentProps = {
   className?: string;
   children: React.ReactNode;
-}
+};
 
 export const SideSheetContent = React.forwardRef<
   HTMLDivElement,
@@ -97,12 +93,10 @@ export const SideSheetContent = React.forwardRef<
 });
 SideSheetContent.displayName = "SideSheetContent";
 
-// --- SideSheetActions ---
-
 export type SideSheetActionsProps = {
   className?: string;
   children: React.ReactNode;
-}
+};
 
 export const SideSheetActions = React.forwardRef<
   HTMLDivElement,
@@ -141,6 +135,74 @@ function hasCompoundChildren(children: React.ReactNode): boolean {
   );
 }
 
+// ─── Sheet Visual Content ────────────────────────────────────────────────────
+
+function SheetInner({
+  side,
+  isModal,
+  isComposable,
+  headline,
+  showClose,
+  actions,
+  onOpenChange,
+  className,
+  children,
+}: {
+  side: "left" | "right";
+  isModal: boolean;
+  isComposable: boolean;
+  headline?: string;
+  showClose: boolean;
+  actions?: React.ReactNode;
+  onOpenChange: (open: boolean) => void;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className={cn(
+        "flex flex-col h-full w-full max-w-100",
+        isModal ? "bg-surface-container-low" : "bg-surface",
+        !isModal && side === "right" && "border-l border-outline-variant",
+        !isModal && side === "left" && "border-r border-outline-variant",
+        className
+      )}
+    >
+      {isComposable ? (
+        children
+      ) : (
+        <>
+          <div className="flex items-center gap-3 px-6 pt-6 pb-3">
+            {headline ? (
+              <h2 className="flex-1 text-[14px] leading-5 font-medium tracking-[0.1px] text-[hsl(var(--on-surface-variant))]">
+                {headline}
+              </h2>
+            ) : (
+              <div className="flex-1" />
+            )}
+            {showClose && (
+              <button
+                type="button"
+                onClick={() => onOpenChange(false)}
+                className="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer text-[hsl(var(--on-surface-variant))] hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                aria-label="Close"
+              >
+                <Icon name="close" size={24} />
+              </button>
+            )}
+          </div>
+          <div className="flex-1 overflow-y-auto px-6">{children}</div>
+          {actions && (
+            <div className="flex items-center justify-end gap-2 h-18 px-6 pt-4 pb-6 border-t border-outline-variant">
+              {actions}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
 // ─── SideSheet (Root) ────────────────────────────────────────────────────────
 
 /**
@@ -148,34 +210,9 @@ function hasCompoundChildren(children: React.ReactNode): boolean {
  *
  * @see https://m3.material.io/components/side-sheets/specs
  *
- * Two variants:
- * - Standard: inline with divider, surface background
- * - Modal: overlay with scrim, surface-container-low background
- *
- * Supports two APIs:
- * - Composable: Use SideSheet.Header, SideSheet.Content, SideSheet.Actions
- * - Legacy: Pass children directly with headline, showClose, actions props
- *
- * Standard anatomy:
- * - Divider (optional), Headline, Container, Close icon button
- * - Container bg: surface
- * - Divider: outline-variant
- * - Max-width: 400dp
- * - Start/end padding: 24dp
- * - Padding between top elements: 12dp
- * - Bottom actions: 72dp height, 16dp top / 24dp bottom padding
- *
- * Modal anatomy:
- * - Back icon (optional), Headline, Container, Close icon, Divider, Actions, Scrim
- * - Container bg: surface-container-low
- * - Scrim: on-surface at 32% opacity
- * - Max-width: 400dp
- * - Same padding specs
- *
- * Animation:
- * - Slides in from specified side (200ms M3 standard easing)
- * - Scrim fades in (150ms)
- * - prefers-reduced-motion: instant
+ * Modal variant uses Radix Dialog for focus trap, scroll lock, focus
+ * restoration, Escape dismiss, and click-outside dismiss.
+ * Standard variant is an inline panel with Escape to dismiss.
  */
 export type SideSheetProps = {
   open: boolean;
@@ -203,16 +240,9 @@ function SideSheetRoot({
   className,
   children,
 }: SideSheetProps) {
-  const sheetRef = React.useRef<HTMLDivElement>(null);
   const isModal = variant === "modal";
   const isComposable = hasCompoundChildren(children);
 
-  const contextValue = React.useMemo<SideSheetContextValue>(
-    () => ({ open, onOpenChange, variant, side }),
-    [open, onOpenChange, variant, side]
-  );
-
-  // Reduced motion detection for Framer Motion animations
   const [reducedMotion, setReducedMotion] = React.useState(false);
   React.useEffect(() => {
     const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -222,165 +252,117 @@ function SideSheetRoot({
     return () => mql.removeEventListener("change", handler);
   }, []);
 
-  // Focus trap for modal variant
-  React.useEffect(() => {
-    if (!open || !isModal) return;
-
-    const sheet = sheetRef.current;
-    if (!sheet) return;
-
-    const focusableSelector =
-      'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
-
-    const focusableElements =
-      sheet.querySelectorAll<HTMLElement>(focusableSelector);
-    const firstFocusable = focusableElements[0];
-    const lastFocusable = focusableElements[focusableElements.length - 1];
-
-    // Focus first element
-    firstFocusable?.focus();
-
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        onOpenChange(false);
-        return;
-      }
-
-      if (e.key !== "Tab") return;
-
-      if (e.shiftKey) {
-        if (document.activeElement === firstFocusable) {
-          e.preventDefault();
-          lastFocusable?.focus();
-        }
-      } else {
-        if (document.activeElement === lastFocusable) {
-          e.preventDefault();
-          firstFocusable?.focus();
-        }
-      }
-    }
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open, isModal, onOpenChange]);
-
-  // Modal: restore focus to the trigger on close and lock body scroll while open.
-  React.useEffect(() => {
-    if (!open || !isModal) return;
-
-    const previouslyFocused = document.activeElement as HTMLElement | null;
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-      previouslyFocused?.focus?.();
-    };
-  }, [open, isModal]);
-
-  // Close on Escape for standard variant
-  React.useEffect(() => {
-    if (!open || isModal) return;
-
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        onOpenChange(false);
-      }
-    }
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open, isModal, onOpenChange]);
-
-  // Slide direction based on side
   const slideFrom = side === "right" ? "100%" : "-100%";
+
+  const contextValue = React.useMemo<SideSheetContextValue>(
+    () => ({ open, onOpenChange, variant, side }),
+    [open, onOpenChange, variant, side]
+  );
+
+  // ── Modal: Radix Dialog handles focus trap, scroll lock, focus restore,
+  //    Escape dismiss, click-outside dismiss.
+  if (isModal) {
+    return (
+      <SideSheetContext.Provider value={contextValue}>
+        <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
+          <AnimatePresence>
+            {open && (
+              <DialogPrimitive.Portal forceMount>
+                {/* Scrim */}
+                <DialogPrimitive.Overlay asChild>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: reducedMotion ? 0 : 0.15 }}
+                    className="fixed inset-0 z-50 bg-[hsl(var(--on-surface)/0.32)]"
+                  />
+                </DialogPrimitive.Overlay>
+
+                {/* Sheet */}
+                <DialogPrimitive.Content
+                  asChild
+                  aria-label={headline || "Side sheet"}
+                >
+                  <motion.div
+                    initial={{ x: reducedMotion ? 0 : slideFrom }}
+                    animate={{ x: 0 }}
+                    exit={{ x: reducedMotion ? 0 : slideFrom }}
+                    transition={{
+                      type: "tween",
+                      duration: reducedMotion ? 0 : 0.2,
+                      ease: [0.2, 0, 0, 1],
+                    }}
+                    className={cn(
+                      "fixed top-0 bottom-0 z-50 outline-none",
+                      side === "right" ? "right-0" : "left-0"
+                    )}
+                  >
+                    <SheetInner
+                      side={side}
+                      isModal
+                      isComposable={isComposable}
+                      headline={headline}
+                      showClose={showClose}
+                      actions={actions}
+                      onOpenChange={onOpenChange}
+                      className={className}
+                    >
+                      {children}
+                    </SheetInner>
+                  </motion.div>
+                </DialogPrimitive.Content>
+              </DialogPrimitive.Portal>
+            )}
+          </AnimatePresence>
+        </DialogPrimitive.Root>
+      </SideSheetContext.Provider>
+    );
+  }
+
+  // ── Standard: inline panel, Escape to dismiss only.
+  React.useEffect(() => {
+    if (!open) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onOpenChange(false);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [open, onOpenChange]);
 
   return (
     <SideSheetContext.Provider value={contextValue}>
       <AnimatePresence>
         {open && (
-          <>
-            {/* Scrim (modal only) */}
-            {isModal && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: reducedMotion ? 0 : 0.15 }}
-                className="fixed inset-0 z-50 bg-[hsl(var(--on-surface)/0.32)]"
-                onClick={() => onOpenChange(false)}
-                aria-hidden="true"
-              />
+          <motion.div
+            role="complementary"
+            aria-label={headline || "Side sheet"}
+            initial={{ x: reducedMotion ? 0 : slideFrom }}
+            animate={{ x: 0 }}
+            exit={{ x: reducedMotion ? 0 : slideFrom }}
+            transition={{
+              type: "tween",
+              duration: reducedMotion ? 0 : 0.2,
+              ease: [0.2, 0, 0, 1],
+            }}
+            className={cn(
+              "fixed top-0 bottom-0 z-50",
+              side === "right" ? "right-0" : "left-0"
             )}
-
-            {/* Sheet container */}
-            <motion.div
-              ref={sheetRef}
-              role={isModal ? "dialog" : "complementary"}
-              aria-modal={isModal || undefined}
-              aria-label={headline || "Side sheet"}
-              initial={{ x: reducedMotion ? 0 : slideFrom }}
-              animate={{ x: 0 }}
-              exit={{ x: reducedMotion ? 0 : slideFrom }}
-              transition={{
-                type: "tween",
-                duration: reducedMotion ? 0 : 0.2,
-                ease: [0.2, 0, 0, 1], // M3 standard easing
-              }}
-              className={cn(
-                "fixed top-0 bottom-0 z-50",
-                "flex flex-col",
-                "w-full max-w-100",
-                side === "right" ? "right-0" : "left-0",
-                isModal ? "bg-surface-container-low" : "bg-surface",
-                // Standard variant divider
-                !isModal && side === "right" && "border-l border-outline-variant",
-                !isModal && side === "left" && "border-r border-outline-variant",
-                className
-              )}
+          >
+            <SheetInner
+              side={side}
+              isModal={false}
+              isComposable={isComposable}
+              headline={headline}
+              showClose={showClose}
+              actions={actions}
+              onOpenChange={onOpenChange}
+              className={className}
             >
-              {isComposable ? (
-                // Composable layout: render sub-components directly
-                children
-              ) : (
-                // Legacy layout: headline + close + children + actions
-                <>
-                  {/* Header */}
-                  <div className="flex items-center gap-3 px-6 pt-6 pb-3">
-                    {headline ? (
-                      <h2 className="flex-1 text-[14px] leading-5 font-medium tracking-[0.1px] text-[hsl(var(--on-surface-variant))]">
-                        {headline}
-                      </h2>
-                    ) : (
-                      <div className="flex-1" />
-                    )}
-
-                    {showClose && (
-                      <button
-                        type="button"
-                        onClick={() => onOpenChange(false)}
-                        className="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer text-[hsl(var(--on-surface-variant))] hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                        aria-label="Close"
-                      >
-                        <Icon name="close" size={24} />
-                      </button>
-                    )}
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex-1 overflow-y-auto px-6">{children}</div>
-
-                  {/* Actions (bottom bar) */}
-                  {actions && (
-                    <div className="flex items-center justify-end gap-2 h-18 px-6 pt-4 pb-6 border-t border-outline-variant">
-                      {actions}
-                    </div>
-                  )}
-                </>
-              )}
-            </motion.div>
-          </>
+              {children}
+            </SheetInner>
+          </motion.div>
         )}
       </AnimatePresence>
     </SideSheetContext.Provider>

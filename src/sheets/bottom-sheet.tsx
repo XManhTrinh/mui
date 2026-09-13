@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { motion, AnimatePresence } from "motion/react";
 
 import { cn } from "../lib/utils";
@@ -27,11 +28,7 @@ export function useBottomSheet(): BottomSheetContextValue {
 
 // ─── Sub-Components ───────────────────────────────────────────────────────────
 
-// --- BottomSheetHandle ---
-
-export type BottomSheetHandleProps = {
-  className?: string;
-}
+export type BottomSheetHandleProps = { className?: string };
 
 export const BottomSheetHandle = React.forwardRef<
   HTMLDivElement,
@@ -48,12 +45,10 @@ export const BottomSheetHandle = React.forwardRef<
 });
 BottomSheetHandle.displayName = "BottomSheetHandle";
 
-// --- BottomSheetHeader ---
-
 export type BottomSheetHeaderProps = {
   className?: string;
   children: React.ReactNode;
-}
+};
 
 export const BottomSheetHeader = React.forwardRef<
   HTMLDivElement,
@@ -67,12 +62,10 @@ export const BottomSheetHeader = React.forwardRef<
 });
 BottomSheetHeader.displayName = "BottomSheetHeader";
 
-// --- BottomSheetContent ---
-
 export type BottomSheetContentProps = {
   className?: string;
   children: React.ReactNode;
-}
+};
 
 export const BottomSheetContent = React.forwardRef<
   HTMLDivElement,
@@ -86,12 +79,10 @@ export const BottomSheetContent = React.forwardRef<
 });
 BottomSheetContent.displayName = "BottomSheetContent";
 
-// --- BottomSheetActions ---
-
 export type BottomSheetActionsProps = {
   className?: string;
   children: React.ReactNode;
-}
+};
 
 export const BottomSheetActions = React.forwardRef<
   HTMLDivElement,
@@ -131,6 +122,44 @@ function hasCompoundChildren(children: React.ReactNode): boolean {
   );
 }
 
+// ─── Sheet Content (shared between modal and standard) ───────────────────────
+
+function SheetBody({
+  showDragHandle,
+  isComposable,
+  className,
+  children,
+}: {
+  showDragHandle: boolean;
+  isComposable: boolean;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className={cn(
+        "rounded-t-[28px] bg-surface-container-low",
+        "shadow-[0_-1px_3px_hsl(var(--elevation-1))]",
+        isComposable && "flex flex-col",
+        className
+      )}
+    >
+      {isComposable ? (
+        children
+      ) : (
+        <>
+          {showDragHandle && (
+            <div className="flex items-center justify-center py-5.5">
+              <div className="h-1 w-8 rounded-full bg-surface-variant-foreground" />
+            </div>
+          )}
+          <div className="overflow-y-auto px-4 pb-4">{children}</div>
+        </>
+      )}
+    </div>
+  );
+}
+
 // ─── BottomSheet (Root) ──────────────────────────────────────────────────────
 
 /**
@@ -139,29 +168,13 @@ function hasCompoundChildren(children: React.ReactNode): boolean {
  * @see https://m3.material.io/components/bottom-sheets/specs
  *
  * Two variants:
- * - Standard: no scrim, inline content
- * - Modal: above scrim overlay, focus-trapped
+ * - Standard: no scrim, inline content, Escape to dismiss
+ * - Modal: Radix Dialog overlay with focus trap, scrim, scroll lock,
+ *   focus restoration, and click-outside dismiss — all handled by Radix.
  *
  * Supports two APIs:
- * - Composable: Use BottomSheet.Handle, BottomSheet.Header, BottomSheet.Content, BottomSheet.Actions
- * - Legacy: Pass children directly (rendered in a scrollable content area)
- *
- * Anatomy:
- * 1. Container (surface-container-low, 28dp top corners)
- * 2. Drag handle (optional, 32×4dp, centered)
- * 3. Scrim (modal only, on-surface at 32% opacity)
- *
- * Measurements:
- * - Width: full, max 640dp
- * - Top margin: 72dp (compact), 56dp (>640dp)
- * - Corner radius: 28dp top-left/right
- * - Drag handle: 32×4dp, padding 22dp top/bottom
- *
- * Animation:
- * - Open: slide up 200ms M3 standard easing
- * - Close: slide down 150ms
- * - Scrim: fade 150ms
- * - prefers-reduced-motion: instant
+ * - Composable: BottomSheet.Handle / .Header / .Content / .Actions
+ * - Legacy: Pass children directly
  */
 export type BottomSheetProps = {
   open: boolean;
@@ -181,11 +194,9 @@ function BottomSheetRoot({
   className,
   children,
 }: BottomSheetProps) {
-  const sheetRef = React.useRef<HTMLDivElement>(null);
   const isModal = variant === "modal";
   const isComposable = hasCompoundChildren(children);
 
-  // Reduced motion detection for Framer Motion animations
   const [reducedMotion, setReducedMotion] = React.useState(false);
   React.useEffect(() => {
     const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -195,142 +206,103 @@ function BottomSheetRoot({
     return () => mql.removeEventListener("change", handler);
   }, []);
 
-  // Focus trap for modal variant
-  React.useEffect(() => {
-    if (!open || !isModal) return;
-
-    const sheet = sheetRef.current;
-    if (!sheet) return;
-
-    const focusableSelector =
-      'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
-
-    const focusableElements =
-      sheet.querySelectorAll<HTMLElement>(focusableSelector);
-    const firstFocusable = focusableElements[0];
-    const lastFocusable = focusableElements[focusableElements.length - 1];
-
-    // Focus first element
-    firstFocusable?.focus();
-
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        onOpenChange(false);
-        return;
-      }
-
-      if (e.key !== "Tab") return;
-
-      if (e.shiftKey) {
-        if (document.activeElement === firstFocusable) {
-          e.preventDefault();
-          lastFocusable?.focus();
-        }
-      } else {
-        if (document.activeElement === lastFocusable) {
-          e.preventDefault();
-          firstFocusable?.focus();
-        }
-      }
-    }
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open, isModal, onOpenChange]);
-
-  // Modal: restore focus to the trigger on close and lock body scroll while open.
-  React.useEffect(() => {
-    if (!open || !isModal) return;
-
-    const previouslyFocused = document.activeElement as HTMLElement | null;
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-      previouslyFocused?.focus?.();
-    };
-  }, [open, isModal]);
-
-  // Close on Escape for standard variant
-  React.useEffect(() => {
-    if (!open || isModal) return;
-
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        onOpenChange(false);
-      }
-    }
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open, isModal, onOpenChange]);
-
   const contextValue = React.useMemo<BottomSheetContextValue>(
     () => ({ open, onOpenChange, variant }),
     [open, onOpenChange, variant]
   );
 
+  // ── Modal variant: Radix Dialog handles focus trap, scroll lock,
+  //    focus restoration, Escape dismiss, and click-outside dismiss.
+  if (isModal) {
+    return (
+      <BottomSheetContext.Provider value={contextValue}>
+        <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
+          <AnimatePresence>
+            {open && (
+              <DialogPrimitive.Portal forceMount>
+                {/* Scrim */}
+                <DialogPrimitive.Overlay asChild>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: reducedMotion ? 0 : 0.15 }}
+                    className="fixed inset-0 z-50 bg-[hsl(var(--on-surface)/0.32)]"
+                  />
+                </DialogPrimitive.Overlay>
+
+                {/* Sheet */}
+                <DialogPrimitive.Content asChild>
+                  <motion.div
+                    initial={{ y: reducedMotion ? 0 : "100%" }}
+                    animate={{ y: 0 }}
+                    exit={{ y: reducedMotion ? 0 : "100%" }}
+                    transition={{
+                      type: "tween",
+                      duration: reducedMotion ? 0 : 0.2,
+                      ease: [0.2, 0, 0, 1],
+                    }}
+                    className={cn(
+                      "fixed bottom-0 left-0 right-0 z-50",
+                      "mx-0 max-w-160 mt-18",
+                      "min-[640px]:mx-auto min-[640px]:mt-14",
+                      "outline-none"
+                    )}
+                  >
+                    <SheetBody
+                      showDragHandle={showDragHandle}
+                      isComposable={isComposable}
+                      className={className}
+                    >
+                      {children}
+                    </SheetBody>
+                  </motion.div>
+                </DialogPrimitive.Content>
+              </DialogPrimitive.Portal>
+            )}
+          </AnimatePresence>
+        </DialogPrimitive.Root>
+      </BottomSheetContext.Provider>
+    );
+  }
+
+  // ── Standard variant: no overlay, no focus trap. Just Escape to dismiss.
+  React.useEffect(() => {
+    if (!open) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onOpenChange(false);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [open, onOpenChange]);
+
   return (
     <BottomSheetContext.Provider value={contextValue}>
       <AnimatePresence>
         {open && (
-          <>
-            {/* Scrim (modal only) */}
-            {isModal && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: reducedMotion ? 0 : 0.15 }}
-                className="fixed inset-0 z-50 bg-[hsl(var(--on-surface)/0.32)]"
-                onClick={() => onOpenChange(false)}
-                aria-hidden="true"
-              />
+          <motion.div
+            initial={{ y: reducedMotion ? 0 : "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: reducedMotion ? 0 : "100%" }}
+            transition={{
+              type: "tween",
+              duration: reducedMotion ? 0 : 0.2,
+              ease: [0.2, 0, 0, 1],
+            }}
+            className={cn(
+              "fixed bottom-0 left-0 right-0 z-50",
+              "mx-0 max-w-160 mt-18",
+              "min-[640px]:mx-auto min-[640px]:mt-14"
             )}
-
-            {/* Sheet container */}
-            <motion.div
-              ref={sheetRef}
-              role={isModal ? "dialog" : undefined}
-              aria-modal={isModal || undefined}
-              initial={{ y: reducedMotion ? 0 : "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: reducedMotion ? 0 : "100%" }}
-              transition={{
-                type: "tween",
-                duration: reducedMotion ? 0 : 0.2,
-                ease: [0.2, 0, 0, 1], // M3 standard easing
-              }}
-              className={cn(
-                "fixed bottom-0 left-0 right-0 z-50",
-                "mx-0 max-w-160",
-                "mt-18",
-                "rounded-t-[28px]",
-                "bg-surface-container-low",
-                "shadow-[0_-1px_3px_hsl(var(--elevation-1))]",
-                // Responsive: wider viewport adjustments
-                "min-[640px]:mx-auto min-[640px]:mt-14",
-                isComposable && "flex flex-col",
-                className
-              )}
+          >
+            <SheetBody
+              showDragHandle={showDragHandle}
+              isComposable={isComposable}
+              className={className}
             >
-              {isComposable ? (
-                // Composable layout: render children directly (sub-components)
-                children
-              ) : (
-                // Legacy layout: drag handle + children in content area
-                <>
-                  {showDragHandle && (
-                    <div className="flex items-center justify-center py-5.5">
-                      <div className="h-1 w-8 rounded-full bg-surface-variant-foreground" />
-                    </div>
-                  )}
-                  <div className="overflow-y-auto px-4 pb-4">{children}</div>
-                </>
-              )}
-            </motion.div>
-          </>
+              {children}
+            </SheetBody>
+          </motion.div>
         )}
       </AnimatePresence>
     </BottomSheetContext.Provider>
