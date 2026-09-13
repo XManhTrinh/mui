@@ -309,12 +309,18 @@ export default function RootLayout({
             </div>
           </nav>
 
+          {/* Divider between rail and drawer */}
+          {isDrawerVisible && (
+            <div className="w-px shrink-0 bg-outline-variant" />
+          )}
+
           {/* Drawer — child links for the hovered category */}
           <div
             onMouseEnter={cancelClose}
             onMouseLeave={scheduleClose}
             className={[
-              "h-full bg-surface-container border-e border-outline-variant overflow-hidden",
+              "h-full bg-surface-container overflow-hidden",
+              "rounded-e-2xl",
               "transition-[width,opacity] duration-250 ease-[cubic-bezier(0.2,0,0,1)]",
               isDrawerVisible ? "w-56 opacity-100" : "w-0 opacity-0",
             ].join(" ")}
