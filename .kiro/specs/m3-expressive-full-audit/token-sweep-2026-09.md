@@ -232,3 +232,10 @@ After the token-value sweep, every component was re-reviewed for behavioral and 
 - **DatePicker / CalendarView** — the calendar now navigates to the month/year of an externally-changed selected value via an effect keyed on the selection time.
 
 All fixes verified with `npx tsc --noEmit` (clean). No token values changed in this pass.
+
+### Follow-up pass — remaining nits (2026-09)
+
+- **Slider** ✅ Full RTL support: all physical `left` replaced with `insetInlineStart`, translate centering uses `ltr:-translate-x-1/2 rtl:translate-x-1/2`, state layer uses `start-1/2`. Active track already used logical `start-0`.
+- **NavigationRail** ✅ `NavigationRailContent` now has `role="tablist"` + `aria-orientation="vertical"`; `NavigationRailItem` gained `tabIndex={0}` + Enter/Space keyboard activation. NavigationBar was already correct.
+- **Badge** ✅ Already had `aria-hidden="true"` on dot and `aria-label` on count. No change needed.
+- **Button** ✅ Added disabled+asChild CSS guard (matching FAB/ExtendedFAB/IconButton). All button CVA calls now pass resolved (not raw) variant/size values.
