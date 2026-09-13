@@ -8,115 +8,164 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Icon, IconButton } from "@mui/index";
 
-// ─── Navigation data with child routes ────────────────────────────────────────
+// ─── Navigation structure ─────────────────────────────────────────────────────
 
-type NavChild = { label: string; href: string };
-type NavItem = {
+type NavEntry =
+  | { kind: "link"; label: string; href: string }
+  | { kind: "group"; label: string; children: { label: string; href: string }[] };
+
+/** Flat + grouped list matching the m3.material.io component drawer. */
+const componentEntries: NavEntry[] = [
+  { kind: "link", label: "Overview", href: "/" },
+  { kind: "link", label: "App bars", href: "/layout/app-bar" },
+  { kind: "link", label: "Badges", href: "/data-display/badges" },
+  {
+    kind: "group",
+    label: "Buttons",
+    children: [
+      { label: "All buttons", href: "/buttons" },
+      { label: "Button groups", href: "/buttons/button-group" },
+      { label: "Common buttons", href: "/buttons" },
+      { label: "Extended FABs", href: "/buttons/fabs" },
+      { label: "FAB menu", href: "/buttons/fabs" },
+      { label: "FABs", href: "/buttons/fabs" },
+      { label: "Icon buttons", href: "/buttons/icon-buttons" },
+      { label: "Split button", href: "/buttons/split-button" },
+    ],
+  },
+  { kind: "link", label: "Cards", href: "/data-display/cards" },
+  { kind: "link", label: "Carousel", href: "/layout/carousel" },
+  { kind: "link", label: "Checkbox", href: "/inputs/checkbox" },
+  { kind: "link", label: "Chips", href: "/data-display/chips" },
+  {
+    kind: "group",
+    label: "Date & time pickers",
+    children: [
+      { label: "Date picker", href: "/pickers/date" },
+      { label: "Time picker", href: "/pickers/time" },
+    ],
+  },
+  { kind: "link", label: "Dialogs", href: "/feedback/dialog" },
+  { kind: "link", label: "Divider", href: "/data-display/divider" },
+  { kind: "link", label: "Icon", href: "/data-display/icon" },
+  { kind: "link", label: "Lists", href: "/data-display/lists" },
+  { kind: "link", label: "Menus", href: "/feedback/menu" },
+  {
+    kind: "group",
+    label: "Navigation",
+    children: [
+      { label: "Navigation bar", href: "/navigation/bar" },
+      { label: "Navigation rail", href: "/navigation/rail" },
+    ],
+  },
+  {
+    kind: "group",
+    label: "Progress indicators",
+    children: [
+      { label: "All indicators", href: "/feedback/progress" },
+    ],
+  },
+  { kind: "link", label: "Radio", href: "/inputs/radio" },
+  { kind: "link", label: "Search", href: "/inputs/search" },
+  { kind: "link", label: "Select", href: "/inputs/select" },
+  {
+    kind: "group",
+    label: "Sheets",
+    children: [
+      { label: "Bottom sheet", href: "/layout/bottom-sheet" },
+      { label: "Side sheet", href: "/layout/side-sheet" },
+    ],
+  },
+  { kind: "link", label: "Slider", href: "/inputs/slider" },
+  { kind: "link", label: "Snackbar", href: "/feedback/snackbar" },
+  { kind: "link", label: "Switch", href: "/inputs/switch" },
+  { kind: "link", label: "Tabs", href: "/layout/tabs" },
+  { kind: "link", label: "Text fields", href: "/inputs/text-fields" },
+  { kind: "link", label: "Toolbar", href: "/layout/toolbar" },
+  { kind: "link", label: "Tooltip", href: "/data-display/tooltip" },
+  { kind: "link", label: "Typography", href: "/layout/typography" },
+];
+
+// ─── Rail items (top-level sections like m3.material.io) ──────────────────────
+
+type RailItem = {
   value: string;
   icon: string;
   label: string;
-  href: string;
-  children: NavChild[];
+  href?: string; // direct link (non-drawer items)
 };
 
-const navItems: NavItem[] = [
-  {
-    value: "buttons",
-    icon: "buttons_alt",
-    label: "Buttons",
-    href: "/buttons",
-    children: [
-      { label: "Common Buttons", href: "/buttons" },
-      { label: "Icon Buttons", href: "/buttons/icon-buttons" },
-      { label: "FABs", href: "/buttons/fabs" },
-      { label: "Split Button", href: "/buttons/split-button" },
-      { label: "Button Group", href: "/buttons/button-group" },
-    ],
-  },
-  {
-    value: "inputs",
-    icon: "input",
-    label: "Inputs",
-    href: "/inputs/text-fields",
-    children: [
-      { label: "Text Fields", href: "/inputs/text-fields" },
-      { label: "Select", href: "/inputs/select" },
-      { label: "Checkbox", href: "/inputs/checkbox" },
-      { label: "Radio", href: "/inputs/radio" },
-      { label: "Switch", href: "/inputs/switch" },
-      { label: "Slider", href: "/inputs/slider" },
-      { label: "Search", href: "/inputs/search" },
-    ],
-  },
-  {
-    value: "data-display",
-    icon: "dashboard",
-    label: "Display",
-    href: "/data-display/cards",
-    children: [
-      { label: "Cards", href: "/data-display/cards" },
-      { label: "Badges", href: "/data-display/badges" },
-      { label: "Chips", href: "/data-display/chips" },
-      { label: "Lists", href: "/data-display/lists" },
-      { label: "Tooltip", href: "/data-display/tooltip" },
-      { label: "Divider", href: "/data-display/divider" },
-      { label: "Icon", href: "/data-display/icon" },
-    ],
-  },
-  {
-    value: "feedback",
-    icon: "feedback",
-    label: "Feedback",
-    href: "/feedback/dialog",
-    children: [
-      { label: "Dialog", href: "/feedback/dialog" },
-      { label: "Snackbar", href: "/feedback/snackbar" },
-      { label: "Menu", href: "/feedback/menu" },
-      { label: "Progress", href: "/feedback/progress" },
-    ],
-  },
-  {
-    value: "navigation",
-    icon: "near_me",
-    label: "Navigation",
-    href: "/navigation/bar",
-    children: [
-      { label: "Navigation Bar", href: "/navigation/bar" },
-      { label: "Navigation Rail", href: "/navigation/rail" },
-    ],
-  },
-  {
-    value: "layout",
-    icon: "view_sidebar",
-    label: "Layout",
-    href: "/layout/app-bar",
-    children: [
-      { label: "App Bar", href: "/layout/app-bar" },
-      { label: "Tabs", href: "/layout/tabs" },
-      { label: "Bottom Sheet", href: "/layout/bottom-sheet" },
-      { label: "Side Sheet", href: "/layout/side-sheet" },
-      { label: "Toolbar", href: "/layout/toolbar" },
-      { label: "Carousel", href: "/layout/carousel" },
-      { label: "Typography", href: "/layout/typography" },
-    ],
-  },
-  {
-    value: "pickers",
-    icon: "calendar_month",
-    label: "Pickers",
-    href: "/pickers/date",
-    children: [
-      { label: "Date Picker", href: "/pickers/date" },
-      { label: "Time Picker", href: "/pickers/time" },
-    ],
-  },
+const railItems: RailItem[] = [
+  { value: "home", icon: "home", label: "Home", href: "/" },
+  { value: "components", icon: "widgets", label: "Components" },
 ];
 
-// Rail collapsed width: 80px (w-20). Expanded drawer width: 280px (w-70).
-const RAIL_W = "w-20";
-const RAIL_ML = "ml-20";
-const DRAWER_W = "w-70";
-const DRAWER_ML = "ml-70";
+// ─── Collapsible group component ──────────────────────────────────────────────
+
+function NavGroup({
+  label,
+  children,
+  pathname,
+  defaultOpen,
+}: {
+  label: string;
+  children: { label: string; href: string }[];
+  pathname: string;
+  defaultOpen: boolean;
+}) {
+  const [open, setOpen] = React.useState(defaultOpen);
+
+  // Auto-open when a child becomes active
+  React.useEffect(() => {
+    if (children.some((c) => pathname === c.href)) {
+      setOpen(true);
+    }
+  }, [pathname, children]);
+
+  return (
+    <div>
+      <button
+        onClick={() => setOpen((prev) => !prev)}
+        className={[
+          "flex items-center w-full px-4 py-3 rounded-full cursor-pointer",
+          "text-[14px] leading-5 text-[hsl(var(--on-surface-variant))]",
+          "hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors",
+          "outline-none focus-visible:ring-2 focus-visible:ring-primary",
+        ].join(" ")}
+      >
+        <span className="flex-1 text-start">{label}</span>
+        <Icon
+          name={open ? "arrow_drop_up" : "arrow_drop_down"}
+          size={20}
+          className="text-[hsl(var(--on-surface-variant))]"
+        />
+      </button>
+
+      {open && (
+        <div className="flex flex-col gap-0.5 ps-3">
+          {children.map((child) => {
+            const isActive = pathname === child.href;
+            return (
+              <Link
+                key={child.href + child.label}
+                href={child.href}
+                className={[
+                  "no-underline flex items-center px-4 py-2.5 rounded-full",
+                  "text-[14px] leading-5 transition-colors",
+                  isActive
+                    ? "bg-secondary-container text-secondary-container-foreground font-medium"
+                    : "text-[hsl(var(--on-surface-variant))] hover:bg-[hsl(var(--on-surface)/0.08)]",
+                ].join(" ")}
+              >
+                {child.label}
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
 
 // ─── Root layout ──────────────────────────────────────────────────────────────
 
@@ -127,29 +176,24 @@ export default function RootLayout({
 }) {
   const pathname = usePathname();
   const [dark, setDark] = React.useState(false);
-  // Which category drawer is open — null means collapsed rail only
-  const [openCategory, setOpenCategory] = React.useState<string | null>(null);
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  // "pinned" means the user is on a component page — drawer stays open
+  // even after the cursor leaves. On the homepage it unpins.
+  const [pinned, setPinned] = React.useState(false);
+  const closeTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   React.useEffect(() => {
     setDark(document.documentElement.classList.contains("dark"));
   }, []);
 
-  // Auto-expand the drawer for the active category on route change
+  // Pin the drawer open when on a component page; unpin on homepage
   React.useEffect(() => {
     if (pathname === "/") {
-      setOpenCategory(null);
-      return;
-    }
-    for (const item of navItems) {
-      if (
-        pathname === item.href ||
-        pathname.startsWith(item.href + "/") ||
-        pathname.startsWith("/" + item.value + "/") ||
-        pathname === "/" + item.value
-      ) {
-        setOpenCategory(item.value);
-        return;
-      }
+      setPinned(false);
+      setDrawerOpen(false);
+    } else {
+      setPinned(true);
+      setDrawerOpen(true);
     }
   }, [pathname]);
 
@@ -159,211 +203,169 @@ export default function RootLayout({
     document.documentElement.classList.toggle("dark", next);
   };
 
-  const activeValue = React.useMemo(() => {
-    for (const item of navItems) {
-      if (
-        pathname === item.href ||
-        pathname.startsWith(item.href + "/") ||
-        pathname.startsWith("/" + item.value)
-      ) {
-        return item.value;
-      }
+  // Hover open — cancel any pending close and show the drawer
+  const handleMouseEnter = () => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
     }
-    return undefined;
-  }, [pathname]);
-
-  const handleCategoryClick = (value: string) => {
-    // Toggle: clicking the same category collapses back to rail
-    setOpenCategory((prev) => (prev === value ? null : value));
+    setDrawerOpen(true);
   };
 
-  const drawerItem = navItems.find((n) => n.value === openCategory);
-  const isExpanded = !!drawerItem;
+  // Hover close — only close if not pinned. Grace period so the user
+  // can move between the rail item and the drawer.
+  const handleMouseLeave = () => {
+    if (pinned) return;
+    closeTimerRef.current = setTimeout(() => {
+      setDrawerOpen(false);
+    }, 220);
+  };
+
+  const activeRail = pathname === "/" ? "home" : "components";
 
   return (
     <html lang="en" className={dark ? "dark" : ""}>
       <body className="bg-surface text-surface-foreground min-h-screen">
-        {/* ── Sidebar ──────────────────────────────────────────────── */}
-        <aside
-          className={[
-            "fixed inset-t-0 inset-l-0 h-screen z-40 flex flex-col bg-surface-container",
-            "transition-[width] duration-300 ease-[cubic-bezier(0.2,0,0,1)] overflow-hidden",
-            isExpanded ? DRAWER_W : RAIL_W,
-          ].join(" ")}
-        >
-          {/* ── Collapsed rail view ────────────────────────────────── */}
-          {!isExpanded && (
-            <div className="flex flex-col h-full">
-              {/* Home button */}
-              <div className="flex items-center justify-center pt-3 pb-6">
-                <Link href="/">
-                  <IconButton icon="home" variant="standard" aria-label="Home" />
-                </Link>
-              </div>
+        {/* ── Sidebar: rail + drawer side by side ──────────────────── */}
+        <div className="fixed inset-t-0 inset-l-0 h-screen z-40 flex">
+          {/* Rail — always visible, 80px */}
+          <nav className="flex flex-col items-center w-20 shrink-0 bg-surface-container h-full py-3">
+            {/* Rail items */}
+            <div className="flex flex-col items-center gap-2 flex-1">
+              {railItems.map((item) => {
+                const isActive = activeRail === item.value;
+                const isComponents = item.value === "components";
 
-              {/* Category items */}
-              <nav className="flex-1 flex flex-col items-center gap-1 overflow-y-auto">
-                {navItems.map((item) => {
-                  const isActive = activeValue === item.value;
-                  return (
-                    <button
-                      key={item.value}
-                      onClick={() => handleCategoryClick(item.value)}
-                      className={[
-                        "group relative flex flex-col items-center justify-center w-full py-1 cursor-pointer outline-none",
-                        "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset rounded-lg",
-                      ].join(" ")}
-                    >
-                      {/* Indicator pill */}
-                      <span className="relative flex items-center justify-center w-14 h-8">
-                        <span
-                          className={[
-                            "absolute inset-0 rounded-full transition-[transform,opacity] duration-200 ease-[cubic-bezier(0.2,0,0,1)] origin-center",
-                            isActive
-                              ? "bg-secondary-container scale-x-100 opacity-100"
-                              : "scale-x-0 opacity-0",
-                          ].join(" ")}
-                        />
-                        {/* State layer */}
-                        <span
-                          className={[
-                            "absolute inset-0 rounded-full transition-colors duration-200",
-                            isActive
-                              ? "group-hover:bg-[hsl(var(--on-secondary-container)/0.08)]"
-                              : "group-hover:bg-[hsl(var(--on-surface-variant)/0.08)]",
-                          ].join(" ")}
-                        />
-                        <Icon
-                          name={item.icon}
-                          size={24}
-                          filled={isActive}
-                          className={[
-                            "relative z-10 transition-colors duration-200",
-                            isActive
-                              ? "text-secondary-container-foreground"
-                              : "text-[hsl(var(--on-surface-variant))]",
-                          ].join(" ")}
-                        />
-                      </span>
-                      {/* Label */}
+                const inner = (
+                  <button
+                    key={item.value}
+                    onMouseEnter={isComponents ? handleMouseEnter : undefined}
+                    onMouseLeave={isComponents ? handleMouseLeave : undefined}
+                    className={[
+                      "group relative flex flex-col items-center justify-center cursor-pointer outline-none",
+                      "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset rounded-lg py-1",
+                    ].join(" ")}
+                  >
+                    <span className="relative flex items-center justify-center w-14 h-8">
                       <span
                         className={[
-                          "text-[12px] leading-4 font-medium tracking-[0.5px] truncate mt-0.5",
-                          isActive ? "text-secondary" : "text-[hsl(var(--on-surface-variant))]",
+                          "absolute inset-0 rounded-full transition-[transform,opacity] duration-200 ease-[cubic-bezier(0.2,0,0,1)] origin-center",
+                          isActive
+                            ? "bg-secondary-container scale-x-100 opacity-100"
+                            : "scale-x-0 opacity-0",
                         ].join(" ")}
-                      >
-                        {item.label}
-                      </span>
-                    </button>
-                  );
-                })}
-              </nav>
-
-              {/* Theme toggle */}
-              <div className="flex items-center justify-center py-4">
-                <IconButton
-                  icon={dark ? "light_mode" : "dark_mode"}
-                  variant="standard"
-                  aria-label="Toggle theme"
-                  onClick={toggleTheme}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* ── Expanded drawer view ───────────────────────────────── */}
-          {isExpanded && drawerItem && (
-            <div className="flex flex-col h-full">
-              {/* Header: back arrow to collapse + category title */}
-              <div className="flex items-center gap-2 px-3 pt-3 pb-2">
-                <button
-                  onClick={() => setOpenCategory(null)}
-                  className="flex items-center justify-center size-10 rounded-full cursor-pointer hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                  aria-label="Collapse navigation"
-                >
-                  <Icon name="arrow_back" size={24} className="text-[hsl(var(--on-surface-variant))]" />
-                </button>
-                <span className="text-[14px] font-medium text-surface-foreground truncate">
-                  {drawerItem.label}
-                </span>
-              </div>
-
-              {/* Category items — compact icons row to switch categories */}
-              <div className="flex items-center gap-1 px-3 pb-3 overflow-x-auto">
-                {navItems.map((item) => {
-                  const isCurrent = item.value === openCategory;
-                  return (
-                    <button
-                      key={item.value}
-                      onClick={() => handleCategoryClick(item.value)}
-                      className={[
-                        "flex items-center justify-center size-10 shrink-0 rounded-full cursor-pointer transition-colors outline-none",
-                        "focus-visible:ring-2 focus-visible:ring-primary",
-                        isCurrent
-                          ? "bg-secondary-container"
-                          : "hover:bg-[hsl(var(--on-surface)/0.08)]",
-                      ].join(" ")}
-                      aria-label={item.label}
-                      title={item.label}
-                    >
+                      />
+                      <span
+                        className={[
+                          "absolute inset-0 rounded-full transition-colors duration-200",
+                          isActive
+                            ? "group-hover:bg-[hsl(var(--on-secondary-container)/0.08)]"
+                            : "group-hover:bg-[hsl(var(--on-surface-variant)/0.08)]",
+                        ].join(" ")}
+                      />
                       <Icon
                         name={item.icon}
-                        size={20}
-                        filled={isCurrent}
-                        className={
-                          isCurrent
+                        size={24}
+                        filled={isActive}
+                        className={[
+                          "relative z-10 transition-colors duration-200",
+                          isActive
                             ? "text-secondary-container-foreground"
-                            : "text-[hsl(var(--on-surface-variant))]"
-                        }
+                            : "text-[hsl(var(--on-surface-variant))]",
+                        ].join(" ")}
                       />
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Divider */}
-              <div className="h-px bg-outline-variant mx-3" />
-
-              {/* Child links */}
-              <nav className="flex-1 flex flex-col gap-0.5 px-3 py-2 overflow-y-auto">
-                {drawerItem.children.map((child) => {
-                  const isChildActive = pathname === child.href;
-                  return (
-                    <Link
-                      key={child.href}
-                      href={child.href}
+                    </span>
+                    <span
                       className={[
-                        "no-underline flex items-center px-4 py-2.5 rounded-full",
-                        "text-[14px] leading-5 transition-colors",
-                        isChildActive
-                          ? "bg-secondary-container text-secondary-container-foreground font-medium"
-                          : "text-[hsl(var(--on-surface-variant))] hover:bg-[hsl(var(--on-surface)/0.08)]",
+                        "text-[12px] leading-4 font-medium tracking-[0.5px] mt-0.5",
+                        isActive ? "text-secondary" : "text-[hsl(var(--on-surface-variant))]",
                       ].join(" ")}
                     >
-                      {child.label}
+                      {item.label}
+                    </span>
+                  </button>
+                );
+
+                // Home links directly; Components toggles the drawer
+                if (item.href) {
+                  return (
+                    <Link key={item.value} href={item.href} className="no-underline">
+                      {inner}
                     </Link>
+                  );
+                }
+                return <React.Fragment key={item.value}>{inner}</React.Fragment>;
+              })}
+            </div>
+
+            {/* Theme toggle at bottom */}
+            <div className="pt-2">
+              <IconButton
+                icon={dark ? "light_mode" : "dark_mode"}
+                variant="standard"
+                aria-label="Toggle theme"
+                onClick={toggleTheme}
+              />
+            </div>
+          </nav>
+
+          {/* Drawer — slides in from the right of the rail */}
+          <div
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            className={[
+              "h-full bg-surface-container border-e border-outline-variant overflow-hidden",
+              "transition-[width,opacity] duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
+              drawerOpen ? "w-70 opacity-100" : "w-0 opacity-0",
+            ].join(" ")}
+          >
+            <div className="w-70 h-full flex flex-col">
+              {/* Drawer content — scrollable list */}
+              <nav className="flex-1 overflow-y-auto px-3 py-3 flex flex-col gap-0.5">
+                {componentEntries.map((entry, i) => {
+                  if (entry.kind === "link") {
+                    const isActive = pathname === entry.href;
+                    return (
+                      <Link
+                        key={entry.href + i}
+                        href={entry.href}
+                        className={[
+                          "no-underline flex items-center px-4 py-3 rounded-full",
+                          "text-[14px] leading-5 transition-colors",
+                          isActive
+                            ? "bg-secondary-container text-secondary-container-foreground font-medium"
+                            : "text-[hsl(var(--on-surface-variant))] hover:bg-[hsl(var(--on-surface)/0.08)]",
+                        ].join(" ")}
+                      >
+                        {entry.label}
+                      </Link>
+                    );
+                  }
+
+                  // Collapsible group
+                  const hasActiveChild = entry.children.some(
+                    (c) => pathname === c.href
+                  );
+                  return (
+                    <NavGroup
+                      key={entry.label}
+                      label={entry.label}
+                      children={entry.children}
+                      pathname={pathname}
+                      defaultOpen={hasActiveChild}
+                    />
                   );
                 })}
               </nav>
-
-              {/* Footer: theme toggle */}
-              <div className="flex items-center px-3 py-3 border-t border-outline-variant">
-                <IconButton
-                  icon={dark ? "light_mode" : "dark_mode"}
-                  variant="standard"
-                  aria-label="Toggle theme"
-                  onClick={toggleTheme}
-                />
-              </div>
             </div>
-          )}
-        </aside>
+          </div>
+        </div>
 
-        {/* ── Main content — pushes over with the sidebar ──────────── */}
+        {/* ── Main content — pushes with the sidebar ───────────────── */}
         <div
           className={[
             "transition-[margin-left] duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
-            isExpanded ? DRAWER_ML : RAIL_ML,
+            drawerOpen ? "ml-[360px]" : "ml-20",
           ].join(" ")}
         >
           <main className="p-8 max-w-240">{children}</main>
