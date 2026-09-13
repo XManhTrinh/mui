@@ -259,9 +259,9 @@ export function SnackbarProvider({
   const visible = queue.slice(0, maxVisible);
 
   const positionClasses = {
-    "bottom-left": "items-start inset-l-4",
-    "bottom-center": "items-center inset-l-1/2 -translate-x-1/2",
-    "bottom-right": "items-end inset-r-4",
+    "bottom-left": "items-start left-4",
+    "bottom-center": "items-center left-1/2 -translate-x-1/2",
+    "bottom-right": "items-end right-4",
   };
 
   return (
@@ -271,11 +271,11 @@ export function SnackbarProvider({
       {/* Snackbar container — fixed at bottom */}
       <div
         className={cn(
-          "fixed inset-b-4 z-70 flex flex-col gap-2 w-full max-w-140 pointer-events-none",
+          "fixed bottom-4 z-70 flex flex-col gap-2 w-full max-w-140 pointer-events-none",
           // Mobile: 16dp margins, centered
-          "max-sm:inset-l-4 max-sm:inset-r-4 max-sm:w-[calc(100%-32px)]",
+          "max-sm:left-4 max-sm:right-4 max-sm:w-[calc(100%-32px)]",
           // Above mobile nav (bottom-20 ~ 80px for nav bar clearance)
-          "max-sm:inset-b-20",
+          "max-sm:bottom-20",
           // Desktop: position-based
           "sm:" + positionClasses[position]
         )}

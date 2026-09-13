@@ -205,7 +205,7 @@ export default function RootLayout({
     <html lang="en" className={dark ? "dark" : ""}>
       <body className="bg-surface text-surface-foreground min-h-screen">
         {/* ── Sidebar: rail + drawer ───────────────────────────────── */}
-        <div className="fixed inset-t-0 inset-l-0 h-screen z-40 flex">
+        <div className="fixed top-0 left-0 h-screen z-40 flex">
           {/* Rail — always visible (80px) */}
           <nav className="flex flex-col items-center w-20 shrink-0 bg-surface-container h-full py-3 z-10">
             {/* Home */}

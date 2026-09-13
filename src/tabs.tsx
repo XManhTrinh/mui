@@ -226,7 +226,7 @@ function TabList({ className, children }: TabListProps) {
           doesn't flash a phantom 24dp stub at the origin before layout. */}
       {indicatorStyle.width > 0 && (
         <span
-          className="absolute inset-b-0 bg-primary transition-[left,width] duration-200 ease-[cubic-bezier(0.2,0,0,1)]"
+          className="absolute bottom-0 bg-primary transition-[left,width] duration-200 ease-[cubic-bezier(0.2,0,0,1)]"
           style={{
             left: `${indicatorStyle.left}px`,
             width: `${indicatorStyle.width}px`,

@@ -160,7 +160,7 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
         {showValueIndicator && (
           <div
             className={cn(
-              "absolute -inset-t-12 pointer-events-none z-10",
+              "absolute -top-12 pointer-events-none z-10",
               // Center on the thumb position: shift by -50% own width in LTR, +50% in RTL.
               "ltr:-translate-x-1/2 rtl:translate-x-1/2",
               "flex items-center justify-center w-12 h-11 rounded-full",
@@ -207,7 +207,7 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
               <span
                 key={pct}
                 className={cn(
-                  "absolute inset-t-1/2 -translate-y-1/2 ltr:-translate-x-1/2 rtl:translate-x-1/2 w-1 h-1 rounded-full pointer-events-none",
+                  "absolute top-1/2 -translate-y-1/2 ltr:-translate-x-1/2 rtl:translate-x-1/2 w-1 h-1 rounded-full pointer-events-none",
                   pct <= percentage
                     ? "bg-[hsl(var(--on-primary))]"
                     : "bg-[hsl(var(--on-secondary-container))]"
@@ -221,7 +221,7 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
         {/* Visual handle (thumb) — per-size height, 4dp width (6dp on large+/interacting) */}
         <div
           className={cn(
-            "absolute inset-t-1/2 -translate-y-1/2 ltr:-translate-x-1/2 rtl:translate-x-1/2 rounded-full",
+            "absolute top-1/2 -translate-y-1/2 ltr:-translate-x-1/2 rtl:translate-x-1/2 rounded-full",
             sz.handleW,
             sz.handle,
             "transition-[width,background-color] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
@@ -235,7 +235,7 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
           {/* State layer — 48dp touch area indicator */}
           <span
             className={cn(
-              "absolute inset-t-1/2 inset-s-1/2 ltr:-translate-x-1/2 rtl:translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full",
+              "absolute top-1/2 inset-s-1/2 ltr:-translate-x-1/2 rtl:translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full",
               "transition-colors duration-200 pointer-events-none",
               // Press (10%) takes precedence, then focus (10%), then hover (8%).
               !disabled && isInteracting && "bg-[hsl(var(--primary)/0.10)]",

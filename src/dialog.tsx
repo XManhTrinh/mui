@@ -235,7 +235,7 @@ const DialogContent = React.forwardRef<
               "inset-0 rounded-none flex flex-col",
               "bg-surface-container-high shadow-none",
               // ── Desktop (sm+): centered dialog fallback ──
-              "sm:inset-auto sm:inset-l-[50%] sm:inset-t-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%]",
+              "sm:inset-auto sm:left-[50%] sm:top-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%]",
               "sm:w-full sm:min-w-70 sm:max-w-140 sm:max-h-[90vh]",
               "sm:rounded-(--corner-extra-large,28px)",
               className
@@ -302,7 +302,7 @@ const DialogContent = React.forwardRef<
           }
           className={cn(
             "fixed z-50",
-            "inset-l-[50%] inset-t-[50%] translate-x-[-50%] translate-y-[-50%]",
+            "left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]",
             "w-[calc(100%-2rem)] sm:w-full",
             "min-w-70 max-w-140",
             "max-h-[90vh]",
@@ -356,7 +356,7 @@ const DialogContent = React.forwardRef<
 
           {/* ── Close button (opt-in for basic) ── */}
           {showClose && (
-            <DialogPrimitive.Close className="absolute inset-r-4 inset-t-4 flex items-center justify-center w-10 h-10 rounded-full text-surface-variant-foreground cursor-pointer hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+            <DialogPrimitive.Close className="absolute right-4 top-4 flex items-center justify-center w-10 h-10 rounded-full text-surface-variant-foreground cursor-pointer hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
               <Icon name="close" size={20} />
               <span className="sr-only">Close</span>
             </DialogPrimitive.Close>

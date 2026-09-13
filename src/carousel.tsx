@@ -185,7 +185,7 @@ function Carousel({
             type="button"
             onClick={() => scrollBy(-1)}
             className={cn(
-              "absolute inset-l-2 inset-t-1/2 -translate-y-1/2 z-10",
+              "absolute left-2 top-1/2 -translate-y-1/2 z-10",
               "flex items-center justify-center w-12 h-12 rounded-full cursor-pointer",
               "bg-surface text-surface-foreground shadow-[0_2px_6px_hsl(var(--elevation-2)),0_1px_2px_hsl(var(--elevation-1))]",
               "opacity-0 group-hover/carousel:opacity-100 transition-opacity",
@@ -202,7 +202,7 @@ function Carousel({
             type="button"
             onClick={() => scrollBy(1)}
             className={cn(
-              "absolute inset-r-2 inset-t-1/2 -translate-y-1/2 z-10",
+              "absolute right-2 top-1/2 -translate-y-1/2 z-10",
               "flex items-center justify-center w-12 h-12 rounded-full cursor-pointer",
               "bg-surface text-surface-foreground shadow-[0_2px_6px_hsl(var(--elevation-2)),0_1px_2px_hsl(var(--elevation-1))]",
               "opacity-0 group-hover/carousel:opacity-100 transition-opacity",
