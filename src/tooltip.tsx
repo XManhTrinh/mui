@@ -219,11 +219,9 @@ function TooltipSurface({
   React.useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
-    // Wait one frame so the browser computes layout at the hidden position
-    requestAnimationFrame(() => {
-      const rect = el.getBoundingClientRect();
-      setPos(computePosition(anchor, rect, preferred, gap));
-    });
+    // Read the intrinsic dimensions from the offscreen-rendered tooltip
+    const { width, height } = el.getBoundingClientRect();
+    setPos(computePosition(anchor, { width, height }, preferred, gap));
   }, [anchor, preferred, gap]);
 
   const resolved = pos?.side ?? preferred;
