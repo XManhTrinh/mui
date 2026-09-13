@@ -58,12 +58,13 @@ const iconButtonVariants = cva(
         outlined:
           "bg-transparent border border-outline text-surface-variant-foreground",
       },
+      // M3 Expressive icon-button size scale: 32/40/56/96/136dp containers.
       size: {
-        xs: "size-8 [&_svg]:size-[18px]",
+        xs: "size-8 [&_svg]:size-5",
         s: "size-10 [&_svg]:size-6",
-        m: "size-12 [&_svg]:size-6",
-        l: "size-14 [&_svg]:size-7",
-        xl: "size-16 [&_svg]:size-8",
+        m: "size-14 [&_svg]:size-6",
+        l: "size-24 [&_svg]:size-8",
+        xl: "size-34 [&_svg]:size-10",
       },
     },
     defaultVariants: {
@@ -74,14 +75,14 @@ const iconButtonVariants = cva(
 );
 
 /**
- * Proportional icon sizes per container size (M3 Expressive ~60% ratio).
+ * Proportional icon glyph sizes per container size (M3 Expressive).
  */
 const iconSizeMap = {
-  xs: 18,
+  xs: 20,
   s: 24,
   m: 24,
-  l: 28,
-  xl: 32,
+  l: 32,
+  xl: 40,
 } as const;
 
 /**
@@ -94,8 +95,8 @@ const shapeClasses = {
     xs: "rounded-full active:rounded-lg",
     s: "rounded-full active:rounded-xl",
     m: "rounded-full active:rounded-xl",
-    l: "rounded-full active:rounded-2xl",
-    xl: "rounded-full active:rounded-2xl",
+    l: "rounded-full active:rounded-[28px]",
+    xl: "rounded-full active:rounded-[28px]",
   },
   square: {
     xs: "rounded-xl active:rounded-lg",

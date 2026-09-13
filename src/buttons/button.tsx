@@ -18,22 +18,18 @@ import {
  * icon support, loading state, and shape morph on press.
  *
  * Shapes: round (default) or square (pass `square` prop).
- * Sizes: xs (32dp), s (40dp, default), m (48dp), l (56dp), xl (64dp).
- *
- * NOTE: M3 Expressive defines a taller reference height scale (commonly cited
- * XS 32 / S 40 / M 56 / L 96 / XL 136dp). This library ships a more compact
- * scale (XS 32 / S 40 / M 48 / L 56 / XL 64) that matches XS/S exactly. Raising
- * M/L/XL to the tall Expressive values is a deliberate, high-blast-radius change
- * that must be confirmed against the spec + consumers before changing — see
- * `.kiro/specs/m3-expressive-full-audit/token-sweep-2026-09.md` (item A2/B1).
+ * Sizes (M3 Expressive height scale): xs (32dp), s (40dp, default), m (56dp),
+ * l (96dp), xl (136dp). Typography and icon size scale with height:
+ * xs/s = Label Large 14 + 20dp icon, m = Title Medium 16 + 24dp icon,
+ * l = Headline Small 24 + 32dp icon, xl = Headline Large 32 + 40dp icon.
  */
 
 const buttonVariants = cva(
   [
     // Layout
     "relative inline-flex items-center justify-center whitespace-nowrap",
-    // Typography: font-weight and tracking shared, size per variant
-    "font-medium tracking-[0.1px]",
+    // Weight shared; size sets font-size/line-height/tracking (typography scales in Expressive)
+    "font-medium",
     // Shared interaction + state layer + focus + transition + icon primitives
     buttonBase,
     // Disabled
@@ -48,12 +44,14 @@ const buttonVariants = cva(
         elevated: cn(buttonVariantColors.elevated, buttonVariantHoverElevation.elevated),
         tonal: cn(buttonVariantColors.tonal, buttonVariantHoverElevation.tonal),
       },
+      // M3 Expressive size scale: heights 32/40/56/96/136dp with typography and
+      // icon size scaling up per size (Label Large → Title Medium → Headline).
       size: {
-        xs: "h-8 px-4 gap-1.5 text-[12px] leading-4 [&_svg]:size-[18px]",
-        s: "h-10 px-6 gap-2 text-[14px] leading-5 [&_svg]:size-5",
-        m: "h-12 px-7 gap-2 text-[14px] leading-5 [&_svg]:size-6",
-        l: "h-14 px-8 gap-2 text-[16px] leading-6 [&_svg]:size-6",
-        xl: "h-16 px-8 gap-3 text-[16px] leading-6 [&_svg]:size-7",
+        xs: "h-8 px-3 gap-2 text-[14px] leading-5 tracking-[0.1px] [&_svg]:size-5",
+        s: "h-10 px-4 gap-2 text-[14px] leading-5 tracking-[0.1px] [&_svg]:size-5",
+        m: "h-14 px-6 gap-2 text-[16px] leading-6 tracking-[0.15px] [&_svg]:size-6",
+        l: "h-24 px-12 gap-3 text-[24px] leading-8 tracking-normal [&_svg]:size-8",
+        xl: "h-34 px-16 gap-3 text-[32px] leading-10 tracking-normal [&_svg]:size-10",
       },
     },
     defaultVariants: {
@@ -65,18 +63,18 @@ const buttonVariants = cva(
 
 /**
  * Shape classes: round uses rounded-full, square uses size-dependent radii.
- * Pressed morph reduces radius for both shapes.
- * M3 spec corner radii:
- *   Square resting: xs=12dp, s=12dp, m=16dp, l=28dp, xl=28dp
- *   Pressed: xs=8dp, s=8dp, m=12dp, l=16dp, xl=16dp
+ * Pressed morph changes radius for both shapes (M3 Expressive shape morph).
+ * M3 Expressive square resting corner radii scale with size:
+ *   xs=12dp, s=12dp, m=16dp, l=28dp, xl=28dp
+ * Round pressed-morph target grows with the (now taller) sizes.
  */
 const shapeClasses = {
   round: {
     xs: "rounded-full active:rounded-lg",
     s: "rounded-full active:rounded-lg",
     m: "rounded-full active:rounded-xl",
-    l: "rounded-full active:rounded-2xl",
-    xl: "rounded-full active:rounded-2xl",
+    l: "rounded-full active:rounded-[28px]",
+    xl: "rounded-full active:rounded-[28px]",
   },
   square: {
     xs: "rounded-xl active:rounded-lg",
@@ -92,11 +90,11 @@ const shapeClasses = {
 // trailing icon padding mirrors correctly under RTL. Format is always "ps-* pe-*"
 // (start first, end second) — the combined leading+trailing case below relies on it.
 const iconPaddingMap = {
-  xs: { icon: "ps-2 pe-4", trailing: "ps-4 pe-2" },
-  s: { icon: "ps-4 pe-6", trailing: "ps-6 pe-4" },
-  m: { icon: "ps-5 pe-7", trailing: "ps-7 pe-5" },
-  l: { icon: "ps-6 pe-8", trailing: "ps-8 pe-6" },
-  xl: { icon: "ps-6 pe-8", trailing: "ps-8 pe-6" },
+  xs: { icon: "ps-2 pe-3", trailing: "ps-3 pe-2" },
+  s: { icon: "ps-3 pe-4", trailing: "ps-4 pe-3" },
+  m: { icon: "ps-4 pe-6", trailing: "ps-6 pe-4" },
+  l: { icon: "ps-10 pe-12", trailing: "ps-12 pe-10" },
+  xl: { icon: "ps-14 pe-16", trailing: "ps-16 pe-14" },
 } as const;
 
 function ButtonSpinner({ className }: { className?: string }) {
