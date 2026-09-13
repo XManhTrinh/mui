@@ -2,6 +2,7 @@
   "name": "@vkieu/mui",
   "version": "1.0.0",
   "description": "Material Design 3 Expressive component library for React & Next.js",
+  "packageManager": "pnpm@9.15.4",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
