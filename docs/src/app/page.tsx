@@ -27,13 +27,31 @@ import Link from "next/link";
 
 // ─── Category data ────────────────────────────────────────────────────────────
 
-const categories = [
+type ComponentLink = { name: string; href: string };
+
+const categories: {
+  title: string;
+  icon: string;
+  href: string;
+  description: string;
+  components: ComponentLink[];
+  color: string;
+  iconColor: string;
+}[] = [
   {
     title: "Buttons",
     icon: "buttons_alt",
     href: "/buttons",
     description: "Common buttons, icon buttons, FABs, split buttons, and button groups",
-    components: ["Button", "IconButton", "FAB", "ExtendedFAB", "FABMenu", "SplitButton", "ButtonGroup"],
+    components: [
+      { name: "Button", href: "/buttons" },
+      { name: "IconButton", href: "/buttons/icon-buttons" },
+      { name: "FAB", href: "/buttons/fabs" },
+      { name: "ExtendedFAB", href: "/buttons/fabs" },
+      { name: "FABMenu", href: "/buttons/fabs" },
+      { name: "SplitButton", href: "/buttons/split-button" },
+      { name: "ButtonGroup", href: "/buttons/button-group" },
+    ],
     color: "bg-primary-container",
     iconColor: "text-primary-container-foreground",
   },
@@ -42,7 +60,15 @@ const categories = [
     icon: "input",
     href: "/inputs/text-fields",
     description: "Text fields, selects, checkboxes, radios, switches, sliders, and search",
-    components: ["TextField", "Select", "Checkbox", "Radio", "Switch", "Slider", "Search"],
+    components: [
+      { name: "TextField", href: "/inputs/text-fields" },
+      { name: "Select", href: "/inputs/select" },
+      { name: "Checkbox", href: "/inputs/checkbox" },
+      { name: "Radio", href: "/inputs/radio" },
+      { name: "Switch", href: "/inputs/switch" },
+      { name: "Slider", href: "/inputs/slider" },
+      { name: "Search", href: "/inputs/search" },
+    ],
     color: "bg-secondary-container",
     iconColor: "text-secondary-container-foreground",
   },
@@ -51,7 +77,15 @@ const categories = [
     icon: "dashboard",
     href: "/data-display/cards",
     description: "Cards, badges, chips, lists, tooltips, dividers, and icons",
-    components: ["Card", "Badge", "Chip", "List", "Tooltip", "Divider", "Icon"],
+    components: [
+      { name: "Card", href: "/data-display/cards" },
+      { name: "Badge", href: "/data-display/badges" },
+      { name: "Chip", href: "/data-display/chips" },
+      { name: "List", href: "/data-display/lists" },
+      { name: "Tooltip", href: "/data-display/tooltip" },
+      { name: "Divider", href: "/data-display/divider" },
+      { name: "Icon", href: "/data-display/icon" },
+    ],
     color: "bg-tertiary-container",
     iconColor: "text-tertiary-container-foreground",
   },
@@ -60,7 +94,12 @@ const categories = [
     icon: "feedback",
     href: "/feedback/dialog",
     description: "Dialogs, snackbars, menus, and progress indicators",
-    components: ["Dialog", "Snackbar", "Menu", "Progress", "LoadingIndicator"],
+    components: [
+      { name: "Dialog", href: "/feedback/dialog" },
+      { name: "Snackbar", href: "/feedback/snackbar" },
+      { name: "Menu", href: "/feedback/menu" },
+      { name: "Progress", href: "/feedback/progress" },
+    ],
     color: "bg-primary-container",
     iconColor: "text-primary-container-foreground",
   },
@@ -69,7 +108,10 @@ const categories = [
     icon: "near_me",
     href: "/navigation/bar",
     description: "Bottom navigation bars and side navigation rails",
-    components: ["NavigationBar", "NavigationRail"],
+    components: [
+      { name: "NavigationBar", href: "/navigation/bar" },
+      { name: "NavigationRail", href: "/navigation/rail" },
+    ],
     color: "bg-secondary-container",
     iconColor: "text-secondary-container-foreground",
   },
@@ -78,7 +120,15 @@ const categories = [
     icon: "view_sidebar",
     href: "/layout/app-bar",
     description: "App bars, tabs, sheets, toolbars, carousels, and typography",
-    components: ["AppBar", "Tabs", "BottomSheet", "SideSheet", "Toolbar", "Carousel", "Typography"],
+    components: [
+      { name: "AppBar", href: "/layout/app-bar" },
+      { name: "Tabs", href: "/layout/tabs" },
+      { name: "BottomSheet", href: "/layout/bottom-sheet" },
+      { name: "SideSheet", href: "/layout/side-sheet" },
+      { name: "Toolbar", href: "/layout/toolbar" },
+      { name: "Carousel", href: "/layout/carousel" },
+      { name: "Typography", href: "/layout/typography" },
+    ],
     color: "bg-tertiary-container",
     iconColor: "text-tertiary-container-foreground",
   },
@@ -87,7 +137,10 @@ const categories = [
     icon: "calendar_month",
     href: "/pickers/date",
     description: "Calendar date pickers and time input pickers",
-    components: ["DatePicker", "DatePickerModal", "TimePicker"],
+    components: [
+      { name: "DatePicker", href: "/pickers/date" },
+      { name: "TimePicker", href: "/pickers/time" },
+    ],
     color: "bg-primary-container",
     iconColor: "text-primary-container-foreground",
   },
@@ -276,13 +329,17 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {categories.map((cat) => (
-            <Link key={cat.title} href={cat.href} className="no-underline group">
-              <Card variant="elevated" interactive className="h-full transition-shadow duration-200 group-hover:shadow-lg">
-                <CardContent className="space-y-4">
-                  {/* Header */}
+            <Card
+              key={cat.title}
+              variant="elevated"
+              className="h-full flex flex-col"
+            >
+              <CardContent className="flex flex-col gap-4 flex-1">
+                {/* Header — links to the category overview */}
+                <Link href={cat.href} className="no-underline group/head">
                   <div className="flex items-center gap-3">
                     <div
-                      className={`flex items-center justify-center size-12 rounded-2xl ${cat.color}`}
+                      className={`flex items-center justify-center size-12 rounded-2xl shrink-0 ${cat.color}`}
                     >
                       <Icon
                         name={cat.icon}
@@ -290,42 +347,52 @@ export default function HomePage() {
                         className={cat.iconColor}
                       />
                     </div>
-                    <div>
-                      <Typography variant="title-medium">{cat.title}</Typography>
-                      <Typography variant="label-small" color="surface-variant-foreground">
+                    <div className="min-w-0">
+                      <Typography variant="title-medium" className="group-hover/head:text-primary transition-colors">
+                        {cat.title}
+                      </Typography>
+                      <Typography
+                        variant="label-small"
+                        color="surface-variant-foreground"
+                      >
                         {cat.components.length} components
                       </Typography>
                     </div>
+                    <Icon
+                      name="arrow_forward"
+                      size={18}
+                      className="ms-auto text-[hsl(var(--on-surface-variant))] opacity-0 -translate-x-1 group-hover/head:opacity-100 group-hover/head:translate-x-0 transition-all duration-200"
+                    />
                   </div>
+                </Link>
 
-                  {/* Description */}
-                  <Typography variant="body-small" color="surface-variant-foreground">
-                    {cat.description}
-                  </Typography>
+                {/* Description */}
+                <Typography
+                  variant="body-small"
+                  color="surface-variant-foreground"
+                >
+                  {cat.description}
+                </Typography>
 
-                  {/* Component chips */}
-                  <div className="flex flex-wrap gap-1.5">
-                    {cat.components.slice(0, 5).map((comp) => (
-                      <Chip
-                        key={comp}
-                        variant="assist"
-                        className="h-6 text-[11px] px-2.5"
-                      >
-                        {comp}
-                      </Chip>
-                    ))}
-                    {cat.components.length > 5 && (
+                {/* Component chips — each links to its own page */}
+                <div className="flex flex-wrap gap-1.5 mt-auto">
+                  {cat.components.map((comp) => (
+                    <Link
+                      key={comp.name}
+                      href={comp.href}
+                      className="no-underline"
+                    >
                       <Chip
                         variant="assist"
-                        className="h-6 text-[11px] px-2.5"
+                        className="h-7 text-[11px] px-2.5 hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors cursor-pointer"
                       >
-                        +{cat.components.length - 5} more
+                        {comp.name}
                       </Chip>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
+                    </Link>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </section>
