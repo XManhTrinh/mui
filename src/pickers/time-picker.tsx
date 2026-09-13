@@ -154,7 +154,7 @@ function TimePickerInput({
           disabled={disabled}
           aria-label="Hour"
           className={cn(
-            "h-18 w-24 rounded-2xl bg-surface-container-highest text-center text-[24px] font-normal text-surface-foreground cursor-text",
+            "h-20 w-24 rounded-lg bg-surface-container-highest text-center text-[45px] leading-none font-normal text-surface-foreground cursor-text",
             "outline-none focus-visible:ring-2 focus-visible:ring-primary",
             "transition-colors duration-100"
           )}
@@ -162,7 +162,7 @@ function TimePickerInput({
       </div>
 
       {/* Separator */}
-      <span className="mx-1 mt-5 text-[16px] font-medium text-surface-foreground">
+      <span className="mx-1 mt-5 text-[45px] leading-none font-normal text-surface-foreground">
         :
       </span>
 
@@ -180,7 +180,7 @@ function TimePickerInput({
           disabled={disabled}
           aria-label="Minute"
           className={cn(
-            "h-18 w-24 rounded-2xl bg-surface-container-highest text-center text-[24px] font-normal text-surface-foreground cursor-text",
+            "h-20 w-24 rounded-lg bg-surface-container-highest text-center text-[45px] leading-none font-normal text-surface-foreground cursor-text",
             "outline-none focus-visible:ring-2 focus-visible:ring-primary",
             "transition-colors duration-100"
           )}
@@ -189,7 +189,7 @@ function TimePickerInput({
 
       {/* AM/PM selector (12h only) */}
       {is12h && (
-        <div className="ms-3 mt-5 flex h-18 w-13 flex-col overflow-hidden rounded-2xl border border-outline">
+        <div className="ms-3 mt-5 flex h-20 w-13 flex-col overflow-hidden rounded-lg border border-outline">
           <button
             type="button"
             disabled={disabled}
