@@ -243,10 +243,13 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         className={cn(
           iconButtonVariants({ variant: effectiveVariant, size }),
           shapeClass,
+          // Native `disabled` is ignored when slotted onto a non-button
+          // element (e.g. a link), so enforce the affordance in CSS.
+          asChild && disabled && "opacity-[0.38] pointer-events-none cursor-not-allowed",
           className
         )}
         ref={ref}
-        disabled={disabled}
+        disabled={asChild ? undefined : disabled}
         aria-disabled={disabled ? true : undefined}
         aria-pressed={toggle ? isPressed : undefined}
         tabIndex={disabled ? -1 : undefined}

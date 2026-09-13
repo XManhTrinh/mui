@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot, Slottable } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../lib/utils";
@@ -181,16 +181,20 @@ const FAB = React.forwardRef<HTMLButtonElement, FABProps>(
           fabVariants({ color, size }),
           shapeClass,
           loading && "pointer-events-none",
+          // When rendered `asChild` (e.g. as a link) the native `disabled`
+          // attribute is ignored, so enforce the disabled affordance in CSS.
+          asChild && disabled && "pointer-events-none opacity-100",
           className
         )}
         ref={ref}
-        disabled={disabled}
+        disabled={asChild ? undefined : disabled}
+        aria-disabled={disabled ? true : undefined}
         aria-busy={loading ? true : undefined}
         tabIndex={disabled ? -1 : undefined}
         {...props}
       >
         {loading ? <FABSpinner className={spinnerSize[resolvedSize]} /> : icon}
-        {children}
+        <Slottable>{children}</Slottable>
       </Comp>
     );
   }

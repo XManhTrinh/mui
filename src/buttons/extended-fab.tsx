@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot, Slottable } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../lib/utils";
@@ -130,6 +130,11 @@ export type ExtendedFABProps = React.ButtonHTMLAttributes<HTMLButtonElement> & V
   size?: "small" | "medium" | "large";
   /** Loading state */
   loading?: boolean;
+  /**
+   * The slottable element when `asChild` is set (e.g. an `<a>`). The
+   * icon and label are composed inside it. Ignored when `asChild` is false.
+   */
+  children?: React.ReactNode;
 }
 
 const ExtendedFAB = React.forwardRef<HTMLButtonElement, ExtendedFABProps>(
@@ -143,6 +148,7 @@ const ExtendedFAB = React.forwardRef<HTMLButtonElement, ExtendedFABProps>(
       label,
       loading = false,
       disabled = false,
+      children,
       ...props
     },
     ref
@@ -150,21 +156,38 @@ const ExtendedFAB = React.forwardRef<HTMLButtonElement, ExtendedFABProps>(
     const Comp = asChild ? Slot : "button";
     const resolvedSize = size ?? "small";
 
+    const content = (
+      <>
+        {loading ? <ExtendedFABSpinner className={efabSpinnerSize[resolvedSize]} /> : icon}
+        <span>{label}</span>
+      </>
+    );
+
     return (
       <Comp
         className={cn(
           extendedFabVariants({ color, size }),
           loading && "pointer-events-none",
+          // Native `disabled` is ignored when slotted onto a non-button
+          // element (e.g. a link), so enforce the affordance in CSS.
+          asChild && disabled && "pointer-events-none",
           className
         )}
         ref={ref}
-        disabled={disabled}
+        disabled={asChild ? undefined : disabled}
+        aria-disabled={disabled ? true : undefined}
         aria-busy={loading ? true : undefined}
         tabIndex={disabled ? -1 : undefined}
         {...props}
       >
-        {loading ? <ExtendedFABSpinner className={efabSpinnerSize[resolvedSize]} /> : icon}
-        <span>{label}</span>
+        {asChild ? (
+          <>
+            {content}
+            <Slottable>{children}</Slottable>
+          </>
+        ) : (
+          content
+        )}
       </Comp>
     );
   }
