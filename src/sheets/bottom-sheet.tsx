@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useMotionValue, useTransform } from "motion/react";
 
 import { cn } from "../lib/utils";
 
@@ -28,16 +28,24 @@ export function useBottomSheet(): BottomSheetContextValue {
 
 // ─── Sub-Components ───────────────────────────────────────────────────────────
 
-export type BottomSheetHandleProps = { className?: string };
+export type BottomSheetHandleProps = {
+  className?: string;
+  /** @internal Pointer handler for drag-to-dismiss (set by BottomSheet root) */
+  onPointerDown?: React.PointerEventHandler;
+};
 
 export const BottomSheetHandle = React.forwardRef<
   HTMLDivElement,
   BottomSheetHandleProps
->(function BottomSheetHandle({ className }, ref) {
+>(function BottomSheetHandle({ className, onPointerDown }, ref) {
   return (
     <div
       ref={ref}
-      className={cn("flex items-center justify-center py-5.5", className)}
+      className={cn(
+        "flex items-center justify-center py-5.5 cursor-grab active:cursor-grabbing touch-none",
+        className
+      )}
+      onPointerDown={onPointerDown}
     >
       <div className="h-1 w-8 rounded-full bg-surface-variant-foreground" />
     </div>
@@ -127,11 +135,13 @@ function hasCompoundChildren(children: React.ReactNode): boolean {
 function SheetBody({
   showDragHandle,
   isComposable,
+  onDragHandlePointerDown,
   className,
   children,
 }: {
   showDragHandle: boolean;
   isComposable: boolean;
+  onDragHandlePointerDown?: React.PointerEventHandler;
   className?: string;
   children: React.ReactNode;
 }) {
@@ -149,7 +159,10 @@ function SheetBody({
       ) : (
         <>
           {showDragHandle && (
-            <div className="flex items-center justify-center py-5.5">
+            <div
+              className="flex items-center justify-center py-5.5 cursor-grab active:cursor-grabbing touch-none"
+              onPointerDown={onDragHandlePointerDown}
+            >
               <div className="h-1 w-8 rounded-full bg-surface-variant-foreground" />
             </div>
           )}
@@ -211,6 +224,27 @@ function BottomSheetRoot({
     [open, onOpenChange, variant]
   );
 
+  // ── Drag-to-dismiss ─────────────────────────────────────────────
+  const dragY = useMotionValue(0);
+  const sheetRef = React.useRef<HTMLDivElement>(null);
+
+  // Fade the scrim as the sheet is dragged down
+  const scrimOpacity = useTransform(dragY, [0, 300], [1, 0]);
+
+  const handleDragEnd = React.useCallback(
+    (_: unknown, info: { offset: { y: number }; velocity: { y: number } }) => {
+      const sheetHeight = sheetRef.current?.offsetHeight ?? 400;
+      const threshold = sheetHeight * 0.3;
+      // Dismiss if dragged far enough or flicked fast enough downward
+      if (info.offset.y > threshold || info.velocity.y > 500) {
+        onOpenChange(false);
+      }
+      // Otherwise snap back (motion animate handles this via animate prop)
+      dragY.set(0);
+    },
+    [onOpenChange, dragY]
+  );
+
   // ── Modal variant: Radix Dialog handles focus trap, scroll lock,
   //    focus restoration, Escape dismiss, and click-outside dismiss.
   if (isModal) {
@@ -227,6 +261,7 @@ function BottomSheetRoot({
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: reducedMotion ? 0 : 0.15 }}
+                    style={{ opacity: scrimOpacity }}
                     className="fixed inset-0 z-50 bg-[hsl(var(--on-surface)/0.32)]"
                   />
                 </DialogPrimitive.Overlay>
@@ -234,6 +269,12 @@ function BottomSheetRoot({
                 {/* Sheet */}
                 <DialogPrimitive.Content asChild>
                   <motion.div
+                    ref={sheetRef}
+                    drag="y"
+                    dragConstraints={{ top: 0, bottom: 0 }}
+                    dragElastic={{ top: 0, bottom: 0.5 }}
+                    onDragEnd={handleDragEnd}
+                    style={{ y: dragY }}
                     initial={{ y: reducedMotion ? 0 : "100%" }}
                     animate={{ y: 0 }}
                     exit={{ y: reducedMotion ? 0 : "100%" }}
@@ -246,7 +287,7 @@ function BottomSheetRoot({
                       "fixed bottom-0 left-0 right-0 z-50",
                       "mx-0 max-w-160 mt-18",
                       "min-[640px]:mx-auto min-[640px]:mt-14",
-                      "outline-none"
+                      "outline-none touch-none"
                     )}
                   >
                     <SheetBody
