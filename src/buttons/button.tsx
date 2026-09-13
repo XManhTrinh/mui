@@ -48,7 +48,7 @@ const buttonVariants = cva(
       // M3 Expressive size scale: heights 32/40/56/96/136dp with typography and
       // icon size scaling up per size (Label Large → Title Medium → Headline).
       size: {
-        xs: "h-8 px-3 gap-1 text-[14px] leading-5 tracking-[0.1px] [&_svg]:size-5",
+        xs: "h-8 px-3 gap-2 text-[14px] leading-5 tracking-[0.1px] [&_svg]:size-5",
         s: "h-10 px-4 gap-2 text-[14px] leading-5 tracking-[0.1px] [&_svg]:size-5",
         m: "h-14 px-6 gap-2 text-[16px] leading-6 tracking-[0.15px] [&_svg]:size-6",
         l: "h-24 px-12 gap-3 text-[24px] leading-8 tracking-normal [&_svg]:size-8",
@@ -84,6 +84,15 @@ const shapeClasses = {
     l: "rounded-[28px] active:rounded-2xl",
     xl: "rounded-[28px] active:rounded-2xl",
   },
+} as const;
+
+// M3 outlined outline width scales with size: xs/s/m = 1dp, l = 2dp, xl = 3dp.
+const outlinedBorderWidth = {
+  xs: "border",
+  s: "border",
+  m: "border",
+  l: "border-2",
+  xl: "border-[3px]",
 } as const;
 
 // NOTE: M3 Expressive uses symmetric horizontal padding regardless of icon
@@ -195,12 +204,20 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       ? buttonVariantToggleColors[resolvedVariant][isSelected ? "selected" : "unselected"]
       : "";
 
+    // M3: outlined outline width scales with size — xs/s/m 1dp, l 2dp, xl 3dp.
+    // (Suppressed when a toggle-selected outlined button drops its border.)
+    const outlinedBorderClass =
+      resolvedVariant === "outlined" && !(toggle && isSelected)
+        ? outlinedBorderWidth[resolvedSize]
+        : "";
+
     const button = (
       <Comp
         className={cn(
           buttonVariants({ variant, size }),
           shapeClasses[shape][resolvedSize],
           toggleColorClass,
+          outlinedBorderClass,
           loading && "pointer-events-none",
           className
         )}

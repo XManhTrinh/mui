@@ -133,6 +133,16 @@ Typography scale (all 15 roles match standard M3 values: display 57/45/36, headl
 - **Outlined variant color** ✅ fixed — spec default is `outline-variant` border + `on-surface-variant` icon/label; code had `outline` border + `primary` text. Corrected in `button-primitives.ts` (also flows to SplitButton's outlined segments). Elevated/Filled/Tonal/Text default colors confirmed correct.
 - **Button toggle (selection) state** ✅ implemented — Added `toggle` / `selected` / `defaultSelected` / `onSelectedChange` props to Button (mirroring IconButton), with per-variant selected/unselected color maps (`buttonVariantToggleColors`) from the M3 color spec: filled selected Primary/On-primary + unselected Surface-container/On-surface-variant; tonal selected Secondary/On-secondary; elevated selected Primary/On-primary; outlined selected Inverse-surface/Inverse-on-surface (border removed). Shape inverts round↔square when selected; sets `aria-pressed`. Text buttons fall back to default (not toggleable per spec).
 
+### Button — 100% verified against MDC token file (`md.comp.button.*`)
+Cross-checked every token against `material-components-android/.../button/res/values/tokens.xml`:
+- **Typography per size** ✅ confirmed: xs/s = Label Large, m = Title Medium, l = Headline Small, xl = Headline Large (matches shipped).
+- **Icon sizes** ✅ 20/20/24/32/40; **leading/trailing space** ✅ 12/16/24/48/64; **icon→label space** ✅ 8/8/8/12/16 — fixed xs gap (was 4dp/`gap-1`, spec is 8dp/`gap-2`).
+- **Outlined outline width scales with size** ✅ fixed: xs/s/m = 1dp, l = 2dp, xl = 3dp (was flat 1px). Added `outlinedBorderWidth` map, suppressed when toggle-selected drops the border.
+- **Elevation** ✅ elevated = level1 resting, filled/tonal/text/outlined = level0 resting (matches; filled keeps a hover shadow as an interaction affordance).
+- **Colors** ✅ default + toggle unselected/selected per variant all match the token file (filled unselected surface-container/on-surface-variant, selected primary/on-primary; tonal selected secondary/on-secondary; elevated selected primary/on-primary; outlined selected surface-inverse/on-surface-inverse; text not toggleable).
+- **Square/pressed corner shapes** ✅ 12/12/16/28/28 resting, 8/8/12/16/16 pressed; selected square → full (matches).
+Button is now fully spec-compliant and verified.
+
 ### Button XS/S 48dp touch target ✅ (per spec)
 Implemented per the M3 "Target areas" rule: xs (32dp) and s (40dp) buttons
 are wrapped in a transparent expander that adds vertical padding (xs +8dp,
