@@ -463,6 +463,25 @@ Eight color schemes are available out of the box. The default (purple) is built 
 
 All preset values are generated from the Material Theme Builder HCT algorithm — proper contrast ratios for both light and dark modes are guaranteed.
 
+### Preset + override
+
+You can use a preset as a starting point and override specific tokens on top:
+
+```css
+@import "tailwindcss";
+@import "@vkieu/mui/theme.css";
+@import "@vkieu/mui/themes/theme-facebook.css";
+
+/* Override just the tokens you want — the rest stay from the preset */
+:root {
+  --primary: 220 90% 45%;           /* tweak the blue */
+  --tertiary: 30 80% 50%;           /* swap tertiary to orange */
+  --surface-container: 220 15% 96%; /* adjust surface shade */
+}
+```
+
+This works because CSS custom properties follow the normal cascade — the last `:root` block wins for any token it sets, and everything else falls through to the preset or base theme.
+
 ### Custom theme
 
 Override the CSS variables in `:root` to use any brand color:
