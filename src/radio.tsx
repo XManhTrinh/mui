@@ -226,44 +226,75 @@ const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
         )}
       >
         {(() => {
-          // Roving tabindex (ARIA radiogroup): only one radio is tabbable — the
-          // checked one, or the first enabled radio when none is checked.
-          const childArray = React.Children.toArray(children);
-          const isEnabled = (c: React.ReactNode) =>
-            React.isValidElement<RadioProps>(c) &&
-            !(disabled || c.props.disabled);
-          const hasChecked = childArray.some(
-            (c) =>
-              React.isValidElement<RadioProps>(c) &&
-              c.props.value !== undefined &&
-              c.props.value === currentValue
-          );
-          const firstEnabledIndex = childArray.findIndex(isEnabled);
+          // Recursively walk the children tree to find and enhance Radio
+          // elements wherever they appear — even when wrapped in <label>,
+          // <div>, or other layout elements.
+          const flatRadios: { value?: string; disabled?: boolean; index: number }[] = [];
+          let counter = 0;
 
-          return childArray.map((child, index) => {
-            if (React.isValidElement<RadioProps>(child)) {
-              const childValue = child.props.value;
-              const isChecked =
-                childValue !== undefined && childValue === currentValue;
-              const isTabbable = hasChecked
-                ? isChecked
-                : index === firstEnabledIndex;
-              return React.cloneElement(child, {
-                name,
-                disabled: disabled || child.props.disabled,
-                checked: childValue !== undefined ? isChecked : undefined,
-                tabIndex: isTabbable ? 0 : -1,
-                onCheckedChange: (checked: boolean) => {
-                  if (checked && childValue) {
-                    if (!isControlled) setInternalValue(childValue);
-                    onValueChange?.(childValue);
-                  }
-                  child.props.onCheckedChange?.(checked);
-                },
-              } as Partial<RadioProps>);
-            }
-            return child;
-          });
+          const collectRadios = (nodes: React.ReactNode) => {
+            React.Children.forEach(nodes, (child) => {
+              if (React.isValidElement<RadioProps>(child) && (child.type as { displayName?: string })?.displayName === "Radio") {
+                flatRadios.push({
+                  value: child.props.value,
+                  disabled: disabled || child.props.disabled,
+                  index: counter++,
+                });
+              } else if (React.isValidElement(child) && (child.props as { children?: React.ReactNode }).children) {
+                collectRadios((child.props as { children?: React.ReactNode }).children);
+              }
+            });
+          };
+          collectRadios(children);
+
+          const hasChecked = flatRadios.some(
+            (r) => r.value !== undefined && r.value === currentValue
+          );
+          const firstEnabledIndex = flatRadios.find((r) => !r.disabled)?.index ?? -1;
+
+          let radioCounter = 0;
+
+          const enhanceChildren = (nodes: React.ReactNode): React.ReactNode => {
+            return React.Children.map(nodes, (child) => {
+              if (!React.isValidElement(child)) return child;
+
+              // Direct Radio match
+              if ((child.type as { displayName?: string })?.displayName === "Radio") {
+                const idx = radioCounter++;
+                const radioProps = child.props as RadioProps;
+                const childValue = radioProps.value;
+                const isChecked = childValue !== undefined && childValue === currentValue;
+                const isTabbable = hasChecked ? isChecked : idx === firstEnabledIndex;
+
+                return React.cloneElement(child as React.ReactElement<RadioProps>, {
+                  name,
+                  disabled: disabled || radioProps.disabled,
+                  checked: childValue !== undefined ? isChecked : undefined,
+                  tabIndex: isTabbable ? 0 : -1,
+                  onCheckedChange: (checked: boolean) => {
+                    if (checked && childValue) {
+                      if (!isControlled) setInternalValue(childValue);
+                      onValueChange?.(childValue);
+                    }
+                    radioProps.onCheckedChange?.(checked);
+                  },
+                } as Partial<RadioProps>);
+              }
+
+              // Wrapper element — recurse into its children
+              const wrapperProps = child.props as { children?: React.ReactNode };
+              if (wrapperProps.children) {
+                return React.cloneElement(child as React.ReactElement<{ children?: React.ReactNode }>, {
+                  ...wrapperProps,
+                  children: enhanceChildren(wrapperProps.children),
+                });
+              }
+
+              return child;
+            });
+          };
+
+          return enhanceChildren(children);
         })()}
       </div>
     );
