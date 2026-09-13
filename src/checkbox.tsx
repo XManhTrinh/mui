@@ -27,6 +27,8 @@ export type CheckboxProps = {
   defaultChecked?: boolean;
   onCheckedChange?: (checked: boolean | "indeterminate") => void;
   indeterminate?: boolean;
+  /** Error state — error container/outline + on-error icon per M3 */
+  error?: boolean;
   disabled?: boolean;
   id?: string;
   name?: string;
@@ -42,6 +44,7 @@ const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
       defaultChecked = false,
       onCheckedChange,
       indeterminate = false,
+      error = false,
       disabled = false,
       id,
       name,
@@ -83,6 +86,7 @@ const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
         role="checkbox"
         aria-checked={ariaCheckedValue}
         aria-label={ariaLabel}
+        aria-invalid={error || undefined}
         aria-disabled={disabled || undefined}
         id={id}
         disabled={disabled}
@@ -113,9 +117,13 @@ const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
           className={cn(
             "absolute w-10 h-10 rounded-full transition-colors duration-200 pointer-events-none",
             !disabled &&
+              error &&
+              "group-hover:bg-[hsl(var(--error)/0.08)] group-focus-visible:bg-[hsl(var(--error)/0.10)] group-active:bg-[hsl(var(--error)/0.10)]",
+            !disabled &&
+              !error &&
               !active &&
               "group-hover:bg-[hsl(var(--on-surface)/0.08)] group-focus-visible:bg-[hsl(var(--on-surface)/0.10)] group-active:bg-[hsl(var(--on-surface)/0.10)]",
-            !disabled && active && "group-hover:bg-[hsl(var(--primary)/0.08)] group-focus-visible:bg-[hsl(var(--primary)/0.10)] group-active:bg-[hsl(var(--primary)/0.10)]"
+            !disabled && !error && active && "group-hover:bg-[hsl(var(--primary)/0.08)] group-focus-visible:bg-[hsl(var(--primary)/0.10)] group-active:bg-[hsl(var(--primary)/0.10)]"
           )}
         />
 
@@ -124,10 +132,13 @@ const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
           className={cn(
             "relative z-10 flex items-center justify-center w-4.5 h-4.5 rounded-xs",
             "transition-colors duration-100 ease-[cubic-bezier(0.2,0,0,1)]",
+            // Error unchecked / checked (takes precedence when enabled)
+            !active && !disabled && error && "border-2 border-[hsl(var(--error))] bg-transparent",
+            active && !disabled && error && "border-0 bg-error",
             // Unchecked
-            !active && !disabled && "border-2 border-[hsl(var(--on-surface-variant))] bg-transparent",
+            !active && !disabled && !error && "border-2 border-[hsl(var(--on-surface-variant))] bg-transparent",
             // Checked / Indeterminate
-            active && !disabled && "border-0 bg-primary",
+            active && !disabled && !error && "border-0 bg-primary",
             // Disabled unchecked
             !active && disabled && "border-2 border-[hsl(var(--on-surface)/0.38)] bg-transparent",
             // Disabled checked
@@ -139,7 +150,7 @@ const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
             <svg
               className={cn(
                 "w-3 h-3 transition-opacity duration-100 ease-[cubic-bezier(0.2,0,0,1)]",
-                !disabled ? "text-primary-foreground" : "text-surface"
+                disabled ? "text-surface" : error ? "text-error-foreground" : "text-primary-foreground"
               )}
               viewBox="0 0 12 12"
               fill="none"
