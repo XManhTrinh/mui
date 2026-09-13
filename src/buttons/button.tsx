@@ -5,6 +5,11 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../lib/utils";
+import {
+  buttonBase,
+  buttonVariantColors,
+  buttonVariantHoverElevation,
+} from "./button-primitives";
 
 /**
  * Material Design 3 Button
@@ -22,38 +27,19 @@ const buttonVariants = cva(
     "relative inline-flex items-center justify-center whitespace-nowrap",
     // Typography: font-weight and tracking shared, size per variant
     "font-medium tracking-[0.1px]",
-    // Cursor & interaction
-    "cursor-pointer select-none",
-    // Transition: M3 Expressive shape morph (visible on press and release)
-    "transition-[border-radius,box-shadow] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
-    // Focus ring
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+    // Shared interaction + state layer + focus + transition + icon primitives
+    buttonBase,
     // Disabled
-    "disabled:opacity-[0.38] disabled:pointer-events-none disabled:cursor-not-allowed",
-    // State layer via ::before pseudo-element
-    "overflow-hidden",
-    "before:absolute before:inset-0 before:rounded-[inherit]",
-    "before:bg-current before:opacity-0",
-    "before:transition-opacity before:duration-200 before:pointer-events-none",
-    // State layer opacities (M3: 8% hover, 10% focus, 10% press)
-    "hover:before:opacity-[0.08]",
-    "focus-visible:before:opacity-[0.10]",
-    "active:before:opacity-[0.10]",
-    // Icon sizing defaults
-    "[&_svg]:pointer-events-none [&_svg]:shrink-0",
+    "disabled:opacity-[0.38] disabled:pointer-events-none disabled:cursor-not-allowed disabled:before:opacity-0!",
   ].join(" "),
   {
     variants: {
       variant: {
-        filled:
-          "bg-primary text-primary-foreground hover:shadow-[0_1px_3px_var(--elevation-1)] disabled:shadow-none",
-        outlined:
-          "bg-transparent border border-outline text-primary disabled:border-[hsl(var(--on-surface)/0.12)]",
-        text: "bg-transparent text-primary",
-        elevated:
-          "bg-surface-container-low text-primary shadow-[0_1px_3px_var(--elevation-1)] hover:shadow-[0_3px_6px_var(--elevation-2)] disabled:shadow-none",
-        tonal:
-          "bg-secondary-container text-secondary-container-foreground hover:shadow-[0_1px_3px_var(--elevation-1)]",
+        filled: cn(buttonVariantColors.filled, buttonVariantHoverElevation.filled),
+        outlined: cn(buttonVariantColors.outlined, buttonVariantHoverElevation.outlined),
+        text: cn(buttonVariantColors.text, buttonVariantHoverElevation.text),
+        elevated: cn(buttonVariantColors.elevated, buttonVariantHoverElevation.elevated),
+        tonal: cn(buttonVariantColors.tonal, buttonVariantHoverElevation.tonal),
       },
       size: {
         xs: "h-8 px-4 gap-1.5 text-[12px] leading-4 [&_svg]:size-[18px]",

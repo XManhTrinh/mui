@@ -5,6 +5,11 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../lib/utils";
+import {
+  buttonBase,
+  buttonVariantColors,
+  buttonVariantHoverElevation,
+} from "./button-primitives";
 
 /**
  * Material Design 3 Split Button
@@ -58,23 +63,6 @@ const iconOffsets = {
   m: -2,
   l: -3,
   xl: -6,
-} as const;
-
-// Segment color classes per variant
-const segmentColors = {
-  filled: "bg-primary text-primary-foreground",
-  tonal: "bg-secondary-container text-secondary-container-foreground",
-  outlined: "bg-transparent border border-outline text-primary",
-  elevated:
-    "bg-surface-container-low text-primary shadow-[0_1px_3px_var(--elevation-1)]",
-} as const;
-
-// Segment hover elevation
-const segmentHoverElevation = {
-  filled: "hover:shadow-[0_1px_3px_var(--elevation-1)]",
-  tonal: "hover:shadow-[0_1px_3px_var(--elevation-1)]",
-  outlined: "",
-  elevated: "hover:shadow-[0_3px_6px_var(--elevation-2)]",
 } as const;
 
 // Height classes per size
@@ -247,40 +235,29 @@ const SplitButtonRoot = React.forwardRef<HTMLDivElement, SplitButtonProps>(
             className={cn(
               // Base layout
               "relative inline-flex items-center justify-center gap-2",
-              "cursor-pointer select-none",
               heightClasses[resolvedSize],
               leadingPadding[resolvedSize],
               // Typography: Label Large
               "text-[14px] font-medium leading-5 tracking-[0.1px]",
-              // Colors
-              segmentColors[resolvedVariant],
-              segmentHoverElevation[resolvedVariant],
-              // Outer corners: full pill on left, inner radius on right
+              // Shared interaction + state layer + focus + transition + icon primitives
+              buttonBase,
+              // Colors + hover elevation (shared with Button)
+              buttonVariantColors[resolvedVariant],
+              buttonVariantHoverElevation[resolvedVariant],
+              // Icon size for split-button segments (5 = 20dp)
+              "[&_svg]:size-5 [&_.material-symbols-rounded]:pointer-events-none",
+              // Outer corners: full pill on the start edge, inner radius on the
+              // end (inner) edge. Logical properties mirror correctly under RTL.
               // Press shape morph: reduce outer radius on press (M3 Expressive spring morph)
-              "rounded-l-full active:rounded-l-xl",
-              // Transition
-              "transition-[border-radius,box-shadow] duration-100 ease-out",
-              // State layer
-              "overflow-hidden",
-              "before:absolute before:inset-0 before:rounded-[inherit]",
-              "before:bg-current before:opacity-0",
-              "before:transition-opacity before:duration-200 before:pointer-events-none",
-              "hover:before:opacity-[0.08]",
-              "focus-visible:before:opacity-[0.10]",
-              "active:before:opacity-[0.10]",
-              // Focus ring
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-              // Icon sizing
-              "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-5",
-              "[&_.material-symbols-rounded]:pointer-events-none",
+              "rounded-s-full active:rounded-s-xl",
               // Disabled
               isLeadingDisabled && "opacity-[0.38] pointer-events-none cursor-not-allowed",
               // Composable className from SplitButton.Leading
               leadingClassName
             )}
             style={{
-              borderTopRightRadius: innerRadius,
-              borderBottomRightRadius: innerRadius,
+              borderStartEndRadius: innerRadius,
+              borderEndEndRadius: innerRadius,
             }}
             disabled={isLeadingDisabled}
             tabIndex={isLeadingDisabled ? -1 : undefined}
@@ -289,23 +266,23 @@ const SplitButtonRoot = React.forwardRef<HTMLDivElement, SplitButtonProps>(
             onMouseEnter={(e) => {
               // Morph inner corners toward full round on hover
               const el = e.currentTarget;
-              el.style.borderTopRightRadius = "9999px";
-              el.style.borderBottomRightRadius = "9999px";
+              el.style.borderStartEndRadius = "9999px";
+              el.style.borderEndEndRadius = "9999px";
             }}
             onMouseLeave={(e) => {
               const el = e.currentTarget;
-              el.style.borderTopRightRadius = innerRadius;
-              el.style.borderBottomRightRadius = innerRadius;
+              el.style.borderStartEndRadius = innerRadius;
+              el.style.borderEndEndRadius = innerRadius;
             }}
             onFocus={(e) => {
               const el = e.currentTarget;
-              el.style.borderTopRightRadius = "9999px";
-              el.style.borderBottomRightRadius = "9999px";
+              el.style.borderStartEndRadius = "9999px";
+              el.style.borderEndEndRadius = "9999px";
             }}
             onBlur={(e) => {
               const el = e.currentTarget;
-              el.style.borderTopRightRadius = innerRadius;
-              el.style.borderBottomRightRadius = innerRadius;
+              el.style.borderStartEndRadius = innerRadius;
+              el.style.borderEndEndRadius = innerRadius;
             }}
           >
             {leadingContent}
@@ -324,33 +301,23 @@ const SplitButtonRoot = React.forwardRef<HTMLDivElement, SplitButtonProps>(
               className={cn(
                 // Base layout
                 "relative inline-flex items-center justify-center",
-                "cursor-pointer select-none",
                 heightClasses[resolvedSize],
                 trailingWidth[resolvedSize],
-                // Colors
-                segmentColors[resolvedVariant],
-                segmentHoverElevation[resolvedVariant],
-                // Outer corners: full pill on right, inner radius on left
+                // Shared interaction + state layer + focus + transition + icon primitives
+                buttonBase,
+                // Colors + hover elevation (shared with Button)
+                buttonVariantColors[resolvedVariant],
+                buttonVariantHoverElevation[resolvedVariant],
+                // Outer corners: full pill on the end edge, inner radius on the
+                // start (inner) edge. Logical properties mirror correctly under RTL.
                 // Press shape morph: reduce outer radius on press (M3 Expressive spring morph)
-                "rounded-r-full active:rounded-r-xl",
-                // Transition
-                "transition-[border-radius,box-shadow] duration-100 ease-out",
-                // State layer
-                "overflow-hidden",
-                "before:absolute before:inset-0 before:rounded-[inherit]",
-                "before:bg-current before:opacity-0",
-                "before:transition-opacity before:duration-200 before:pointer-events-none",
-                "hover:before:opacity-[0.08]",
-                "focus-visible:before:opacity-[0.10]",
-                "active:before:opacity-[0.10]",
-                // Focus ring
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                "rounded-e-full active:rounded-e-xl",
                 // Disabled
                 isTrailingDisabled && "opacity-[0.38] pointer-events-none cursor-not-allowed"
               )}
               style={{
-                borderTopLeftRadius: innerRadius,
-                borderBottomLeftRadius: innerRadius,
+                borderStartStartRadius: innerRadius,
+                borderEndStartRadius: innerRadius,
               }}
               disabled={isTrailingDisabled}
               tabIndex={isTrailingDisabled ? -1 : undefined}
@@ -358,23 +325,23 @@ const SplitButtonRoot = React.forwardRef<HTMLDivElement, SplitButtonProps>(
               aria-expanded={menuOpen}
               onMouseEnter={(e) => {
                 const el = e.currentTarget;
-                el.style.borderTopLeftRadius = "9999px";
-                el.style.borderBottomLeftRadius = "9999px";
+                el.style.borderStartStartRadius = "9999px";
+                el.style.borderEndStartRadius = "9999px";
               }}
               onMouseLeave={(e) => {
                 const el = e.currentTarget;
-                el.style.borderTopLeftRadius = innerRadius;
-                el.style.borderBottomLeftRadius = innerRadius;
+                el.style.borderStartStartRadius = innerRadius;
+                el.style.borderEndStartRadius = innerRadius;
               }}
               onFocus={(e) => {
                 const el = e.currentTarget;
-                el.style.borderTopLeftRadius = "9999px";
-                el.style.borderBottomLeftRadius = "9999px";
+                el.style.borderStartStartRadius = "9999px";
+                el.style.borderEndStartRadius = "9999px";
               }}
               onBlur={(e) => {
                 const el = e.currentTarget;
-                el.style.borderTopLeftRadius = innerRadius;
-                el.style.borderBottomLeftRadius = innerRadius;
+                el.style.borderStartStartRadius = innerRadius;
+                el.style.borderEndStartRadius = innerRadius;
               }}
             >
               {/* Chevron down icon with rotation + offset animation */}

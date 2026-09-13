@@ -4,6 +4,7 @@ import * as React from "react";
 import { motion, AnimatePresence } from "motion/react";
 
 import { cn } from "../lib/utils";
+import { FAB } from "./fab";
 
 /**
  * Material Design 3 FAB Menu
@@ -91,12 +92,6 @@ const FABMenuItemComponent = React.forwardRef<
 FABMenuItemComponent.displayName = "FABMenuItemComponent";
 
 // ─── Color Mappings ───────────────────────────────────────────────────────────
-
-const closeButtonColors = {
-  primary: "bg-primary-container text-primary-container-foreground",
-  secondary: "bg-secondary-container text-secondary-container-foreground",
-  tertiary: "bg-tertiary-container text-tertiary-container-foreground",
-} as const;
 
 const menuItemColors = {
   primary: "bg-surface-container-high text-primary",
@@ -375,32 +370,33 @@ const FABMenuRoot: React.FC<FABMenuProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Close button / FAB trigger */}
+      {/* Close button / FAB trigger — composed from the FAB component */}
       {isOpen ? (
-        <button
+        <FAB
           ref={closeRef}
-          type="button"
-          className={cn(
-            "relative mt-1 h-14 w-14 rounded-full inline-flex items-center justify-center",
-            "cursor-pointer select-none",
-            // State layer
-            "overflow-hidden",
-            "before:absolute before:inset-0 before:rounded-[inherit]",
-            "before:bg-current before:opacity-0",
-            "before:transition-opacity before:duration-200 before:pointer-events-none",
-            "hover:before:opacity-[0.08]",
-            "focus-visible:before:opacity-[0.10]",
-            "active:before:opacity-[0.10]",
-            // Focus ring
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-            // Elevation
-            "shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
-            // Icon sizing
-            "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-6",
-            "[&_.material-symbols-rounded]:pointer-events-none",
-            closeButtonColors[colorSet]
-          )}
+          size="l"
+          shape="round"
+          color={colorSet}
+          className="mt-1"
           aria-label={closeLabel}
+          icon={
+            /* X close icon */
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          }
           onClick={() => {
             setOpen(false);
             triggerRef.current?.focus();
@@ -414,60 +410,19 @@ const FABMenuRoot: React.FC<FABMenuProps> = ({
             // Allow arrow nav to work at container level
             handleKeyDown(e);
           }}
-        >
-          {/* X close icon */}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
+        />
       ) : (
-        <button
+        <FAB
           ref={triggerRef}
-          type="button"
-          className={cn(
-            "relative h-14 w-14 rounded-2xl inline-flex items-center justify-center",
-            "cursor-pointer select-none",
-            // Transition for shape morph
-            "transition-[border-radius,box-shadow] duration-100 ease-out",
-            // State layer
-            "overflow-hidden",
-            "before:absolute before:inset-0 before:rounded-[inherit]",
-            "before:bg-current before:opacity-0",
-            "before:transition-opacity before:duration-200 before:pointer-events-none",
-            "hover:before:opacity-[0.08]",
-            "focus-visible:before:opacity-[0.10]",
-            "active:before:opacity-[0.10]",
-            // Shape morph on press
-            "active:rounded-xl",
-            // Focus ring
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-            // Elevation
-            "shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
-            "hover:shadow-[0_6px_12px_var(--elevation-4),0_2px_4px_var(--elevation-4)]",
-            // Icon sizing
-            "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-6",
-            "[&_.material-symbols-rounded]:pointer-events-none",
-            closeButtonColors[colorSet]
-          )}
+          size="l"
+          shape="rounded"
+          color={colorSet}
           aria-haspopup="menu"
           aria-expanded={isOpen}
           aria-label={triggerLabel}
+          icon={triggerIcon}
           onClick={() => setOpen(true)}
-        >
-          {triggerIcon}
-        </button>
+        />
       )}
     </div>
   );
