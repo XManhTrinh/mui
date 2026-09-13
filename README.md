@@ -452,6 +452,7 @@ Six color schemes are available out of the box. The default (purple) is built in
 | Green | `#006C4C` | `@import "@vkieu/mui/themes/theme-green.css";` |
 | Red | `#B8232A` | `@import "@vkieu/mui/themes/theme-red.css";` |
 | Amber | `#795900` | `@import "@vkieu/mui/themes/theme-amber.css";` |
+| Facebook | `#1877F2` | `@import "@vkieu/mui/themes/theme-facebook.css";` |
 
 ```css
 @import "tailwindcss";
@@ -637,6 +638,7 @@ src/
 │   ├── theme-green.css     # Green preset (#006C4C)
 │   ├── theme-red.css       # Red preset (#B8232A)
 │   ├── theme-amber.css     # Amber preset (#795900)
+│   ├── theme-facebook.css  # Facebook preset (#1877F2)
 │   └── index.ts            # Theme preset metadata
 ├── app-bar.tsx             # Top app bar
 ├── badge.tsx               # Badge (dot/count)

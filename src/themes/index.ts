@@ -5,6 +5,7 @@ export const themePresets = [
   { name: "Green", value: "green", source: "#006C4C", file: "theme-green.css" },
   { name: "Red", value: "red", source: "#B8232A", file: "theme-red.css" },
   { name: "Amber", value: "amber", source: "#795900", file: "theme-amber.css" },
+  { name: "Facebook", value: "facebook", source: "#1877F2", file: "theme-facebook.css" },
 ] as const;
 
 export type ThemePreset = (typeof themePresets)[number]["value"];

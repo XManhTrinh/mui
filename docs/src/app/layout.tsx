@@ -32,6 +32,10 @@ const amberThemeCSS = `
 :root:root{--primary:44 100% 24%;--on-primary:0 0% 100%;--primary-container:40 100% 81%;--on-primary-container:41 100% 7%;--secondary:41 26% 33%;--on-secondary:0 0% 100%;--secondary-container:40 70% 84%;--on-secondary-container:41 80% 8%;--tertiary:114 17% 34%;--on-tertiary:0 0% 100%;--tertiary-container:108 49% 85%;--on-tertiary-container:125 64% 8%;--surface:32 100% 97%;--on-surface:40 24% 10%;--surface-variant:37 43% 87%;--on-surface-variant:41 14% 26%;--outline:39 10% 45%;--outline-variant:36 23% 76%;--inverse-surface:39 15% 18%;--inverse-on-surface:35 61% 93%;--inverse-primary:42 87% 62%;--surface-container-lowest:0 0% 100%;--surface-container-low:37 68% 94%;--surface-container:35 52% 92%;--surface-container-high:35 41% 89%;--surface-container-highest:37 32% 87%;--surface-bright:32 100% 97%;--surface-dim:37 26% 84%}
 :root:root.dark{--primary:42 87% 62%;--on-primary:42 100% 13%;--primary-container:44 100% 18%;--on-primary-container:40 100% 81%;--secondary:40 40% 73%;--on-secondary:42 47% 15%;--secondary-container:40 32% 24%;--on-secondary-container:40 70% 84%;--tertiary:110 28% 74%;--on-tertiary:118 32% 16%;--tertiary-container:116 22% 25%;--on-tertiary-container:108 49% 85%;--surface:40 35% 7%;--on-surface:37 32% 87%;--surface-variant:41 14% 26%;--on-surface-variant:36 23% 76%;--outline:38 11% 55%;--outline-variant:41 14% 26%;--inverse-surface:37 32% 87%;--inverse-on-surface:39 15% 18%;--inverse-primary:44 100% 24%;--surface-container-lowest:42 42% 5%;--surface-container-low:40 24% 10%;--surface-container:40 21% 11%;--surface-container-high:37 16% 15%;--surface-container-highest:39 14% 20%;--surface-bright:34 13% 22%;--surface-dim:40 35% 7%}`;
 
+const facebookThemeCSS = `
+:root:root{--primary:211 73% 39%;--on-primary:0 0% 100%;--primary-container:219 100% 92%;--on-primary-container:212 100% 12%;--secondary:219 14% 39%;--on-secondary:0 0% 100%;--secondary-container:221 69% 91%;--on-secondary-container:216 41% 12%;--tertiary:285 16% 40%;--on-tertiary:0 0% 100%;--tertiary-container:289 95% 92%;--on-tertiary-container:283 42% 13%;--surface:240 100% 99%;--on-surface:220 10% 11%;--surface-variant:225 23% 90%;--on-surface-variant:218 8% 28%;--outline:220 5% 47%;--outline-variant:220 11% 79%;--inverse-surface:230 6% 20%;--inverse-on-surface:240 30% 95%;--inverse-primary:217 100% 82%;--surface-container-lowest:0 0% 100%;--surface-container-low:240 41% 97%;--surface-container:240 24% 94%;--surface-container-high:240 18% 92%;--surface-container-highest:240 14% 90%;--surface-bright:240 100% 99%;--surface-dim:249 10% 86%}
+:root:root.dark{--primary:217 100% 82%;--on-primary:210 100% 19%;--primary-container:208 100% 26%;--on-primary-container:219 100% 92%;--secondary:221 31% 80%;--on-secondary:217 25% 20%;--secondary-container:218 18% 29%;--on-secondary-container:221 69% 91%;--tertiary:287 39% 81%;--on-tertiary:283 27% 21%;--tertiary-container:284 19% 31%;--on-tertiary-container:289 95% 92%;--surface:225 10% 8%;--on-surface:240 14% 90%;--surface-variant:218 8% 28%;--on-surface-variant:220 11% 79%;--outline:220 6% 58%;--outline-variant:218 8% 28%;--inverse-surface:240 14% 90%;--inverse-on-surface:230 6% 20%;--inverse-primary:211 73% 39%;--surface-container-lowest:225 13% 6%;--surface-container-low:220 10% 11%;--surface-container:220 9% 13%;--surface-container-high:220 7% 17%;--surface-container-highest:220 6% 21%;--surface-bright:220 5% 23%;--surface-dim:225 10% 8%}`;
+
 // ─── Navigation data ──────────────────────────────────────────────────────────
 
 type NavCategory = {
@@ -199,6 +203,7 @@ export default function RootLayout({
       green: greenThemeCSS,
       red: redThemeCSS,
       amber: amberThemeCSS,
+      facebook: facebookThemeCSS,
     };
 
     const css = themeMap[name];
@@ -357,6 +362,7 @@ export default function RootLayout({
                   { name: "green", color: "#006C4C", tokens: "green" },
                   { name: "red", color: "#B8232A", tokens: "red" },
                   { name: "amber", color: "#795900", tokens: "amber" },
+                  { name: "facebook", color: "#1877F2", tokens: "facebook" },
                 ] as const).map((t) => (
                   <button
                     key={t.name}

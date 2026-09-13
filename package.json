@@ -17,6 +17,7 @@
     "./themes/theme-green.css": "./src/themes/theme-green.css",
     "./themes/theme-red.css": "./src/themes/theme-red.css",
     "./themes/theme-amber.css": "./src/themes/theme-amber.css",
+    "./themes/theme-facebook.css": "./src/themes/theme-facebook.css",
     "./buttons": "./src/buttons/index.ts",
     "./navigation": "./src/navigation/index.ts",
     "./sheets": "./src/sheets/index.ts",
