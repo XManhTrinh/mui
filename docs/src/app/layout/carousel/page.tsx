@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Carousel, CarouselItem } from "@mui/index";
 import { Showcase } from "@/components/showcase";
+import { PropsTable, type PropDef } from "@/components/props-table";
 
 export default function CarouselPage() {
   return (
@@ -78,6 +79,27 @@ export default function CarouselPage() {
           </div>
         </Showcase>
       </section>
+
+      <PropsTable
+        componentName="Carousel"
+        props={[
+          { name: "variant", type: '"multi-browse" | "uncontained" | "hero" | "full-screen"', default: '"uncontained"', description: "Carousel layout variant" },
+          { name: "gap", type: "number", default: "8", description: "Gap between items in pixels" },
+          { name: "showArrows", type: "boolean", default: "true", description: "Shows navigation arrow buttons" },
+          { name: "className", type: "string", description: "Additional CSS classes" },
+          { name: "children", type: "ReactNode", description: "CarouselItem elements", required: true },
+        ]}
+      />
+
+      <PropsTable
+        componentName="CarouselItem"
+        props={[
+          { name: "size", type: '"large" | "medium" | "small"', description: "Item size (auto-derived from position in multi-browse)" },
+          { name: "disabled", type: "boolean", description: "Disables the carousel item" },
+          { name: "className", type: "string", description: "Additional CSS classes" },
+          { name: "children", type: "ReactNode", description: "Item content", required: true },
+        ]}
+      />
     </div>
   );
 }

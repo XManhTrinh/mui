@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Switch, Icon, Chip } from "@mui/index";
 import { Showcase, Playground } from "@/components/showcase";
+import { PropsTable, type PropDef } from "@/components/props-table";
 
 export default function SwitchPage() {
   const [enabled, setEnabled] = React.useState(true);
@@ -99,6 +100,21 @@ export default function SwitchPage() {
           </label>
         </Showcase>
       </section>
+
+      <PropsTable
+        componentName="Switch"
+        props={[
+          { name: "checked", type: "boolean", description: "Controlled checked state" },
+          { name: "defaultChecked", type: "boolean", default: "false", description: "Initial checked state (uncontrolled)" },
+          { name: "onCheckedChange", type: "(checked: boolean) => void", description: "Callback when the checked state changes" },
+          { name: "disabled", type: "boolean", default: "false", description: "Disables the switch" },
+          { name: "showIcons", type: "boolean", default: "false", description: "Shows check/close icons on the thumb" },
+          { name: "id", type: "string", description: "HTML id attribute" },
+          { name: "name", type: "string", description: "Form field name" },
+          { name: "className", type: "string", description: "Additional CSS classes" },
+          { name: "aria-label", type: "string", description: "Accessible label for screen readers" },
+        ]}
+      />
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import * as React from "react";
 import { TimePicker } from "@mui/index";
 import { Showcase } from "@/components/showcase";
+import { PropsTable, type PropDef } from "@/components/props-table";
 
 export default function TimePickerPage() {
   const [time, setTime] = React.useState<{ hours: number; minutes: number } | null>(null);
@@ -46,6 +47,17 @@ export default function TimePickerPage() {
           <TimePicker format="12h" value={{ hours: 10, minutes: 0 }} disabled />
         </Showcase>
       </section>
+
+      <PropsTable
+        componentName="TimePicker"
+        props={[
+          { name: "value", type: "TimeValue", description: "Controlled time value — { hours: number, minutes: number }" },
+          { name: "onChange", type: "(value: TimeValue) => void", description: "Callback when the time value changes" },
+          { name: "format", type: '"12h" | "24h"', default: '"12h"', description: "Time display format" },
+          { name: "disabled", type: "boolean", description: "Disables the time picker" },
+          { name: "className", type: "string", description: "Additional CSS classes" },
+        ]}
+      />
     </div>
   );
 }

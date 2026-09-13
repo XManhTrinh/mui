@@ -15,13 +15,19 @@ const iconButtonProps: PropDef[] = [
     name: "iconSize",
     type: "number",
     default: "auto",
-    description: "Override icon size (px). Defaults to proportional (18→20→24→28→32).",
+    description: "Override icon size (px). Defaults to proportional (20→24→24→32→40).",
   },
   {
     name: "iconFilled",
     type: "boolean",
     default: "false",
     description: "Fill the icon. In toggle mode, auto-tracks pressed state.",
+  },
+  {
+    name: "iconWeight",
+    type: "100 | 200 | 300 | 400 | 500 | 600 | 700",
+    default: "400",
+    description: "Icon weight when using the `icon` shorthand.",
   },
   {
     name: "variant",
@@ -33,7 +39,7 @@ const iconButtonProps: PropDef[] = [
     name: "size",
     type: '"xs" | "s" | "m" | "l" | "xl"',
     default: '"s"',
-    description: "Container size: xs(32dp), s(40dp, 24dp icon), m(48dp), l(56dp), xl(64dp)",
+    description: "Container size: xs (32dp), s (40dp, default), m (56dp), l (96dp), xl (136dp)",
   },
   {
     name: "shape",
@@ -53,9 +59,26 @@ const iconButtonProps: PropDef[] = [
     description: "Controlled pressed state (toggle mode)",
   },
   {
+    name: "defaultPressed",
+    type: "boolean",
+    description: "Default pressed state for uncontrolled toggle usage",
+  },
+  {
     name: "onPressedChange",
     type: "(pressed: boolean) => void",
     description: "Callback when toggle state changes",
+  },
+  {
+    name: "asChild",
+    type: "boolean",
+    default: "false",
+    description: "Render as child element using the Radix Slot pattern",
+  },
+  {
+    name: "compact",
+    type: "boolean",
+    default: "false",
+    description: "Removes 48dp touch target padding for dense layouts (affects xs and s sizes)",
   },
   {
     name: "disabled",
@@ -221,6 +244,7 @@ export default function IconButtonsPage() {
         <h2 className="text-[22px] leading-7 font-normal">M3 Expressive Specs</h2>
         <div className="rounded-xl border border-outline-variant p-4 space-y-2 text-sm text-surface-variant-foreground">
           <p><strong>Default size:</strong> s (40dp container, 24dp icon)</p>
+          <p><strong>Size scale:</strong> xs (32dp), s (40dp, default), m (56dp), l (96dp), xl (136dp)</p>
           <p><strong>Variants:</strong> standard, filled, filled-tonal, outlined</p>
           <p><strong>Toggle:</strong> Shape inversion on pressed state (round↔square)</p>
           <p><strong>Shape morph:</strong> <code>active:rounded-xl</code> on press for non-round shapes</p>

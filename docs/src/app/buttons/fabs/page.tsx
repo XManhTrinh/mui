@@ -29,7 +29,14 @@ export default function FABsPage() {
         <FAB size="large" icon={<Icon name="add" />} aria-label="Add" />
       </Showcase>
 
-      <Showcase title="FAB Colors" code={`<FAB color="primary" icon={<Icon name="edit" />} aria-label="Edit" />\n<FAB color="secondary" icon={<Icon name="edit" />} aria-label="Edit" />\n<FAB color="tertiary" icon={<Icon name="edit" />} aria-label="Edit" />`}>
+      {/* Container Colors */}
+      <Showcase title="FAB Container Colors (default)" code={`<FAB color="primary-container" icon={<Icon name="add" />} aria-label="Add" />\n<FAB color="secondary-container" icon={<Icon name="edit" />} aria-label="Edit" />\n<FAB color="tertiary-container" icon={<Icon name="palette" />} aria-label="Create" />`}>
+        <FAB color="primary-container" icon={<Icon name="add" />} aria-label="Add" />
+        <FAB color="secondary-container" icon={<Icon name="edit" />} aria-label="Edit" />
+        <FAB color="tertiary-container" icon={<Icon name="palette" />} aria-label="Create" />
+      </Showcase>
+
+      <Showcase title="FAB Tone Colors" code={`<FAB color="primary" icon={<Icon name="edit" />} aria-label="Edit" />\n<FAB color="secondary" icon={<Icon name="edit" />} aria-label="Edit" />\n<FAB color="tertiary" icon={<Icon name="edit" />} aria-label="Edit" />`}>
         <FAB color="primary" icon={<Icon name="edit" />} aria-label="Edit" />
         <FAB color="secondary" icon={<Icon name="edit" />} aria-label="Edit" />
         <FAB color="tertiary" icon={<Icon name="edit" />} aria-label="Edit" />
@@ -39,6 +46,17 @@ export default function FABsPage() {
         <FAB shape="round" size="fab" icon={<Icon name="navigation" />} aria-label="Navigate" />
         <FAB shape="round" size="medium" icon={<Icon name="navigation" />} aria-label="Navigate" />
         <FAB shape="round" size="large" icon={<Icon name="navigation" />} aria-label="Navigate" />
+      </Showcase>
+
+      {/* Loading & Disabled */}
+      <Showcase title="Loading State" code={`<FAB loading icon={<Icon name="add" />} aria-label="Add" />\n<ExtendedFAB loading icon={<Icon name="add" />} label="Creating..." />`}>
+        <FAB loading icon={<Icon name="add" />} aria-label="Add" />
+        <ExtendedFAB loading icon={<Icon name="add" />} label="Creating..." />
+      </Showcase>
+
+      <Showcase title="Disabled" code={`<FAB disabled icon={<Icon name="add" />} aria-label="Add" />\n<ExtendedFAB disabled icon={<Icon name="add" />} label="Create" />`}>
+        <FAB disabled icon={<Icon name="add" />} aria-label="Add" />
+        <ExtendedFAB disabled icon={<Icon name="add" />} label="Create" />
       </Showcase>
 
       {/* ExtendedFAB Examples */}
@@ -112,21 +130,29 @@ export default function FABsPage() {
       <PropsTable
         componentName="FAB"
         props={[
-          { name: "size", type: '"m" | "l" | "xl" | "extended"', default: '"l"', description: "FAB size: m(48dp/small), l(56dp/medium, default), xl(96dp/large), extended(56dp height)" },
-          { name: "color", type: '"primary" | "secondary" | "tertiary"', default: '"primary"', description: "Color scheme" },
-          { name: "shape", type: '"square" | "round"', default: '"square"', description: "Corner shape: corner-large (rounded-2xl) at rest, active:rounded-xl on press" },
+          { name: "size", type: '"fab" | "medium" | "large"', default: '"fab"', description: "FAB size: fab (56dp), medium (80dp), large (96dp)" },
+          { name: "color", type: '"primary-container" | "secondary-container" | "tertiary-container" | "primary" | "secondary" | "tertiary" | "surface"', default: '"primary-container"', description: "Color scheme (container variants are tonal, non-container are filled)" },
+          { name: "shape", type: '"rounded" | "round"', default: '"rounded"', description: "Corner shape: rounded (corner-large) or round (corner-full)" },
           { name: "icon", type: "ReactNode", description: "Icon element", required: true },
-          { name: "aria-label", type: "string", description: "Accessible label", required: true },
+          { name: "loading", type: "boolean", default: "false", description: "Show spinner, disable interaction" },
+          { name: "disabled", type: "boolean", default: "false", description: "Disable interaction" },
+          { name: "asChild", type: "boolean", default: "false", description: "Render as child element via Radix Slot (e.g. a link)" },
+          { name: "aria-label", type: "string", description: "Accessible label (required — icon-only element)" },
+          { name: "className", type: "string", description: "Additional Tailwind classes" },
         ]}
       />
 
       <PropsTable
         componentName="ExtendedFAB"
         props={[
-          { name: "size", type: '"small" | "medium" | "large"', default: '"small"', description: "Extended FAB size (56dp/80dp/96dp height)" },
-          { name: "color", type: '"primary" | "secondary" | "tertiary"', default: '"primary"', description: "Color scheme" },
-          { name: "icon", type: "ReactNode | null", description: "Optional leading icon" },
-          { name: "label", type: "string", description: "Text label", required: true },
+          { name: "size", type: '"small" | "medium" | "large"', default: '"small"', description: "Extended FAB size: small (56dp), medium (80dp), large (96dp)" },
+          { name: "color", type: '"primary" | "secondary" | "tertiary" | "primary-fixed" | "secondary-fixed" | "tertiary-fixed"', default: '"primary"', description: "Color scheme" },
+          { name: "icon", type: "ReactNode", description: "Leading icon element", required: true },
+          { name: "label", type: "string", description: "Text label (provides accessible name)", required: true },
+          { name: "loading", type: "boolean", default: "false", description: "Show spinner, disable interaction" },
+          { name: "disabled", type: "boolean", default: "false", description: "Disable interaction" },
+          { name: "asChild", type: "boolean", default: "false", description: "Render as child element via Radix Slot" },
+          { name: "className", type: "string", description: "Additional Tailwind classes" },
         ]}
       />
 
@@ -137,7 +163,9 @@ export default function FABsPage() {
           { name: "triggerLabel", type: "string", description: "Accessible label for the trigger button", required: true },
           { name: "colorSet", type: '"primary" | "secondary" | "tertiary"', default: '"primary"', description: "Color set for close button and items" },
           { name: "open", type: "boolean", description: "Controlled open state" },
+          { name: "defaultOpen", type: "boolean", default: "false", description: "Uncontrolled default open state" },
           { name: "onOpenChange", type: "(open: boolean) => void", description: "Callback when open state changes" },
+          { name: "closeLabel", type: "string", default: '"Close menu"', description: "Close button accessible label" },
           { name: "children", type: "ReactNode", description: "FABMenu.Item elements (2–6 items)", required: true },
         ]}
       />
@@ -156,10 +184,11 @@ export default function FABsPage() {
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">M3 Expressive Specs</h2>
         <div className="rounded-xl border border-outline-variant p-4 space-y-2 text-sm text-surface-variant-foreground">
-          <p><strong>Sizes:</strong> m (48dp) · l (56dp, default) · xl (96dp) · extended (56dp height)</p>
-          <p><strong>Shape:</strong> corner-large (rounded-2xl) at rest → <code>active:rounded-xl</code> on press</p>
+          <p><strong>FAB sizes:</strong> fab (56dp, default) · medium (80dp) · large (96dp)</p>
+          <p><strong>ExtendedFAB sizes:</strong> small (56dp, default) · medium (80dp) · large (96dp)</p>
+          <p><strong>Shape:</strong> rounded (corner-large) or round (corner-full) — shape morph on press</p>
           <p><strong>Elevation:</strong> Level 3 at rest, Level 4 on hover</p>
-          <p><strong>Color:</strong> Uses primary-container, secondary-container, or tertiary-container surfaces</p>
+          <p><strong>Colors:</strong> Container variants (primary-container, secondary-container, tertiary-container) and tone variants (primary, secondary, tertiary)</p>
         </div>
       </section>
 

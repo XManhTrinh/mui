@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Tooltip, IconButton, Icon, Button } from "@mui/index";
 import { Showcase } from "@/components/showcase";
+import { PropsTable, type PropDef } from "@/components/props-table";
 
 export default function TooltipPage() {
   return (
@@ -75,6 +76,20 @@ export default function TooltipPage() {
           </Tooltip>
         </Showcase>
       </section>
+
+      <PropsTable
+        componentName="Tooltip"
+        props={[
+          { name: "content", type: "string", description: "Tooltip text content", required: true },
+          { name: "subhead", type: "string", description: 'Subhead text (rich variant only, variant="rich")' },
+          { name: "variant", type: '"plain" | "rich"', default: '"plain"', description: "Tooltip visual variant" },
+          { name: "side", type: '"top" | "bottom" | "left" | "right"', default: '"top"', description: "Preferred placement side" },
+          { name: "delayShow", type: "number", default: "500", description: "Delay in ms before showing the tooltip" },
+          { name: "delayHide", type: "number", default: "200", description: "Delay in ms before hiding the tooltip" },
+          { name: "children", type: "ReactNode", description: "Trigger element the tooltip wraps", required: true },
+          { name: "className", type: "string", description: "Additional CSS classes for the tooltip content" },
+        ]}
+      />
     </div>
   );
 }

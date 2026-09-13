@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Search, Icon, IconButton, Switch } from "@mui/index";
+import { Search, SearchView, Icon, IconButton, Switch, Button, List, ListItem } from "@mui/index";
 import { Showcase, Playground } from "@/components/showcase";
 import { PropsTable } from "@/components/props-table";
 import { AccessibilityNotes } from "@/components/accessibility-notes";
@@ -12,6 +12,10 @@ export default function SearchPage() {
   const [pgQuery, setPgQuery] = React.useState("");
   const [showTrailing, setShowTrailing] = React.useState(true);
   const [disabled, setDisabled] = React.useState(false);
+
+  // SearchView state
+  const [viewOpen, setViewOpen] = React.useState(false);
+  const [viewQuery, setViewQuery] = React.useState("");
 
   const playgroundCode = `<Search value={query} onValueChange={setQuery}${disabled ? " disabled" : ""}>
   <Search.LeadingIcon>
@@ -131,6 +135,66 @@ ${showTrailing ? `  <Search.TrailingIcon>
         </Showcase>
       </section>
 
+      {/* Search View */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">Search View</h2>
+        <p className="text-sm text-surface-variant-foreground">
+          SearchView provides a full-surface expanded search experience. On mobile
+          it covers the full viewport; on larger screens it renders as a docked
+          panel anchored top-center.
+        </p>
+        <Showcase
+          title="Expanded Search View"
+          code={`<Button variant="outlined" onClick={() => setViewOpen(true)}>
+  Open Search View
+</Button>
+<SearchView open={viewOpen} onOpenChange={setViewOpen} value={viewQuery} onValueChange={setViewQuery}>
+  <SearchView.Header
+    trailing={
+      <IconButton variant="standard" size="xs" aria-label="Clear" onClick={() => setViewQuery("")}>
+        <Icon name="close" />
+      </IconButton>
+    }
+  >
+    <SearchView.Input placeholder="Search..." />
+  </SearchView.Header>
+  <SearchView.Divider />
+  <SearchView.Content>
+    <List>
+      <ListItem leading={<Icon name="history" size={24} />} interactive>Recent search 1</ListItem>
+      <ListItem leading={<Icon name="history" size={24} />} interactive>Recent search 2</ListItem>
+      <ListItem leading={<Icon name="trending_up" size={24} />} interactive>Trending topic</ListItem>
+    </List>
+  </SearchView.Content>
+</SearchView>`}
+        >
+          <Button variant="outlined" onClick={() => setViewOpen(true)}>
+            Open Search View
+          </Button>
+          <SearchView open={viewOpen} onOpenChange={setViewOpen} value={viewQuery} onValueChange={setViewQuery}>
+            <SearchView.Header
+              trailing={
+                viewQuery ? (
+                  <IconButton variant="standard" size="xs" aria-label="Clear" onClick={() => setViewQuery("")}>
+                    <Icon name="close" />
+                  </IconButton>
+                ) : undefined
+              }
+            >
+              <SearchView.Input placeholder="Search..." />
+            </SearchView.Header>
+            <SearchView.Divider />
+            <SearchView.Content>
+              <List>
+                <ListItem leading={<Icon name="history" size={24} />} interactive>Recent search 1</ListItem>
+                <ListItem leading={<Icon name="history" size={24} />} interactive>Recent search 2</ListItem>
+                <ListItem leading={<Icon name="trending_up" size={24} />} interactive>Trending topic</ListItem>
+              </List>
+            </SearchView.Content>
+          </SearchView>
+        </Showcase>
+      </section>
+
       {/* Props Tables */}
       <PropsTable
         componentName="Search"
@@ -167,6 +231,57 @@ ${showTrailing ? `  <Search.TrailingIcon>
         props={[
           { name: "children", type: "ReactNode", description: "Icon or IconButton element", required: true },
           { name: "className", type: "string", description: "Additional CSS classes" },
+        ]}
+      />
+
+      <PropsTable
+        componentName="SearchView"
+        props={[
+          { name: "open", type: "boolean", description: "Controlled open state", required: true },
+          { name: "onOpenChange", type: "(open: boolean) => void", description: "Callback when open state changes", required: true },
+          { name: "value", type: "string", description: "Controlled query value" },
+          { name: "defaultValue", type: "string", default: '""', description: "Default query value (uncontrolled)" },
+          { name: "onValueChange", type: "(value: string) => void", description: "Callback when query value changes" },
+          { name: "aria-label", type: "string", default: '"Search"', description: "Accessible label for the dialog" },
+          { name: "className", type: "string", description: "Additional CSS classes for the view container" },
+          { name: "children", type: "ReactNode", description: "SearchView.Header, SearchView.Divider, SearchView.Content" },
+        ]}
+      />
+
+      <PropsTable
+        componentName="SearchView.Header"
+        props={[
+          { name: "leadingIcon", type: "string", default: '"arrow_back"', description: "Leading icon name (back button)" },
+          { name: "leadingLabel", type: "string", default: '"Back"', description: "Accessible label for the leading button" },
+          { name: "onLeadingClick", type: "() => void", description: "Leading button click handler (defaults to closing the view)" },
+          { name: "trailing", type: "ReactNode", description: "Trailing content (e.g. clear button or avatar)" },
+          { name: "className", type: "string", description: "Additional CSS classes" },
+          { name: "children", type: "ReactNode", description: "Header content — typically a SearchView.Input" },
+        ]}
+      />
+
+      <PropsTable
+        componentName="SearchView.Input"
+        props={[
+          { name: "placeholder", type: "string", default: '"Search"', description: "Placeholder text" },
+          { name: "aria-label", type: "string", description: "Accessible label (defaults to placeholder)" },
+          { name: "onSubmit", type: "(value: string) => void", description: "Callback when Enter key is pressed" },
+          { name: "className", type: "string", description: "Additional CSS classes" },
+        ]}
+      />
+
+      <PropsTable
+        componentName="SearchView.Divider"
+        props={[
+          { name: "className", type: "string", description: "Additional CSS classes" },
+        ]}
+      />
+
+      <PropsTable
+        componentName="SearchView.Content"
+        props={[
+          { name: "className", type: "string", description: "Additional CSS classes" },
+          { name: "children", type: "ReactNode", description: "Suggestions and search results" },
         ]}
       />
 

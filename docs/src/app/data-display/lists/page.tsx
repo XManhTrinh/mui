@@ -3,6 +3,7 @@
 import * as React from "react";
 import { List, ListItem, Icon } from "@mui/index";
 import { Showcase } from "@/components/showcase";
+import { PropsTable, type PropDef } from "@/components/props-table";
 
 export default function ListsPage() {
   return (
@@ -67,6 +68,31 @@ export default function ListsPage() {
           </List>
         </Showcase>
       </section>
+
+      <PropsTable
+        componentName="List"
+        props={[
+          { name: "className", type: "string", description: "Additional CSS classes" },
+          { name: "children", type: "ReactNode", description: "ListItem elements", required: true },
+        ]}
+      />
+
+      <PropsTable
+        componentName="ListItem"
+        props={[
+          { name: "leading", type: "ReactNode", description: "Leading element (icon, avatar, image)" },
+          { name: "trailing", type: "ReactNode", description: "Trailing element (icon, text, checkbox)" },
+          { name: "overline", type: "string", description: "Overline text above the headline" },
+          { name: "supporting", type: "string", description: "Supporting text below the headline" },
+          { name: "children", type: "ReactNode", description: "Headline content", required: true },
+          { name: "lines", type: "1 | 2 | 3", default: "1", description: "Number of text lines to display" },
+          { name: "selected", type: "boolean", description: "Whether the item is selected" },
+          { name: "disabled", type: "boolean", description: "Disables the item" },
+          { name: "interactive", type: "boolean", description: "Enables hover and press states" },
+          { name: "onClick", type: "() => void", description: "Click handler (implies interactive)" },
+          { name: "className", type: "string", description: "Additional CSS classes" },
+        ]}
+      />
     </div>
   );
 }
