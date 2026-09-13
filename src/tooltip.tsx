@@ -219,8 +219,11 @@ function TooltipSurface({
   React.useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const rect = el.getBoundingClientRect();
-    setPos(computePosition(anchor, rect, preferred, gap));
+    // Wait one frame so the browser computes layout at the hidden position
+    requestAnimationFrame(() => {
+      const rect = el.getBoundingClientRect();
+      setPos(computePosition(anchor, rect, preferred, gap));
+    });
   }, [anchor, preferred, gap]);
 
   const resolved = pos?.side ?? preferred;
@@ -310,7 +313,10 @@ function Tooltip({
 
   const measureAnchor = React.useCallback(() => {
     const el = triggerRef.current;
-    if (el) setAnchor(el.getBoundingClientRect());
+    // Measure the actual trigger element (first child), not the wrapper span,
+    // so the tooltip aligns to the visual button/icon, not the inline-flex wrapper.
+    const target = el?.firstElementChild ?? el;
+    if (target) setAnchor(target.getBoundingClientRect());
   }, []);
 
   const open = React.useCallback(() => {
