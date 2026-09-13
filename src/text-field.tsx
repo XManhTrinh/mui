@@ -133,14 +133,15 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       disabled ? "text-[hsl(var(--on-surface)/0.38)] cursor-not-allowed" : "cursor-text"
     );
 
-    const padL = leadingIcon ? "pl-0" : "pl-4";
-    const padR = trailingIcon ? "pr-0" : "pr-4";
+    // Logical inline padding so leading/trailing insets mirror under RTL.
+    const padL = leadingIcon ? "ps-0" : "ps-4";
+    const padR = trailingIcon ? "pe-0" : "pe-4";
 
     // ── Shared sub-elements ───────────────────────────────────────────────────
 
     const leadingEl = leadingIcon && (
       <span className={cn(
-        "shrink-0 flex items-center justify-center w-13 h-full pl-3 pr-4",
+        "shrink-0 flex items-center justify-center w-13 h-full ps-3 pe-4",
         "text-[hsl(var(--on-surface-variant))]",
         disabled && "text-[hsl(var(--on-surface)/0.38)]"
       )}>
@@ -150,7 +151,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
     const trailingEl = trailingIcon && (
       <span className={cn(
-        "shrink-0 flex items-center justify-center w-13 h-full pl-4 pr-3",
+        "shrink-0 flex items-center justify-center w-13 h-full ps-4 pe-3",
         error ? "text-[hsl(var(--error))]" : "text-[hsl(var(--on-surface-variant))]",
         disabled && "text-[hsl(var(--on-surface)/0.38)]"
       )}>
@@ -174,7 +175,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
         )}
         {characterCount && (
           <span className={cn(
-            "text-xs leading-4 tracking-[0.4px] ml-auto text-[hsl(var(--on-surface-variant))]",
+            "text-xs leading-4 tracking-[0.4px] ms-auto text-[hsl(var(--on-surface-variant))]",
             disabled && "text-[hsl(var(--on-surface)/0.38)]"
           )}>
             {characterCount.current}/{characterCount.max}
@@ -221,7 +222,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
             <div className={cn("relative flex-1 h-full flex", multiline ? "flex-col pt-6 pb-2" : "items-center", padL, padR)}>
               {prefix && showAffixes && !multiline && (
-                <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 mr-1 pt-6 pb-2">
+                <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 me-1 pt-6 pb-2">
                   {prefix}
                 </span>
               )}
@@ -249,7 +250,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 <label
                   htmlFor={inputId}
                   className={cn(
-                    "absolute left-0 pointer-events-none select-none z-1",
+                    "absolute start-0 pointer-events-none select-none z-1",
                     padL,
                     "origin-top-left transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
                     multiline
@@ -266,7 +267,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               )}
 
               {suffix && showAffixes && (
-                <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 ml-1 pt-6 pb-2">
+                <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 ms-1 pt-6 pb-2">
                   {suffix}
                 </span>
               )}
@@ -315,7 +316,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             )}
           >
             <legend className={cn(
-              "h-2.75 block text-xs leading-2.75 ml-3",
+              "h-2.75 block text-xs leading-2.75 ms-3",
               "transition-[max-width,padding] duration-200",
               (focused || hasValue) ? "px-1 max-w-full" : "px-0 max-w-[0.01px]"
             )}>
@@ -327,7 +328,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
           <div className={cn("relative flex-1 h-full flex", multiline ? "flex-col py-4" : "items-center", padL, padR)}>
             {prefix && showAffixes && !multiline && (
-              <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 mr-1">
+              <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 me-1">
                 {prefix}
               </span>
             )}
@@ -358,17 +359,17 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 className={cn(
                   "absolute pointer-events-none select-none",
                   "origin-top-left transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
-                  // Resting: align with input text
-                  leadingIcon ? "left-0" : "left-4",
+                  // Resting: align with input text (logical start inset for RTL)
+                  leadingIcon ? "start-0" : "start-4",
                   multiline
                     ? "top-4 text-[16px] leading-6 tracking-[0.5px]"
                     : "top-1/2 -translate-y-1/2 text-[16px] leading-6 tracking-[0.5px]",
                   // Floating: move up into the fieldset notch (which extends 8px above the container via -top-2)
                   leadingIcon
                     ? cn(
-                        "peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:-left-9 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
-                        "peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:-left-9 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
-                        "peer-[:-webkit-autofill]:top-0 peer-[:-webkit-autofill]:-translate-y-1/2 peer-[:-webkit-autofill]:-left-9 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]"
+                        "peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:-start-9 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
+                        "peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:-start-9 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:leading-4 peer-not-placeholder-shown:tracking-[0.4px]",
+                        "peer-[:-webkit-autofill]:top-0 peer-[:-webkit-autofill]:-translate-y-1/2 peer-[:-webkit-autofill]:-start-9 peer-[:-webkit-autofill]:text-xs peer-[:-webkit-autofill]:leading-4 peer-[:-webkit-autofill]:tracking-[0.4px]"
                       )
                     : cn(
                         "peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:text-xs peer-focus:leading-4 peer-focus:tracking-[0.4px]",
@@ -383,7 +384,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             )}
 
             {suffix && showAffixes && (
-              <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 ml-1">
+              <span className="text-[16px] leading-6 tracking-[0.5px] text-[hsl(var(--on-surface-variant))] shrink-0 ms-1">
                 {suffix}
               </span>
             )}

@@ -11,8 +11,11 @@ import { cn } from "../lib/utils";
  *
  * Implements Small (56dp), Medium (80dp), and Large (96dp) sizes with
  * Title Medium typography, icon + label content, and 6 color variants.
- * Supports shape morph on press, fixed positioning, loading state,
+ * Supports shape morph on press, loading state,
  * and accessible touch targets.
+ *
+ * Positioning is the consumer's responsibility — use className to add
+ * fixed/absolute/sticky positioning as needed.
  *
  * State layers use a ::before pseudo-element with `bg-current` to inherit
  * the text color (which is the on-color for each variant).
@@ -27,7 +30,7 @@ const extendedFabVariants = cva(
     // Cursor & interaction
     "cursor-pointer select-none",
     // Transition for elevation + shape morph
-    "transition-[border-radius,box-shadow] duration-100 ease-out",
+    "transition-[border-radius,box-shadow] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
     // Focus ring
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
     // Elevation Level 3 rest, Level 4 hover
@@ -48,7 +51,7 @@ const extendedFabVariants = cva(
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-6",
     "[&_.material-symbols-rounded]:pointer-events-none",
     // Disabled
-    "disabled:opacity-[0.38] disabled:pointer-events-none disabled:cursor-not-allowed disabled:shadow-none",
+    "disabled:opacity-[0.38] disabled:pointer-events-none disabled:cursor-not-allowed disabled:shadow-none disabled:before:opacity-0!",
   ].join(" "),
   {
     variants: {
@@ -61,9 +64,9 @@ const extendedFabVariants = cva(
         "tertiary-fixed": "bg-tertiary text-tertiary-foreground",
       },
       size: {
-        small: "h-14 px-4 gap-2 rounded-2xl active:rounded-xl",
-        medium: "h-20 px-4 gap-2 rounded-2xl active:rounded-xl",
-        large: "h-24 px-4 gap-2 rounded-[28px] active:rounded-2xl",
+        small: "h-14 ps-4 pe-5 gap-2 rounded-2xl active:rounded-xl",
+        medium: "h-20 ps-4 pe-5 gap-2 rounded-2xl active:rounded-xl",
+        large: "h-24 ps-4 pe-5 gap-2 rounded-[28px] active:rounded-2xl",
       },
     },
     defaultVariants: {
@@ -115,8 +118,6 @@ export type ExtendedFABProps = React.ButtonHTMLAttributes<HTMLButtonElement> & V
     | "tertiary-fixed";
   /** Size */
   size?: "small" | "medium" | "large";
-  /** Fixed positioning (bottom-right) */
-  fixed?: boolean;
   /** Loading state */
   loading?: boolean;
 }
@@ -130,7 +131,6 @@ const ExtendedFAB = React.forwardRef<HTMLButtonElement, ExtendedFABProps>(
       asChild = false,
       icon,
       label,
-      fixed = false,
       loading = false,
       disabled = false,
       ...props
@@ -139,16 +139,10 @@ const ExtendedFAB = React.forwardRef<HTMLButtonElement, ExtendedFABProps>(
   ) => {
     const Comp = asChild ? Slot : "button";
 
-    // Fixed positioning classes
-    const fixedClasses = fixed
-      ? "fixed right-4 bottom-4 z-50 md:bottom-4 max-md:bottom-20"
-      : "";
-
     return (
       <Comp
         className={cn(
           extendedFabVariants({ color, size }),
-          fixedClasses,
           loading && "pointer-events-none",
           className
         )}

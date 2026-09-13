@@ -61,7 +61,7 @@ const LinearProgress = React.forwardRef<HTMLDivElement, LinearProgressProps>(
       >
         {isDeterminate ? (
           <div
-            className="absolute inset-y-0 left-0 rounded-full bg-primary transition-[width] duration-200 ease-[cubic-bezier(0.2,0,0,1)]"
+            className="absolute inset-y-0 start-0 rounded-full bg-primary transition-[width] duration-200 ease-[cubic-bezier(0.2,0,0,1)]"
             style={{ width: `${clampedValue}%` }}
           />
         ) : (

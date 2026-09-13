@@ -48,7 +48,7 @@ const SearchLeadingIcon = React.forwardRef<HTMLDivElement, SearchLeadingIconProp
       <div
         ref={ref}
         className={cn(
-          "flex items-center justify-center w-12 h-12 shrink-0 ml-1",
+          "flex items-center justify-center w-12 h-12 shrink-0 ms-1",
           className
         )}
       >
@@ -122,7 +122,7 @@ const SearchTrailingIcon = React.forwardRef<HTMLDivElement, SearchTrailingIconPr
       <div
         ref={ref}
         className={cn(
-          "flex items-center justify-center w-12 h-12 shrink-0 mr-1",
+          "flex items-center justify-center w-12 h-12 shrink-0 me-1",
           className
         )}
       >
@@ -269,7 +269,7 @@ const SearchRoot = React.forwardRef<HTMLDivElement, SearchProps>(
             // ── Legacy Prop-Based Layout ──
             <>
               {/* Leading icon — 48dp touch target, 4dp padding */}
-              <div className="flex items-center justify-center w-12 h-12 shrink-0 ml-1">
+              <div className="flex items-center justify-center w-12 h-12 shrink-0 ms-1">
                 <Icon
                   name={leadingIcon}
                   size={24}
@@ -297,7 +297,7 @@ const SearchRoot = React.forwardRef<HTMLDivElement, SearchProps>(
 
               {/* Trailing icon */}
               {trailingIcon && (
-                <div className="flex items-center justify-center w-12 h-12 shrink-0 mr-1">
+                <div className="flex items-center justify-center w-12 h-12 shrink-0 me-1">
                   {trailingIcon}
                 </div>
               )}

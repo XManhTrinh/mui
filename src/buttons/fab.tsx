@@ -11,8 +11,11 @@ import { cn } from "../lib/utils";
  *
  * Implements small, medium, large, and extended FAB sizes with
  * primary, secondary, tertiary, and surface color variants.
- * Supports shape morph on press, fixed positioning, loading state,
+ * Supports shape morph on press, loading state,
  * and accessible touch targets.
+ *
+ * Positioning is the consumer's responsibility — use className to add
+ * fixed/absolute/sticky positioning as needed.
  *
  * State layers use a ::before pseudo-element with `bg-current` to inherit
  * the text color (which is the on-color for each variant).
@@ -25,14 +28,14 @@ const fabVariants = cva(
     // Cursor & interaction
     "cursor-pointer select-none",
     // Transition for shape morph + elevation
-    "transition-[border-radius,box-shadow] duration-100 ease-out",
+    "transition-[border-radius,box-shadow] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
     // Focus ring
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
     // Elevation Level 3 at rest, Level 4 on hover
     "shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
     "hover:shadow-[0_6px_12px_var(--elevation-4),0_2px_4px_var(--elevation-4)]",
     // Disabled
-    "disabled:opacity-[0.38] disabled:pointer-events-none disabled:cursor-not-allowed disabled:shadow-none",
+    "disabled:opacity-[0.38] disabled:pointer-events-none disabled:cursor-not-allowed disabled:shadow-none disabled:before:opacity-0!",
     // State layer via ::before pseudo-element
     "overflow-hidden",
     "before:absolute before:inset-0 before:rounded-[inherit]",
@@ -59,7 +62,7 @@ const fabVariants = cva(
         l: "size-14 [&_svg]:size-6",
         xl: "size-24 [&_svg]:size-9",
         extended:
-          "h-14 w-auto pl-4 pr-5 gap-2 [&_svg]:size-6",
+          "h-14 w-auto ps-4 pe-5 gap-2 [&_svg]:size-6",
       },
     },
     defaultVariants: {
@@ -125,8 +128,6 @@ export type FABProps = React.ButtonHTMLAttributes<HTMLButtonElement> & VariantPr
   color?: "primary" | "secondary" | "tertiary" | "surface";
   /** Shape variant */
   shape?: "rounded" | "round";
-  /** Fixed positioning (bottom-right) */
-  fixed?: boolean;
   /** Loading state */
   loading?: boolean;
 }
@@ -141,7 +142,6 @@ const FAB = React.forwardRef<HTMLButtonElement, FABProps>(
       asChild = false,
       icon,
       label,
-      fixed = false,
       loading = false,
       disabled = false,
       children,
@@ -155,17 +155,11 @@ const FAB = React.forwardRef<HTMLButtonElement, FABProps>(
     // Shape classes for resting + active morph
     const shapeClass = shapeClasses[shape][resolvedSize];
 
-    // Fixed positioning classes
-    const fixedClasses = fixed
-      ? "fixed right-4 bottom-4 z-50 md:bottom-4 max-md:bottom-20"
-      : "";
-
     return (
       <Comp
         className={cn(
           fabVariants({ color, size }),
           shapeClass,
-          fixedClasses,
           loading && "pointer-events-none",
           className
         )}

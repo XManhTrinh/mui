@@ -28,7 +28,7 @@ const chipVariants = cva(
     "text-[14px] leading-5 font-medium tracking-[0.1px]",
     "transition-colors duration-200 select-none cursor-pointer",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-    "disabled:pointer-events-none disabled:opacity-[0.38] disabled:cursor-not-allowed",
+    "disabled:pointer-events-none disabled:opacity-[0.38] disabled:cursor-not-allowed disabled:before:opacity-0!",
   ].join(" "),
   {
     variants: {
@@ -101,6 +101,7 @@ const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
         ref={ref}
         type="button"
         disabled={disabled}
+        aria-pressed={variant === "filter" || variant === "input" ? selected : undefined}
         className={cn(
           chipVariants({ variant, selected, elevated }),
           // State layer on hover/focus/press
@@ -108,17 +109,17 @@ const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
           !selected && "hover:before:bg-[hsl(var(--on-surface)/0.08)] focus-visible:before:bg-[hsl(var(--on-surface)/0.10)] active:before:bg-[hsl(var(--on-surface)/0.10)]",
           selected && "hover:before:bg-[hsl(var(--on-secondary-container)/0.08)] focus-visible:before:bg-[hsl(var(--on-secondary-container)/0.10)] active:before:bg-[hsl(var(--on-secondary-container)/0.10)]",
           // Adjust padding when icons present
-          hasLeading && "pl-2",
-          hasTrailing && "pr-2",
+          hasLeading && "ps-2",
+          hasTrailing && "pe-2",
           className
         )}
         {...props}
       >
         {showCheckmark && (
-          <Icon name="check" size={18} className="mr-2 relative z-10" />
+          <Icon name="check" size={18} className="me-2 relative z-10" />
         )}
         {!showCheckmark && leadingIcon && (
-          <Icon name={leadingIcon} size={18} className={cn("mr-2 relative z-10", variant === "assist" && "text-primary")} />
+          <Icon name={leadingIcon} size={18} className={cn("me-2 relative z-10", variant === "assist" && "text-primary")} />
         )}
         <span className="relative z-10 truncate">{children}</span>
         {showDismiss && (
@@ -137,13 +138,13 @@ const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
                 onDismiss?.();
               }
             }}
-            className="relative z-10 ml-2 inline-flex items-center justify-center min-w-12 min-h-12 -mr-3"
+            className="relative z-10 ms-2 inline-flex items-center justify-center min-w-12 min-h-12 -me-3"
           >
             <Icon name="close" size={18} />
           </span>
         )}
         {!showDismiss && trailingIcon && (
-          <Icon name={trailingIcon} size={18} className="ml-2 relative z-10" />
+          <Icon name={trailingIcon} size={18} className="ms-2 relative z-10" />
         )}
       </button>
     );

@@ -80,13 +80,16 @@ const shapeClasses = {
   },
 } as const;
 
-// Asymmetric padding when icon is present (icon-side gets less padding per M3 spec: -8dp)
+// Asymmetric padding when icon is present (icon-side gets less padding per M3 spec: -8dp).
+// Logical padding (ps = padding-inline-start, pe = padding-inline-end) so leading/
+// trailing icon padding mirrors correctly under RTL. Format is always "ps-* pe-*"
+// (start first, end second) — the combined leading+trailing case below relies on it.
 const iconPaddingMap = {
-  xs: { icon: "pl-2 pr-4", trailing: "pl-4 pr-2" },
-  s: { icon: "pl-4 pr-6", trailing: "pl-6 pr-4" },
-  m: { icon: "pl-5 pr-7", trailing: "pl-7 pr-5" },
-  l: { icon: "pl-6 pr-8", trailing: "pl-8 pr-6" },
-  xl: { icon: "pl-6 pr-8", trailing: "pl-8 pr-6" },
+  xs: { icon: "ps-2 pe-4", trailing: "ps-4 pe-2" },
+  s: { icon: "ps-4 pe-6", trailing: "ps-6 pe-4" },
+  m: { icon: "ps-5 pe-7", trailing: "ps-7 pe-5" },
+  l: { icon: "ps-6 pe-8", trailing: "ps-8 pe-6" },
+  xl: { icon: "ps-6 pe-8", trailing: "ps-8 pe-6" },
 } as const;
 
 function ButtonSpinner({ className }: { className?: string }) {

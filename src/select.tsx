@@ -48,7 +48,7 @@ function LabelText({ label, required }: { label: string; required: boolean }) {
   return (
     <>
       {label}
-      {required && <span className="text-error ml-0.5">*</span>}
+      {required && <span className="text-error ms-0.5">*</span>}
     </>
   );
 }
@@ -108,7 +108,7 @@ function SelectMenu({
         side="bottom"
         sideOffset={4}
         className={cn(
-          "z-50 min-w-28 max-w-70 w-(--radix-dropdown-menu-trigger-width) overflow-y-auto max-h-[min(var(--radix-dropdown-menu-content-available-height,300px),300px)] rounded-sm bg-surface-container py-2 shadow-[0_3px_6px_var(--elevation-2),0_1px_3px_var(--elevation-2)]",
+          "z-50 min-w-28 max-w-70 w-(--radix-dropdown-menu-trigger-width) overflow-y-auto max-h-[min(var(--radix-dropdown-menu-content-available-height,300px),300px)] rounded bg-surface-container py-2 shadow-[0_3px_6px_var(--elevation-2),0_1px_3px_var(--elevation-2)]",
           "m3-animate-menu"
         )}
       >
@@ -149,6 +149,8 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
     const [open, setOpen] = React.useState(false);
     const [internalValue, setInternalValue] = React.useState(defaultValue ?? "");
     const inputId = React.useId();
+    const labelId = React.useId();
+    const supportingId = React.useId();
 
     const isControlled = value !== undefined;
     const currentValue = isControlled ? value : internalValue;
@@ -189,8 +191,12 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                 type="button"
                 id={inputId}
                 disabled={disabled}
+                aria-required={required || undefined}
+                aria-labelledby={label ? labelId : undefined}
+                aria-describedby={displayedSupportingText ? supportingId : undefined}
+                aria-invalid={error || undefined}
                 className={cn(
-                  "group relative flex items-center w-full h-14 overflow-hidden text-left",
+                  "group relative flex items-center w-full h-14 overflow-hidden text-start",
                   "rounded-t rounded-b-none bg-surface-container-highest",
                   !disabled && "hover:before:absolute hover:before:inset-0 hover:before:bg-[hsl(var(--on-surface)/0.08)]",
                   disabled && "pointer-events-none cursor-not-allowed bg-[hsl(var(--on-surface)/0.04)]",
@@ -198,7 +204,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                 )}
               >
                 {/* Content area */}
-                <div className="relative flex-1 min-w-0 h-full flex items-center pl-4 pr-0">
+                <div className="relative flex-1 min-w-0 h-full flex items-center ps-4 pe-0">
                   {/* Selected value text */}
                   <span
                     className={cn(
@@ -217,8 +223,9 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                   {/* Label */}
                   {label && (
                     <span
+                      id={labelId}
                       className={cn(
-                        "absolute left-4 pointer-events-none select-none",
+                        "absolute start-4 pointer-events-none select-none",
                         "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
                         hasValue || open
                           ? "top-2 translate-y-0 text-xs leading-4 tracking-[0.4px]"
@@ -234,7 +241,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                 {/* Trailing icon */}
                 <span
                   className={cn(
-                    "shrink-0 flex items-center justify-center w-13 h-full pr-3 transition-transform duration-200",
+                    "shrink-0 flex items-center justify-center w-13 h-full pe-3 transition-transform duration-200",
                     open && "rotate-180",
                     error ? "text-[hsl(var(--error))]" : "text-[hsl(var(--on-surface-variant))]",
                     disabled && "text-[hsl(var(--on-surface)/0.38)]"
@@ -268,6 +275,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
           </DropdownMenuPrimitive.Root>
           {(supportingText || (error && errorText)) && (
             <p
+              id={supportingId}
               className={cn(
                 "px-4 pt-1 text-[12px] leading-4 tracking-[0.4px]",
                 error ? "text-[hsl(var(--error))]" : "text-[hsl(var(--on-surface-variant))]",
@@ -295,8 +303,12 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
               type="button"
               id={inputId}
               disabled={disabled}
+              aria-required={required || undefined}
+              aria-labelledby={label ? labelId : undefined}
+              aria-describedby={displayedSupportingText ? supportingId : undefined}
+              aria-invalid={error || undefined}
               className={cn(
-                "group relative flex items-center w-full rounded text-left",
+                "group relative flex items-center w-full rounded text-start",
                 isCompact ? "h-full" : "h-14",
                 disabled && "pointer-events-none cursor-not-allowed",
                 "outline-none"
@@ -325,7 +337,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                 {!isCompact && (
                   <legend
                     className={cn(
-                      "h-2.75 block text-xs leading-2.75 ml-3",
+                      "h-2.75 block text-xs leading-2.75 ms-3",
                       "transition-[max-width,padding] duration-200",
                       hasValue || open ? "px-1 max-w-full" : "px-0 max-w-[0.01px]"
                     )}
@@ -337,8 +349,8 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
 
               {/* Content area */}
               <div className={cn(
-                "relative flex-1 min-w-0 h-full flex items-center pr-0",
-                isCompact ? "pl-3" : "pl-4"
+                "relative flex-1 min-w-0 h-full flex items-center pe-0",
+                isCompact ? "ps-3" : "ps-4"
               )}>
                 {/* Selected value text */}
                 <span
@@ -359,8 +371,9 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                 {/* Label */}
                 {label && (
                   <span
+                    id={labelId}
                     className={cn(
-                      "absolute left-4 pointer-events-none select-none z-3",
+                      "absolute start-4 pointer-events-none select-none z-3",
                       "transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
                       hasValue || open
                         ? "top-0 -translate-y-1/2 text-xs leading-4 tracking-[0.4px]"
@@ -376,8 +389,8 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
               {/* Trailing icon */}
               <span
                 className={cn(
-                  "shrink-0 flex items-center justify-center h-full pr-2 transition-transform duration-200",
-                  isCompact ? "w-8" : "w-13 pr-3",
+                  "shrink-0 flex items-center justify-center h-full pe-2 transition-transform duration-200",
+                  isCompact ? "w-8" : "w-13 pe-3",
                   open && "rotate-180",
                   error ? "text-[hsl(var(--error))]" : "text-[hsl(var(--on-surface-variant))]",
                   disabled && "text-[hsl(var(--on-surface)/0.38)]"

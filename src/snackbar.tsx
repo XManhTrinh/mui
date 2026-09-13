@@ -153,8 +153,8 @@ function SnackbarItem({ item, onDismiss, reducedMotion }: SnackbarItemProps) {
         "bg-inverse-surface text-inverse-on-surface",
         "shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
         // Padding
-        "pl-4 py-3",
-        action || showClose ? "pr-2" : "pr-4"
+        "ps-4 py-3",
+        action || showClose ? "pe-2" : "pe-4"
       )}
     >
       {/* Supporting text — Body Medium */}
@@ -175,10 +175,13 @@ function SnackbarItem({ item, onDismiss, reducedMotion }: SnackbarItemProps) {
           className={cn(
             "shrink-0 text-[14px] font-medium leading-5 tracking-[0.1px]",
             "text-[hsl(var(--inverse-primary,var(--primary)))]",
-            "hover:opacity-80 transition-opacity cursor-pointer",
+            "relative overflow-hidden",
+            "hover:before:opacity-[0.08] active:before:opacity-[0.10]",
+            "before:absolute before:inset-0 before:rounded-[inherit] before:bg-current before:opacity-0 before:transition-opacity before:duration-200 before:pointer-events-none",
+            "transition-colors cursor-pointer",
             "px-2 py-1.5 rounded-sm",
             "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--inverse-primary,var(--primary)))]",
-            showClose ? "mr-0" : "mr-2"
+            showClose ? "me-0" : "me-2"
           )}
         >
           {action.label}
@@ -195,7 +198,7 @@ function SnackbarItem({ item, onDismiss, reducedMotion }: SnackbarItemProps) {
             "text-inverse-on-surface",
             "hover:bg-[hsl(var(--inverse-on-surface)/0.08)] transition-colors",
             "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-inverse-on-surface",
-            "mr-1"
+            "me-1"
           )}
           aria-label="Close"
         >
@@ -280,5 +283,7 @@ export function SnackbarProvider({
     </SnackbarContext.Provider>
   );
 }
+
+SnackbarProvider.displayName = "SnackbarProvider";
 
 export type { SnackbarContextValue };

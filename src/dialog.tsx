@@ -243,7 +243,7 @@ const DialogContent = React.forwardRef<
           >
             {/* ── Full-screen header: 56dp, close icon (24dp), Title Large ── */}
             <div className="flex items-center h-14 px-4 shrink-0 sm:hidden">
-              <DialogPrimitive.Close className="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors mr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+              <DialogPrimitive.Close className="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-[hsl(var(--on-surface)/0.08)] transition-colors me-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                 <Icon name="close" size={24} className="text-on-surface" />
               </DialogPrimitive.Close>
             </div>

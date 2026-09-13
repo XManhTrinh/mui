@@ -167,7 +167,7 @@ const ListItem = React.forwardRef<HTMLLIElement, ListItemProps>(
           {supporting && (
             <p
               className={cn(
-                "text-[14px] leading-5 text-surface-variant-foreground",
+                "text-[14px] leading-5 tracking-[0.25px] text-surface-variant-foreground",
                 lines === 3 ? "line-clamp-2" : "truncate"
               )}
             >
@@ -180,7 +180,7 @@ const ListItem = React.forwardRef<HTMLLIElement, ListItemProps>(
         {trailing && (
           <div
             className={cn(
-              "shrink-0 flex items-center pr-2 text-surface-variant-foreground",
+              "shrink-0 flex items-center pe-2 text-surface-variant-foreground",
               isThreeLine && "self-start mt-2"
             )}
           >

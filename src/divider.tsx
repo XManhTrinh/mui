@@ -33,7 +33,7 @@ const Divider = React.forwardRef<HTMLHRElement, DividerProps>(
         className={cn(
           "shrink-0 border-none bg-outline-variant",
           isHorizontal ? "h-px w-full" : "w-px h-full",
-          isHorizontal && variant === "inset" && "ml-4",
+          isHorizontal && variant === "inset" && "ms-4",
           isHorizontal && variant === "middle-inset" && "mx-4",
           !isHorizontal && variant === "inset" && "mt-4",
           !isHorizontal && variant === "middle-inset" && "my-4",
