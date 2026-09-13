@@ -226,7 +226,7 @@ export type {
 
 // ─── Slider ───────────────────────────────────────────────────────────────────
 export { Slider } from "./slider";
-export type { SliderProps } from "./slider";
+export type { SliderProps, SliderSize } from "./slider";
 
 // ─── Text Field ───────────────────────────────────────────────────────────────
 export { TextField } from "./text-field";

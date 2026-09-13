@@ -40,6 +40,24 @@ import { cn } from "./lib/utils";
  * Animation: value indicator fade 150ms, handle state 200ms M3 standard easing
  */
 
+/**
+ * M3 Expressive slider sizes. Per md.comp.slider.{xsmall,small,medium,large,xlarge}:
+ * track height 16/24/40/56/96dp, handle height 44/44/44/68/108dp,
+ * track shape-leading 8/8/12/16/28dp.
+ */
+export type SliderSize = "xsmall" | "small" | "medium" | "large" | "xlarge";
+
+const sliderSizeMap: Record<
+  SliderSize,
+  { track: string; handle: string; row: string; radius: string; handleW: string }
+> = {
+  xsmall: { track: "h-4", handle: "h-11", row: "h-12", radius: "rounded-lg", handleW: "w-1" },
+  small: { track: "h-6", handle: "h-11", row: "h-12", radius: "rounded-lg", handleW: "w-1" },
+  medium: { track: "h-10", handle: "h-11", row: "h-12", radius: "rounded-xl", handleW: "w-1" },
+  large: { track: "h-14", handle: "h-17", row: "h-18", radius: "rounded-2xl", handleW: "w-1.5" },
+  xlarge: { track: "h-24", handle: "h-27", row: "h-28", radius: "rounded-[28px]", handleW: "w-1.5" },
+};
+
 export type SliderProps = {
   value?: number;
   defaultValue?: number;
@@ -47,6 +65,8 @@ export type SliderProps = {
   min?: number;
   max?: number;
   step?: number;
+  /** M3 Expressive size (default: xsmall — the 16dp baseline track) */
+  size?: SliderSize;
   disabled?: boolean;
   showValueIndicator?: boolean;
   showStops?: boolean;
@@ -63,6 +83,7 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
       min = 0,
       max = 100,
       step,
+      size = "xsmall",
       disabled = false,
       showValueIndicator = false,
       showStops,
@@ -71,6 +92,7 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
     },
     ref
   ) => {
+    const sz = sliderSizeMap[size];
     const [internalValue, setInternalValue] = React.useState(
       defaultValue ?? min
     );
@@ -109,7 +131,8 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
     return (
       <div
         className={cn(
-          "isolate relative flex items-center h-12 select-none group",
+          "isolate relative flex items-center select-none group",
+          sz.row,
           disabled && "pointer-events-none cursor-not-allowed",
           className
         )}
@@ -134,12 +157,13 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
           </div>
         )}
 
-        {/* Track container — 16dp height, fully rounded */}
-        <div className="relative w-full h-4 rounded-lg overflow-hidden">
+        {/* Track container — per-size height + shape-leading radius */}
+        <div className={cn("relative w-full overflow-hidden", sz.track, sz.radius)}>
           {/* Inactive track */}
           <div
             className={cn(
-              "absolute inset-0 rounded-lg",
+              "absolute inset-0",
+              sz.radius,
               disabled
                 ? "bg-[hsl(var(--on-surface)/0.12)]"
                 : "bg-secondary-container"
@@ -149,7 +173,8 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
           {/* Active track */}
           <div
             className={cn(
-              "absolute inset-y-0 left-0 rounded-lg",
+              "absolute inset-y-0 start-0",
+              sz.radius,
               disabled
                 ? "bg-[hsl(var(--on-surface)/0.38)]"
                 : "bg-primary"
@@ -174,11 +199,12 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
             ))}
         </div>
 
-        {/* Visual handle (thumb) — 44dp height × 4dp width */}
+        {/* Visual handle (thumb) — per-size height, 4dp width (6dp on large+/interacting) */}
         <div
           className={cn(
-            "absolute top-1/2 -translate-y-1/2 -translate-x-1/2",
-            "w-1 h-11 rounded-full",
+            "absolute top-1/2 -translate-y-1/2 -translate-x-1/2 rounded-full",
+            sz.handleW,
+            sz.handle,
             "transition-[width,background-color] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
             disabled
               ? "bg-[hsl(var(--on-surface)/0.38)] cursor-not-allowed"
