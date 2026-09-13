@@ -47,7 +47,7 @@ export const buttonBase = [
 export const buttonVariantColors = {
   filled: "bg-primary text-primary-foreground",
   outlined:
-    "bg-transparent border border-outline text-primary disabled:border-[hsl(var(--on-surface)/0.12)]",
+    "bg-transparent border border-outline-variant text-surface-variant-foreground disabled:border-[hsl(var(--on-surface)/0.12)]",
   text: "bg-transparent text-primary",
   elevated:
     "bg-surface-container-low text-primary shadow-[0_1px_3px_hsl(var(--elevation-1))] disabled:shadow-none",
