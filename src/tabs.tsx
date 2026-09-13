@@ -336,22 +336,27 @@ export type TabContentProps = {
 
 function TabContent({ value: contentValue, className, children }: TabContentProps) {
   const { value: activeValue, onValueChange } = useTabsContext();
+  const panelRef = React.useRef<HTMLDivElement>(null);
   const swipeStart = React.useRef<{ x: number; y: number } | null>(null);
 
   if (activeValue !== contentValue) return null;
 
-  const handlePointerDown = (e: React.PointerEvent) => {
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     swipeStart.current = { x: e.clientX, y: e.clientY };
+    // Capture the pointer so pointerUp fires even if the cursor leaves the element
+    e.currentTarget.setPointerCapture(e.pointerId);
   };
 
-  const handlePointerUp = (e: React.PointerEvent) => {
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!swipeStart.current) return;
     const dx = e.clientX - swipeStart.current.x;
     const dy = e.clientY - swipeStart.current.y;
     swipeStart.current = null;
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      // Find the ordered list of tab values from the DOM
-      const tablist = document.querySelector('[role="tablist"]');
+      // Find the tablist that belongs to the same Tabs container (sibling, not global)
+      const panel = panelRef.current;
+      const tabsRoot = panel?.closest(".flex.flex-col");
+      const tablist = tabsRoot?.querySelector('[role="tablist"]') ?? document.querySelector('[role="tablist"]');
       if (!tablist) return;
       const tabs = Array.from(
         tablist.querySelectorAll<HTMLElement>('[role="tab"][data-tab-value]')
@@ -370,8 +375,9 @@ function TabContent({ value: contentValue, className, children }: TabContentProp
 
   return (
     <div
+      ref={panelRef}
       role="tabpanel"
-      className={cn("mt-4 focus-visible:outline-none touch-pan-y", className)}
+      className={cn("mt-4 focus-visible:outline-none cursor-grab active:cursor-grabbing", className)}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
     >

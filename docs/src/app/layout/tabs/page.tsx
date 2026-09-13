@@ -147,7 +147,7 @@ export default function TabsPage() {
         <p className="text-[14px] text-surface-variant-foreground">
           When tabs don't fit, the tab list scrolls horizontally. Try resizing the browser or use the arrow keys to navigate.
         </p>
-        <Showcase title="Many Tabs (scrollable)" className="flex-col items-stretch" code={`<Tabs defaultValue="mon">
+        <Showcase title="Many Tabs (scrollable)" className="flex-col items-stretch max-w-md" code={`<Tabs defaultValue="mon">
   <TabList>
     <Tab value="mon" label="Monday" />
     <Tab value="tue" label="Tuesday" />
