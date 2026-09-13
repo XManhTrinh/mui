@@ -23,7 +23,8 @@ import {
  */
 
 const splitButtonVariants = cva(
-  "relative inline-flex items-center",
+  // 2dp gap between the leading and trailing segments per M3 Expressive.
+  "relative inline-flex items-center gap-0.5",
   {
     variants: {
       variant: {
@@ -288,11 +289,7 @@ const SplitButtonRoot = React.forwardRef<HTMLDivElement, SplitButtonProps>(
             {leadingContent}
           </button>
 
-          {/* Divider between segments — M3: uses outline-variant */}
-          <span
-            className="w-px self-stretch bg-outline-variant"
-            aria-hidden="true"
-          />
+          {/* 2dp gap between segments provided by the container's gap-0.5 */}
 
           {/* Trailing segment (menu trigger) */}
           <DropdownMenu.Trigger asChild>
@@ -377,7 +374,7 @@ const SplitButtonRoot = React.forwardRef<HTMLDivElement, SplitButtonProps>(
             className={cn(
               "z-50 min-w-40 rounded-sm p-1",
               "bg-surface-container text-surface-foreground",
-              "shadow-[0_3px_6px_var(--elevation-2),0_1px_2px_var(--elevation-2)]",
+              "shadow-[0_3px_6px_hsl(var(--elevation-2)),0_1px_2px_hsl(var(--elevation-2))]",
               "m3-animate-menu"
             )}
           >
