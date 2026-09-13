@@ -126,6 +126,16 @@ function SelectMenu({
           "flex flex-col"
         )}
         onCloseAutoFocus={() => setFilter("")}
+        // When searchable: redirect any printable keystroke back to the
+        // search input so typing always filters, even when an item is focused.
+        onKeyDown={searchable ? (e) => {
+          if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            e.preventDefault();
+            e.stopPropagation();
+            inputRef.current?.focus();
+            setFilter((f) => f + e.key);
+          }
+        } : undefined}
       >
         {searchable && (
           <div className="sticky top-0 z-10 px-3 pb-2 bg-surface-container">
