@@ -6,8 +6,8 @@
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
-    "docs:dev": "cd docs && npm run dev",
-    "docs:build": "cd docs && npm run build"
+    "build": "pnpm --filter @vkieu/mui-docs build",
+    "docs:dev": "pnpm --filter @vkieu/mui-docs dev"
   },
   "exports": {
     ".": "./src/index.ts",

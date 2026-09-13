@@ -1,6 +1,4 @@
 {
-  "installCommand": "pnpm install",
-  "buildCommand": "pnpm --filter @vkieu/mui-docs build",
-  "outputDirectory": "docs/.next",
-  "framework": "nextjs"
+  "buildCommand": "cd docs && next build",
+  "outputDirectory": "docs/.next"
 }
