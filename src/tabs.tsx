@@ -403,7 +403,7 @@ function TabContent({ value: contentValue, className, children }: TabContentProp
     <div
       ref={panelRef}
       role="tabpanel"
-      className={cn("mt-4 focus-visible:outline-none cursor-grab active:cursor-grabbing", className)}
+      className={cn("mt-4 focus-visible:outline-none", className)}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
     >
