@@ -185,7 +185,7 @@ function TabList({ className, children }: TabListProps) {
     const rect = target.getBoundingClientRect();
 
     setIndicatorStyle({
-      left: rect.left - containerRect.left,
+      left: rect.left - containerRect.left + container.scrollLeft,
       width: rect.width,
     });
   }, [value, variant]);
@@ -204,7 +204,13 @@ function TabList({ className, children }: TabListProps) {
       .querySelectorAll("[data-tab-value]")
       .forEach((tab) => observer.observe(tab));
 
-    return () => observer.disconnect();
+    // Re-measure on scroll so the indicator tracks during horizontal scrolling
+    container.addEventListener("scroll", measureIndicator);
+
+    return () => {
+      observer.disconnect();
+      container.removeEventListener("scroll", measureIndicator);
+    };
   }, [measureIndicator]);
 
   const indicatorHeight = variant === "primary" ? 3 : 2;
