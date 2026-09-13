@@ -189,3 +189,17 @@ Both workspaces (`mui`, `strata/apps/web`) compile clean after the sweep.
 - **Progress indicators** ✅ wavy variant added (`wave` prop): LinearProgress determinate SVG sine wave (amp 3dp / wavelength 40dp, scrolling); CircularProgress sine-perturbed ring (amp 1.6dp / ~15dp wavelength), defaults to 48dp "with wave" size.
 - **Checkbox** ✅ error state added (`error` prop: error container / on-error icon / error outline / error state layer / aria-invalid).
 - **NavigationBar** — level2 elevation left as flat tonal (deliberate; common M3 web treatment). Not a deviation.
+
+---
+
+## Gap-closure pass (completeness re-check)
+
+Re-audited components that were previously only docs-verified or soft-passed:
+- **Search / SearchView** ✅ token-verified vs `md.comp.search-bar` + `md.comp.search-view`. Bar 56dp pill / Body Large / surface-container-high already correct. **Fixed SearchView:** docked shape 16dp → **28dp** (corner-extra-large); elevation level2 → **level3**; full-screen header 56dp → **72dp** (docked stays 56dp); divider `outline-variant` → **`outline`**.
+- **Carousel** ✅ token-verified vs carousel `dimens.xml`: small item 40–56dp ✓, corner 28dp ✓.
+- **Toolbar** — **no MDC token file exists** (newer Expressive component, not shipped in material-components-android). Verified against M3 Expressive docs guidance only (docked h-16 surface-container / floating h-14 rounded-full primary-container, no elevation). Documented as docs-verified, not token-verified.
+- **LoadingIndicator** — thin wrapper over CircularProgress; its size presets (24/48/64) are convenience values, not spec tokens. Covered via CircularProgress.
+
+### Final coverage
+Token-verified against MDC `tokens.xml`/`dimens.xml`: button, icon-button, fab, extended-fab, fab-menu, split-button, checkbox, radio, switch, slider, chip, text-field, select, card, dialog, bottom-sheet, side-sheet, divider, list, navigation-bar, navigation-rail, tabs, app-bar, badge, snackbar, tooltip, menu, search, carousel, date-picker, time-picker, linear-progress, circular-progress, typography, icon.
+Docs-verified (no token file published): toolbar.
