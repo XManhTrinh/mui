@@ -156,7 +156,7 @@ const FABMenuRoot: React.FC<FABMenuProps> = ({
             sideOffset={8}
             align="center"
             className={cn(
-              "z-50 flex flex-col items-center gap-1 outline-none",
+              "z-50 flex flex-col items-center outline-none",
               "animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
               className
             )}

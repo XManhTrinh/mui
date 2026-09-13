@@ -99,6 +99,31 @@ export default function FABMenuPage() {
         </Showcase>
       </section>
 
+      {/* Icon-Only Items */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">Icon-Only Items</h2>
+        <p className="text-[14px] text-surface-variant-foreground">
+          For a compact speed-dial, use shorter labels or set descriptive
+          <code>aria-label</code> overrides. The items display icon + label by default.
+        </p>
+        <Showcase
+          title="Compact Labels"
+          code={`<FABMenu triggerIcon={<Icon name="edit" />} triggerLabel="Quick actions">
+  <FABMenu.Item icon={<Icon name="image" />} label="Photo" onClick={() => {}} />
+  <FABMenu.Item icon={<Icon name="videocam" />} label="Video" onClick={() => {}} />
+  <FABMenu.Item icon={<Icon name="mic" />} label="Audio" onClick={() => {}} />
+  <FABMenu.Item icon={<Icon name="attachment" />} label="File" onClick={() => {}} />
+</FABMenu>`}
+        >
+          <FABMenu triggerIcon={<Icon name="edit" />} triggerLabel="Quick actions">
+            <FABMenu.Item icon={<Icon name="image" />} label="Photo" onClick={() => {}} />
+            <FABMenu.Item icon={<Icon name="videocam" />} label="Video" onClick={() => {}} />
+            <FABMenu.Item icon={<Icon name="mic" />} label="Audio" onClick={() => {}} />
+            <FABMenu.Item icon={<Icon name="attachment" />} label="File" onClick={() => {}} />
+          </FABMenu>
+        </Showcase>
+      </section>
+
       {/* Props Tables */}
       <PropsTable
         componentName="FABMenu"
