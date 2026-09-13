@@ -1,0 +1,73 @@
+/**
+ * @vkieu/mui — Amber theme preset
+ * Source: #795900
+ * Usage: @import "@vkieu/mui/themes/theme-amber.css"; (after theme.css)
+ */
+:root {
+  --primary: 44 100% 24%;
+  --on-primary: 0 0% 100%;
+  --primary-container: 40 100% 81%;
+  --on-primary-container: 41 100% 7%;
+  --secondary: 41 26% 33%;
+  --on-secondary: 0 0% 100%;
+  --secondary-container: 40 70% 84%;
+  --on-secondary-container: 41 80% 8%;
+  --tertiary: 114 17% 34%;
+  --on-tertiary: 0 0% 100%;
+  --tertiary-container: 108 49% 85%;
+  --on-tertiary-container: 125 64% 8%;
+  --error: 0 75% 42%;
+  --on-error: 0 0% 100%;
+  --error-container: 6 100% 92%;
+  --on-error-container: 358 100% 13%;
+  --surface: 32 100% 97%;
+  --on-surface: 40 24% 10%;
+  --surface-variant: 37 43% 87%;
+  --on-surface-variant: 41 14% 26%;
+  --outline: 39 10% 45%;
+  --outline-variant: 36 23% 76%;
+  --inverse-surface: 39 15% 18%;
+  --inverse-on-surface: 35 61% 93%;
+  --inverse-primary: 42 87% 62%;
+  --surface-container-lowest: 0 0% 100%;
+  --surface-container-low: 37 68% 94%;
+  --surface-container: 35 52% 92%;
+  --surface-container-high: 35 41% 89%;
+  --surface-container-highest: 37 32% 87%;
+  --surface-bright: 32 100% 97%;
+  --surface-dim: 37 26% 84%;
+}
+.dark {
+  --primary: 42 87% 62%;
+  --on-primary: 42 100% 13%;
+  --primary-container: 44 100% 18%;
+  --on-primary-container: 40 100% 81%;
+  --secondary: 40 40% 73%;
+  --on-secondary: 42 47% 15%;
+  --secondary-container: 40 32% 24%;
+  --on-secondary-container: 40 70% 84%;
+  --tertiary: 110 28% 74%;
+  --on-tertiary: 118 32% 16%;
+  --tertiary-container: 116 22% 25%;
+  --on-tertiary-container: 108 49% 85%;
+  --error: 6 100% 84%;
+  --on-error: 357 100% 21%;
+  --error-container: 356 100% 29%;
+  --on-error-container: 6 100% 92%;
+  --surface: 40 35% 7%;
+  --on-surface: 37 32% 87%;
+  --surface-variant: 41 14% 26%;
+  --on-surface-variant: 36 23% 76%;
+  --outline: 38 11% 55%;
+  --outline-variant: 41 14% 26%;
+  --inverse-surface: 37 32% 87%;
+  --inverse-on-surface: 39 15% 18%;
+  --inverse-primary: 44 100% 24%;
+  --surface-container-lowest: 42 42% 5%;
+  --surface-container-low: 40 24% 10%;
+  --surface-container: 40 21% 11%;
+  --surface-container-high: 37 16% 15%;
+  --surface-container-highest: 39 14% 20%;
+  --surface-bright: 34 13% 22%;
+  --surface-dim: 40 35% 7%;
+}

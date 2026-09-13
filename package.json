@@ -11,6 +11,12 @@
   "exports": {
     ".": "./src/index.ts",
     "./theme.css": "./src/theme.css",
+    "./themes": "./src/themes/index.ts",
+    "./themes/theme-blue.css": "./src/themes/theme-blue.css",
+    "./themes/theme-teal.css": "./src/themes/theme-teal.css",
+    "./themes/theme-green.css": "./src/themes/theme-green.css",
+    "./themes/theme-red.css": "./src/themes/theme-red.css",
+    "./themes/theme-amber.css": "./src/themes/theme-amber.css",
     "./buttons": "./src/buttons/index.ts",
     "./navigation": "./src/navigation/index.ts",
     "./sheets": "./src/sheets/index.ts",

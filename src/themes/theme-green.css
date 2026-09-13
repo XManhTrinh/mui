@@ -1,0 +1,73 @@
+/**
+ * @vkieu/mui — Green theme preset
+ * Source: #006C4C
+ * Usage: @import "@vkieu/mui/themes/theme-green.css"; (after theme.css)
+ */
+:root {
+  --primary: 162 100% 21%;
+  --on-primary: 0 0% 100%;
+  --primary-container: 154 89% 75%;
+  --on-primary-container: 156 100% 6%;
+  --secondary: 145 13% 35%;
+  --on-secondary: 0 0% 100%;
+  --secondary-container: 140 34% 86%;
+  --on-secondary-container: 150 48% 8%;
+  --tertiary: 197 31% 35%;
+  --on-tertiary: 0 0% 100%;
+  --tertiary-container: 200 88% 87%;
+  --on-tertiary-container: 195 100% 8%;
+  --error: 0 75% 42%;
+  --on-error: 0 0% 100%;
+  --error-container: 6 100% 92%;
+  --on-error-container: 358 100% 13%;
+  --surface: 120 43% 97%;
+  --on-surface: 140 12% 10%;
+  --surface-variant: 127 15% 88%;
+  --on-surface-variant: 140 7% 27%;
+  --outline: 140 4% 46%;
+  --outline-variant: 127 8% 77%;
+  --inverse-surface: 130 6% 18%;
+  --inverse-on-surface: 120 19% 94%;
+  --inverse-primary: 155 61% 64%;
+  --surface-container-lowest: 0 0% 100%;
+  --surface-container-low: 120 23% 95%;
+  --surface-container: 129 19% 93%;
+  --surface-container-high: 120 12% 91%;
+  --surface-container-highest: 129 12% 88%;
+  --surface-bright: 120 43% 97%;
+  --surface-dim: 120 8% 85%;
+}
+.dark {
+  --primary: 155 61% 64%;
+  --on-primary: 160 100% 11%;
+  --primary-container: 161 100% 16%;
+  --on-primary-container: 154 89% 75%;
+  --secondary: 140 19% 75%;
+  --on-secondary: 146 25% 17%;
+  --secondary-container: 146 16% 25%;
+  --on-secondary-container: 140 34% 86%;
+  --tertiary: 199 46% 76%;
+  --on-tertiary: 194 81% 15%;
+  --tertiary-container: 196 43% 25%;
+  --on-tertiary-container: 200 88% 87%;
+  --error: 6 100% 84%;
+  --on-error: 357 100% 21%;
+  --error-container: 356 100% 29%;
+  --on-error-container: 6 100% 92%;
+  --surface: 140 17% 7%;
+  --on-surface: 129 12% 88%;
+  --surface-variant: 140 7% 27%;
+  --on-surface-variant: 127 8% 77%;
+  --outline: 133 4% 56%;
+  --outline-variant: 140 7% 27%;
+  --inverse-surface: 129 12% 88%;
+  --inverse-on-surface: 130 6% 18%;
+  --inverse-primary: 162 100% 21%;
+  --surface-container-lowest: 140 23% 5%;
+  --surface-container-low: 140 12% 10%;
+  --surface-container: 140 10% 12%;
+  --surface-container-high: 130 7% 16%;
+  --surface-container-highest: 130 6% 20%;
+  --surface-bright: 130 5% 22%;
+  --surface-dim: 140 17% 7%;
+}
