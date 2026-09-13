@@ -5,7 +5,7 @@ import "./globals.css";
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Icon, IconButton, AppBar, NavigationRail, Divider } from "@mui/index";
 
 const navItems = [
@@ -24,9 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const router = useRouter();
   const [dark, setDark] = React.useState(false);
-  const [navExpanded, setNavExpanded] = React.useState(true);
 
   React.useEffect(() => {
     setDark(document.documentElement.classList.contains("dark"));
@@ -51,14 +49,15 @@ export default function RootLayout({
     <html lang="en" className={dark ? "dark" : ""}>
       <body className="bg-surface text-surface-foreground min-h-screen">
         {/* Sidebar — fixed position, full height */}
-        <NavigationRail expanded={navExpanded} className="fixed top-0 left-0 h-screen z-40">
+        <NavigationRail expanded className="fixed inset-t-0 inset-l-0 h-screen z-40">
           <NavigationRail.Header>
-            <IconButton
-              icon="menu"
-              variant="standard"
-              aria-label={navExpanded ? "Collapse navigation" : "Expand navigation"}
-              onClick={() => setNavExpanded((prev) => !prev)}
-            />
+            <Link href="/">
+              <IconButton
+                icon="home"
+                variant="standard"
+                aria-label="Home"
+              />
+            </Link>
           </NavigationRail.Header>
 
           <NavigationRail.Content>
@@ -84,9 +83,9 @@ export default function RootLayout({
         </NavigationRail>
 
         {/* Main content — offset by sidebar width */}
-        <div className={`transition-[margin-left] duration-300 ease-[cubic-bezier(0.2,0,0,1)] ${navExpanded ? "ml-90" : "ml-24"}`}>
+        <div className="ml-90">
           <AppBar
-            className="sticky top-0 z-30"
+            className="sticky inset-t-0 z-30"
             headline={
               <Link href="/" className="text-[22px] leading-7 font-normal text-surface-foreground no-underline">
                 M3 Components
