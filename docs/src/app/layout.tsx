@@ -216,6 +216,7 @@ export default function RootLayout({
                 color="tertiary-container"
                 icon={<Icon name="home" />}
                 aria-label="Home"
+                className="shadow-none"
                 onMouseEnter={scheduleClose}
               />
             </Link>
@@ -313,8 +314,8 @@ export default function RootLayout({
             className={[
               "h-full bg-surface-container overflow-hidden",
               "rounded-e-2xl",
-              // M3 Level 1 shadow on the end edge
-              "shadow-[4px_0_12px_0_hsl(var(--elevation-1))]",
+              // Subtle shadow on the right edge (falls onto main content)
+              "shadow-[2px_0_8px_0_hsl(var(--elevation-1))]",
               // Open: emphasized-decelerate (fast start, gentle settle)
               // Close: emphasized-accelerate (gentle start, fast exit)
               isDrawerVisible
