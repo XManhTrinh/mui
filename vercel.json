@@ -1,4 +1,0 @@
-{
-  "buildCommand": "cd docs && next build",
-  "outputDirectory": "docs/.next"
-}
