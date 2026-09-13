@@ -213,7 +213,7 @@ export default function RootLayout({
               <FAB
                 size="fab"
                 shape="rounded"
-                color="tertiary-container"
+                color="primary"
                 icon={<Icon name="home" />}
                 aria-label="Home"
                 className="shadow-none!"
@@ -369,7 +369,7 @@ export default function RootLayout({
             // When drawer is pinned (component page), push content right.
             // Rail = 80px, drawer = 224px → total 304px.
             // When only rail visible → 80px.
-            isDrawerVisible && isPinned ? "ml-[304px]" : "ml-20",
+            isDrawerVisible && isPinned ? "ml-76" : "ml-20",
           ].join(" ")}
         >
           <main className="p-8 max-w-240">{children}</main>
