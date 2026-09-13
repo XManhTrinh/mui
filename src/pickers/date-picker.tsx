@@ -197,6 +197,26 @@ function CalendarView({
     }
   };
 
+  // ── Swipe between months ────────────────────────────────────────
+  const swipeStart = React.useRef<{ x: number; y: number } | null>(null);
+
+  const handleSwipeStart = (e: React.PointerEvent) => {
+    if (e.pointerType === "mouse") return; // mouse uses buttons
+    swipeStart.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handleSwipeEnd = (e: React.PointerEvent) => {
+    if (!swipeStart.current) return;
+    const dx = e.clientX - swipeStart.current.x;
+    const dy = e.clientY - swipeStart.current.y;
+    swipeStart.current = null;
+    // Only count horizontal swipes (dx > 50px, mostly horizontal)
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0) handleNextMonth();
+      else handlePrevMonth();
+    }
+  };
+
   const handleNextMonth = () => {
     if (viewMonth === 11) {
       setViewMonth(0);
@@ -348,7 +368,11 @@ function CalendarView({
           </div>
 
           {/* Date grid */}
-          <div className="grid grid-cols-7">
+          <div
+            className="grid grid-cols-7 touch-pan-y"
+            onPointerDown={handleSwipeStart}
+            onPointerUp={handleSwipeEnd}
+          >
             {cells.map((cell, i) => {
               const selected = isEndpoint(cell.date);
               const isTodayDate = isToday(cell.date);

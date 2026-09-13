@@ -35,6 +35,8 @@ export type CarouselProps = {
   gap?: number;
   /** Show navigation arrows */
   showArrows?: boolean;
+  /** Auto-advance interval in ms (0 = disabled). Pauses on hover/focus. */
+  autoPlay?: number;
   /** Additional className for container */
   className?: string;
   /** Carousel items */
@@ -85,6 +87,7 @@ function Carousel({
   variant = "uncontained",
   gap = 8,
   showArrows = false,
+  autoPlay = 0,
   className,
   children,
 }: CarouselProps) {
@@ -165,6 +168,24 @@ function Carousel({
     }
   };
 
+  // ── Auto-play ───────────────────────────────────────────────────
+  const [paused, setPaused] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!autoPlay || autoPlay <= 0 || paused) return;
+    const timer = setInterval(() => {
+      const el = scrollRef.current;
+      if (!el) return;
+      const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 1;
+      if (atEnd) {
+        el.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        el.scrollBy({ left: el.clientWidth * 0.8, behavior: "smooth" });
+      }
+    }, autoPlay);
+    return () => clearInterval(timer);
+  }, [autoPlay, paused]);
+
   const contextValue = React.useMemo<CarouselContextValue>(
     () => ({
       variant,
@@ -188,6 +209,10 @@ function Carousel({
       role="region"
       aria-roledescription="carousel"
       aria-label="Carousel"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
     >
       {/* Scroll container */}
       <div
