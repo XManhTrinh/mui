@@ -201,7 +201,6 @@ function CalendarView({
   const swipeStart = React.useRef<{ x: number; y: number } | null>(null);
 
   const handleSwipeStart = (e: React.PointerEvent) => {
-    if (e.pointerType === "mouse") return; // mouse uses buttons
     swipeStart.current = { x: e.clientX, y: e.clientY };
   };
 
