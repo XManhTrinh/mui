@@ -160,14 +160,16 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
         {showValueIndicator && (
           <div
             className={cn(
-              "absolute -top-12 -translate-x-1/2 pointer-events-none z-10",
+              "absolute -top-12 pointer-events-none z-10",
+              // Center on the thumb position: shift by -50% own width in LTR, +50% in RTL.
+              "ltr:-translate-x-1/2 rtl:translate-x-1/2",
               "flex items-center justify-center w-12 h-11 rounded-full",
               "bg-inverse-surface text-inverse-on-surface",
               "text-[12px] leading-4 font-medium tracking-[0.5px]",
               "transition-opacity duration-150 ease-[cubic-bezier(0.2,0,0,1)]",
               showIndicator ? "opacity-100" : "opacity-0"
             )}
-            style={{ left: thumbCenter }}
+            style={{ insetInlineStart: thumbCenter }}
             aria-hidden="true"
           >
             {Math.round(currentValue)}
@@ -205,12 +207,12 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
               <span
                 key={pct}
                 className={cn(
-                  "absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-1 h-1 rounded-full pointer-events-none",
+                  "absolute top-1/2 -translate-y-1/2 ltr:-translate-x-1/2 rtl:translate-x-1/2 w-1 h-1 rounded-full pointer-events-none",
                   pct <= percentage
                     ? "bg-[hsl(var(--on-primary))]"
                     : "bg-[hsl(var(--on-secondary-container))]"
                 )}
-                style={{ left: `${pct}%` }}
+                style={{ insetInlineStart: `${pct}%` }}
                 aria-hidden="true"
               />
             ))}
@@ -219,7 +221,7 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
         {/* Visual handle (thumb) — per-size height, 4dp width (6dp on large+/interacting) */}
         <div
           className={cn(
-            "absolute top-1/2 -translate-y-1/2 -translate-x-1/2 rounded-full",
+            "absolute top-1/2 -translate-y-1/2 ltr:-translate-x-1/2 rtl:translate-x-1/2 rounded-full",
             sz.handleW,
             sz.handle,
             "transition-[width,background-color] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
@@ -228,12 +230,12 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
               : cn("bg-primary", isInteracting ? "cursor-grabbing" : "cursor-grab"),
             isInteracting && !disabled && "w-1.5"
           )}
-          style={{ left: thumbCenter }}
+          style={{ insetInlineStart: thumbCenter }}
         >
           {/* State layer — 48dp touch area indicator */}
           <span
             className={cn(
-              "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full",
+              "absolute top-1/2 start-1/2 ltr:-translate-x-1/2 rtl:translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full",
               "transition-colors duration-200 pointer-events-none",
               // Press (10%) takes precedence, then focus (10%), then hover (8%).
               !disabled && isInteracting && "bg-[hsl(var(--primary)/0.10)]",
