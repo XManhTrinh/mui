@@ -204,7 +204,7 @@ export default function ButtonGroupPage() {
       >
         <div className="flex flex-col gap-4 items-start">
           {(["xs", "s", "m", "l", "xl"] as const).map((s) => (
-            <ButtonGroup key={s} size={s}>
+            <ButtonGroup key={s} size={s} defaultValue="a">
               <ButtonGroupItem value="a" label={`${s.toUpperCase()} - A`} />
               <ButtonGroupItem value="b" label={`${s.toUpperCase()} - B`} />
               <ButtonGroupItem value="c" label={`${s.toUpperCase()} - C`} />
@@ -219,12 +219,12 @@ export default function ButtonGroupPage() {
         code={`<ButtonGroup shape="round">...</ButtonGroup>\n<ButtonGroup shape="square">...</ButtonGroup>`}
       >
         <div className="flex flex-col gap-4 items-start">
-          <ButtonGroup shape="round">
+          <ButtonGroup shape="round" defaultValue="a">
             <ButtonGroupItem value="a" label="Round A" />
             <ButtonGroupItem value="b" label="Round B" />
             <ButtonGroupItem value="c" label="Round C" />
           </ButtonGroup>
-          <ButtonGroup shape="square">
+          <ButtonGroup shape="square" defaultValue="a">
             <ButtonGroupItem value="a" label="Square A" />
             <ButtonGroupItem value="b" label="Square B" />
             <ButtonGroupItem value="c" label="Square C" />
@@ -238,7 +238,7 @@ export default function ButtonGroupPage() {
         code={`<ButtonGroup equalWidth className="w-full">\n  <ButtonGroupItem value="a" label="Short" />\n  <ButtonGroupItem value="b" label="Medium Text" />\n  <ButtonGroupItem value="c" label="A Longer Label" />\n</ButtonGroup>`}
       >
         <div className="w-full">
-          <ButtonGroup equalWidth className="w-full">
+          <ButtonGroup equalWidth defaultValue="a" className="w-full">
             <ButtonGroupItem value="a" label="Short" />
             <ButtonGroupItem value="b" label="Medium Text" />
             <ButtonGroupItem value="c" label="A Longer Label" />
