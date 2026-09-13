@@ -92,60 +92,99 @@ const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
     ref
   ) => {
     const showCheckmark = variant === "filter" && selected;
-    const showDismiss = variant === "input" && onDismiss;
+    const showDismiss = variant === "input" && !!onDismiss;
     const hasLeading = !!(leadingIcon || showCheckmark);
     const hasTrailing = !!(trailingIcon || showDismiss);
+
+    const stateLayer = cn(
+      "before:absolute before:inset-0 before:rounded-lg before:transition-colors before:duration-200 before:pointer-events-none",
+      !selected &&
+        "hover:before:bg-[hsl(var(--on-surface)/0.08)] focus-visible:before:bg-[hsl(var(--on-surface)/0.10)] active:before:bg-[hsl(var(--on-surface)/0.10)]",
+      selected &&
+        "hover:before:bg-[hsl(var(--on-secondary-container)/0.08)] focus-visible:before:bg-[hsl(var(--on-secondary-container)/0.10)] active:before:bg-[hsl(var(--on-secondary-container)/0.10)]"
+    );
+
+    const body = (
+      <>
+        {showCheckmark && (
+          <Icon name="check" size={18} className="me-2 relative z-10" />
+        )}
+        {!showCheckmark && leadingIcon && (
+          <Icon
+            name={leadingIcon}
+            size={18}
+            className={cn("me-2 relative z-10", variant === "assist" && "text-primary")}
+          />
+        )}
+        <span className="relative z-10 truncate">{children}</span>
+        {!showDismiss && trailingIcon && (
+          <Icon name={trailingIcon} size={18} className="ms-2 relative z-10" />
+        )}
+      </>
+    );
+
+    // Input chips with a dismiss action render the label and the remove
+    // control as two SEPARATE sibling buttons inside a container — never a
+    // button nested in a button (invalid DOM + keyboard-unreachable). The
+    // container carries the chip's visual styling.
+    if (showDismiss) {
+      return (
+        <div
+          className={cn(
+            chipVariants({ variant, selected, elevated }),
+            // The container is a plain div, so `disabled:` utilities don't
+            // apply — dim it explicitly when disabled.
+            disabled && "opacity-[0.38] pointer-events-none",
+            hasLeading && "ps-2",
+            "pe-1",
+            className
+          )}
+        >
+          <button
+            ref={ref}
+            type="button"
+            disabled={disabled}
+            aria-pressed={selected}
+            className={cn(
+              "relative inline-flex items-center rounded-lg -mx-1 px-1 focus-visible:outline-none",
+              stateLayer
+            )}
+            {...props}
+          >
+            {body}
+          </button>
+          <button
+            type="button"
+            disabled={disabled}
+            aria-label="Remove"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDismiss?.();
+            }}
+            className="relative z-10 ms-1 inline-flex items-center justify-center size-8 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hover:bg-[hsl(var(--on-surface)/0.08)] active:bg-[hsl(var(--on-surface)/0.10)] disabled:pointer-events-none"
+          >
+            <Icon name="close" size={18} />
+          </button>
+        </div>
+      );
+    }
 
     return (
       <button
         ref={ref}
         type="button"
         disabled={disabled}
-        aria-pressed={variant === "filter" || variant === "input" ? selected : undefined}
+        aria-pressed={variant === "filter" ? selected : undefined}
         className={cn(
           chipVariants({ variant, selected, elevated }),
-          // State layer on hover/focus/press
-          "before:absolute before:inset-0 before:rounded-lg before:transition-colors before:duration-200 before:pointer-events-none",
-          !selected && "hover:before:bg-[hsl(var(--on-surface)/0.08)] focus-visible:before:bg-[hsl(var(--on-surface)/0.10)] active:before:bg-[hsl(var(--on-surface)/0.10)]",
-          selected && "hover:before:bg-[hsl(var(--on-secondary-container)/0.08)] focus-visible:before:bg-[hsl(var(--on-secondary-container)/0.10)] active:before:bg-[hsl(var(--on-secondary-container)/0.10)]",
-          // Adjust padding when icons present
+          stateLayer,
           hasLeading && "ps-2",
           hasTrailing && "pe-2",
           className
         )}
         {...props}
       >
-        {showCheckmark && (
-          <Icon name="check" size={18} className="me-2 relative z-10" />
-        )}
-        {!showCheckmark && leadingIcon && (
-          <Icon name={leadingIcon} size={18} className={cn("me-2 relative z-10", variant === "assist" && "text-primary")} />
-        )}
-        <span className="relative z-10 truncate">{children}</span>
-        {showDismiss && (
-          <span
-            role="button"
-            tabIndex={-1}
-            aria-label="Remove"
-            onClick={(e) => {
-              e.stopPropagation();
-              onDismiss?.();
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.stopPropagation();
-                e.preventDefault();
-                onDismiss?.();
-              }
-            }}
-            className="relative z-10 ms-2 inline-flex items-center justify-center min-w-12 min-h-12 -me-3"
-          >
-            <Icon name="close" size={18} />
-          </span>
-        )}
-        {!showDismiss && trailingIcon && (
-          <Icon name={trailingIcon} size={18} className="ms-2 relative z-10" />
-        )}
+        {body}
       </button>
     );
   }

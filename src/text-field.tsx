@@ -86,12 +86,15 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       return () => clearTimeout(timer);
     }, []);
 
-    // Merge forwarded ref with internal ref
+    // Merge forwarded ref with internal ref. Accepts input OR textarea so the
+    // same ref works for the multiline variant.
     const mergedRef = React.useCallback(
-      (node: HTMLInputElement | null) => {
+      (node: HTMLInputElement | HTMLTextAreaElement | null) => {
         inputRef.current = node;
-        if (typeof ref === "function") ref(node);
-        else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = node;
+        if (typeof ref === "function") ref(node as HTMLInputElement | null);
+        else if (ref)
+          (ref as React.MutableRefObject<HTMLInputElement | null>).current =
+            node as HTMLInputElement | null;
       },
       [ref]
     );
@@ -229,7 +232,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
               {multiline ? (
                 <textarea
+                  ref={mergedRef}
                   {...sharedProps}
+                  {...(inputProps as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
                   value={isControlled ? (value as string) : undefined}
                   defaultValue={!isControlled ? (defaultValue as string) : undefined}
                   rows={rows}
@@ -335,7 +340,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
             {multiline ? (
               <textarea
+                ref={mergedRef}
                 {...sharedProps}
+                {...(inputProps as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
                 value={isControlled ? (value as string) : undefined}
                 defaultValue={!isControlled ? (defaultValue as string) : undefined}
                 rows={rows}

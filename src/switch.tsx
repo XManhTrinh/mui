@@ -101,16 +101,11 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
         ? 24
         : 16;
 
-    // Handle position: center vertically, slide horizontally
-    // Track inner width = 52 - 4 (padding) = 48 usable
-    // Unselected: handle starts at left with some padding
-    // Selected: handle ends at right
-    const handleLeft = isChecked
-      ? 52 - handleSize - 4 // 4dp from right edge
-      : 4; // 4dp from left edge (when 16dp) or adjusted
-
-    // For unselected without icon: handle is 16dp, positioned at ~8dp from left
-    // For unselected with icon: handle is 24dp, positioned at 4dp from left
+    // Handle position: center vertically, slide horizontally.
+    // Track inner width = 52 - 4 (padding) = 48 usable.
+    // - Selected: handle sits 4dp from the right edge.
+    // - Unselected without icon: 16dp handle positioned ~8dp from left.
+    // - Unselected with icon or pressed: 24dp handle positioned 4dp from left.
     const computedLeft = isChecked
       ? 52 - handleSize - 4
       : hasIcon || isPressed

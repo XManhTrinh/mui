@@ -49,13 +49,22 @@ export type SliderSize = "xsmall" | "small" | "medium" | "large" | "xlarge";
 
 const sliderSizeMap: Record<
   SliderSize,
-  { track: string; handle: string; row: string; radius: string; handleW: string }
+  {
+    track: string;
+    handle: string;
+    row: string;
+    radius: string;
+    handleW: string;
+    /** Resting handle width in px (used to inset the thumb so it never
+     * overflows the track at the min/max ends). */
+    handleWpx: number;
+  }
 > = {
-  xsmall: { track: "h-4", handle: "h-11", row: "h-12", radius: "rounded-lg", handleW: "w-1" },
-  small: { track: "h-6", handle: "h-11", row: "h-12", radius: "rounded-lg", handleW: "w-1" },
-  medium: { track: "h-10", handle: "h-11", row: "h-12", radius: "rounded-xl", handleW: "w-1" },
-  large: { track: "h-14", handle: "h-17", row: "h-18", radius: "rounded-2xl", handleW: "w-1.5" },
-  xlarge: { track: "h-24", handle: "h-27", row: "h-28", radius: "rounded-[28px]", handleW: "w-1.5" },
+  xsmall: { track: "h-4", handle: "h-11", row: "h-12", radius: "rounded-lg", handleW: "w-1", handleWpx: 4 },
+  small: { track: "h-6", handle: "h-11", row: "h-12", radius: "rounded-lg", handleW: "w-1", handleWpx: 4 },
+  medium: { track: "h-10", handle: "h-11", row: "h-12", radius: "rounded-xl", handleW: "w-1", handleWpx: 4 },
+  large: { track: "h-14", handle: "h-17", row: "h-18", radius: "rounded-2xl", handleW: "w-1.5", handleWpx: 6 },
+  xlarge: { track: "h-24", handle: "h-27", row: "h-28", radius: "rounded-[28px]", handleW: "w-1.5", handleWpx: 6 },
 };
 
 export type SliderProps = {
@@ -98,12 +107,19 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
     );
     const [isInteracting, setIsInteracting] = React.useState(false);
     const [isHovered, setIsHovered] = React.useState(false);
+    const [isFocused, setIsFocused] = React.useState(false);
 
     const isControlled = controlledValue !== undefined;
     const currentValue = isControlled ? controlledValue : internalValue;
 
     const percentage =
       max === min ? 0 : ((currentValue - min) / (max - min)) * 100;
+
+    // Position the handle's CENTER, inset by half its width at both ends so it
+    // never spills past the track edges at min/max. This maps the value
+    // fraction 0..1 into the track center-line [halfW, 100% - halfW].
+    const fraction = percentage / 100;
+    const thumbCenter = `calc(${sz.handleWpx / 2}px + ${fraction} * (100% - ${sz.handleWpx}px))`;
 
     // Determine if discrete (has stops)
     const isDiscrete = step !== undefined && step > 0;
@@ -120,7 +136,8 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
       return positions;
     }, [shouldShowStops, step, min, max]);
 
-    const showIndicator = showValueIndicator && (isInteracting || isHovered);
+    const showIndicator =
+      showValueIndicator && (isInteracting || isHovered || isFocused);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = Number(e.target.value);
@@ -150,7 +167,7 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
               "transition-opacity duration-150 ease-[cubic-bezier(0.2,0,0,1)]",
               showIndicator ? "opacity-100" : "opacity-0"
             )}
-            style={{ left: `${percentage}%` }}
+            style={{ left: thumbCenter }}
             aria-hidden="true"
           >
             {Math.round(currentValue)}
@@ -211,16 +228,17 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
               : cn("bg-primary", isInteracting ? "cursor-grabbing" : "cursor-grab"),
             isInteracting && !disabled && "w-1.5"
           )}
-          style={{ left: `${percentage}%` }}
+          style={{ left: thumbCenter }}
         >
           {/* State layer — 48dp touch area indicator */}
           <span
             className={cn(
               "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full",
               "transition-colors duration-200 pointer-events-none",
+              // Press (10%) takes precedence, then focus (10%), then hover (8%).
               !disabled && isInteracting && "bg-[hsl(var(--primary)/0.10)]",
-              !disabled && isHovered && !isInteracting && "bg-[hsl(var(--primary)/0.08)]",
-              !disabled && !isHovered && !isInteracting && "group-focus-visible:bg-[hsl(var(--primary)/0.10)]"
+              !disabled && !isInteracting && isFocused && "bg-[hsl(var(--primary)/0.10)]",
+              !disabled && !isInteracting && !isFocused && isHovered && "bg-[hsl(var(--primary)/0.08)]"
             )}
           />
         </div>
@@ -237,8 +255,8 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
           onPointerDown={() => setIsInteracting(true)}
           onPointerUp={() => setIsInteracting(false)}
           onPointerCancel={() => setIsInteracting(false)}
-          onFocus={() => setIsHovered(true)}
-          onBlur={() => setIsHovered(false)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           disabled={disabled}
           aria-label={ariaLabel}
           aria-valuemin={min}

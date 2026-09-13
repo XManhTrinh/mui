@@ -29,6 +29,11 @@ export type RadioProps = {
   value?: string;
   className?: string;
   "aria-label"?: string;
+  /**
+   * Tab-order index. Managed by RadioGroup (roving tabindex); usually not set
+   * directly. Defaults to browser behavior when used standalone.
+   */
+  tabIndex?: number;
 }
 
 const Radio = React.forwardRef<HTMLButtonElement, RadioProps>(
@@ -43,6 +48,7 @@ const Radio = React.forwardRef<HTMLButtonElement, RadioProps>(
       value,
       className,
       "aria-label": ariaLabel,
+      tabIndex,
     },
     ref
   ) => {
@@ -68,6 +74,7 @@ const Radio = React.forwardRef<HTMLButtonElement, RadioProps>(
         aria-disabled={disabled || undefined}
         id={id}
         disabled={disabled}
+        tabIndex={tabIndex}
         onClick={handleClick}
         className={cn(
           "group relative inline-flex items-center justify-center size-12 select-none",
@@ -218,24 +225,46 @@ const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
           className
         )}
       >
-        {React.Children.map(children, (child) => {
-          if (React.isValidElement<RadioProps>(child)) {
-            const childValue = child.props.value;
-            return React.cloneElement(child, {
-              name,
-              disabled: disabled || child.props.disabled,
-              checked: childValue !== undefined ? childValue === currentValue : undefined,
-              onCheckedChange: (checked: boolean) => {
-                if (checked && childValue) {
-                  if (!isControlled) setInternalValue(childValue);
-                  onValueChange?.(childValue);
-                }
-                child.props.onCheckedChange?.(checked);
-              },
-            } as Partial<RadioProps>);
-          }
-          return child;
-        })}
+        {(() => {
+          // Roving tabindex (ARIA radiogroup): only one radio is tabbable — the
+          // checked one, or the first enabled radio when none is checked.
+          const childArray = React.Children.toArray(children);
+          const isEnabled = (c: React.ReactNode) =>
+            React.isValidElement<RadioProps>(c) &&
+            !(disabled || c.props.disabled);
+          const hasChecked = childArray.some(
+            (c) =>
+              React.isValidElement<RadioProps>(c) &&
+              c.props.value !== undefined &&
+              c.props.value === currentValue
+          );
+          const firstEnabledIndex = childArray.findIndex(isEnabled);
+
+          return childArray.map((child, index) => {
+            if (React.isValidElement<RadioProps>(child)) {
+              const childValue = child.props.value;
+              const isChecked =
+                childValue !== undefined && childValue === currentValue;
+              const isTabbable = hasChecked
+                ? isChecked
+                : index === firstEnabledIndex;
+              return React.cloneElement(child, {
+                name,
+                disabled: disabled || child.props.disabled,
+                checked: childValue !== undefined ? isChecked : undefined,
+                tabIndex: isTabbable ? 0 : -1,
+                onCheckedChange: (checked: boolean) => {
+                  if (checked && childValue) {
+                    if (!isControlled) setInternalValue(childValue);
+                    onValueChange?.(childValue);
+                  }
+                  child.props.onCheckedChange?.(checked);
+                },
+              } as Partial<RadioProps>);
+            }
+            return child;
+          });
+        })()}
       </div>
     );
   }
