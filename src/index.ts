@@ -151,13 +151,16 @@ export type {
 } from "./snackbar";
 
 // ─── App Bar ──────────────────────────────────────────────────────────────────
-export { AppBar, AppBarLeading, AppBarHeadline, AppBarTrailing, useAppBar, PageBar } from "./app-bar";
+export { AppBar, AppBarLeading, AppBarHeadline, AppBarTrailing, useAppBar, useAppBarCollapse, PageBar } from "./app-bar";
 export type {
   AppBarProps,
+  AppBarVariant,
   AppBarContextValue,
   AppBarLeadingProps,
   AppBarHeadlineProps,
   AppBarTrailingProps,
+  UseAppBarCollapseOptions,
+  UseAppBarCollapseReturn,
   PageBarProps,
 } from "./app-bar";
 
