@@ -6,7 +6,7 @@ import "./globals.css";
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Icon, IconButton } from "@mui/index";
+import { Icon, IconButton, FAB } from "@mui/index";
 
 // ─── Navigation data ──────────────────────────────────────────────────────────
 
@@ -191,44 +191,14 @@ export default function RootLayout({
           <nav className="flex flex-col items-center w-20 shrink-0 bg-surface-container h-full py-3 z-10">
             {/* Home */}
             <Link href="/" className="no-underline mb-4">
-              <button
-                className={[
-                  "group relative flex flex-col items-center justify-center cursor-pointer outline-none",
-                  "focus-visible:ring-2 focus-visible:ring-primary rounded-lg py-1",
-                ].join(" ")}
+              <FAB
+                size="fab"
+                shape="rounded"
+                color="tertiary-container"
+                icon={<Icon name="home" />}
+                aria-label="Home"
                 onMouseEnter={scheduleClose}
-              >
-                <span className="relative flex items-center justify-center w-14 h-8">
-                  <span
-                    className={[
-                      "absolute inset-0 rounded-full transition-[transform,opacity] duration-200 origin-center",
-                      pathname === "/"
-                        ? "bg-secondary-container scale-x-100 opacity-100"
-                        : "scale-x-0 opacity-0",
-                    ].join(" ")}
-                  />
-                  <span className="absolute inset-0 rounded-full transition-colors duration-200 group-hover:bg-[hsl(var(--on-surface-variant)/0.08)]" />
-                  <Icon
-                    name="home"
-                    size={24}
-                    filled={pathname === "/"}
-                    className={[
-                      "relative z-10",
-                      pathname === "/"
-                        ? "text-secondary-container-foreground"
-                        : "text-[hsl(var(--on-surface-variant))]",
-                    ].join(" ")}
-                  />
-                </span>
-                <span
-                  className={[
-                    "text-[12px] leading-4 font-medium tracking-[0.5px] mt-0.5",
-                    pathname === "/" ? "text-secondary" : "text-[hsl(var(--on-surface-variant))]",
-                  ].join(" ")}
-                >
-                  Home
-                </span>
-              </button>
+              />
             </Link>
 
             {/* Category items */}
