@@ -147,7 +147,7 @@ export default function TabsPage() {
         <p className="text-[14px] text-surface-variant-foreground">
           When tabs don't fit, the tab list scrolls horizontally. Try resizing the browser or use the arrow keys to navigate.
         </p>
-        <Showcase title="Many Tabs (scrollable)" className="flex-col items-stretch max-w-md" code={`<Tabs defaultValue="mon">
+        <Showcase title="Many Tabs (scrollable)" className="flex-col items-stretch" code={`<Tabs defaultValue="mon">
   <TabList>
     <Tab value="mon" label="Monday" />
     <Tab value="tue" label="Tuesday" />
@@ -161,7 +161,8 @@ export default function TabsPage() {
   </TabList>
   <TabContent value="mon">Monday content</TabContent>
 </Tabs>`}>
-          <Tabs defaultValue="mon" variant="secondary">
+          <div className="max-w-sm w-full">
+            <Tabs defaultValue="mon" variant="secondary">
             <TabList>
               <Tab value="mon" label="Monday" />
               <Tab value="tue" label="Tuesday" />
@@ -182,7 +183,8 @@ export default function TabsPage() {
             <TabContent value="sun"><p className="p-4 text-sm">Sunday plans</p></TabContent>
             <TabContent value="hol"><p className="p-4 text-sm">Holiday schedule</p></TabContent>
             <TabContent value="vac"><p className="p-4 text-sm">Vacation days</p></TabContent>
-          </Tabs>
+            </Tabs>
+          </div>
         </Showcase>
       </section>
 
