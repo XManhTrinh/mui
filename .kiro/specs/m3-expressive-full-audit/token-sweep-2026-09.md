@@ -203,3 +203,32 @@ Re-audited components that were previously only docs-verified or soft-passed:
 ### Final coverage
 Token-verified against MDC `tokens.xml`/`dimens.xml`: button, icon-button, fab, extended-fab, fab-menu, split-button, checkbox, radio, switch, slider, chip, text-field, select, card, dialog, bottom-sheet, side-sheet, divider, list, navigation-bar, navigation-rail, tabs, app-bar, badge, snackbar, tooltip, menu, search, carousel, date-picker, time-picker, linear-progress, circular-progress, typography, icon.
 Docs-verified (no token file published): toolbar.
+
+---
+
+## Behavioral / clean-code pass (2026-09)
+
+After the token-value sweep, every component was re-reviewed for behavioral and clean-code correctness (layout/empty-slot bugs, controlled/uncontrolled state, effect dependencies, a11y behavior, ref forwarding, dead code). Confirmed issues and fixes:
+
+### Buttons
+- **Button / FAB / ExtendedFAB** — `asChild` (Radix `Slot`) requires a single child, but each rendered spinner/icon/label/children as multiple siblings, which breaks slotting. Now wrap the slotted child in `Slottable` so decorations compose into it. ExtendedFAB gained an optional `children` prop for the slotted element.
+- **FAB / ExtendedFAB / IconButton** — when `asChild` renders a non-button (e.g. a link), the native `disabled` attribute is ignored, leaving disabled controls clickable. Now drop the native `disabled` attr under `asChild` and enforce the affordance with `pointer-events-none` + reduced opacity.
+- **SplitButton** — inner-corner hover/focus morph was driven by direct inline-style mutation, so a `mouseleave` cleared the expanded radius while the segment was still focused (hover/focus desync). Refactored to per-segment `hover`/`focus` state; the trailing segment also stays expanded while its menu is open.
+- **FABMenu** — added the Tab / Shift+Tab focus trap the docstring promised; removed duplicate Escape handling on the close button (now delegates to the single container key handler).
+
+### Layout / slotted
+- **Toolbar** — `ToolbarActions` now carries `ms-auto` so trailing actions stay pinned to the end even when the `ToolbarHeadline` (flex-1) slot is omitted (same class of bug as the earlier AppBar fix). Removed an inaccurate `@m3-audit VERIFIED` note.
+- **Side/Bottom Sheet (modal)** — added focus restoration (capture `document.activeElement` on open, restore on close) and body scroll lock while open.
+- **Tabs** — removed dead `registerTab`/`unregisterTab`/`tabRefs` machinery; added roving `tabIndex` (active = 0, rest = -1); guarded the phantom 24dp indicator stub before measurement (`width > 0`); re-measure the active indicator on container/tab resize via `ResizeObserver`.
+
+### Inputs / selection
+- **TextField (multiline)** — the `<textarea>` branch was missing `ref` forwarding and the spread of remaining input props; both filled and outlined variants now forward the merged ref and spread props.
+- **Radio** — `RadioGroup` now applies a true roving tabindex (checked radio = 0, else first enabled = 0, all others = -1) via a new `tabIndex` prop on `Radio`.
+- **Slider** — focus was conflated with hover (`onFocus` set `isHovered`); split into a separate `isFocused` state with press > focus > hover state-layer precedence. The thumb is now inset by half its width via `calc` so it never overflows the track at min/max.
+- **Chip (input dismiss)** — the remove control was a `<span role="button" tabIndex=-1>` nested inside the chip `<button>` (invalid DOM, keyboard-unreachable). Restructured to a container with two sibling buttons: the label button and a real, focusable remove button.
+- **Switch** — removed dead `handleLeft` (the rendered value is `computedLeft`).
+
+### Pickers
+- **DatePicker / CalendarView** — the calendar now navigates to the month/year of an externally-changed selected value via an effect keyed on the selection time.
+
+All fixes verified with `npx tsc --noEmit` (clean). No token values changed in this pass.

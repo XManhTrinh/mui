@@ -177,6 +177,17 @@ function CalendarView({
   // Hovered date while completing a range (for preview highlighting)
   const [hoverDate, setHoverDate] = React.useState<Date | null>(null);
 
+  // Navigate the calendar to the selected date's month when it changes
+  // externally (e.g. a controlled value updated outside the picker).
+  const selectedDate = mode === "range" ? rangeValue?.start ?? null : value ?? null;
+  const selectedTime = selectedDate ? selectedDate.getTime() : null;
+  React.useEffect(() => {
+    if (selectedTime === null) return;
+    const d = new Date(selectedTime);
+    setViewYear(d.getFullYear());
+    setViewMonth(d.getMonth());
+  }, [selectedTime]);
+
   const handlePrevMonth = () => {
     if (viewMonth === 0) {
       setViewMonth(11);
