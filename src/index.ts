@@ -240,8 +240,8 @@ export { Carousel, CarouselItem } from "./carousel";
 export type { CarouselProps, CarouselItemProps } from "./carousel";
 
 // ─── Pickers ──────────────────────────────────────────────────────────────────
-export { DatePicker, TimePicker } from "./pickers";
-export type { DatePickerProps, TimePickerProps } from "./pickers";
+export { DatePicker, DatePickerModal, TimePicker } from "./pickers";
+export type { DatePickerProps, DatePickerModalProps, DateRange, TimePickerProps, TimeValue } from "./pickers";
 
 // ─── Typography ───────────────────────────────────────────────────────────────
 export { Typography, typographyVariants, ELEMENT_MAP } from "./typography";
