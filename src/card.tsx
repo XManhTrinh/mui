@@ -58,20 +58,24 @@ export type CardProps = React.HTMLAttributes<HTMLDivElement> & VariantProps<type
   variant?: "elevated" | "filled" | "outlined";
   /** Adds state layers + cursor-pointer for clickable cards */
   interactive?: boolean;
+  /** Disabled state for interactive cards (M3: 38% opacity, no interaction) */
+  disabled?: boolean;
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, variant, interactive = false, ...props }, ref) => (
+  ({ className, variant, interactive = false, disabled = false, ...props }, ref) => (
     <div
       ref={ref}
       className={cn(
         cardVariants({ variant, interactive }),
         interactive &&
           "before:absolute before:inset-0 before:rounded-xl before:transition-colors before:duration-200 before:pointer-events-none hover:before:bg-[hsl(var(--on-surface)/0.08)] focus-visible:before:bg-[hsl(var(--on-surface)/0.10)] active:before:bg-[hsl(var(--on-surface)/0.10)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+        interactive && disabled && "opacity-[0.38] pointer-events-none cursor-not-allowed shadow-none before:opacity-0!",
         className
       )}
-      tabIndex={interactive ? 0 : undefined}
+      tabIndex={interactive && !disabled ? 0 : undefined}
       role={interactive ? "button" : undefined}
+      aria-disabled={interactive && disabled ? true : undefined}
       {...props}
     />
   )
@@ -112,7 +116,7 @@ const CardDescription = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "text-[14px] leading-5 text-surface-variant-foreground text-start",
+      "text-[14px] leading-5 tracking-[0.25px] text-surface-variant-foreground text-start",
       className
     )}
     {...props}

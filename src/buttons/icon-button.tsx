@@ -28,7 +28,7 @@ const iconButtonVariants = cva(
     // Cursor & interaction
     "cursor-pointer select-none",
     // Transition for shape morph + elevation
-    "transition-[border-radius,box-shadow] duration-100 ease-out",
+    "transition-[border-radius,box-shadow] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
     // Focus ring
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
     // State layer via ::before pseudo-element
@@ -43,6 +43,9 @@ const iconButtonVariants = cva(
     // Icon sizing defaults (SVG icons)
     "[&_svg]:pointer-events-none [&_svg]:shrink-0",
     "[&_.material-symbols-rounded]:pointer-events-none",
+    // Disabled: M3 38% opacity, no interaction, no hover shadow/state layers
+    "disabled:opacity-[0.38] disabled:pointer-events-none disabled:cursor-not-allowed",
+    "disabled:shadow-none disabled:before:opacity-0!",
   ].join(" "),
   {
     variants: {
@@ -239,7 +242,6 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         className={cn(
           iconButtonVariants({ variant: effectiveVariant, size }),
           shapeClass,
-          disabled && "opacity-[0.38] pointer-events-none cursor-not-allowed",
           className
         )}
         ref={ref}

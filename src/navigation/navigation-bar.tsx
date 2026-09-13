@@ -76,12 +76,12 @@ const NavigationBarItem = React.forwardRef<HTMLButtonElement, NavigationBarItemP
         aria-label={label}
         onClick={() => onSelect(value)}
         className={cn(
-          "group relative flex w-full flex-col items-center justify-center gap-1 h-20 min-h-12 outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset",
+          "group relative flex w-full flex-col items-center justify-center gap-1 h-16 min-h-12 outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset",
           className
         )}
       >
         {/* Indicator container — 64×32dp pill per M3 Expressive */}
-        <div className="relative flex items-center justify-center w-16 h-8">
+        <div className="relative flex items-center justify-center w-14 h-8">
           {/* Active indicator pill — spring-based scale from center */}
           <div
             className={cn(
@@ -173,7 +173,7 @@ export type NavigationBarProps = {
  * Specs:
  * - Full-width bar fixed to bottom of screen (when fixed prop is true)
  * - 3-5 items, equal width
- * - Container height: 80dp (M3 Expressive)
+ * - Container height: 64dp (M3 Expressive — was 80dp in M3)
  * - Container bg: surface-container (tonal elevation, no drop shadow)
  * - Active indicator: 64×32dp pill, secondary-container
  * - Active icon: on-secondary-container, filled
@@ -219,7 +219,7 @@ function NavigationBarRoot({
     return (
       <nav
         className={cn(
-          "h-20 bg-surface-container",
+          "h-16 bg-surface-container",
           fixed && "fixed bottom-0 left-0 right-0 z-40",
           className
         )}
@@ -253,7 +253,7 @@ function NavigationBarRoot({
                   className="group relative flex w-full flex-col items-center justify-center gap-1 h-20 min-h-12 outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
                 >
                   {/* Indicator container — 64×32dp pill per M3 Expressive */}
-                  <div className="relative flex items-center justify-center w-16 h-8">
+                  <div className="relative flex items-center justify-center w-14 h-8">
                     {/* Active indicator pill — spring-based scale from center */}
                     <div
                       className={cn(
@@ -314,7 +314,7 @@ function NavigationBarRoot({
     <NavigationBarContext.Provider value={contextValue}>
       <nav
         className={cn(
-          "h-20 bg-surface-container",
+          "h-16 bg-surface-container",
           fixed && "fixed bottom-0 left-0 right-0 z-40",
           className
         )}
@@ -329,6 +329,9 @@ function NavigationBarRoot({
 }
 
 // ─── Compound Component Export ────────────────────────────────────────────────
+
+NavigationBarRoot.displayName = "NavigationBar";
+NavigationBarItem.displayName = "NavigationBarItem";
 
 export const NavigationBar = Object.assign(NavigationBarRoot, {
   Item: NavigationBarItem,

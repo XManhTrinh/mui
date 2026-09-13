@@ -325,6 +325,8 @@ function BottomSheetRoot({
 
 // ─── Compound Component Export ────────────────────────────────────────────────
 
+BottomSheetRoot.displayName = "BottomSheet";
+
 export const BottomSheet = Object.assign(BottomSheetRoot, {
   Handle: BottomSheetHandle,
   Header: BottomSheetHeader,

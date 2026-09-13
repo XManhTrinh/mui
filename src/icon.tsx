@@ -80,3 +80,5 @@ export function Icon({
     </span>
   );
 }
+
+Icon.displayName = "Icon";

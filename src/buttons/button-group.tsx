@@ -536,7 +536,7 @@ const ButtonGroupItem = React.forwardRef<HTMLButtonElement, ButtonGroupItemProps
           // Typography: Label Large
           "text-[14px] font-medium leading-5 tracking-[0.1px]",
           // Transition: matches standard Button — includes border-radius for M3 Expressive spring shape morph
-          "transition-[border-radius,box-shadow] duration-100 ease-out",
+          "transition-[border-radius,box-shadow] duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
           // State layer via ::before pseudo-element
           "overflow-hidden",
           "before:absolute before:inset-0 before:rounded-[inherit]",

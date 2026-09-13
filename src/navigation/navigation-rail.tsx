@@ -62,7 +62,6 @@ function NavigationRailRoot({
       <aside
         className={cn(
           "z-40 flex flex-col bg-surface-container shrink-0",
-          "shadow-[0_4px_8px_var(--elevation-3),0_1px_3px_var(--elevation-3)]",
           "transition-[width] duration-300 ease-[cubic-bezier(0.2,0,0,1)] overflow-hidden",
           expanded ? "w-90" : "w-24",
           className
@@ -249,6 +248,12 @@ function NavigationRailItem({
 }
 
 // ─── Compound Component Export ────────────────────────────────────────────────
+
+NavigationRailRoot.displayName = "NavigationRail";
+NavigationRailHeader.displayName = "NavigationRailHeader";
+NavigationRailContent.displayName = "NavigationRailContent";
+NavigationRailFooter.displayName = "NavigationRailFooter";
+NavigationRailItem.displayName = "NavigationRailItem";
 
 export const NavigationRail = Object.assign(NavigationRailRoot, {
   Header: NavigationRailHeader,

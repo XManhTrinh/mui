@@ -364,4 +364,9 @@ function TabContent({ value: contentValue, className, children }: TabContentProp
   );
 }
 
+Tabs.displayName = "Tabs";
+TabList.displayName = "TabList";
+Tab.displayName = "Tab";
+TabContent.displayName = "TabContent";
+
 export { Tabs, TabList, Tab, TabContent };

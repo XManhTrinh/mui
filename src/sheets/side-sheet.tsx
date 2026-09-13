@@ -54,7 +54,7 @@ export const SideSheetHeader = React.forwardRef<
       ) : (
         <>
           {headline ? (
-            <h2 className="flex-1 text-[14px] leading-5 font-medium text-[hsl(var(--on-surface-variant))]">
+            <h2 className="flex-1 text-[14px] leading-5 font-medium tracking-[0.1px] text-[hsl(var(--on-surface-variant))]">
               {headline}
             </h2>
           ) : (
@@ -335,7 +335,7 @@ function SideSheetRoot({
                   {/* Header */}
                   <div className="flex items-center gap-3 px-6 pt-6 pb-3">
                     {headline ? (
-                      <h2 className="flex-1 text-[14px] leading-5 font-medium text-[hsl(var(--on-surface-variant))]">
+                      <h2 className="flex-1 text-[14px] leading-5 font-medium tracking-[0.1px] text-[hsl(var(--on-surface-variant))]">
                         {headline}
                       </h2>
                     ) : (
@@ -374,6 +374,8 @@ function SideSheetRoot({
 }
 
 // ─── Compound Component Export ────────────────────────────────────────────────
+
+SideSheetRoot.displayName = "SideSheet";
 
 export const SideSheet = Object.assign(SideSheetRoot, {
   Header: SideSheetHeader,
