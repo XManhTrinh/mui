@@ -101,6 +101,8 @@ function NavigationRailContent({ className, children }: NavigationRailContentPro
 
   return (
     <div
+      role="tablist"
+      aria-orientation="vertical"
       className={cn(
         "flex-1 flex flex-col overflow-y-auto overflow-x-hidden",
         expanded ? "gap-0 px-3" : "gap-1.5 px-0",
@@ -160,11 +162,20 @@ function NavigationRailItem({
 }: NavigationRailItemProps) {
   const { expanded } = useNavigationRail();
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onClick?.();
+    }
+  };
+
   return (
     <div
       role="tab"
       aria-selected={active}
+      tabIndex={0}
       onClick={onClick}
+      onKeyDown={handleKeyDown}
       className={cn(
         "group relative flex flex-col items-center justify-center w-full cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full",
         expanded ? "py-0" : "py-1.5",
