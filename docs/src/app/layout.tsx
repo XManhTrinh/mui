@@ -216,7 +216,7 @@ export default function RootLayout({
                 color="tertiary-container"
                 icon={<Icon name="home" />}
                 aria-label="Home"
-                className="shadow-none"
+                className="shadow-none!"
                 onMouseEnter={scheduleClose}
               />
             </Link>
