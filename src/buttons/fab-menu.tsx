@@ -266,6 +266,17 @@ const FABMenuRoot: React.FC<FABMenuProps> = ({
           focusableElements[prevIndex]?.focus();
           break;
         }
+        case "Tab": {
+          // Focus trap: keep Tab / Shift+Tab cycling within the menu.
+          if (focusableElements.length === 0) break;
+          e.preventDefault();
+          const delta = e.shiftKey ? -1 : 1;
+          const from = currentIndex === -1 ? 0 : currentIndex;
+          const nextIndex =
+            (from + delta + focusableElements.length) % focusableElements.length;
+          focusableElements[nextIndex]?.focus();
+          break;
+        }
       }
     },
     [isOpen, setOpen]
@@ -401,15 +412,9 @@ const FABMenuRoot: React.FC<FABMenuProps> = ({
             setOpen(false);
             triggerRef.current?.focus();
           }}
-          onKeyDown={(e) => {
-            if (e.key === "Escape") {
-              e.preventDefault();
-              setOpen(false);
-              triggerRef.current?.focus();
-            }
-            // Allow arrow nav to work at container level
-            handleKeyDown(e);
-          }}
+          // Escape / Arrow / Tab handling all lives in the container-level
+          // handleKeyDown so it stays in one place (no duplicate Escape).
+          onKeyDown={handleKeyDown}
         />
       ) : (
         <FAB

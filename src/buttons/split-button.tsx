@@ -189,6 +189,14 @@ const SplitButtonRoot = React.forwardRef<HTMLDivElement, SplitButtonProps>(
   ) => {
     const [menuOpen, setMenuOpen] = React.useState(false);
 
+    // Track hover/focus per segment in state and derive the inner-corner morph
+    // from it, so a mouseleave can't clobber the expanded radius while the
+    // segment is still focused (and vice versa).
+    const [leadingHover, setLeadingHover] = React.useState(false);
+    const [leadingFocus, setLeadingFocus] = React.useState(false);
+    const [trailingHover, setTrailingHover] = React.useState(false);
+    const [trailingFocus, setTrailingFocus] = React.useState(false);
+
     const resolvedVariant = variantProp ?? "tonal";
     const resolvedSize = sizeProp ?? "m";
 
@@ -196,6 +204,13 @@ const SplitButtonRoot = React.forwardRef<HTMLDivElement, SplitButtonProps>(
 
     const innerRadius = innerRadii[resolvedSize];
     const iconOffset = iconOffsets[resolvedSize];
+
+    // Inner corners morph toward a full round while hovered or focused.
+    const leadingInnerRadius =
+      leadingHover || leadingFocus ? "9999px" : innerRadius;
+    // The trailing segment also stays expanded while its menu is open.
+    const trailingInnerRadius =
+      trailingHover || trailingFocus || menuOpen ? "9999px" : innerRadius;
 
     // Dual-API detection: check if children contain a SplitButtonLeading element
     const leadingChild = findLeadingChild(children);
@@ -257,34 +272,18 @@ const SplitButtonRoot = React.forwardRef<HTMLDivElement, SplitButtonProps>(
               leadingClassName
             )}
             style={{
-              borderStartEndRadius: innerRadius,
-              borderEndEndRadius: innerRadius,
+              borderStartEndRadius: leadingInnerRadius,
+              borderEndEndRadius: leadingInnerRadius,
+              transition: "border-radius 200ms cubic-bezier(0.2,0,0,1)",
             }}
             disabled={isLeadingDisabled}
             tabIndex={isLeadingDisabled ? -1 : undefined}
             aria-label={leadingAriaLabel}
             onClick={leadingOnClick}
-            onMouseEnter={(e) => {
-              // Morph inner corners toward full round on hover
-              const el = e.currentTarget;
-              el.style.borderStartEndRadius = "9999px";
-              el.style.borderEndEndRadius = "9999px";
-            }}
-            onMouseLeave={(e) => {
-              const el = e.currentTarget;
-              el.style.borderStartEndRadius = innerRadius;
-              el.style.borderEndEndRadius = innerRadius;
-            }}
-            onFocus={(e) => {
-              const el = e.currentTarget;
-              el.style.borderStartEndRadius = "9999px";
-              el.style.borderEndEndRadius = "9999px";
-            }}
-            onBlur={(e) => {
-              const el = e.currentTarget;
-              el.style.borderStartEndRadius = innerRadius;
-              el.style.borderEndEndRadius = innerRadius;
-            }}
+            onMouseEnter={() => setLeadingHover(true)}
+            onMouseLeave={() => setLeadingHover(false)}
+            onFocus={() => setLeadingFocus(true)}
+            onBlur={() => setLeadingFocus(false)}
           >
             {leadingContent}
           </button>
@@ -313,33 +312,18 @@ const SplitButtonRoot = React.forwardRef<HTMLDivElement, SplitButtonProps>(
                 isTrailingDisabled && "opacity-[0.38] pointer-events-none cursor-not-allowed"
               )}
               style={{
-                borderStartStartRadius: innerRadius,
-                borderEndStartRadius: innerRadius,
+                borderStartStartRadius: trailingInnerRadius,
+                borderEndStartRadius: trailingInnerRadius,
+                transition: "border-radius 200ms cubic-bezier(0.2,0,0,1)",
               }}
               disabled={isTrailingDisabled}
               tabIndex={isTrailingDisabled ? -1 : undefined}
               aria-haspopup="menu"
               aria-expanded={menuOpen}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget;
-                el.style.borderStartStartRadius = "9999px";
-                el.style.borderEndStartRadius = "9999px";
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget;
-                el.style.borderStartStartRadius = innerRadius;
-                el.style.borderEndStartRadius = innerRadius;
-              }}
-              onFocus={(e) => {
-                const el = e.currentTarget;
-                el.style.borderStartStartRadius = "9999px";
-                el.style.borderEndStartRadius = "9999px";
-              }}
-              onBlur={(e) => {
-                const el = e.currentTarget;
-                el.style.borderStartStartRadius = innerRadius;
-                el.style.borderEndStartRadius = innerRadius;
-              }}
+              onMouseEnter={() => setTrailingHover(true)}
+              onMouseLeave={() => setTrailingHover(false)}
+              onFocus={() => setTrailingFocus(true)}
+              onBlur={() => setTrailingFocus(false)}
             >
               {/* Chevron down icon with rotation + offset animation */}
               <svg
