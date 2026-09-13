@@ -455,7 +455,7 @@ const SearchViewRoot = React.forwardRef<HTMLDivElement, SearchViewProps>(
                 // sm+: docked panel anchored top-center
                 "sm:inset-auto sm:left-[50%] sm:top-4 sm:translate-x-[-50%]",
                 "sm:w-full sm:min-w-90 sm:max-w-180 sm:max-h-[min(560px,90vh)]",
-                "sm:rounded-2xl sm:shadow-[0_3px_6px_hsl(var(--elevation-2))]",
+                "sm:rounded-[28px] sm:shadow-[0_4px_8px_hsl(var(--elevation-3)),0_1px_3px_hsl(var(--elevation-3))]",
                 className
               )}
             >
@@ -501,7 +501,7 @@ const SearchViewHeader = React.forwardRef<HTMLDivElement, SearchViewHeaderProps>
     return (
       <div
         ref={ref}
-        className={cn("flex items-center h-14 shrink-0 px-1", className)}
+        className={cn("flex items-center h-18 sm:h-14 shrink-0 px-1", className)}
       >
         <button
           type="button"
@@ -582,7 +582,7 @@ export type SearchViewDividerProps = {
  */
 const SearchViewDivider = React.forwardRef<HTMLDivElement, SearchViewDividerProps>(
   ({ className }, ref) => (
-    <div ref={ref} className={cn("h-px shrink-0 bg-outline-variant", className)} aria-hidden="true" />
+    <div ref={ref} className={cn("h-px shrink-0 bg-outline", className)} aria-hidden="true" />
   )
 );
 SearchViewDivider.displayName = "SearchViewDivider";
