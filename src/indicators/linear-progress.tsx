@@ -22,7 +22,7 @@ import { cn } from "../lib/utils";
  *
  * Colors (via CSS custom properties):
  * - Active indicator: primary
- * - Track: surface-container-highest
+ * - Track: secondary-container
  *
  * Animation:
  * - Determinate: smooth width transition (200ms M3 standard easing)
@@ -55,7 +55,7 @@ const LinearProgress = React.forwardRef<HTMLDivElement, LinearProgressProps>(
         aria-valuenow={clampedValue}
         aria-label={ariaLabel}
         className={cn(
-          "relative w-full h-1 rounded-full overflow-hidden bg-surface-container-highest",
+          "relative w-full h-1 rounded-full overflow-hidden bg-secondary-container",
           className
         )}
       >
