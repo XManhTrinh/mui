@@ -1,5 +1,6 @@
 {
   "installCommand": "pnpm install",
   "buildCommand": "cd docs && pnpm run build",
+  "outputDirectory": "docs/.next",
   "framework": "nextjs"
 }
