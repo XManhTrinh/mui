@@ -17,6 +17,8 @@ import { Icon } from "./icon";
  * - Hidden scrollbar for clean appearance
  *
  * Variants:
+ * - multi-browse: large → medium → small items for quickly browsing many items
+ *   (the default M3 strategy). Items without an explicit size auto-size by position.
  * - uncontained (default): leading padding 16dp, items scroll past trailing edge
  * - hero: leading + trailing padding, first item large, trailing items peek small
  * - full-screen: no padding, full-width items, one at a time
@@ -24,9 +26,11 @@ import { Icon } from "./icon";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
+export type CarouselVariant = "multi-browse" | "uncontained" | "hero" | "full-screen";
+
 export type CarouselProps = {
   /** Layout variant */
-  variant?: "uncontained" | "hero" | "full-screen";
+  variant?: CarouselVariant;
   /** Gap between items in pixels (default: 8) */
   gap?: number;
   /** Show navigation arrows */
@@ -38,13 +42,41 @@ export type CarouselProps = {
 }
 
 export type CarouselItemProps = {
-  /** Item width: "large" (dynamic fill), "medium" (half), "small" (40-56dp) */
+  /**
+   * Item width: "large" (dynamic fill), "medium" (half), "small" (40-56dp).
+   * When omitted, the size is derived from the carousel variant and the item's
+   * position (multi-browse: large → medium → small; otherwise large).
+   */
   size?: "large" | "medium" | "small";
   /** Disabled state (38% opacity) */
   disabled?: boolean;
   /** Additional className */
   className?: string;
   children: React.ReactNode;
+}
+
+// ─── Context ──────────────────────────────────────────────────────────────────
+
+type CarouselContextValue = {
+  variant: CarouselVariant;
+  /** Resolve a default item size from its position when it has no explicit size. */
+  defaultSizeForIndex: (index: number) => "large" | "medium" | "small";
+};
+
+const CarouselContext = React.createContext<CarouselContextValue | null>(null);
+
+/** Per-item index, provided by Carousel so items can derive a default size. */
+const CarouselIndexContext = React.createContext<number>(0);
+
+/**
+ * Multi-browse default sizing: first item large, next medium, the rest small.
+ * This produces the large → medium → small progression M3 defines for the
+ * multi-browse strategy without requiring the consumer to size each item.
+ */
+function multiBrowseSize(index: number): "large" | "medium" | "small" {
+  if (index === 0) return "large";
+  if (index === 1) return "medium";
+  return "small";
 }
 
 // ─── Carousel ─────────────────────────────────────────────────────────────────
@@ -96,7 +128,24 @@ function Carousel({
     }
   };
 
+  const contextValue = React.useMemo<CarouselContextValue>(
+    () => ({
+      variant,
+      defaultSizeForIndex: variant === "multi-browse" ? multiBrowseSize : () => "large",
+    }),
+    [variant]
+  );
+
+  // Tag each item with its index so items can derive a multi-browse default size.
+  const indexedChildren = React.Children.map(children, (child, index) => {
+    if (!React.isValidElement(child)) return child;
+    return (
+      <CarouselIndexContext.Provider value={index}>{child}</CarouselIndexContext.Provider>
+    );
+  });
+
   return (
+    <CarouselContext.Provider value={contextValue}>
     <div
       className={cn("isolate relative group/carousel", className)}
       role="region"
@@ -116,7 +165,7 @@ function Carousel({
           "[-webkit-overflow-scrolling:touch] scrollbar-none",
           "[&::-webkit-scrollbar]:hidden",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-[28px]",
-          variant === "uncontained" && "pl-4",
+          (variant === "uncontained" || variant === "multi-browse") && "ps-4",
           variant === "hero" && "px-4",
           variant === "full-screen" && "px-0"
         )}
@@ -126,7 +175,7 @@ function Carousel({
           paddingBottom: variant === "full-screen" ? 0 : "8px",
         }}
       >
-        {children}
+        {indexedChildren}
       </div>
 
       {/* Navigation arrows */}
@@ -169,6 +218,7 @@ function Carousel({
         </>
       )}
     </div>
+    </CarouselContext.Provider>
   );
 }
 Carousel.displayName = "Carousel";
@@ -176,11 +226,15 @@ Carousel.displayName = "Carousel";
 // ─── CarouselItem ─────────────────────────────────────────────────────────────
 
 function CarouselItem({
-  size = "large",
+  size,
   disabled = false,
   className,
   children,
 }: CarouselItemProps) {
+  const ctx = React.useContext(CarouselContext);
+  const index = React.useContext(CarouselIndexContext);
+  // Explicit size wins; otherwise derive from the variant + position.
+  const resolvedSize = size ?? ctx?.defaultSizeForIndex(index) ?? "large";
   return (
     <div
       role="listitem"
@@ -191,9 +245,9 @@ function CarouselItem({
         "snap-start",
         "bg-surface",
         // Size variants
-        size === "large" && "w-[calc(100%-48px)] min-w-50",
-        size === "medium" && "w-[calc(50%-12px)] min-w-37.5",
-        size === "small" && "w-14 min-w-10 max-w-14",
+        resolvedSize === "large" && "w-[calc(100%-48px)] min-w-50",
+        resolvedSize === "medium" && "w-[calc(50%-12px)] min-w-37.5",
+        resolvedSize === "small" && "w-14 min-w-10 max-w-14",
         // State layer via pseudo-element
         "before:absolute before:inset-0 before:z-10 before:rounded-[28px] before:pointer-events-none",
         "before:bg-surface-foreground before:opacity-0 before:transition-opacity",

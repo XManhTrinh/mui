@@ -237,7 +237,7 @@ export type { LinearProgressProps, CircularProgressProps, LoadingIndicatorProps 
 
 // ─── Carousel ─────────────────────────────────────────────────────────────────
 export { Carousel, CarouselItem } from "./carousel";
-export type { CarouselProps, CarouselItemProps } from "./carousel";
+export type { CarouselProps, CarouselItemProps, CarouselVariant } from "./carousel";
 
 // ─── Pickers ──────────────────────────────────────────────────────────────────
 export { DatePicker, DatePickerModal, TimePicker } from "./pickers";
