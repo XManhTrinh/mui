@@ -310,9 +310,12 @@ export default function RootLayout({
           </nav>
 
           {/* Divider between rail and drawer */}
-          {isDrawerVisible && (
-            <div className="w-px shrink-0 bg-outline-variant" />
-          )}
+          <div
+            className={[
+              "w-px shrink-0 bg-outline-variant transition-opacity duration-200",
+              isDrawerVisible ? "opacity-100" : "opacity-0",
+            ].join(" ")}
+          />
 
           {/* Drawer — child links for the hovered category */}
           <div
@@ -321,8 +324,14 @@ export default function RootLayout({
             className={[
               "h-full bg-surface-container overflow-hidden",
               "rounded-e-2xl",
-              "transition-[width,opacity] duration-250 ease-[cubic-bezier(0.2,0,0,1)]",
-              isDrawerVisible ? "w-56 opacity-100" : "w-0 opacity-0",
+              // M3 Level 1 shadow on the end edge
+              "shadow-[4px_0_12px_0_hsl(var(--elevation-1))]",
+              // Open: emphasized-decelerate (fast start, gentle settle)
+              // Close: emphasized-accelerate (gentle start, fast exit)
+              isDrawerVisible
+                ? "w-56 opacity-100 duration-400 ease-[cubic-bezier(0.05,0.7,0.1,1)]"
+                : "w-0 opacity-0 duration-200 ease-[cubic-bezier(0.3,0,0.8,0.15)]",
+              "transition-[width,opacity]",
             ].join(" ")}
           >
             {drawerCat && (
