@@ -288,7 +288,7 @@ function Tab({ value: tabValue, icon, label, disabled = false, className }: TabP
       data-tab-value={tabValue}
       onClick={handleClick}
       className={cn(
-        "relative overflow-hidden shrink-0 flex items-center justify-center gap-2 min-w-20 px-4",
+        "relative overflow-hidden flex-none flex items-center justify-center gap-2 min-w-20 px-4",
         layoutDirection,
         "select-none transition-colors duration-200",
         "focus-visible:outline-none",
