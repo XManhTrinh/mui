@@ -79,53 +79,53 @@
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* Primary */
-  --primary: 214 89% 52%;
+  /* ── Primary (M3 baseline: #6750A4 purple) ── */
+  --primary: 256 34% 48%;
   --on-primary: 0 0% 100%;
-  --primary-container: 214 100% 93%;
-  --on-primary-container: 214 100% 20%;
+  --primary-container: 263 100% 93%;
+  --on-primary-container: 261 100% 18%;
 
-  /* Secondary */
-  --secondary: 214 15% 46%;
+  /* ── Secondary ── */
+  --secondary: 259 11% 40%;
   --on-secondary: 0 0% 100%;
-  --secondary-container: 214 20% 92%;
-  --on-secondary-container: 214 20% 18%;
+  --secondary-container: 263 65% 92%;
+  --on-secondary-container: 253 26% 13%;
 
-  /* Tertiary */
-  --tertiary: 160 60% 42%;
+  /* ── Tertiary ── */
+  --tertiary: 340 21% 41%;
   --on-tertiary: 0 0% 100%;
-  --tertiary-container: 160 60% 92%;
-  --on-tertiary-container: 160 60% 16%;
+  --tertiary-container: 342 100% 92%;
+  --on-tertiary-container: 338 48% 13%;
 
-  /* Surface */
-  --surface: 210 20% 99%;
-  --on-surface: 210 20% 10%;
-  --surface-variant: 210 14% 94%;
-  --on-surface-variant: 210 10% 34%;
-  --surface-container-low: 210 20% 97%;
-  --surface-container: 210 18% 95%;
-  --surface-container-high: 210 16% 92%;
-  --surface-container-highest: 210 14% 89%;
+  /* ── Surface ── */
+  --surface: 315 100% 99%;
+  --on-surface: 255 7% 11%;
+  --surface-variant: 275 24% 90%;
+  --on-surface-variant: 264 7% 29%;
+  --surface-container-low: 278 44% 96%;
+  --surface-container: 276 38% 95%;
+  --surface-container-high: 276 25% 92%;
+  --surface-container-highest: 280 17% 90%;
 
-  /* Inverse */
-  --inverse-surface: 210 20% 10%;
-  --inverse-on-surface: 210 10% 95%;
-  --inverse-primary: 214 100% 72%;
+  /* ── Inverse ── */
+  --inverse-surface: 260 3% 19%;
+  --inverse-on-surface: 300 19% 95%;
+  --inverse-primary: 258 100% 87%;
 
-  /* Outline */
-  --outline: 210 8% 56%;
-  --outline-variant: 210 12% 82%;
+  /* ── Outline ── */
+  --outline: 270 4% 47%;
+  --outline-variant: 270 11% 79%;
 
-  /* Error */
-  --error: 0 75% 42%;
+  /* ── Error ── */
+  --error: 3 71% 41%;
   --on-error: 0 0% 100%;
-  --error-container: 0 100% 93%;
-  --on-error-container: 0 100% 18%;
+  --error-container: 4 71% 92%;
+  --on-error-container: 3 71% 15%;
 
-  /* Surface — extended */
+  /* ── Surface extended ── */
   --surface-container-lowest: 0 0% 100%;
-  --surface-bright: 210 20% 98%;
-  --surface-dim: 210 14% 87%;
+  --surface-bright: 315 100% 99%;
+  --surface-dim: 280 13% 86%;
 
   /* Scrim & shadow */
   --scrim: 0 0% 0%;
@@ -204,46 +204,53 @@
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 .dark {
-  --primary: 214 100% 83%;
-  --on-primary: 214 80% 20%;
-  --primary-container: 214 55% 31%;
-  --on-primary-container: 214 100% 92%;
+  /* ── Primary ── */
+  --primary: 258 100% 87%;
+  --on-primary: 259 58% 28%;
+  --primary-container: 257 43% 38%;
+  --on-primary-container: 263 100% 93%;
 
-  --secondary: 214 20% 78%;
-  --on-secondary: 214 20% 20%;
-  --secondary-container: 214 18% 30%;
-  --on-secondary-container: 214 25% 92%;
+  /* ── Secondary ── */
+  --secondary: 263 27% 81%;
+  --on-secondary: 258 18% 22%;
+  --secondary-container: 258 13% 31%;
+  --on-secondary-container: 263 65% 92%;
 
-  --tertiary: 160 40% 65%;
-  --on-tertiary: 0 0% 100%;
-  --tertiary-container: 160 40% 28%;
-  --on-tertiary-container: 160 50% 92%;
+  /* ── Tertiary ── */
+  --tertiary: 343 63% 83%;
+  --on-tertiary: 338 33% 22%;
+  --tertiary-container: 340 25% 31%;
+  --on-tertiary-container: 342 100% 92%;
 
-  --surface: 220 17% 8%;
-  --on-surface: 220 10% 90%;
-  --surface-variant: 220 10% 20%;
-  --on-surface-variant: 214 12% 78%;
-  --surface-container-low: 214 13% 11%;
-  --surface-container: 214 12% 13%;
-  --surface-container-high: 220 8% 17%;
-  --surface-container-highest: 220 6% 21%;
+  /* ── Surface ── */
+  --surface: 255 7% 11%;
+  --on-surface: 312 9% 89%;
+  --surface-variant: 264 7% 29%;
+  --on-surface-variant: 270 11% 79%;
+  --surface-container-low: 255 7% 11%;
+  --surface-container: 257 10% 14%;
+  --surface-container-high: 257 8% 17%;
+  --surface-container-highest: 257 6% 22%;
 
-  --inverse-surface: 220 10% 90%;
-  --inverse-on-surface: 220 17% 12%;
-  --inverse-primary: 214 55% 38%;
+  /* ── Inverse ── */
+  --inverse-surface: 312 9% 89%;
+  --inverse-on-surface: 260 3% 19%;
+  --inverse-primary: 256 34% 48%;
 
-  --outline: 214 8% 56%;
-  --outline-variant: 220 10% 28%;
+  /* ── Outline ── */
+  --outline: 264 5% 58%;
+  --outline-variant: 264 7% 29%;
 
-  --error: 0 80% 72%;
-  --on-error: 0 100% 18%;
-  --error-container: 0 75% 25%;
-  --on-error-container: 0 100% 92%;
+  /* ── Error ── */
+  --error: 3 70% 83%;
+  --on-error: 3 71% 22%;
+  --error-container: 3 71% 32%;
+  --on-error-container: 4 71% 92%;
 
-  /* Surface — extended (dark) */
-  --surface-container-lowest: 220 20% 5%;
-  --surface-bright: 220 10% 24%;
-  --surface-dim: 220 17% 6%;
+  /* ── Surface extended (dark) ── */
+  --surface-container-lowest: 260 19% 6%;
+  --surface-bright: 270 5% 23%;
+  --surface-dim: 255 7% 11%;
 
   /* Scrim & shadow (same in dark) */
   --scrim: 0 0% 0%;
