@@ -38,6 +38,8 @@ export type SelectProps = {
   errorText?: string;
   supportingText?: string;
   required?: boolean;
+  /** Enable typeahead search input inside the dropdown */
+  searchable?: boolean;
   className?: string;
 }
 
@@ -96,11 +98,22 @@ function SelectMenu({
   options,
   currentValue,
   onSelect,
+  searchable = false,
 }: {
   options: SelectOption[];
   currentValue: string;
   onSelect: (value: string) => void;
+  searchable?: boolean;
 }) {
+  const [filter, setFilter] = React.useState("");
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
+  const filteredOptions = searchable && filter
+    ? options.filter((o) =>
+        o.label.toLowerCase().includes(filter.toLowerCase())
+      )
+    : options;
+
   return (
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.Content
@@ -111,8 +124,24 @@ function SelectMenu({
           "z-50 min-w-28 max-w-70 w-(--radix-dropdown-menu-trigger-width) overflow-y-auto max-h-[min(var(--radix-dropdown-menu-content-available-height,300px),300px)] rounded bg-surface-container py-2 shadow-[0_3px_6px_hsl(var(--elevation-2)),0_1px_3px_hsl(var(--elevation-2))]",
           "m3-animate-menu"
         )}
+        onCloseAutoFocus={() => setFilter("")}
       >
-        {options.map((option) => (
+        {searchable && (
+          <div className="px-3 pb-2">
+            <input
+              ref={inputRef}
+              type="text"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              placeholder="Search..."
+              className="w-full h-10 px-3 rounded bg-surface-container-highest text-[14px] leading-5 text-surface-foreground placeholder:text-[hsl(var(--on-surface-variant))] outline-none focus:ring-2 focus:ring-primary"
+              autoFocus
+              // Prevent Radix from closing the menu when typing
+              onKeyDown={(e) => e.stopPropagation()}
+            />
+          </div>
+        )}
+        {filteredOptions.map((option) => (
           <SelectOptionItem
             key={option.value}
             option={option}
@@ -120,6 +149,11 @@ function SelectMenu({
             onSelect={() => onSelect(option.value)}
           />
         ))}
+        {searchable && filteredOptions.length === 0 && (
+          <div className="px-3 py-3 text-[14px] text-[hsl(var(--on-surface-variant))]">
+            No results
+          </div>
+        )}
       </DropdownMenuPrimitive.Content>
     </DropdownMenuPrimitive.Portal>
   );
@@ -142,6 +176,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
       errorText,
       supportingText,
       required = false,
+      searchable = false,
       className,
     },
     ref
@@ -271,6 +306,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
               options={options}
               currentValue={currentValue}
               onSelect={handleSelect}
+              searchable={searchable}
             />
           </DropdownMenuPrimitive.Root>
           {(supportingText || (error && errorText)) && (
@@ -405,6 +441,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             options={options}
             currentValue={currentValue}
             onSelect={handleSelect}
+            searchable={searchable}
           />
         </DropdownMenuPrimitive.Root>
         {(supportingText || (error && errorText)) && (

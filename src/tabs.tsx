@@ -335,14 +335,46 @@ export type TabContentProps = {
 }
 
 function TabContent({ value: contentValue, className, children }: TabContentProps) {
-  const { value: activeValue } = useTabsContext();
+  const { value: activeValue, onValueChange } = useTabsContext();
+  const swipeStart = React.useRef<{ x: number; y: number } | null>(null);
 
   if (activeValue !== contentValue) return null;
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (e.pointerType === "mouse") return;
+    swipeStart.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (!swipeStart.current) return;
+    const dx = e.clientX - swipeStart.current.x;
+    const dy = e.clientY - swipeStart.current.y;
+    swipeStart.current = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      // Find the ordered list of tab values from the DOM
+      const tablist = document.querySelector('[role="tablist"]');
+      if (!tablist) return;
+      const tabs = Array.from(
+        tablist.querySelectorAll<HTMLElement>('[role="tab"][data-tab-value]')
+      );
+      const values = tabs.map((t) => t.getAttribute("data-tab-value") ?? "");
+      const currentIndex = values.indexOf(activeValue);
+      if (currentIndex === -1) return;
+      const nextIndex = dx < 0
+        ? Math.min(currentIndex + 1, values.length - 1)
+        : Math.max(currentIndex - 1, 0);
+      if (nextIndex !== currentIndex) {
+        onValueChange(values[nextIndex]);
+      }
+    }
+  };
 
   return (
     <div
       role="tabpanel"
-      className={cn("mt-4 focus-visible:outline-none", className)}
+      className={cn("mt-4 focus-visible:outline-none touch-pan-y", className)}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
     >
       {children}
     </div>
