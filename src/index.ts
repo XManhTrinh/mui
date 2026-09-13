@@ -86,12 +86,24 @@ export type { SwitchProps } from "./switch";
 
 // ─── Search ───────────────────────────────────────────────────────────────────
 export { Search, SearchLeadingIcon, SearchInput, SearchTrailingIcon, useSearch } from "./search";
+export {
+  SearchView,
+  SearchViewHeader,
+  SearchViewInput,
+  SearchViewDivider,
+  SearchViewContent,
+} from "./search";
 export type {
   SearchProps,
   SearchContextValue,
   SearchLeadingIconProps,
   SearchInputProps,
   SearchTrailingIconProps,
+  SearchViewProps,
+  SearchViewHeaderProps,
+  SearchViewInputProps,
+  SearchViewDividerProps,
+  SearchViewContentProps,
 } from "./search";
 
 // ─── Tabs ─────────────────────────────────────────────────────────────────────
