@@ -66,7 +66,7 @@ const extendedFabVariants = cva(
           "h-14 px-4 gap-2 text-[16px] leading-6 tracking-[0.15px] rounded-2xl active:rounded-xl [&_svg]:size-6",
         // 80dp · Title Large · 28 icon · corner-large-increased(20) · 26 pad · 12 gap
         medium:
-          "h-20 px-[26px] gap-3 text-[22px] leading-7 tracking-normal rounded-[20px] active:rounded-2xl [&_svg]:size-7",
+          "h-20 px-6.5 gap-3 text-[22px] leading-7 tracking-normal rounded-[20px] active:rounded-2xl [&_svg]:size-7",
         // 96dp · Headline Small · 36 icon · corner-extra-large(28) · 28 pad · 16 gap
         large:
           "h-24 px-7 gap-4 text-[24px] leading-8 tracking-normal rounded-[28px] active:rounded-2xl [&_svg]:size-9",
