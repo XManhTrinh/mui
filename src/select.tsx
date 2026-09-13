@@ -145,7 +145,14 @@ function SelectMenu({
               {filter && (
                 <button
                   type="button"
-                  onClick={() => setFilter("")}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setFilter("");
+                    requestAnimationFrame(() => inputRef.current?.focus());
+                  }}
+                  // Prevent Radix from moving focus away from the search input
+                  onPointerDown={(e) => e.preventDefault()}
                   className="shrink-0 flex items-center justify-center size-6 rounded-full cursor-pointer text-[hsl(var(--on-surface-variant))] hover:bg-[hsl(var(--on-surface)/0.08)]"
                   aria-label="Clear search"
                 >
