@@ -190,10 +190,10 @@ export default function TextFieldsPage() {
         <h2 className="text-[22px] leading-7 font-normal">Character Count</h2>
         <Showcase
           title="Display current/max character usage"
-          code={`<TextField label="Bio" characterCount={{ current: 42, max: 200 }} />`}
+          code={`<TextField label="Bio" characterCount={200} />`}
         >
-          <TextField variant="outlined" label="Bio" characterCount={{ current: 42, max: 200 }} defaultValue="Hello, I'm a software engineer." />
-          <TextField variant="filled" label="Tweet" characterCount={{ current: 128, max: 280 }} supportingText="Keep it short" defaultValue="Just shipped a new feature!" />
+          <TextField variant="outlined" label="Bio" characterCount={200} defaultValue="Hello, I'm a software engineer." />
+          <TextField variant="filled" label="Tweet" characterCount={280} supportingText="Keep it short" defaultValue="Just shipped a new feature!" />
         </Showcase>
       </section>
 
@@ -222,14 +222,13 @@ export default function TextFieldsPage() {
         <h2 className="text-[22px] leading-7 font-normal">Character Counter with Error</h2>
         <Showcase
           title="Counter turns red when exceeding max"
-          code={`const [text, setText] = React.useState("Hello world");\n\n<TextField\n  label="Bio"\n  multiline\n  value={text}\n  onChange={(e) => setText(e.target.value)}\n  characterCount={{ current: text.length, max: 50 }}\n/>`}
+          code={`<TextField label="Bio" multiline characterCount={50} defaultValue="Hello world — type more to see the counter turn red" />`}
         >
           <TextField
             label="Bio"
             multiline
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            characterCount={{ current: text.length, max: 50 }}
+            characterCount={50}
+            defaultValue="Hello world — type more to see the counter turn red"
           />
         </Showcase>
       </section>

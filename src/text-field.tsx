@@ -31,7 +31,11 @@ export type TextFieldProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "
   rows?: number;
   /** Auto-grow the textarea height as the user types (multiline only) */
   autoGrow?: boolean;
-  characterCount?: { current: number; max: number };
+  /**
+   * Character counter. Pass a number for the max length (auto-counted),
+   * or `{ current, max }` for manual control.
+   */
+  characterCount?: number | { current: number; max: number };
   className?: string;
 }
 
@@ -179,17 +183,22 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             {displayedSupporting}
           </span>
         )}
-        {characterCount && (
-          <span className={cn(
-            "text-xs leading-4 tracking-[0.4px] ms-auto",
-            characterCount.current > characterCount.max
-              ? "text-[hsl(var(--error))]"
-              : "text-[hsl(var(--on-surface-variant))]",
-            disabled && "text-[hsl(var(--on-surface)/0.38)]"
-          )}>
-            {characterCount.current}/{characterCount.max}
-          </span>
-        )}
+        {characterCount && (() => {
+          const cc = typeof characterCount === "number"
+            ? { current: String(currentValue ?? "").length, max: characterCount }
+            : characterCount;
+          return (
+            <span className={cn(
+              "text-xs leading-4 tracking-[0.4px] ms-auto",
+              cc.current > cc.max
+                ? "text-[hsl(var(--error))]"
+                : "text-[hsl(var(--on-surface-variant))]",
+              disabled && "text-[hsl(var(--on-surface)/0.38)]"
+            )}>
+              {cc.current}/{cc.max}
+            </span>
+          );
+        })()}
       </div>
     );
 
