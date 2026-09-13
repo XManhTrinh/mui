@@ -250,3 +250,6 @@ export type {
   TypographyVariant,
   TypographyColor,
 } from "./typography";
+
+// ─── Motion Utilities ─────────────────────────────────────────────────────────
+export { duration, easing, spring, transition, SCALE_INITIAL } from "./lib/motion";
