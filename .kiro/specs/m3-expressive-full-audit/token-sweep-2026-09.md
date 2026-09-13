@@ -184,9 +184,8 @@ the spec; "Fixed" = corrected a wrong value.
 
 Both workspaces (`mui`, `strata/apps/web`) compile clean after the sweep.
 
-### Phase 2 backlog — Expressive feature additions (not token deviations)
-These are net-new Expressive variants/features the components don't yet offer:
-- **Slider**: Expressive size scale (xsmall 16 / small 24 / medium 40 / large 56 / xlarge 96dp track heights).
-- **Progress indicators**: wavy/expressive active-indicator variants; circular "with wave" 48dp size.
-- **Checkbox**: error state (`error` container / `on-error` icon).
-- **NavigationBar**: optional level2 elevation (currently flat tonal).
+### Phase 2 — Expressive feature additions
+- **Slider** ✅ Expressive size scale added (`size` prop: xsmall 16 / small 24 / medium 40 / large 56 / xlarge 96dp track; handles 44/44/44/68/108dp; shape-leading 8/8/12/16/28dp). Default xsmall.
+- **Progress indicators** ✅ wavy variant added (`wave` prop): LinearProgress determinate SVG sine wave (amp 3dp / wavelength 40dp, scrolling); CircularProgress sine-perturbed ring (amp 1.6dp / ~15dp wavelength), defaults to 48dp "with wave" size.
+- **Checkbox** ✅ error state added (`error` prop: error container / on-error icon / error outline / error state layer / aria-invalid).
+- **NavigationBar** — level2 elevation left as flat tonal (deliberate; common M3 web treatment). Not a deviation.
