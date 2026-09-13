@@ -48,8 +48,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={dark ? "dark" : ""}>
       <body className="bg-surface text-surface-foreground min-h-screen">
-        {/* Sidebar — fixed position, full height */}
-        <NavigationRail expanded className="fixed inset-t-0 inset-l-0 h-screen z-40">
+        {/* Sidebar — fixed, always collapsed */}
+        <NavigationRail className="fixed inset-t-0 inset-l-0 h-screen z-40">
           <NavigationRail.Header>
             <Link href="/">
               <IconButton
@@ -82,8 +82,8 @@ export default function RootLayout({
           </NavigationRail.Footer>
         </NavigationRail>
 
-        {/* Main content — offset by sidebar width */}
-        <div className="ml-90">
+        {/* Main content — offset by collapsed rail width (96px) */}
+        <div className="ml-24">
           <AppBar
             className="sticky inset-t-0 z-30"
             headline={
