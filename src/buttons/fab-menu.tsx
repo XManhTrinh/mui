@@ -150,35 +150,33 @@ const FABMenuRoot: React.FC<FABMenuProps> = ({
       </PopoverPrimitive.Trigger>
 
       <AnimatePresence>
-        {(openProp ?? defaultOpen) !== false && (
-          <PopoverPrimitive.Portal forceMount>
-            <PopoverPrimitive.Content
-              side="top"
-              sideOffset={8}
-              align="center"
-              className={cn(
-                "z-50 flex flex-col items-center gap-1 outline-none",
-                className
-              )}
-              // Keep the speed-dial menu focused
-              onOpenAutoFocus={(e) => e.preventDefault()}
-            >
-              <motion.div
-                role="menu"
-                className="flex flex-col items-center gap-1"
-                initial="closed"
-                animate="open"
-                exit="closed"
-                variants={{
-                  open: { transition: { staggerChildren: staggerDelay } },
-                  closed: {
-                    transition: {
-                      staggerChildren: staggerDelay,
-                      staggerDirection: -1,
-                    },
+        <PopoverPrimitive.Portal>
+          <PopoverPrimitive.Content
+            side="top"
+            sideOffset={8}
+            align="center"
+            className={cn(
+              "z-50 flex flex-col items-center gap-1 outline-none",
+              "animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
+              className
+            )}
+            onOpenAutoFocus={(e) => e.preventDefault()}
+          >
+            <motion.div
+              role="menu"
+              className="flex flex-col items-center gap-1"
+              initial="closed"
+              animate="open"
+              variants={{
+                open: { transition: { staggerChildren: staggerDelay } },
+                closed: {
+                  transition: {
+                    staggerChildren: staggerDelay,
+                    staggerDirection: -1,
                   },
-                }}
-              >
+                },
+              }}
+            >
                 {validItems.map((item, index) => (
                   <motion.button
                     key={index}
@@ -229,7 +227,6 @@ const FABMenuRoot: React.FC<FABMenuProps> = ({
               </motion.div>
             </PopoverPrimitive.Content>
           </PopoverPrimitive.Portal>
-        )}
       </AnimatePresence>
     </PopoverPrimitive.Root>
   );
