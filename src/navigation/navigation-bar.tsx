@@ -43,7 +43,7 @@ export type NavigationBarItemProps = {
  * NavigationBar.Item — Individual navigation item for the composable API.
  *
  * M3 specs:
- * - Active indicator: 64×32dp pill, secondary-container
+ * - Active indicator: 56×32dp pill, secondary-container
  * - Icon: 24dp, filled variant when active
  * - Label: 12px, Label Medium, below icon
  * - Badge: dot or count badge on top-right of icon
@@ -80,7 +80,7 @@ const NavigationBarItem = React.forwardRef<HTMLButtonElement, NavigationBarItemP
           className
         )}
       >
-        {/* Indicator container — 64×32dp pill per M3 Expressive */}
+        {/* Indicator container — 56×32dp pill (w-14 h-8) per M3 */}
         <div className="relative flex items-center justify-center w-14 h-8">
           {/* Active indicator pill — spring-based scale from center */}
           <div
@@ -175,7 +175,7 @@ export type NavigationBarProps = {
  * - 3-5 items, equal width
  * - Container height: 64dp (M3 Expressive — was 80dp in M3)
  * - Container bg: surface-container (tonal elevation, no drop shadow)
- * - Active indicator: 64×32dp pill, secondary-container
+ * - Active indicator: 56×32dp pill, secondary-container
  * - Active icon: on-secondary-container, filled
  * - Active label: secondary (flexible variant)
  * - Inactive icon/label: on-surface-variant
@@ -250,9 +250,9 @@ function NavigationBarRoot({
                   aria-selected={isActive}
                   aria-label={item.label}
                   onClick={() => handleSelect(item.value)}
-                  className="group relative flex w-full flex-col items-center justify-center gap-1 h-20 min-h-12 outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
+                  className="group relative flex w-full flex-col items-center justify-center gap-1 h-16 min-h-12 outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
                 >
-                  {/* Indicator container — 64×32dp pill per M3 Expressive */}
+                  {/* Indicator container — 56×32dp pill (w-14 h-8) per M3 */}
                   <div className="relative flex items-center justify-center w-14 h-8">
                     {/* Active indicator pill — spring-based scale from center */}
                     <div
