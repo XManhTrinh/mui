@@ -159,11 +159,11 @@ export default function HomePage() {
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden rounded-3xl bg-primary-container px-8 py-14 sm:px-14 sm:py-20">
         {/* Decorative circles */}
-        <div className="pointer-events-none absolute -right-20 -top-20 size-80 rounded-full bg-primary/[0.07]" />
-        <div className="pointer-events-none absolute -left-10 -bottom-10 size-60 rounded-full bg-tertiary/[0.06]" />
+        <div className="pointer-events-none absolute -right-20 -top-20 size-80 rounded-full bg-primary/7" />
+        <div className="pointer-events-none absolute -left-10 -bottom-10 size-60 rounded-full bg-tertiary/6" />
 
         <div className="relative z-10 max-w-160 space-y-6">
-          <div className="inline-flex items-center gap-2 rounded-full bg-primary/[0.12] px-3 py-1">
+          <div className="inline-flex items-center gap-2 rounded-full bg-primary/12 px-3 py-1">
             <Icon name="auto_awesome" size={16} className="text-primary" />
             <span className="text-[12px] font-medium tracking-[0.5px] text-primary">
               M3 Expressive — May 2025
