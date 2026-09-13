@@ -23,10 +23,10 @@ export default function FABsPage() {
       </div>
 
       {/* FAB Examples */}
-      <Showcase title="FAB Sizes" code={`<FAB size="m" icon={<Icon name="add" />} aria-label="Add" />\n<FAB size="l" icon={<Icon name="add" />} aria-label="Add" />\n<FAB size="xl" icon={<Icon name="add" />} aria-label="Add" />`}>
-        <FAB size="m" icon={<Icon name="add" />} aria-label="Add" />
-        <FAB size="l" icon={<Icon name="add" />} aria-label="Add" />
-        <FAB size="xl" icon={<Icon name="add" />} aria-label="Add" />
+      <Showcase title="FAB Sizes" code={`<FAB size="fab" icon={<Icon name="add" />} aria-label="Add" />\n<FAB size="medium" icon={<Icon name="add" />} aria-label="Add" />\n<FAB size="large" icon={<Icon name="add" />} aria-label="Add" />`}>
+        <FAB size="fab" icon={<Icon name="add" />} aria-label="Add" />
+        <FAB size="medium" icon={<Icon name="add" />} aria-label="Add" />
+        <FAB size="large" icon={<Icon name="add" />} aria-label="Add" />
       </Showcase>
 
       <Showcase title="FAB Colors" code={`<FAB color="primary" icon={<Icon name="edit" />} aria-label="Edit" />\n<FAB color="secondary" icon={<Icon name="edit" />} aria-label="Edit" />\n<FAB color="tertiary" icon={<Icon name="edit" />} aria-label="Edit" />`}>
@@ -35,10 +35,10 @@ export default function FABsPage() {
         <FAB color="tertiary" icon={<Icon name="edit" />} aria-label="Edit" />
       </Showcase>
 
-      <Showcase title="FAB Round Shape" code={`<FAB shape="round" size="m" icon={<Icon name="navigation" />} aria-label="Navigate" />\n<FAB shape="round" size="l" icon={<Icon name="navigation" />} aria-label="Navigate" />\n<FAB shape="round" size="xl" icon={<Icon name="navigation" />} aria-label="Navigate" />`}>
-        <FAB shape="round" size="m" icon={<Icon name="navigation" />} aria-label="Navigate" />
-        <FAB shape="round" size="l" icon={<Icon name="navigation" />} aria-label="Navigate" />
-        <FAB shape="round" size="xl" icon={<Icon name="navigation" />} aria-label="Navigate" />
+      <Showcase title="FAB Round Shape" code={`<FAB shape="round" size="fab" icon={<Icon name="navigation" />} aria-label="Navigate" />\n<FAB shape="round" size="medium" icon={<Icon name="navigation" />} aria-label="Navigate" />\n<FAB shape="round" size="large" icon={<Icon name="navigation" />} aria-label="Navigate" />`}>
+        <FAB shape="round" size="fab" icon={<Icon name="navigation" />} aria-label="Navigate" />
+        <FAB shape="round" size="medium" icon={<Icon name="navigation" />} aria-label="Navigate" />
+        <FAB shape="round" size="large" icon={<Icon name="navigation" />} aria-label="Navigate" />
       </Showcase>
 
       {/* ExtendedFAB Examples */}

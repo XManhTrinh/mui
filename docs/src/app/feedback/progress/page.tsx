@@ -91,6 +91,34 @@ export default function ProgressPage() {
       </section>
 
       <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">M3 Expressive — Wavy Variant</h2>
+        <p className="text-[14px] text-surface-variant-foreground">
+          Pass <code>wave</code> to render the active indicator as an animated sine wave per the M3 Expressive spec.
+        </p>
+
+        <Showcase title="Linear — Wavy Determinate" className="flex-col items-stretch" code={`<LinearProgress value={60} wave />`}>
+          <LinearProgress value={30} wave />
+          <LinearProgress value={60} wave />
+          <LinearProgress value={90} wave />
+        </Showcase>
+
+        <Showcase title="Circular — Wavy Indeterminate" code={`<CircularProgress wave />`}>
+          <CircularProgress wave />
+        </Showcase>
+
+        <Showcase title="Circular — Wavy Determinate" code={`<CircularProgress value={60} wave />`}>
+          <CircularProgress value={25} wave />
+          <CircularProgress value={50} wave />
+          <CircularProgress value={75} wave />
+        </Showcase>
+
+        <div className="rounded-xl border border-outline-variant p-4 space-y-2 text-sm text-surface-variant-foreground">
+          <p><strong>Linear wave:</strong> SVG sine wave — amplitude 3dp, wavelength 40dp, scrolling animation.</p>
+          <p><strong>Circular wave:</strong> Sine-perturbed ring — amplitude 1.6dp, ~15dp wavelength. Defaults to 48dp size.</p>
+        </div>
+      </section>
+
+      <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">Loading Indicator</h2>
         <Showcase title="Loading States" code={`<LoadingIndicator />\n<LoadingIndicator size="sm" />\n<LoadingIndicator size="md" />\n<LoadingIndicator size="lg" />`}>
           <LoadingIndicator />

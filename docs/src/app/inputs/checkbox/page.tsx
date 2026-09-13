@@ -11,8 +11,9 @@ export default function CheckboxPage() {
   const [pgChecked, setPgChecked] = React.useState(true);
   const [pgIndeterminate, setPgIndeterminate] = React.useState(false);
   const [pgDisabled, setPgDisabled] = React.useState(false);
+  const [pgError, setPgError] = React.useState(false);
 
-  const pgCode = `<Checkbox${pgChecked ? " checked" : ""}${pgIndeterminate ? " indeterminate" : ""}${pgDisabled ? " disabled" : ""} />`;
+  const pgCode = `<Checkbox${pgChecked ? " checked" : ""}${pgIndeterminate ? " indeterminate" : ""}${pgError ? " error" : ""}${pgDisabled ? " disabled" : ""} />`;
 
   return (
     <div className="max-w-4xl space-y-8">
@@ -44,11 +45,15 @@ export default function CheckboxPage() {
                 <span className="text-[13px] text-surface-foreground">Disabled</span>
                 <Switch checked={pgDisabled} onCheckedChange={setPgDisabled} />
               </label>
+              <label className="flex items-center justify-between cursor-pointer">
+                <span className="text-[13px] text-surface-foreground">Error</span>
+                <Switch checked={pgError} onCheckedChange={setPgError} />
+              </label>
             </div>
           </>
         }
       >
-        <Checkbox checked={pgChecked} indeterminate={pgIndeterminate} disabled={pgDisabled} onCheckedChange={(v) => setPgChecked(v === true)} />
+        <Checkbox checked={pgChecked} indeterminate={pgIndeterminate} disabled={pgDisabled} error={pgError} onCheckedChange={(v) => setPgChecked(v === true)} />
       </Playground>
 
       <section className="space-y-4">
@@ -67,6 +72,29 @@ export default function CheckboxPage() {
         <Showcase title="Disabled States" code={`<Checkbox disabled />\n<Checkbox disabled defaultChecked />`}>
           <Checkbox disabled />
           <Checkbox disabled defaultChecked />
+        </Showcase>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">Error State</h2>
+        <p className="text-[14px] text-surface-variant-foreground">
+          Pass <code>error</code> to show M3 error styling — error container when checked, error outline when unchecked, with <code>aria-invalid</code>.
+        </p>
+        <Showcase title="Error" code={`<Checkbox error />\n<Checkbox error defaultChecked />\n<Checkbox error indeterminate />`}>
+          <div className="flex items-center gap-4">
+            <label className="flex items-center gap-2">
+              <Checkbox error />
+              <span className="text-sm text-error">Required field</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <Checkbox error defaultChecked />
+              <span className="text-sm text-error">Checked error</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <Checkbox error indeterminate />
+              <span className="text-sm text-error">Indeterminate error</span>
+            </label>
+          </div>
         </Showcase>
       </section>
 

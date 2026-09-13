@@ -2,7 +2,7 @@
 
 Material Design 3 Expressive component library for React & Next.js.
 
-Built per official [m3.material.io](https://m3.material.io) specifications (May 2025 Expressive update). 36 components, zero runtime config, theme-driven via CSS custom properties.
+Built per official [m3.material.io](https://m3.material.io) specifications (May 2025 Expressive update). 37+ components, zero runtime config, theme-driven via CSS custom properties.
 
 📖 **[Live Documentation & Playground →](https://kieuv-mui.vercel.app)** 
 
@@ -41,10 +41,10 @@ yarn add github:XManhTrinh/mui
 
 ## Peer Dependencies
 
-Install all required peer dependencies:
+These must be installed in your project:
 
 ```bash
-pnpm add react react-dom tailwindcss clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-dialog @radix-ui/react-dropdown-menu motion material-symbols
+pnpm add react react-dom tailwindcss material-symbols
 ```
 
 | Package | Version | Purpose |
@@ -52,14 +52,9 @@ pnpm add react react-dom tailwindcss clsx tailwind-merge class-variance-authorit
 | `react` | ≥18.0.0 | Core framework |
 | `react-dom` | ≥18.0.0 | DOM rendering |
 | `tailwindcss` | ≥4.0.0 | Styling engine (v4 required) |
-| `clsx` | ≥2.0.0 | Conditional classnames |
-| `tailwind-merge` | ≥2.0.0 | Merge Tailwind classes safely |
-| `class-variance-authority` | ≥0.7.0 | Component variant management |
-| `@radix-ui/react-slot` | ≥1.0.0 | Polymorphic component support |
-| `@radix-ui/react-dialog` | ≥1.0.0 | Dialog/sheet primitives |
-| `@radix-ui/react-dropdown-menu` | ≥2.0.0 | Menu primitives |
-| `motion` | ≥12.0.0 | Animations (Snackbar, Sheets, Tooltip, FABMenu) |
 | `material-symbols` | latest | Icon font (Material Symbols Rounded) |
+
+> Other dependencies (`@radix-ui/*`, `class-variance-authority`, `clsx`, `tailwind-merge`, `motion`) are bundled with the library and installed automatically.
 
 ---
 
@@ -157,6 +152,40 @@ function Actions() {
 }
 ```
 
+### Toggle buttons
+
+```tsx
+import { Button, IconButton, Icon } from "@vkieu/mui";
+
+// Text toggle — inverts shape (round↔square) on selection
+<Button toggle selected={isBold} onSelectedChange={setIsBold} square>
+  Bold
+</Button>
+
+// Icon toggle — switches to filled variant when pressed
+<IconButton
+  toggle
+  pressed={isFavorite}
+  onPressedChange={setIsFavorite}
+  aria-label="Favorite"
+>
+  <Icon name="favorite" />
+</IconButton>
+```
+
+### Polymorphic buttons (asChild)
+
+Render a Button as a link or any other element using the Radix Slot pattern:
+
+```tsx
+import { Button } from "@vkieu/mui";
+import Link from "next/link";
+
+<Button asChild variant="tonal">
+  <Link href="/dashboard">Go to Dashboard</Link>
+</Button>
+```
+
 ### Card with content
 
 ```tsx
@@ -230,15 +259,26 @@ import { NavigationBar, NavigationRail, FAB, Icon } from "@vkieu/mui";
   onValueChange={(v) => setActive(v)}
 />
 
-// Side rail (desktop)
-<NavigationRail
-  items={[
-    { value: "inbox", icon: "inbox", label: "Inbox", badge: 3 },
-    { value: "sent", icon: "send", label: "Sent" },
-    { value: "drafts", icon: "drafts", label: "Drafts" },
-  ]}
-  header={<FAB icon={<Icon name="edit" />} size="m" />}
-/>
+// Side rail (desktop) — composable API
+<NavigationRail expanded={expanded}>
+  <NavigationRail.Header>
+    <IconButton icon="menu" aria-label="Toggle nav" onClick={() => setExpanded(!expanded)} />
+  </NavigationRail.Header>
+  <NavigationRail.Content>
+    <Link href="/inbox">
+      <NavigationRail.Item icon="inbox" label="Inbox" active />
+    </Link>
+    <Link href="/sent">
+      <NavigationRail.Item icon="send" label="Sent" />
+    </Link>
+    <Link href="/drafts">
+      <NavigationRail.Item icon="drafts" label="Drafts" />
+    </Link>
+  </NavigationRail.Content>
+  <NavigationRail.Footer>
+    <IconButton icon="settings" aria-label="Settings" />
+  </NavigationRail.Footer>
+</NavigationRail>
 ```
 
 ### Form elements
@@ -324,12 +364,12 @@ function TabExample() {
 
 | Component | Variants | Default | Sizes | Notes |
 |-----------|----------|---------|-------|-------|
-| `Button` | filled, outlined, text, elevated, tonal | filled / s | xs, s, m, l, xl | Icon support, loading state, shape morph |
-| `IconButton` | standard, filled, filled-tonal, outlined | standard / s | xs, s, m, l, xl | Toggle support, shape morph, touch target |
-| `FAB` | — | primary / l | m, l, xl, extended | Fixed positioning, shape morph |
-| `ExtendedFAB` | — | primary / medium | — | Icon + label |
-| `FABMenu` | — | primary | — | Speed-dial menu, 2–6 items |
-| `SplitButton` | elevated, filled, tonal, outlined | tonal / m | — | Leading action + dropdown |
+| `Button` | filled, outlined, text, elevated, tonal | filled / s | xs (32dp), s (40dp), m (56dp), l (96dp), xl (136dp) | Icon, toggle, loading, shape morph, asChild |
+| `IconButton` | standard, filled, filled-tonal, outlined | standard / s | xs (32dp), s (40dp), m (56dp), l (96dp), xl (136dp) | Toggle, shape morph, asChild, touch target |
+| `FAB` | — | primary-container / fab | fab (56dp), medium (80dp), large (96dp) | Shape morph, loading, asChild |
+| `ExtendedFAB` | — | primary / small | small (56dp), medium (80dp), large (96dp) | Icon + label, asChild |
+| `FABMenu` | — | primary | — | Speed-dial, 2–6 items, focus trap |
+| `SplitButton` | elevated, filled, tonal, outlined | tonal / m | xs, s, m, l, xl | Leading action + dropdown |
 | `ButtonGroup` | standard, connected | connected | — | Single/multiple selection |
 
 ### Navigation
@@ -345,46 +385,48 @@ function TabExample() {
 |-----------|----------|---------|-------|
 | `Card` | elevated, filled, outlined | elevated | Interactive mode, 12dp radius |
 | `Badge` | dot, count | dot | M3 positioning spec |
-| `Chip` | assist, filter, input, suggestion | assist | Selected + elevated states |
+| `Chip` | assist, filter, input, suggestion | assist | Selected + elevated, dismissible input chips |
 | `List` / `ListItem` | 1/2/3 line | 1 line | Leading/trailing slots |
 | `Divider` | full, inset, middle-inset | full | Horizontal/vertical |
 | `Carousel` | uncontained, hero, full-screen | uncontained | Scroll-snap, keyboard nav |
-| `Icon` | — | — | Material Symbols Rounded wrapper |
+| `Icon` | — | — | Material Symbols Rounded, weight/grade/opsz axes |
 | `Tooltip` | plain, rich | plain | 500ms delay, fade animation |
 
 ### Inputs
 
 | Component | Variants | Default | Notes |
 |-----------|----------|---------|-------|
-| `TextField` | filled, outlined | outlined | Floating label, error, character count |
-| `Search` | — | — | 56dp, pill shape, 360–720dp width |
-| `Checkbox` | — | — | Indeterminate support, 48dp target |
-| `Radio` / `RadioGroup` | — | — | 48dp target |
+| `TextField` | filled, outlined | outlined | Floating label, error, character count, multiline |
+| `Search` | — | — | 56dp, pill shape, SearchView overlay |
+| `Checkbox` | — | — | Indeterminate, error state, 48dp target |
+| `Radio` / `RadioGroup` | — | — | Roving tabindex, 48dp target |
 | `Switch` | — | — | Icon support, press-grow animation |
-| `Slider` | continuous, discrete | continuous | Value indicator, stop marks |
-| `DatePicker` | — | — | Calendar grid, min/max dates |
-| `TimePicker` | 12h, 24h | 12h | Input-based |
+| `Slider` | continuous, discrete | continuous / xsmall | 5 sizes: xsmall (16dp), small (24dp), medium (40dp), large (56dp), xlarge (96dp) |
+| `Select` | filled, outlined | outlined | Dropdown menu, floating label |
+| `DatePicker` | — | — | Calendar grid, range mode, min/max dates |
+| `TimePicker` | 12h, 24h | 12h | Clock dial input |
 
 ### Feedback
 
 | Component | Variants | Default | Notes |
 |-----------|----------|---------|-------|
 | `Dialog` | basic, full-screen | basic | Radix-based, icon, scrim |
-| `Snackbar` | — | — | Queue-based, pause on hover |
-| `Menu` / `MenuItem` | — | — | Radix dropdown, 4dp radius |
-| `LinearProgress` | determinate, indeterminate | indeterminate | 4dp track |
-| `CircularProgress` | determinate, indeterminate | indeterminate | 48dp default |
-| `LoadingIndicator` | sm, md, lg | md | Convenience wrapper |
+| `Snackbar` | — | — | Queue-based, pause on hover, duplicate guard |
+| `Menu` / `MenuItem` | — | — | Radix dropdown, sub-menus, density |
+| `LinearProgress` | determinate, indeterminate | indeterminate | 4dp track, `wave` prop for M3 Expressive wavy indicator |
+| `CircularProgress` | determinate, indeterminate | indeterminate | 40dp default, `wave` prop for wavy ring |
+| `LoadingIndicator` | sm, md, lg | md | Convenience wrapper over CircularProgress |
 
 ### Layout
 
 | Component | Variants | Default | Notes |
 |-----------|----------|---------|-------|
 | `AppBar` | — | — | Small top app bar, 64dp |
-| `Toolbar` | — | — | Contextual action bar |
-| `Tabs` | primary, secondary | primary | Sliding active indicator |
-| `BottomSheet` | standard, modal | modal | 28dp corners, drag handle |
-| `SideSheet` | standard, modal | modal | Left/right, 400dp max |
+| `Toolbar` | docked, floating | docked | Standard/vibrant color, action slots |
+| `Tabs` | primary, secondary | primary | Roving tabindex, sliding indicator, ResizeObserver |
+| `BottomSheet` | standard, modal | modal | 28dp corners, drag handle, focus trap |
+| `SideSheet` | standard, modal | modal | Left/right, focus trap, scroll lock |
+| `Typography` | display, headline, title, body, label (×3 each) | body-large | 15 M3 type scale roles, semantic HTML elements |
 
 ---
 
@@ -491,15 +533,15 @@ Always use `IconButton`, never `Button` with padding hacks:
 
 ### Consistent sizes
 
-All button-type components share the same size scale:
+All button-type components share the M3 Expressive height scale:
 
 | Size | Height | Use case |
 |------|--------|----------|
 | `xs` | 32dp | Dense UI, toolbars |
 | `s` | 40dp | **Default** for most contexts |
-| `m` | 48dp | Comfortable spacing |
-| `l` | 56dp | Prominent actions |
-| `xl` | 64dp | Hero sections |
+| `m` | 56dp | Prominent actions |
+| `l` | 96dp | Large display actions |
+| `xl` | 136dp | Hero sections |
 
 ### FAB placement
 

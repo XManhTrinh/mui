@@ -26,8 +26,8 @@ const buttonProps: PropDef[] = [
   {
     name: "size",
     type: '"xs" | "s" | "m" | "l" | "xl"',
-    default: '"m"',
-    description: "Button height: xs(32dp), s(36dp), m(40dp), l(48dp), xl(56dp)",
+    default: '"s"',
+    description: "M3 Expressive height: xs (32dp), s (40dp), m (56dp), l (96dp), xl (136dp)",
   },
   {
     name: "square",
@@ -58,6 +58,34 @@ const buttonProps: PropDef[] = [
     description: "Disable button interaction",
   },
   {
+    name: "toggle",
+    type: "boolean",
+    default: "false",
+    description: "Enable toggle (selection) behavior with shape inversion on select",
+  },
+  {
+    name: "selected",
+    type: "boolean",
+    description: "Controlled selected state (toggle mode only)",
+  },
+  {
+    name: "onSelectedChange",
+    type: "(selected: boolean) => void",
+    description: "Callback when selection state changes (toggle mode)",
+  },
+  {
+    name: "asChild",
+    type: "boolean",
+    default: "false",
+    description: "Render as child element via Radix Slot (e.g. <Link>)",
+  },
+  {
+    name: "compact",
+    type: "boolean",
+    default: "false",
+    description: "Remove 48dp touch-target expander on xs/s sizes for dense layouts",
+  },
+  {
     name: "children",
     type: "ReactNode",
     description: "Button label content",
@@ -76,7 +104,7 @@ export default function ButtonsPage() {
 
   // Playground state
   const [pgVariant, setPgVariant] = React.useState<"filled" | "outlined" | "text" | "elevated" | "tonal">("filled");
-  const [pgSize, setPgSize] = React.useState<"xs" | "s" | "m" | "l" | "xl">("m");
+  const [pgSize, setPgSize] = React.useState<"xs" | "s" | "m" | "l" | "xl">("s");
   const [pgSquare, setPgSquare] = React.useState(false);
   const [pgIcon, setPgIcon] = React.useState(false);
   const [pgDisabled, setPgDisabled] = React.useState(false);
@@ -290,11 +318,35 @@ export default function ButtonsPage() {
         </Showcase>
       </section>
 
+      {/* Toggle */}
+      <section className="space-y-4">
+        <h2 className="text-[22px] leading-7 font-normal">Toggle (Selection)</h2>
+        <p className="text-[14px] text-surface-variant-foreground">
+          Pass <code>toggle</code> to enable selection behavior. The shape inverts (round↔square) when selected.
+          Use <code>selected</code> / <code>onSelectedChange</code> for controlled state.
+        </p>
+
+        <Showcase
+          title="Toggle Buttons"
+          code={`<Button toggle selected={selected} onSelectedChange={setSelected}>\n  Bold\n</Button>`}
+        >
+          <Button toggle selected={togglePressed} onSelectedChange={setTogglePressed} variant="outlined">
+            {togglePressed ? "Selected" : "Unselected"}
+          </Button>
+          <Button toggle selected={togglePressed} onSelectedChange={setTogglePressed} variant="tonal" square>
+            {togglePressed ? "On" : "Off"}
+          </Button>
+          <Button toggle selected={togglePressed} onSelectedChange={setTogglePressed} variant="filled" icon={<Icon name="favorite" />}>
+            Favorite
+          </Button>
+        </Showcase>
+      </section>
+
       {/* M3 Expressive Specs */}
       <section className="space-y-4">
         <h2 className="text-[22px] leading-7 font-normal">M3 Expressive Specs</h2>
         <div className="rounded-xl border border-outline-variant p-4 space-y-2 text-sm text-surface-variant-foreground">
-          <p><strong>Sizes:</strong> xs (32dp) · s (36dp) · m (40dp, default) · l (48dp) · xl (56dp)</p>
+          <p><strong>Sizes:</strong> xs (32dp) · s (40dp, default) · m (56dp) · l (96dp) · xl (136dp)</p>
           <p><strong>Shape:</strong> corner-full (rounded-full) at rest → <code>active:rounded-xl</code> on press (shape morph)</p>
           <p><strong>Variants:</strong> filled, outlined, tonal, text, elevated</p>
           <p><strong>Elevation:</strong> Elevated variant uses Level 1 shadow at rest, Level 2 on hover</p>
