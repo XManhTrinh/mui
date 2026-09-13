@@ -37,6 +37,39 @@ import { Icon } from "./icon";
  * - Exit: fade out (75ms, linear)
  */
 
+// ─── Density Context ──────────────────────────────────────────────────────────
+
+/**
+ * Menu density. `comfortable` is the M3 baseline (48dp rows, Body Large labels,
+ * 24dp icons). `dense` is the M3 high-density treatment for data-heavy UIs
+ * (32dp rows, Body Medium labels, 20dp icons) per the Material density system.
+ *
+ * Set on `<Menu dense>` (or `<MenuSub dense>`); flows to MenuItem, MenuHeader,
+ * and MenuSubTrigger via context so consumers don't thread the prop per item.
+ */
+export type MenuDensity = "comfortable" | "dense";
+
+const MenuDensityContext = React.createContext<MenuDensity>("comfortable");
+
+function useMenuDensity(): MenuDensity {
+  return React.useContext(MenuDensityContext);
+}
+
+/**
+ * Density-dependent class tokens for menu rows (MenuItem / MenuSubTrigger).
+ * Comfortable: 48dp / Body Large. Dense: 32dp / Body Medium.
+ */
+const rowDensityClasses: Record<MenuDensity, string> = {
+  comfortable: "h-12 gap-3 text-[16px] leading-6 tracking-[0.5px]",
+  dense: "h-8 gap-2.5 text-[14px] leading-5 tracking-[0.25px]",
+};
+
+/** Density-dependent icon size (dp) for leading/trailing icons. */
+const iconDensitySize: Record<MenuDensity, number> = {
+  comfortable: 24,
+  dense: 20,
+};
+
 // ─── Menu (Root) ──────────────────────────────────────────────────────────────
 
 export type MenuProps = {
@@ -44,6 +77,8 @@ export type MenuProps = {
   children: React.ReactNode;
   align?: "start" | "center" | "end";
   side?: "top" | "bottom" | "left" | "right";
+  /** Dense variant — 32dp rows / Body Medium labels for data-heavy menus */
+  dense?: boolean;
   className?: string;
 };
 
@@ -55,7 +90,8 @@ export type MenuProps = {
  * its own ref via `asChild`, and the menu content is portalled. Consumers should
  * attach refs directly to the trigger element they pass in.
  */
-function Menu({ trigger, children, align = "start", side = "bottom", className }: MenuProps) {
+function Menu({ trigger, children, align = "start", side = "bottom", dense = false, className }: MenuProps) {
+  const density: MenuDensity = dense ? "dense" : "comfortable";
   return (
     <DropdownMenuPrimitive.Root>
       <DropdownMenuPrimitive.Trigger asChild>{trigger}</DropdownMenuPrimitive.Trigger>
@@ -65,12 +101,16 @@ function Menu({ trigger, children, align = "start", side = "bottom", className }
           side={side}
           sideOffset={4}
           className={cn(
-            "z-50 min-w-28 max-w-70 overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_3px_6px_var(--elevation-2)]",
+            "z-50 min-w-28 max-w-70 overflow-hidden rounded-sm bg-surface-container shadow-[0_3px_6px_var(--elevation-2)]",
+            // Dense menus tighten the container's vertical padding to match rows
+            dense ? "py-1" : "py-2",
             "m3-animate-menu",
             className
           )}
         >
-          {children}
+          <MenuDensityContext.Provider value={density}>
+            {children}
+          </MenuDensityContext.Provider>
         </DropdownMenuPrimitive.Content>
       </DropdownMenuPrimitive.Portal>
     </DropdownMenuPrimitive.Root>
@@ -107,36 +147,42 @@ const MenuItem = React.forwardRef<
       className,
     },
     ref
-  ) => (
-    <DropdownMenuPrimitive.Item
-      ref={ref}
-      disabled={disabled}
-      onSelect={onSelect}
-      className={cn(
-        "flex items-center gap-3 h-12 px-3 text-[16px] leading-6 tracking-[0.5px] text-surface-foreground cursor-pointer select-none outline-none transition-colors",
-        // State layers
-        "focus:bg-[hsl(var(--on-surface)/0.08)] active:bg-[hsl(var(--on-surface)/0.10)]",
-        // Selected state
-        selected && "bg-surface-container-highest",
-        // Disabled
-        "data-disabled:pointer-events-none data-disabled:opacity-[0.38] data-disabled:cursor-not-allowed",
-        className
-      )}
-    >
-      {leadingIcon && (
-        <Icon name={leadingIcon} size={24} className="text-surface-variant-foreground" />
-      )}
-      <span className="flex-1 truncate">{children}</span>
-      {trailingText && (
-        <span className="text-[14px] leading-5 text-surface-variant-foreground">
-          {trailingText}
-        </span>
-      )}
-      {trailingIcon && (
-        <Icon name={trailingIcon} size={24} className="text-surface-variant-foreground" />
-      )}
-    </DropdownMenuPrimitive.Item>
-  )
+  ) => {
+    const density = useMenuDensity();
+    const iconSize = iconDensitySize[density];
+    return (
+      <DropdownMenuPrimitive.Item
+        ref={ref}
+        disabled={disabled}
+        onSelect={onSelect}
+        className={cn(
+          "flex items-center px-3 text-surface-foreground cursor-pointer select-none outline-none transition-colors",
+          // Density: height, gap, and label typography
+          rowDensityClasses[density],
+          // State layers
+          "focus:bg-[hsl(var(--on-surface)/0.08)] active:bg-[hsl(var(--on-surface)/0.10)]",
+          // Selected state
+          selected && "bg-surface-container-highest",
+          // Disabled
+          "data-disabled:pointer-events-none data-disabled:opacity-[0.38] data-disabled:cursor-not-allowed",
+          className
+        )}
+      >
+        {leadingIcon && (
+          <Icon name={leadingIcon} size={iconSize} className="text-surface-variant-foreground" />
+        )}
+        <span className="flex-1 truncate">{children}</span>
+        {trailingText && (
+          <span className="text-[14px] leading-5 tracking-[0.25px] text-surface-variant-foreground">
+            {trailingText}
+          </span>
+        )}
+        {trailingIcon && (
+          <Icon name={trailingIcon} size={iconSize} className="text-surface-variant-foreground" />
+        )}
+      </DropdownMenuPrimitive.Item>
+    );
+  }
 );
 MenuItem.displayName = "MenuItem";
 
@@ -150,17 +196,22 @@ export type MenuHeaderProps = {
 const MenuHeader = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.Label>,
   MenuHeaderProps
->(({ children, className }, ref) => (
-  <DropdownMenuPrimitive.Label
-    ref={ref}
-    className={cn(
-      "px-3 pt-3 pb-1.5 text-[12px] leading-4 font-medium tracking-[0.5px] text-surface-variant-foreground select-none",
-      className
-    )}
-  >
-    {children}
-  </DropdownMenuPrimitive.Label>
-));
+>(({ children, className }, ref) => {
+  const density = useMenuDensity();
+  return (
+    <DropdownMenuPrimitive.Label
+      ref={ref}
+      className={cn(
+        "px-3 text-[12px] leading-4 font-medium tracking-[0.5px] text-surface-variant-foreground select-none",
+        // Density: tighter vertical padding for dense menus
+        density === "dense" ? "pt-2 pb-1" : "pt-3 pb-1.5",
+        className
+      )}
+    >
+      {children}
+    </DropdownMenuPrimitive.Label>
+  );
+});
 MenuHeader.displayName = "MenuHeader";
 
 // ─── MenuDivider ──────────────────────────────────────────────────────────────
@@ -187,17 +238,24 @@ export type MenuSubProps = {
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
+  /** Override density for this submenu (defaults to inheriting from the parent Menu) */
+  dense?: boolean;
 };
 
 /**
  * Submenu wrapper — a logical grouping component that delegates to Radix's
  * `DropdownMenu.Sub`. Does not render its own DOM element, so forwardRef
  * is intentionally omitted.
+ *
+ * Density is inherited from the parent Menu via context. Pass `dense` to
+ * override it for this submenu (e.g. a dense submenu inside a comfortable menu).
  */
-function MenuSub({ children, open, defaultOpen, onOpenChange }: MenuSubProps) {
+function MenuSub({ children, open, defaultOpen, onOpenChange, dense }: MenuSubProps) {
+  const inherited = useMenuDensity();
+  const density: MenuDensity = dense === undefined ? inherited : dense ? "dense" : "comfortable";
   return (
     <DropdownMenuPrimitive.Sub open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
-      {children}
+      <MenuDensityContext.Provider value={density}>{children}</MenuDensityContext.Provider>
     </DropdownMenuPrimitive.Sub>
   );
 }
@@ -215,24 +273,29 @@ export type MenuSubTriggerProps = {
 const MenuSubTrigger = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.SubTrigger>,
   MenuSubTriggerProps
->(({ leadingIcon, disabled = false, children, className }, ref) => (
-  <DropdownMenuPrimitive.SubTrigger
-    ref={ref}
-    disabled={disabled}
-    className={cn(
-      "flex items-center gap-3 h-12 px-3 text-[16px] leading-6 tracking-[0.5px] text-surface-foreground cursor-pointer select-none outline-none transition-colors",
-      "focus:bg-[hsl(var(--on-surface)/0.08)] active:bg-[hsl(var(--on-surface)/0.10)]",
-      "data-disabled:pointer-events-none data-disabled:opacity-[0.38] data-disabled:cursor-not-allowed",
-      className
-    )}
-  >
-    {leadingIcon && (
-      <Icon name={leadingIcon} size={24} className="text-surface-variant-foreground" />
-    )}
-    <span className="flex-1 truncate">{children}</span>
-    <Icon name="chevron_right" size={24} className="text-surface-variant-foreground" />
-  </DropdownMenuPrimitive.SubTrigger>
-));
+>(({ leadingIcon, disabled = false, children, className }, ref) => {
+  const density = useMenuDensity();
+  const iconSize = iconDensitySize[density];
+  return (
+    <DropdownMenuPrimitive.SubTrigger
+      ref={ref}
+      disabled={disabled}
+      className={cn(
+        "flex items-center px-3 text-surface-foreground cursor-pointer select-none outline-none transition-colors",
+        rowDensityClasses[density],
+        "focus:bg-[hsl(var(--on-surface)/0.08)] active:bg-[hsl(var(--on-surface)/0.10)]",
+        "data-disabled:pointer-events-none data-disabled:opacity-[0.38] data-disabled:cursor-not-allowed",
+        className
+      )}
+    >
+      {leadingIcon && (
+        <Icon name={leadingIcon} size={iconSize} className="text-surface-variant-foreground" />
+      )}
+      <span className="flex-1 truncate">{children}</span>
+      <Icon name="chevron_right" size={iconSize} className="text-surface-variant-foreground" />
+    </DropdownMenuPrimitive.SubTrigger>
+  );
+});
 MenuSubTrigger.displayName = "MenuSubTrigger";
 
 // ─── MenuSubContent ───────────────────────────────────────────────────────────
@@ -245,21 +308,25 @@ export type MenuSubContentProps = {
 const MenuSubContent = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.SubContent>,
   MenuSubContentProps
->(({ children, className }, ref) => (
-  <DropdownMenuPrimitive.Portal>
-    <DropdownMenuPrimitive.SubContent
-      ref={ref}
-      sideOffset={4}
-      className={cn(
-        "z-50 min-w-28 max-w-70 overflow-hidden rounded-sm bg-surface-container py-2 shadow-[0_3px_6px_var(--elevation-2)]",
-        "m3-animate-menu",
-        className
-      )}
-    >
-      {children}
-    </DropdownMenuPrimitive.SubContent>
-  </DropdownMenuPrimitive.Portal>
-));
+>(({ children, className }, ref) => {
+  const density = useMenuDensity();
+  return (
+    <DropdownMenuPrimitive.Portal>
+      <DropdownMenuPrimitive.SubContent
+        ref={ref}
+        sideOffset={4}
+        className={cn(
+          "z-50 min-w-28 max-w-70 overflow-hidden rounded-sm bg-surface-container shadow-[0_3px_6px_var(--elevation-2)]",
+          density === "dense" ? "py-1" : "py-2",
+          "m3-animate-menu",
+          className
+        )}
+      >
+        {children}
+      </DropdownMenuPrimitive.SubContent>
+    </DropdownMenuPrimitive.Portal>
+  );
+});
 MenuSubContent.displayName = "MenuSubContent";
 
 // ─── Exports ──────────────────────────────────────────────────────────────────

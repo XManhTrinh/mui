@@ -116,6 +116,7 @@ export type {
   MenuSubProps,
   MenuSubTriggerProps,
   MenuSubContentProps,
+  MenuDensity,
 } from "./menu";
 
 // ─── Select (Exposed Dropdown Menu) ──────────────────────────────────────────
