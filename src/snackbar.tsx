@@ -149,7 +149,7 @@ function SnackbarItem({ item, onDismiss, reducedMotion }: SnackbarItemProps) {
       role={role}
       aria-live={ariaLive}
       className={cn(
-        "flex items-center min-h-12 gap-2 rounded-sm",
+        "flex items-center min-h-12 gap-2 rounded",
         "bg-inverse-surface text-inverse-on-surface",
         "shadow-[0_4px_8px_hsl(var(--elevation-3)),0_1px_3px_hsl(var(--elevation-3))]",
         // Padding
