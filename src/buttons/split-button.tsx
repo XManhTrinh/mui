@@ -24,7 +24,7 @@ import {
 
 const splitButtonVariants = cva(
   // 2dp gap between the leading and trailing segments per M3 Expressive.
-  "relative inline-flex items-center gap-0.5",
+  "relative inline-flex items-center align-middle gap-0.5",
   {
     variants: {
       variant: {

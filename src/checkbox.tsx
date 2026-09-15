@@ -92,7 +92,7 @@ const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
         disabled={disabled}
         onClick={handleClick}
         className={cn(
-          "group relative inline-flex items-center justify-center w-12 h-12 select-none",
+          "group relative inline-flex items-center justify-center align-middle w-12 h-12 select-none",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
           disabled ? "cursor-not-allowed" : "cursor-pointer",
           className

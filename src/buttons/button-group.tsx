@@ -242,7 +242,7 @@ const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>(
         <div
           ref={mergedRef}
           role="group"
-          className={cn("inline-flex", containerGap, className)}
+          className={cn("inline-flex align-middle", containerGap, className)}
           onKeyDown={handleKeyDown}
         >
           {validChildren.map((child, index) => (

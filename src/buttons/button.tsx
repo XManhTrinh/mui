@@ -28,7 +28,7 @@ import {
 const buttonVariants = cva(
   [
     // Layout
-    "relative inline-flex items-center justify-center whitespace-nowrap",
+    "relative inline-flex items-center justify-center align-middle whitespace-nowrap",
     // Weight shared; size sets font-size/line-height/tracking (typography scales in Expressive)
     "font-medium",
     // Shared interaction + state layer + focus + transition + icon primitives

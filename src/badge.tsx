@@ -57,7 +57,7 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
         : undefined;
 
     return (
-      <span ref={ref} className="relative inline-flex overflow-visible">
+      <span ref={ref} className="relative inline-flex align-middle overflow-visible">
         {children}
         {variant === "dot" && (
           <span

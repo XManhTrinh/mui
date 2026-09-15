@@ -103,7 +103,7 @@ const CircularProgress = React.forwardRef<HTMLDivElement, CircularProgressProps>
         aria-valuenow={clampedValue}
         aria-label={ariaLabel}
         className={cn(
-          "inline-flex items-center justify-center",
+          "inline-flex items-center justify-center align-middle",
           !isDeterminate && "animate-[m3-circular-rotate_1.4s_linear_infinite]",
           className
         )}

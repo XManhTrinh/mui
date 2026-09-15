@@ -24,7 +24,7 @@ import { cn } from "../lib/utils";
 const extendedFabVariants = cva(
   [
     // Layout
-    "relative inline-flex items-center justify-center font-medium",
+    "relative inline-flex items-center justify-center align-middle font-medium",
     // Cursor & interaction
     "cursor-pointer select-none",
     // Transition for elevation + shape morph

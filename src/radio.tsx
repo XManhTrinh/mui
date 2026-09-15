@@ -77,7 +77,7 @@ const Radio = React.forwardRef<HTMLButtonElement, RadioProps>(
         tabIndex={tabIndex}
         onClick={handleClick}
         className={cn(
-          "group relative inline-flex items-center justify-center size-12 select-none",
+          "group relative inline-flex items-center justify-center align-middle size-12 select-none",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
           disabled ? "cursor-not-allowed" : "cursor-pointer",
           className

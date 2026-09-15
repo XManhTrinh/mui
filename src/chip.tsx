@@ -24,7 +24,7 @@ import { Icon } from "./icon";
  */
 const chipVariants = cva(
   [
-    "relative inline-flex items-center justify-center h-8 rounded-lg",
+    "relative inline-flex items-center justify-center align-middle h-8 rounded-lg",
     "text-[14px] leading-5 font-medium tracking-[0.1px]",
     "transition-colors duration-200 select-none cursor-pointer",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",

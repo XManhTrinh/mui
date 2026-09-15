@@ -24,7 +24,7 @@ import { Icon } from "../icon";
 const iconButtonVariants = cva(
   [
     // Layout
-    "relative inline-flex items-center justify-center",
+    "relative inline-flex items-center justify-center align-middle",
     // Cursor & interaction
     "cursor-pointer select-none",
     // Transition for shape morph + elevation
@@ -264,7 +264,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     if (needsTouchTarget) {
       return (
         <span
-          className="inline-flex items-center justify-center"
+          className="inline-flex items-center justify-center align-middle"
           style={{
             padding: resolvedSize === "xs" ? "8px" : "4px",
           }}
