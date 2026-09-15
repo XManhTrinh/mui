@@ -144,9 +144,22 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & Varian
   /** Callback when the selected state changes (toggle mode) */
   onSelectedChange?: (selected: boolean) => void;
   /**
+   * Controls how the 48dp minimum touch target is applied for xs/s sizes.
+   *
+   * - `"inner"` (default): An absolutely-positioned inner element extends the
+   *   hit area without affecting layout. Matches the material-web default.
+   * - `"wrapper"`: An outer `<span>` reserves vertical space around the button,
+   *   preventing overlapping touch targets on vertically adjacent elements.
+   *   Use for tightly stacked small buttons.
+   * - `"none"`: No touch-target expansion. Use for dense toolbars or when the
+   *   consumer manages spacing externally.
+   *
+   * Only applies to xs (32dp) and s (40dp) sizes; m/l/xl already meet 48dp.
+   */
+  touchTarget?: "inner" | "wrapper" | "none";
+  /**
+   * @deprecated Use `touchTarget="none"` instead.
    * Remove the 48dp touch-target expander on xs/s sizes for dense layouts.
-   * By default xs (32dp) and s (40dp) buttons are wrapped so their hit area
-   * reaches the M3-required 48×48dp minimum.
    */
   compact?: boolean;
 }
@@ -167,6 +180,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       selected: selectedProp,
       defaultSelected = false,
       onSelectedChange,
+      touchTarget: touchTargetProp,
       compact = false,
       onClick,
       children,
@@ -211,7 +225,51 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ? outlinedBorderWidth[resolvedSize]
         : "";
 
-    const button = (
+    // M3 touch target: xs (32dp) and s (40dp) need a 48×48dp minimum hit area.
+    // Resolve the touch-target mode — `compact` is deprecated in favour of `touchTarget`.
+    const resolvedTouchTarget: "inner" | "wrapper" | "none" =
+      touchTargetProp ?? (compact ? "none" : "inner");
+    const isTouchSize = resolvedSize === "xs" || resolvedSize === "s";
+
+    // "wrapper" mode: outer <span> reserves vertical space (prevents overlap
+    // on tightly stacked buttons). Matches material-web `touch-target="wrapper"`.
+    if (isTouchSize && resolvedTouchTarget === "wrapper") {
+      return (
+        <span
+          className="inline-flex items-center justify-center align-middle"
+          style={{ paddingBlock: resolvedSize === "xs" ? "8px" : "4px" }}
+        >
+          <Comp
+            className={cn(
+              buttonVariants({ variant: resolvedVariant, size: resolvedSize }),
+              shapeClasses[shape][resolvedSize],
+              toggleColorClass,
+              outlinedBorderClass,
+              loading && "pointer-events-none",
+              asChild && disabled && "opacity-[0.38] pointer-events-none cursor-not-allowed",
+              className
+            )}
+            ref={ref}
+            disabled={asChild ? undefined : disabled}
+            aria-disabled={disabled ? true : undefined}
+            aria-busy={loading ? true : undefined}
+            aria-pressed={toggle ? isSelected : undefined}
+            onClick={handleClick}
+            {...props}
+          >
+            {loading && <ButtonSpinner />}
+            {!loading && icon}
+            <Slottable>{children}</Slottable>
+            {trailingIcon}
+          </Comp>
+        </span>
+      );
+    }
+
+    // "inner" (default) or "none" mode: single element, no wrapper.
+    const showInnerTarget = isTouchSize && resolvedTouchTarget === "inner";
+
+    return (
       <Comp
         className={cn(
           buttonVariants({ variant: resolvedVariant, size: resolvedSize }),
@@ -219,8 +277,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           toggleColorClass,
           outlinedBorderClass,
           loading && "pointer-events-none",
-          // Native `disabled` is ignored when slotted onto a non-button
-          // element (e.g. a link), so enforce the affordance in CSS.
           asChild && disabled && "opacity-[0.38] pointer-events-none cursor-not-allowed",
           className
         )}
@@ -232,29 +288,22 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         onClick={handleClick}
         {...props}
       >
+        {/* M3 touch-target expander — absolutely positioned inside the button
+            so it extends the hit area to 48dp without affecting layout.
+            Matches the material-web default `touch-target="inner"`. */}
+        {showInnerTarget && (
+          <span
+            aria-hidden="true"
+            className="absolute left-0 right-0 top-1/2 -translate-y-1/2"
+            style={{ height: "max(48px, 100%)" }}
+          />
+        )}
         {loading && <ButtonSpinner />}
         {!loading && icon}
         <Slottable>{children}</Slottable>
         {trailingIcon}
       </Comp>
     );
-
-    // M3 target areas: xs (32dp) and s (40dp) must reach a 48×48dp touch target.
-    // Wrap in a transparent expander that adds the missing vertical space
-    // (xs +8dp each side, s +4dp) without changing the button's visual size.
-    const needsTouchTarget = !compact && (resolvedSize === "xs" || resolvedSize === "s");
-    if (needsTouchTarget) {
-      return (
-        <span
-          className="inline-flex items-center justify-center align-middle"
-          style={{ paddingBlock: resolvedSize === "xs" ? "8px" : "4px" }}
-        >
-          {button}
-        </span>
-      );
-    }
-
-    return button;
   }
 );
 Button.displayName = "Button";

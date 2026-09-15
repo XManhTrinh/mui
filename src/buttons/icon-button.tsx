@@ -142,8 +142,22 @@ export type IconButtonProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>
   defaultPressed?: boolean;
   /** Callback when toggle state changes */
   onPressedChange?: (pressed: boolean) => void;
-  /** Remove touch-target padding for dense layouts */
+  /** Remove touch-target padding for dense layouts
+   * @deprecated Use `touchTarget="none"` instead.
+   */
   compact?: boolean;
+  /**
+   * Controls how the 48dp minimum touch target is applied for xs/s sizes.
+   *
+   * - `"inner"` (default): An absolutely-positioned inner element extends the
+   *   hit area without affecting layout. Matches the material-web default.
+   * - `"wrapper"`: An outer `<span>` reserves vertical space around the button,
+   *   preventing overlapping touch targets on vertically adjacent elements.
+   * - `"none"`: No touch-target expansion.
+   *
+   * Only applies to xs (32dp) and s (40dp) sizes; m/l/xl already meet 48dp.
+   */
+  touchTarget?: "inner" | "wrapper" | "none";
   /** Required accessible label */
   "aria-label": string;
 }
@@ -164,6 +178,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
       pressed: pressedProp,
       defaultPressed = false,
       onPressedChange,
+      touchTarget: touchTargetProp,
       compact = false,
       disabled = false,
       children,
@@ -211,9 +226,11 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
       [toggle, isPressed, isControlled, onPressedChange, onClick]
     );
 
-    // Touch target: need extra padding for xs (32px) and s (40px) to reach 48px
-    const needsTouchTarget =
-      !compact && (resolvedSize === "xs" || resolvedSize === "s");
+    // Touch target: xs (32px) and s (40px) need expansion to reach 48px.
+    // Resolve the touch-target mode — `compact` is deprecated in favour of `touchTarget`.
+    const resolvedTouchTarget: "inner" | "wrapper" | "none" =
+      touchTargetProp ?? (compact ? "none" : "inner");
+    const isTouchSize = resolvedSize === "xs" || resolvedSize === "s";
 
     // Shape classes for resting + active morph
     // M3 spec: In toggle mode, selected state inverts the shape (round→square, square→round)
@@ -238,13 +255,44 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
       ) : null
     );
 
-    const button = (
+    // "wrapper" mode: outer <span> reserves vertical space
+    if (isTouchSize && resolvedTouchTarget === "wrapper") {
+      return (
+        <span
+          className="inline-flex items-center justify-center align-middle"
+          style={{
+            padding: resolvedSize === "xs" ? "8px" : "4px",
+          }}
+        >
+          <Comp
+            className={cn(
+              iconButtonVariants({ variant: effectiveVariant, size: resolvedSize }),
+              shapeClass,
+              asChild && disabled && "opacity-[0.38] pointer-events-none cursor-not-allowed",
+              className
+            )}
+            ref={ref}
+            disabled={asChild ? undefined : disabled}
+            aria-disabled={disabled ? true : undefined}
+            aria-pressed={toggle ? isPressed : undefined}
+            tabIndex={disabled ? -1 : undefined}
+            onClick={handleClick}
+            {...props}
+          >
+            {iconContent}
+          </Comp>
+        </span>
+      );
+    }
+
+    // "inner" (default) or "none" mode: single element, no wrapper.
+    const showInnerTarget = isTouchSize && resolvedTouchTarget === "inner";
+
+    return (
       <Comp
         className={cn(
           iconButtonVariants({ variant: effectiveVariant, size: resolvedSize }),
           shapeClass,
-          // Native `disabled` is ignored when slotted onto a non-button
-          // element (e.g. a link), so enforce the affordance in CSS.
           asChild && disabled && "opacity-[0.38] pointer-events-none cursor-not-allowed",
           className
         )}
@@ -256,25 +304,18 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         onClick={handleClick}
         {...props}
       >
+        {/* M3 touch-target expander — absolutely positioned inside the button
+            so it extends the hit area to 48dp without affecting layout. */}
+        {showInnerTarget && (
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 top-1/2 -translate-y-1/2"
+            style={{ height: "max(48px, 100%)" }}
+          />
+        )}
         {iconContent}
       </Comp>
     );
-
-    // Wrap with touch target expander for xs/s sizes (unless compact)
-    if (needsTouchTarget) {
-      return (
-        <span
-          className="inline-flex items-center justify-center align-middle"
-          style={{
-            padding: resolvedSize === "xs" ? "8px" : "4px",
-          }}
-        >
-          {button}
-        </span>
-      );
-    }
-
-    return button;
   }
 );
 IconButton.displayName = "IconButton";

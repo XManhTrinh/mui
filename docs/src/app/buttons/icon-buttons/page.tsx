@@ -75,10 +75,16 @@ const iconButtonProps: PropDef[] = [
     description: "Render as child element using the Radix Slot pattern",
   },
   {
+    name: "touchTarget",
+    type: '"inner" | "wrapper" | "none"',
+    default: '"inner"',
+    description: "Touch target mode: inner (default, no layout impact), wrapper (reserves space), none (disabled)",
+  },
+  {
     name: "compact",
     type: "boolean",
     default: "false",
-    description: "Removes 48dp touch target padding for dense layouts (affects xs and s sizes)",
+    description: "Deprecated — use touchTarget=\"none\". Removes 48dp touch target padding for dense layouts (affects xs and s sizes)",
   },
   {
     name: "disabled",

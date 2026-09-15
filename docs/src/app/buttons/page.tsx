@@ -80,10 +80,16 @@ const buttonProps: PropDef[] = [
     description: "Render as child element via Radix Slot (e.g. <Link>)",
   },
   {
+    name: "touchTarget",
+    type: '"inner" | "wrapper" | "none"',
+    default: '"inner"',
+    description: "Touch target mode: inner (default, no layout impact), wrapper (reserves space), none (disabled)",
+  },
+  {
     name: "compact",
     type: "boolean",
     default: "false",
-    description: "Remove 48dp touch-target expander on xs/s sizes for dense layouts",
+    description: "Deprecated — use touchTarget=\"none\". Remove 48dp touch-target expander on xs/s sizes",
   },
   {
     name: "children",
