@@ -10,3 +10,4 @@ playwright-report/
 .DS_Store
 .env*
 !.env.example
+apps/next-playground/next-env.d.ts
