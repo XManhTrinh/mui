@@ -41,3 +41,17 @@ export {
   type ButtonStyleProps,
   type ButtonVariant,
 } from './components/button/button-styles';
+export {
+  IconButton,
+  type IconButtonActionProps,
+  type IconButtonClassNames,
+  type IconButtonLinkProps,
+  type IconButtonProps,
+  type IconButtonToggleProps,
+} from './components/icon-button/IconButton';
+export {
+  iconButtonStyles,
+  type IconButtonStyleProps,
+  type IconButtonVariant,
+  type IconButtonWidth,
+} from './components/icon-button/icon-button-styles';
