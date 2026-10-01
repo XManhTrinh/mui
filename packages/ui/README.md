@@ -24,6 +24,24 @@ Not using Tailwind? Import `@vkieu/mui/styles.compiled.css` instead.
 Fonts are not bundled: load [Roboto Flex](https://fonts.google.com/specimen/Roboto+Flex)
 with `next/font` or Google Fonts. Without it, the system UI font is used.
 
+### Vite 8 and `"use client"`
+
+Interactive modules start with `"use client"` for React Server Components. Vite 8 logs a
+harmless `MODULE_LEVEL_DIRECTIVE` warning for each one in client-only builds. To silence it:
+
+```ts
+// vite.config.ts
+export default defineConfig({
+  build: {
+    rolldownOptions: {
+      onLog(level, log, handler) {
+        if (log.code !== 'MODULE_LEVEL_DIRECTIVE') handler(level, log);
+      },
+    },
+  },
+});
+```
+
 See [`docs/architecture.md`](../../docs/architecture.md) for theming, overrides, motion and
 Next.js setup.
 

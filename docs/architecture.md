@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Foundations built** (shape library port and Storybook pending, see §17) · Last updated: 2026-10-01 (rev. 6 — Foundations implemented)
+Status: **Tier 1 in progress** (Button done; shape library port pending, see §17) · Last updated: 2026-10-01 (rev. 7 — Button)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -218,7 +218,12 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 - Links (`href`) use client-side routing via React Aria `RouterProvider`.
 
 ### Expressive Button family (API fixed from day one)
-- **Button**: `variant` = `elevated | filled | tonal | outlined | text`; `size` = `xs | sm | md | lg | xl`; `shape` = `round | square`; `toggle` + `selected`/`defaultSelected` (selected state changes colour and shape); **press morph** — corners animate squarer on press (spatial spring, animated `border-radius` on an inner layer per §10).
+- **Button** (built): `variant` = `elevated | filled | tonal | outlined | text`; `size` = `xs | sm | md | lg | xl`; `shape` = `round | square`; `toggle` + `selected`/`defaultSelected`/`onSelectedChange` (selected state changes colour and shape); **press morph** — corners animate squarer on press. Also `leadingIcon` / `trailingIcon`, `href` (renders `<a>` via React Aria `useLink`), `disabled`, `classNames` slots `root | content | label | icon`, and `ButtonContext` so a parent (button group) can cascade `variant` / `size` / `shape` / `disabled`.
+  - **Values come from what Compose's `Button.kt` / `ToggleButton.kt` actually use**, which in places overrides their token files: text buttons use `primary` (the token file says `on-surface-variant`, flagged by a Compose TODO); XS padding is 12px with a 4px icon gap; small toggle buttons press to a 6px corner. Label type: `label-large` (XS, S), `title-medium` (M), `headline-small` (L), `headline-large` (XL).
+  - **Press morph** is a CSS `border-radius` transition on the root (border-radius is not a transform, so §10 rule 4 holds). It uses the **effects default** spring, which never bounces, matching Compose. Toggle buttons use the **fast spatial** spring, which does bounce. Full corners are capped at half the container height (`min(var(--md-sys-shape-corner-full), h/2)`) so the transition interpolates smoothly.
+  - **Toggle shape:** selected round buttons become square, as Compose does. Selected square buttons become round, which follows m3.material.io; Compose only ships round toggles. Text buttons have no toggle form, which the types enforce.
+  - **Disabled:** container `on-surface` 10% and content `on-surface-variant` 38% for every variant (the Expressive token files). Compose's older `FilledTonalButtonTokens` (12%, `on-surface`) are not used.
+  - **Touch targets:** XS and S get a 48px `TouchTarget` inside the library-owned inner wrapper. Layout height stays 32 / 40px.
 - **IconButton**: same `variant`/`size`/`shape`/`toggle`, plus `width` = `narrow | default | wide`.
 - **Button group**: `variant` = `standard | connected`; shares `size`/`shape` via context; neighbours react to a pressed button (Expressive width interaction). Connected group replaces the deprecated segmented button.
 - **FAB**: `size` = `default | medium | large` (small FAB deprecated); colours per spec; **Extended FAB** `size` = `sm | md | lg`.
@@ -235,8 +240,8 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 
 ### Rules
 1. **`className` and `style` always go on the outermost element.** Layout utilities apply to the whole component. `style` is merged, never replaced.
-2. **State layer and ripple are painted as background layers on the root**, not as absolutely-positioned children: state layer = `linear-gradient` overlay using state colour × state opacity token; ripple = `radial-gradient` animated via registered `@property` custom properties. They follow `border-radius` automatically and need neither `relative` nor `overflow-hidden`.
-3. **Unavoidable inner overlays** (FAB morph shape, badges, press-morph layer) live inside a library-owned inner wrapper with its own `relative`/clipping. Consumer classes go on the outer element.
+2. **State layer and ripple are painted as background layers on the root**, not as absolutely-positioned children: state layer = `linear-gradient` overlay using state colour × state opacity token; ripple = `radial-gradient` animated via registered `@property` custom properties. They follow `border-radius` automatically and need neither `relative` nor `overflow-hidden`. Components add their own transitions (corners, colours, elevation) through the `--m3-transition-{property,duration,easing,delay}` lists, which the `container-motion` utility fills. Setting `transition-*` directly would cancel the state layer's transitions.
+3. **Unavoidable inner overlays** (FAB morph shape, badges, touch targets) live inside a library-owned inner wrapper with its own `relative`/clipping. Consumer classes go on the outer element.
 4. **Motion never animates the root's `transform`.** Springs, press-scale and morph run on inner layers.
 5. **Containers never trap `fixed` children.** Card, Dialog content, Sheet etc. never put `transform`, `filter`, `backdrop-filter`, `contain` or `will-change: transform` on their root.
 6. **Focus ring = CSS `outline` (+ `outline-offset`)**, so `overflow-hidden`, `fixed` or clipping ancestors can't hide it.
@@ -244,7 +249,7 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 8. **`cn()` conflict resolution** guarantees the consumer's layout class wins whenever the library does set a conflicting one.
 
 ### Verification
-An **override matrix** in CI: every component rendered with `fixed`, `absolute`, `sticky`, `static`, `overflow-hidden`, `overflow-visible`, `w-full`, a transform, inside a transformed ancestor, and in RTL — Playwright visual snapshots plus interaction checks.
+An **override matrix** in CI: every component rendered with `fixed`, `absolute`, `sticky`, `static`, `overflow-hidden`, `overflow-visible`, `w-full`, a transform, inside a transformed ancestor, and in RTL — Playwright visual snapshots plus interaction checks. Each component gets a `LayoutOverride` story (`apps/docs`) and a Playwright test that checks layout size, the background state layer, corner radius, the absence of positioned children, pressing and the keyboard focus ring for every combination.
 
 ## 11. Next.js support
 
@@ -292,7 +297,7 @@ docs/architecture.md   # this file
 pnpm-workspace.yaml
 turbo.json
 packages/ui            # @vkieu/mui (MIT)
-apps/docs              # Storybook (not created yet, see §17)
+apps/docs              # Storybook 10 (theme/mode/contrast/motion/direction toolbars) + Playwright visual tests
 apps/next-playground   # Next.js App Router + Pages Router test app, Playwright e2e (pnpm test:e2e)
 ```
 
@@ -301,6 +306,9 @@ apps/next-playground   # Next.js App Router + Pages Router test app, Playwright 
 - Vitest + Testing Library (unit/behaviour)
 - axe accessibility checks per component
 - Playwright visual regression: every component × 6 themes × light/dark (+ contrast levels on key components) × both motion schemes where relevant
+  - Screenshots are taken against the static Storybook build (`pnpm test:e2e`), with the font loaded locally (`@fontsource-variable/roboto-flex`) so results don't depend on the network.
+  - Baselines are platform-specific (`*-darwin.png` today). CI has to render them in a pinned container image and commit that platform's baselines.
+  - Every class a `tv` recipe can emit is checked to appear literally in its source and to compile in Tailwind. A class assembled at runtime would never be generated.
 - Layout-safety override matrix (§10)
 - Next playground build + Playwright in CI
 - Changesets for versioning/changelog
@@ -347,7 +355,7 @@ Build order: Foundations (token source, 6 themes × modes × contrast, motion sc
 
 ### Remaining Foundations work
 - **Shape library port + `useM3Morph`** (`androidx.graphics.shapes`, 35 shapes, feature-matched morph). It is not started. Nothing in Tier 1 needs it, since the Button press morph animates `border-radius`. The Loading indicator and FAB menu (Tier 2) do, so it has to land before Tier 2.
-- **Storybook (`apps/docs`)** and the **visual-regression matrix** (§14). Both start with the first Tier 1 component, because Foundations has no visual components beyond `Surface` and the field parts.
+- **Vite 8 directive warnings:** Vite 8 (rolldown) logs `MODULE_LEVEL_DIRECTIVE` for every `"use client"` file when a client-only app bundles the library. The warnings are harmless. The `build.rolldownOptions.onLog` filter is in `packages/ui/README.md` and `apps/docs/.storybook/main.ts`.
 - **Stylesheet size:** the six themes × three contrast levels × light/dark/system are about 120 KB unminified, most of the shipped CSS. If that matters to consumers, a later option is to split medium/high contrast into opt-in files.
 
 ## 18. Related
