@@ -33,7 +33,11 @@ export {
   type ButtonProps,
   type ButtonToggleProps,
 } from './components/button/Button';
-export { ButtonContext, type ButtonContextValue } from './components/button/ButtonContext';
+export {
+  ButtonContext,
+  ToggleGroupStateContext,
+  type ButtonContextValue,
+} from './components/button/ButtonContext';
 export {
   buttonStyles,
   type ButtonShape,
@@ -55,3 +59,12 @@ export {
   type IconButtonVariant,
   type IconButtonWidth,
 } from './components/icon-button/icon-button-styles';
+
+// Composites
+export {
+  ButtonGroup,
+  buttonGroupStyles,
+  type ButtonGroupProps,
+  type ButtonGroupSelectionMode,
+  type ButtonGroupVariant,
+} from './composites/button-group/ButtonGroup';
