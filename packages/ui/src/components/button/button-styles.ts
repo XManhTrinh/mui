@@ -59,18 +59,144 @@ const selectedFull = {
   xl: 'data-selected:not-data-pressed:not-data-disabled:rounded-[min(var(--md-sys-shape-corner-full),68px)]',
 } as const;
 
+/**
+ * Connected button group corners (Compose `ButtonGroupDefaults.connected*Shapes`): outer
+ * corners stay full, inner corners are small (8px), extra-small (4px) while pressed, and
+ * the whole button becomes full when selected. Compose defines one set for all sizes.
+ */
+const connectedShapes = [
+  {
+    size: 'xs',
+    connected: 'leading',
+    class: {
+      root: 'rounded-s-[min(var(--md-sys-shape-corner-full),16px)] rounded-e-corner-small data-pressed:rounded-e-corner-extra-small data-selected:not-data-pressed:not-data-disabled:rounded-e-[min(var(--md-sys-shape-corner-full),16px)]',
+    },
+  },
+  {
+    size: 'xs',
+    connected: 'middle',
+    class: {
+      root: 'rounded-corner-small data-pressed:rounded-corner-extra-small data-selected:not-data-pressed:not-data-disabled:rounded-[min(var(--md-sys-shape-corner-full),16px)]',
+    },
+  },
+  {
+    size: 'xs',
+    connected: 'trailing',
+    class: {
+      root: 'rounded-e-[min(var(--md-sys-shape-corner-full),16px)] rounded-s-corner-small data-pressed:rounded-s-corner-extra-small data-selected:not-data-pressed:not-data-disabled:rounded-s-[min(var(--md-sys-shape-corner-full),16px)]',
+    },
+  },
+  {
+    size: 'sm',
+    connected: 'leading',
+    class: {
+      root: 'rounded-s-[min(var(--md-sys-shape-corner-full),20px)] rounded-e-corner-small data-pressed:rounded-e-corner-extra-small data-selected:not-data-pressed:not-data-disabled:rounded-e-[min(var(--md-sys-shape-corner-full),20px)]',
+    },
+  },
+  {
+    size: 'sm',
+    connected: 'middle',
+    class: {
+      root: 'rounded-corner-small data-pressed:rounded-corner-extra-small data-selected:not-data-pressed:not-data-disabled:rounded-[min(var(--md-sys-shape-corner-full),20px)]',
+    },
+  },
+  {
+    size: 'sm',
+    connected: 'trailing',
+    class: {
+      root: 'rounded-e-[min(var(--md-sys-shape-corner-full),20px)] rounded-s-corner-small data-pressed:rounded-s-corner-extra-small data-selected:not-data-pressed:not-data-disabled:rounded-s-[min(var(--md-sys-shape-corner-full),20px)]',
+    },
+  },
+  {
+    size: 'md',
+    connected: 'leading',
+    class: {
+      root: 'rounded-s-[min(var(--md-sys-shape-corner-full),28px)] rounded-e-corner-small data-pressed:rounded-e-corner-extra-small data-selected:not-data-pressed:not-data-disabled:rounded-e-[min(var(--md-sys-shape-corner-full),28px)]',
+    },
+  },
+  {
+    size: 'md',
+    connected: 'middle',
+    class: {
+      root: 'rounded-corner-small data-pressed:rounded-corner-extra-small data-selected:not-data-pressed:not-data-disabled:rounded-[min(var(--md-sys-shape-corner-full),28px)]',
+    },
+  },
+  {
+    size: 'md',
+    connected: 'trailing',
+    class: {
+      root: 'rounded-e-[min(var(--md-sys-shape-corner-full),28px)] rounded-s-corner-small data-pressed:rounded-s-corner-extra-small data-selected:not-data-pressed:not-data-disabled:rounded-s-[min(var(--md-sys-shape-corner-full),28px)]',
+    },
+  },
+  {
+    size: 'lg',
+    connected: 'leading',
+    class: {
+      root: 'rounded-s-[min(var(--md-sys-shape-corner-full),48px)] rounded-e-corner-small data-pressed:rounded-e-corner-extra-small data-selected:not-data-pressed:not-data-disabled:rounded-e-[min(var(--md-sys-shape-corner-full),48px)]',
+    },
+  },
+  {
+    size: 'lg',
+    connected: 'middle',
+    class: {
+      root: 'rounded-corner-small data-pressed:rounded-corner-extra-small data-selected:not-data-pressed:not-data-disabled:rounded-[min(var(--md-sys-shape-corner-full),48px)]',
+    },
+  },
+  {
+    size: 'lg',
+    connected: 'trailing',
+    class: {
+      root: 'rounded-e-[min(var(--md-sys-shape-corner-full),48px)] rounded-s-corner-small data-pressed:rounded-s-corner-extra-small data-selected:not-data-pressed:not-data-disabled:rounded-s-[min(var(--md-sys-shape-corner-full),48px)]',
+    },
+  },
+  {
+    size: 'xl',
+    connected: 'leading',
+    class: {
+      root: 'rounded-s-[min(var(--md-sys-shape-corner-full),68px)] rounded-e-corner-small data-pressed:rounded-e-corner-extra-small data-selected:not-data-pressed:not-data-disabled:rounded-e-[min(var(--md-sys-shape-corner-full),68px)]',
+    },
+  },
+  {
+    size: 'xl',
+    connected: 'middle',
+    class: {
+      root: 'rounded-corner-small data-pressed:rounded-corner-extra-small data-selected:not-data-pressed:not-data-disabled:rounded-[min(var(--md-sys-shape-corner-full),68px)]',
+    },
+  },
+  {
+    size: 'xl',
+    connected: 'trailing',
+    class: {
+      root: 'rounded-e-[min(var(--md-sys-shape-corner-full),68px)] rounded-s-corner-small data-pressed:rounded-s-corner-extra-small data-selected:not-data-pressed:not-data-disabled:rounded-s-[min(var(--md-sys-shape-corner-full),68px)]',
+    },
+  },
+] as const;
+
 const shapeVariants = SIZES.flatMap((size) => [
-  { size, shape: 'round' as const, class: { root: full[size] } },
-  { size, shape: 'square' as const, class: { root: square[size] } },
-  { size, toggle: false, class: { root: pressed[size] } },
+  { size, connected: 'none' as const, shape: 'round' as const, class: { root: full[size] } },
+  { size, connected: 'none' as const, shape: 'square' as const, class: { root: square[size] } },
+  { size, connected: 'none' as const, toggle: false, class: { root: pressed[size] } },
   {
     size,
+    connected: 'none' as const,
     toggle: true,
     class: { root: size === 'sm' ? 'data-pressed:rounded-[6px]' : pressed[size] },
   },
   // Selected toggle buttons swap shape: round becomes square and square becomes round.
-  { size, toggle: true, shape: 'round' as const, class: { root: selectedSquare[size] } },
-  { size, toggle: true, shape: 'square' as const, class: { root: selectedFull[size] } },
+  {
+    size,
+    connected: 'none' as const,
+    toggle: true,
+    shape: 'round' as const,
+    class: { root: selectedSquare[size] },
+  },
+  {
+    size,
+    connected: 'none' as const,
+    toggle: true,
+    shape: 'square' as const,
+    class: { root: selectedFull[size] },
+  },
 ]);
 
 /** Variant definitions for {@link Button}; extend them to add variants. */
@@ -144,9 +270,12 @@ export const buttonStyles = tv({
       true: {},
       false: {},
     },
+    /** Position in a connected button group, set by `ButtonGroup`. */
+    connected: { none: {}, leading: {}, middle: {}, trailing: {} },
   },
   compoundVariants: [
     ...shapeVariants,
+    ...connectedShapes,
     // Outline width grows with size.
     { variant: 'outlined', size: 'lg', class: { root: 'border-2' } },
     { variant: 'outlined', size: 'xl', class: { root: 'border-3' } },
@@ -189,6 +318,7 @@ export const buttonStyles = tv({
     shape: 'round',
     toggle: false,
     hasLeadingIcon: false,
+    connected: 'none',
   },
 });
 

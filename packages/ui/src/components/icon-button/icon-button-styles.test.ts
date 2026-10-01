@@ -12,10 +12,11 @@ function* outputs() {
     for (const size of ['xs', 'sm', 'md', 'lg', 'xl'] as const)
       for (const width of ['narrow', 'default', 'wide'] as const)
         for (const shape of ['round', 'square'] as const)
-          for (const toggle of [false, true]) {
-            const slots = iconButtonStyles({ variant, size, width, shape, toggle });
-            yield* [slots.root(), slots.content(), slots.icon()];
-          }
+          for (const toggle of [false, true])
+            for (const connected of ['none', 'leading', 'middle', 'trailing'] as const) {
+              const slots = iconButtonStyles({ variant, size, width, shape, toggle, connected });
+              yield* [slots.root(), slots.content(), slots.icon()];
+            }
 }
 
 describe('iconButtonStyles', () => {

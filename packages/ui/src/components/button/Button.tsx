@@ -97,6 +97,7 @@ export function Button({
     shape: shapeProp ?? context.shape ?? 'round',
     toggle,
     hasLeadingIcon: Boolean(leadingIcon),
+    connected: context.connected ?? 'none',
   });
 
   // Destructuring a union merges its members, so TypeScript loses the pairing of

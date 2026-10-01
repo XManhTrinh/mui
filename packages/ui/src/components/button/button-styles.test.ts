@@ -12,10 +12,18 @@ function* outputs() {
     for (const size of ['xs', 'sm', 'md', 'lg', 'xl'] as const)
       for (const shape of ['round', 'square'] as const)
         for (const toggle of [false, true])
-          for (const hasLeadingIcon of [false, true]) {
-            const slots = buttonStyles({ variant, size, shape, toggle, hasLeadingIcon });
-            yield* [slots.root(), slots.content(), slots.label(), slots.icon()];
-          }
+          for (const hasLeadingIcon of [false, true])
+            for (const connected of ['none', 'leading', 'middle', 'trailing'] as const) {
+              const slots = buttonStyles({
+                variant,
+                size,
+                shape,
+                toggle,
+                hasLeadingIcon,
+                connected,
+              });
+              yield* [slots.root(), slots.content(), slots.label(), slots.icon()];
+            }
 }
 
 describe('buttonStyles', () => {

@@ -98,6 +98,7 @@ export function IconButton(props: IconButtonProps) {
     width,
     shape: shapeProp ?? context.shape ?? 'round',
     toggle: base.toggle === true,
+    connected: context.connected ?? 'none',
   });
 
   // Destructuring a union merges its members (see Button); `base` holds one member's props.

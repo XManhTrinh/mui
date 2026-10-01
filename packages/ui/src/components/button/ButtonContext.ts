@@ -9,6 +9,11 @@ export interface ButtonContextValue {
   size?: ButtonSize;
   shape?: ButtonShape;
   disabled?: boolean;
+  /** Position in a connected button group; set per child by `ButtonGroup`. */
+  connected?: 'leading' | 'middle' | 'trailing';
 }
 
 export const ButtonContext = createContext<ButtonContextValue>({});
+
+/** Selection state shared by toggle buttons in a selection group (see `ButtonGroup`). */
+export { ToggleGroupStateContext } from '../../primitives/ButtonBase';
