@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Agreed, pre-build** · Last updated: 2026-10-01 (rev. 5 — Foundations checks 1–2 resolved)
+Status: **Foundations built** (shape library port and Storybook pending, see §17) · Last updated: 2026-10-01 (rev. 6 — Foundations implemented)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -32,6 +32,9 @@ import { Button, Dialog, DialogTrigger, ThemeProvider } from '@vkieu/mui';
 | 16 | Stability labels | Expressive-only components marked **Preview** in docs while the upstream spec is still experimental in Compose |
 | 17 | Licence | **MIT** |
 | 18 | Monorepo tooling | **pnpm workspaces + Turborepo** |
+| 19 | Toolchain | Node 24 (`.nvmrc`), pnpm 12 (`packageManager`), **TypeScript 6.0**: TS 7 is out, but typescript-eslint only supports TS < 6.1, so type-aware linting pins 6.0 |
+| 20 | Library build | **tsdown** in unbundle mode (one output file per module, so per-file `"use client"` survives). `scripts/check-dist.ts` verifies directives, extensions and paths after every build |
+| 21 | Colour library | `@material/material-color-utilities` is a devDependency **bundled into `dist/vendor/`** (Apache-2.0 notice in `NOTICE`), because its published ESM cannot be loaded by plain Node (§17) |
 
 ## 2. Stack
 
@@ -43,23 +46,23 @@ import { Button, Dialog, DialogTrigger, ThemeProvider } from '@vkieu/mui';
 | Variants | **tailwind-variants v3** (slots) | Replaces CVA — slots style multi-part components in one call |
 | Class merge | `cn()` = tailwind-merge (extended) + clsx | `packages/ui/src/utils/cn.ts`; its token lists are generated from the token source (§4) |
 | Motion | **Motion** (`motion/react`) | Spring choreography, enter/exit, layout, morph. `LazyMotion` + `m`. Simple state transitions use CSS `linear()` springs |
-| Colour | `@material/material-color-utilities` with **`ColorSpec2025`** | Confirm the npm package exposes the 2025 spec before Foundations; fall back to 2021 spec only if not |
+| Colour | `@material/material-color-utilities` 0.4.0 with **`ColorSpec2025`** | Vendored into the build (decision #21) |
 | Shapes | Port of Android `androidx.graphics.shapes` | Feature-matched morph across M3's 35 shapes. Replaces Flubber. Vendored with Apache-2.0 NOTICE |
 | Fonts | Roboto Flex (variable: wght, wdth, opsz, GRAD) | Consumer-loaded |
 | Repo tooling | pnpm workspaces + Turborepo | Cached builds/tests across packages and apps |
 
 ## 3. Composition architecture (DRY)
 
-Four layers. **Dependencies only point downward** — enforced by a lint rule (dependency-cruiser / eslint-plugin-boundaries).
+Four layers. **Dependencies only point downward**, enforced by `eslint-plugin-boundaries` in `eslint.config.js`. In source, the layers are `src/tokens` → `src/utils` → `src/theme` / `src/motion` → `src/primitives` → `src/components` → `src/composites`. Composites may not import `src/primitives`.
 
 1. **Tokens** — CSS variables for colour, shape, type, motion, elevation, state opacity, z-index.
 2. **Primitives** (internal; also exported from `@vkieu/mui/primitives`)
-   - `useM3Interaction` — wraps React Aria `usePress` / `useHover` / `useFocusRing` / drag → emits `data-pressed`, `data-hovered`, `data-focus-visible`, `data-dragged`, `data-disabled`, `data-selected`
-   - State layer + ripple as **background-layer utilities** on the root (no child elements — see §10), outline-based focus ring, `Elevation`, `Surface`
-   - `Overlay` (portal, focus trap, dismiss, scroll lock)
+   - `useM3Interaction` — wraps React Aria `usePress` / `useHover` / `useFocusRing` / drag → emits `data-pressed`, `data-hovered`, `data-focus-visible`, `data-dragged`, `data-disabled`, `data-selected`. Pass `isPressed` from another React Aria hook (e.g. `useButton`) to skip its own press handling. It also sets the ripple origin (`--m3-ripple-x/y/size`) on pointer-down or Enter/Space.
+   - State layer + ripple as **background-layer utilities** on the root (no child elements — see §10): `state-layer`, plus `focus-ring` / `focus-ring-inset` (outline). `Surface` (`container` role + `elevation` 0–5 + `shape`) covers elevation; there is no separate `Elevation` component.
+   - `Overlay`: portal to `body` that **re-applies the theme attributes of where it was rendered**, so overlays opened inside a `ThemeScope` keep its theme. Dismissal, focus containment and scroll lock come from the React Aria overlay hooks (`useModalOverlay`, `usePopover`, …) used by each component.
    - `useM3Morph` (shape-library morph driven by Motion `useTransform`)
    - `useM3Spring` (resolves the active motion scheme → Motion spring config)
-   - `Field` parts: `Label`, `SupportingText`, `ErrorText`, character counter
+   - `Field` parts: `FieldLabel`, `SupportingText`, `ErrorText`, `CharacterCounter`
 3. **Components** — Button, IconButton, FAB, Card, TextField, Checkbox, Radio, Switch… assembled from primitives.
 4. **Composites** — built **only from public components** (dogfooding the public API):
    - Button group (connected) = Buttons / IconButtons + group context
@@ -84,6 +87,19 @@ One token source file (TypeScript) generates **all** of:
 - the Motion spring configs used by `useM3Spring`
 
 so CSS, class merging and JS motion can never drift apart.
+
+In practice the source is `packages/ui/src/tokens/*.ts`. `pnpm generate` writes `src/styles/generated/{tokens,themes,theme}.css`; those files are gitignored and Turborepo regenerates them before build, typecheck, lint and test. `cn()` and `useM3Spring` import the token objects directly.
+
+Tailwind utility names:
+
+| Token | Utilities |
+|---|---|
+| Colour roles | `bg-primary`, `text-on-surface`, `border-outline-variant`, … |
+| Type scale | `text-<role>` sets size, line height, tracking and weight (`text-body-large`, `text-label-large-emphasized`); typeface via `font-brand` / `font-plain` |
+| Corners | `rounded-corner-<name>` (`rounded-corner-full`, `rounded-corner-medium`, …) |
+| Elevation | `shadow-elevation-0` … `shadow-elevation-5` |
+| Springs | `ease-m3-<family>-<speed>` and `duration-m3-<family>-<speed>`; legacy curves are `ease-m3-emphasized`, … |
+| Variants | `medium:` / `expanded:` / `large:` / `xlarge:`; `dark:` follows `data-mode` (including `system`); `motion-standard:` |
 
 ### Shape (corner) scale — spec tokens only
 | Token | Value |
@@ -139,10 +155,16 @@ Full baseline type scale + Expressive **emphasized** variants for every role (di
 Each: light + dark × 3 contrast levels, generated at **build time** into static CSS. Mode follows system preference unless set.
 
 ### API
-- `<ThemeProvider defaultTheme defaultMode defaultContrast defaultMotion themes>` + `useTheme()` → `{ theme, setTheme, mode, setMode, resolvedMode, contrast, setContrast, motion, setMotion, themes }`. Persists to localStorage/cookie.
-- `<ThemeScope theme mode contrast motion>` — theme a subtree; nestable.
-- `createTheme({ name, seed, variant, contrast })` — runtime custom theme.
-- CLI: `npx @vkieu/mui theme --seed <hex> --name <name>` → static CSS (no flash).
+- `<ThemeProvider defaultTheme defaultMode defaultContrast defaultMotion themes>` + `useTheme()` → `{ theme, setTheme, mode, setMode, resolvedMode, contrast, setContrast, motion, setMotion, themes }`.
+  - Each dimension can also be controlled: `theme` + `onThemeChange`, and likewise for the others.
+  - `storage`: `"cookie"` (default), `"local-storage"` or `"none"`. The key is `vkieu-mui-theme` (`storageKey`) and the value is URL-encoded `theme=…&mode=…&contrast=…&motion=…`.
+  - The stored value is read with `useSyncExternalStore`, so there's no hydration mismatch or extra render.
+  - `applyToDocument={false}` stops it from writing to `<html>`.
+  - `createTheme()` results passed in `themes` are injected as hoisted React 19 `<style precedence>` tags.
+- `<ThemeScope theme mode contrast motion>` — theme a subtree; nestable. It writes all four attributes, inheriting the ones you don't set, and adds `text-on-surface`, which `className` can override. `useThemeScope()` reads the effective state.
+- Attribute fallbacks: a missing `data-contrast` behaves as `standard`, a missing `data-mode` as `light`, and a root without `data-theme` gets `baseline`.
+- `createTheme({ name, seed, variant, contrast })` — runtime custom theme. `contrast` takes one level or a list (default: all three).
+- CLI: `npx @vkieu/mui theme --seed <hex> --name <name> [--variant] [--contrast] [--out]` → static CSS (no flash). The bin is `vkieu-mui`.
 
 ## 6. Motion system (M3 Expressive)
 
@@ -270,8 +292,8 @@ docs/architecture.md   # this file
 pnpm-workspace.yaml
 turbo.json
 packages/ui            # @vkieu/mui (MIT)
-apps/docs              # Storybook
-apps/next-playground   # Next.js App Router test app
+apps/docs              # Storybook (not created yet, see §17)
+apps/next-playground   # Next.js App Router + Pages Router test app, Playwright e2e (pnpm test:e2e)
 ```
 
 ## 14. Quality
@@ -322,6 +344,11 @@ Build order: Foundations (token source, 6 themes × modes × contrast, motion sc
   Overshoot: expressive spatial 9.5% fast, 1.5% default/slow; standard spatial 0.15%; effects 0%. This matches §6.
 - Open spec gaps: `FabMediumTokens` / `ExtendedFabMediumTokens` have `ContainerShape` commented out in Compose (comment says `CornerLargeIncreased`, 20px). `LargeIconButtonTokens` has `Uniform` spacing instead of `Default`. Confirm both against m3.material.io before building FAB / IconButton.
 - `@vkieu` npm scope must be owned before publishing.
+
+### Remaining Foundations work
+- **Shape library port + `useM3Morph`** (`androidx.graphics.shapes`, 35 shapes, feature-matched morph). It is not started. Nothing in Tier 1 needs it, since the Button press morph animates `border-radius`. The Loading indicator and FAB menu (Tier 2) do, so it has to land before Tier 2.
+- **Storybook (`apps/docs`)** and the **visual-regression matrix** (§14). Both start with the first Tier 1 component, because Foundations has no visual components beyond `Surface` and the field parts.
+- **Stylesheet size:** the six themes × three contrast levels × light/dark/system are about 120 KB unminified, most of the shipped CSS. If that matters to consumers, a later option is to split medium/high contrast into opt-in files.
 
 ## 18. Related
 
