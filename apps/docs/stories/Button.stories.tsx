@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button, type ButtonShape, type ButtonSize, type ButtonVariant } from '@vkieu/mui';
 import { useState } from 'react';
 import { AddIcon, ArrowIcon, SendIcon, StarIcon } from './icons';
+import { LAYOUT_OVERRIDES, LAYOUT_OVERRIDE_NAMES, type LayoutOverrideName } from './layout-overrides';
 
 const VARIANTS: ButtonVariant[] = ['elevated', 'filled', 'tonal', 'outlined', 'text'];
 const SIZES: ButtonSize[] = ['xs', 'sm', 'md', 'lg', 'xl'];
@@ -114,28 +115,17 @@ export const Link: Story = {
   args: { href: 'https://m3.material.io/components/buttons', variant: 'text', children: 'Spec' },
 };
 
-const OVERRIDES = {
-  none: '',
-  fixed: 'fixed right-4 bottom-4',
-  absolute: 'absolute top-24 left-24',
-  sticky: 'sticky top-0',
-  static: 'static',
-  overflowHidden: 'overflow-hidden',
-  overflowVisible: 'overflow-visible',
-  fullWidth: 'w-full',
-  transform: 'translate-x-4 rotate-3',
-} as const;
 
 /**
  * Layout safety (architecture §10): the same button with a consumer layout class, inside
  * an optional transformed ancestor. It must look and behave the same in every case.
  */
 export const LayoutOverride: StoryObj<{
-  override: keyof typeof OVERRIDES;
+  override: LayoutOverrideName;
   transformedAncestor: boolean;
 }> = {
   args: { override: 'none', transformedAncestor: false },
-  argTypes: { override: { control: 'select', options: Object.keys(OVERRIDES) } },
+  argTypes: { override: { control: 'select', options: LAYOUT_OVERRIDE_NAMES } },
   render: function LayoutOverrideStory({ override, transformedAncestor }) {
     const [count, setCount] = useState(0);
     return (
@@ -149,7 +139,7 @@ export const LayoutOverride: StoryObj<{
         </p>
         <Button
           data-testid="target"
-          className={OVERRIDES[override]}
+          className={LAYOUT_OVERRIDES[override]}
           leadingIcon={<AddIcon />}
           onPress={() => setCount((c) => c + 1)}
         >

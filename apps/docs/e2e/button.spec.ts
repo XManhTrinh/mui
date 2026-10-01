@@ -1,21 +1,9 @@
-import { expect, test, type Locator, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+import { layoutSafetySuite } from './layout-safety';
+import { MODES, THEMES, shotWithMargin } from './shots';
 import { openStory } from './story';
 
-/** Screenshot of an element plus a margin, so the outline focus ring is included. */
-async function shotWithMargin(page: Page, locator: Locator, name: string, margin = 8) {
-  const box = (await locator.boundingBox())!;
-  await expect(page).toHaveScreenshot(name, {
-    clip: {
-      x: box.x - margin,
-      y: box.y - margin,
-      width: box.width + margin * 2,
-      height: box.height + margin * 2,
-    },
-  });
-}
 
-const THEMES = ['baseline', 'ocean', 'forest', 'sunset', 'rose', 'slate'];
-const MODES = ['light', 'dark'] as const;
 
 test.describe('Button visual regression', () => {
   for (const theme of THEMES) {
@@ -105,64 +93,6 @@ test.describe('Button interaction states', () => {
   });
 });
 
-/** Architecture §10: consumer layout classes must never break the component. */
 test.describe('Button layout safety', () => {
-  const overrides = [
-    'none',
-    'fixed',
-    'absolute',
-    'sticky',
-    'static',
-    'overflowHidden',
-    'overflowVisible',
-    'fullWidth',
-    'transform',
-  ];
-
-  for (const override of overrides) {
-    for (const transformedAncestor of [false, true]) {
-      for (const dir of ['ltr', 'rtl'] as const) {
-        const name = `${override}${transformedAncestor ? ' · transformed ancestor' : ''} · ${dir}`;
-        test(name, async ({ page }) => {
-          await openStory(
-            page,
-            'components-button--layout-override',
-            { dir },
-            { override, transformedAncestor },
-          );
-          const button = page.getByTestId('target');
-          // Layout size (not the on-screen box, which a rotate transform enlarges).
-          const size = await button.evaluate((el) => ({
-            height: (el as HTMLElement).offsetHeight,
-            width: (el as HTMLElement).offsetWidth,
-          }));
-          expect(size.height).toBe(40);
-          if (override !== 'fullWidth') expect(size.width).toBeLessThan(200);
-
-          const style = await button.evaluate((el) => {
-            const s = getComputedStyle(el);
-            return {
-              backgroundImage: s.backgroundImage,
-              radius: s.borderTopLeftRadius,
-              positionedDescendants: [...el.querySelectorAll('*')].filter(
-                (child) =>
-                  child.closest('[data-touch-target]') === null &&
-                  ['absolute', 'fixed'].includes(getComputedStyle(child).position),
-              ).length,
-            };
-          });
-          expect(style.backgroundImage).toContain('linear-gradient');
-          expect(style.radius).toBe('20px');
-          expect(style.positionedDescendants).toBe(0);
-
-          await button.click();
-          await expect(page.getByTestId('count')).toHaveText('Pressed 1');
-          await page.keyboard.press('Shift+Tab');
-          await page.keyboard.press('Tab');
-          await expect(button).toHaveAttribute('data-focus-visible', 'true');
-          expect(await button.evaluate((el) => getComputedStyle(el).outlineStyle)).toBe('solid');
-        });
-      }
-    }
-  }
+  layoutSafetySuite('components-button--layout-override', { height: 40, radius: '20px' });
 });
