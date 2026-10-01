@@ -284,6 +284,16 @@ describe('Button toggle', () => {
     );
   });
 
+  it('rejects a text toggle in its types', () => {
+    const textToggle = (
+      // @ts-expect-error text buttons have no toggle form
+      <Button toggle variant="text">
+        Bold
+      </Button>
+    );
+    expect(textToggle).toBeTruthy();
+  });
+
   it('falls back to filled for a text variant from context', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     render(

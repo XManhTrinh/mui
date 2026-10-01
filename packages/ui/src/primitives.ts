@@ -14,6 +14,14 @@ export {
 export { Overlay, type OverlayProps } from './primitives/Overlay';
 export { TouchTarget, type TouchTargetProps } from './primitives/TouchTarget';
 export {
+  ButtonBase,
+  type ButtonBaseActionProps,
+  type ButtonBaseLinkProps,
+  type ButtonBaseProps,
+  type ButtonBaseRenderState,
+  type ButtonBaseToggleProps,
+} from './primitives/ButtonBase';
+export {
   CharacterCounter,
   ErrorText,
   FieldLabel,
