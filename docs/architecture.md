@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 1 in progress** (Button and IconButton done; shape library port pending, see §17) · Last updated: 2026-10-01 (rev. 8 — IconButton)
+Status: **Tier 1 in progress** (Button, IconButton and ButtonGroup done; shape library port pending, see §17) · Last updated: 2026-10-01 (rev. 9 — ButtonGroup)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -233,7 +233,13 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
   - **Selected toggles:** standard turns `primary`, filled `primary`/`on-primary` (unselected `surface-container`), tonal `secondary`/`on-secondary`, and outlined `inverse-surface`/`inverse-on-surface` with no border. Shape swaps round ↔ square (Compose tokens). Every icon button morph, toggles included, uses the non-bouncing effects spring, as Compose does.
   - Reads `size` / `shape` / `disabled` from `ButtonContext`, but not `variant`, because the variant sets differ.
 - **Colour note:** the 2025 colour spec makes `inverse-on-surface` noticeably muted (baseline light `#a09ba1` on `#0f0d12`, about 7:1 contrast). Selected outlined buttons and icon buttons look greyer than the 2021 palette did. That's correct, not a bug.
-- **Button group**: `variant` = `standard | connected`; shares `size`/`shape` via context; neighbours react to a pressed button (Expressive width interaction). Connected group replaces the deprecated segmented button.
+- **Button group** (built, `ButtonGroup`, a composite): `variant` = `standard | connected`; shares `size` / `shape` / `disabled` and `buttonVariant` (Buttons only) through `ButtonContext`, and the child's own props win.
+  - **Press expansion:** neighbours react to a pressed button (Compose `ButtonGroup`). The pressed item grows by `expandedRatio` (0.15) of its width, and its neighbours shrink by the same amount. Each neighbour gives up at most its compression limit, which is half the space around its content (Compose: the item's end padding). Middle items split the growth across both sides, so the group's total width stays constant.
+  - **How it works on the web:** the group watches its children's public `data-pressed` attribute (a MutationObserver), pins their `flex-basis` to the measured width, and animates it on the fast spatial spring (added to `container-motion`). While pinned, `min-width` is 0 (Compose forces exact widths too). Inline styles are removed once the release settles, so consumer sizing such as `flex-1` applies again. `expandedRatio={0}` turns it off.
+  - **Connected:** 2px gap. Outer corners stay full, inner corners are small (8px) and extra-small (4px) when pressed, and selected buttons become fully round. These are logical corners, so they mirror in RTL. Children get `connected` = `leading | middle | trailing` through a per-child `ButtonContext` provider; Button and IconButton apply it in their recipes, and it replaces their normal shape classes.
+  - **Selection:** `selectionMode` = `none | single | multiple` with `selectedKeys` / `defaultSelectedKeys` / `onSelectionChange` / `disallowEmptySelection`. Toggle buttons with a `value` join the group's React Aria toggle-group state (`ToggleGroupStateContext`, read by `ButtonBase`). Single selection renders as a `radiogroup` of `radio`s. React Aria keeps every option tabbable and adds arrow-key movement. No-op changes that React Stately reports (same keys) are not passed to `onSelectionChange`.
+  - **Spec gaps:** Compose only has *Small* tokens for groups (standard gap 12px; connected gap 2px, inner corners 8/4px). They are used at every size until per-size values are published. The Compose **overflow menu** is deferred until Menu exists.
+  - Children must be direct elements (each is wrapped in its own context provider).
 - **FAB**: `size` = `default | medium | large` (small FAB deprecated); colours per spec; **Extended FAB** `size` = `sm | md | lg`.
 
 ## 10. Layout safety (consumer positioning never breaks a component)
