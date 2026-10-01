@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 1 in progress** (Button done; shape library port pending, see §17) · Last updated: 2026-10-01 (rev. 7 — Button)
+Status: **Tier 1 in progress** (Button and IconButton done; shape library port pending, see §17) · Last updated: 2026-10-01 (rev. 8 — IconButton)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -58,6 +58,8 @@ Four layers. **Dependencies only point downward**, enforced by `eslint-plugin-bo
 1. **Tokens** — CSS variables for colour, shape, type, motion, elevation, state opacity, z-index.
 2. **Primitives** (internal; also exported from `@vkieu/mui/primitives`)
    - `useM3Interaction` — wraps React Aria `usePress` / `useHover` / `useFocusRing` / drag → emits `data-pressed`, `data-hovered`, `data-focus-visible`, `data-dragged`, `data-disabled`, `data-selected`. Pass `isPressed` from another React Aria hook (e.g. `useButton`) to skip its own press handling. It also sets the ripple origin (`--m3-ripple-x/y/size`) on pointer-down or Enter/Space.
+   - `ButtonBase` — unstyled button behaviour shared by every button-like component: `<button>`, link (`href`, via `useLink`) or toggle (`toggle`, via `useToggleButton`), with `useM3Interaction` applied. `children` may be a function of `{ isSelected }`. Button, IconButton and later FAB / chips render it and only add styling.
+   - `TouchTarget` — 48×48px hit area for small controls, placed in the inner wrapper.
    - State layer + ripple as **background-layer utilities** on the root (no child elements — see §10): `state-layer`, plus `focus-ring` / `focus-ring-inset` (outline). `Surface` (`container` role + `elevation` 0–5 + `shape`) covers elevation; there is no separate `Elevation` component.
    - `Overlay`: portal to `body` that **re-applies the theme attributes of where it was rendered**, so overlays opened inside a `ThemeScope` keep its theme. Dismissal, focus containment and scroll lock come from the React Aria overlay hooks (`useModalOverlay`, `usePopover`, …) used by each component.
    - `useM3Morph` (shape-library morph driven by Motion `useTransform`)
@@ -224,7 +226,13 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
   - **Toggle shape:** selected round buttons become square, as Compose does. Selected square buttons become round, which follows m3.material.io; Compose only ships round toggles. Text buttons have no toggle form, which the types enforce.
   - **Disabled:** container `on-surface` 10% and content `on-surface-variant` 38% for every variant (the Expressive token files). Compose's older `FilledTonalButtonTokens` (12%, `on-surface`) are not used.
   - **Touch targets:** XS and S get a 48px `TouchTarget` inside the library-owned inner wrapper. Layout height stays 32 / 40px.
-- **IconButton**: same `variant`/`size`/`shape`/`toggle`, plus `width` = `narrow | default | wide`.
+- **IconButton** (built): `variant` = `standard | filled | tonal | outlined` (Compose's icon button variants: no elevated or text); same `size` / `shape` / `toggle`, plus `width` = `narrow | default | wide`, `icon`, an optional `selectedIcon` for toggles, and `href`.
+  - **Name required by the types:** either `aria-label` or `aria-labelledby`.
+  - **Width** = icon size + leading + trailing space. Compose's `Uniform` option is the default width, which resolves the `LargeIconButtonTokens` naming gap. In px (narrow / default / wide): XS 28/32/40, S 32/40/52, M 48/56/72, L 64/96/128, XL 104/136/184. Icons are 20/24/24/32/40px.
+  - **Colour:** standard and outlined icon buttons **inherit the surrounding text colour**, like Compose's `LocalContentColor`. The outlined border is drawn in that colour, and disabled is that colour at 38%. Filled and tonal use their tokens, with disabled container `on-surface` 10% and icon `on-surface` 38%. Compose's "vibrant" colours (token `on-surface-variant` / `outline-variant`, used by toolbars) are left for the Toolbar work.
+  - **Selected toggles:** standard turns `primary`, filled `primary`/`on-primary` (unselected `surface-container`), tonal `secondary`/`on-secondary`, and outlined `inverse-surface`/`inverse-on-surface` with no border. Shape swaps round ↔ square (Compose tokens). Every icon button morph, toggles included, uses the non-bouncing effects spring, as Compose does.
+  - Reads `size` / `shape` / `disabled` from `ButtonContext`, but not `variant`, because the variant sets differ.
+- **Colour note:** the 2025 colour spec makes `inverse-on-surface` noticeably muted (baseline light `#a09ba1` on `#0f0d12`, about 7:1 contrast). Selected outlined buttons and icon buttons look greyer than the 2021 palette did. That's correct, not a bug.
 - **Button group**: `variant` = `standard | connected`; shares `size`/`shape` via context; neighbours react to a pressed button (Expressive width interaction). Connected group replaces the deprecated segmented button.
 - **FAB**: `size` = `default | medium | large` (small FAB deprecated); colours per spec; **Extended FAB** `size` = `sm | md | lg`.
 
@@ -350,7 +358,7 @@ Build order: Foundations (token source, 6 themes × modes × contrast, motion sc
   | standard | 0.9 / 1400 | 0.9 / 700 | 0.9 / 300 | 1.0 / 3800 · 1600 · 800 |
 
   Overshoot: expressive spatial 9.5% fast, 1.5% default/slow; standard spatial 0.15%; effects 0%. This matches §6.
-- Open spec gaps: `FabMediumTokens` / `ExtendedFabMediumTokens` have `ContainerShape` commented out in Compose (comment says `CornerLargeIncreased`, 20px). `LargeIconButtonTokens` has `Uniform` spacing instead of `Default`. Confirm both against m3.material.io before building FAB / IconButton.
+- Open spec gaps: `FabMediumTokens` / `ExtendedFabMediumTokens` have `ContainerShape` commented out in Compose (comment says `CornerLargeIncreased`, 20px). Confirm against m3.material.io before building FAB. (The `LargeIconButtonTokens` `Uniform` question is resolved: it is the default width, see §9.)
 - `@vkieu` npm scope must be owned before publishing.
 
 ### Remaining Foundations work
