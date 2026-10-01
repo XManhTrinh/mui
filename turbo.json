@@ -1,22 +1,25 @@
 {
-  "$schema": "https://turborepo.com/schema.json",
+  "$schema": "https://turborepo.dev/schema.json",
   "tasks": {
     "generate": {
-      "inputs": ["src/tokens/**", "scripts/**"],
-      "outputs": ["src/styles/generated/**"]
+      "inputs": ["src/tokens/**", "src/theme/css.ts", "src/theme/scheme.ts", "scripts/**"],
+      "outputs": ["src/styles/generated/*.css"]
     },
     "build": {
       "dependsOn": ["^build", "generate"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "storybook-static/**"]
     },
     "typecheck": {
-      "dependsOn": ["^build", "generate"]
+      "dependsOn": ["^build", "generate"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/tsconfig.base.json"]
     },
     "lint": {
-      "dependsOn": ["generate"]
+      "dependsOn": ["generate"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/eslint.config.js"]
     },
     "test": {
       "dependsOn": ["^build", "generate"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/tsconfig.base.json"],
       "outputs": ["coverage/**"]
     },
     "dev": {
