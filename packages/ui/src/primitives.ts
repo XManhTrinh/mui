@@ -12,6 +12,7 @@ export {
   type SurfaceVariants,
 } from './primitives/Surface';
 export { Overlay, type OverlayProps } from './primitives/Overlay';
+export { TouchTarget, type TouchTargetProps } from './primitives/TouchTarget';
 export {
   CharacterCounter,
   ErrorText,
