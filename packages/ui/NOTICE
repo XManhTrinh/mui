@@ -1,0 +1,11 @@
+@vkieu/mui
+Copyright (c) 2026 the @vkieu/mui authors. Licensed under the MIT License.
+
+This package bundles @material/material-color-utilities
+(https://github.com/material-foundation/material-color-utilities),
+Copyright 2021 Google LLC, licensed under the Apache License, Version 2.0
+(https://www.apache.org/licenses/LICENSE-2.0).
+
+Design tokens are derived from Jetpack Compose Material 3
+(https://android.googlesource.com/platform/frameworks/support), Copyright The
+Android Open Source Project, licensed under the Apache License, Version 2.0.

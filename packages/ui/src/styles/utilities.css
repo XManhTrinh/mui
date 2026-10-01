@@ -1,0 +1,136 @@
+/*
+ * Interaction utilities. State layers and ripples are painted as background layers
+ * on the element itself, so they follow its border-radius and never depend on the
+ * element's position, overflow or transform (architecture §10).
+ */
+
+@property --m3-state-opacity {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --m3-ripple-opacity {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --m3-ripple-radius {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+/* `dark:` follows `data-mode`, including `system`. */
+@custom-variant dark {
+  &:where([data-mode='dark'], [data-mode='dark'] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where([data-mode='system'], [data-mode='system'] *) {
+      @slot;
+    }
+  }
+}
+
+/* `motion-standard:` applies under the standard motion scheme or reduced motion. */
+@custom-variant motion-standard {
+  &:where([data-motion='standard'], [data-motion='standard'] *) {
+    @slot;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    @slot;
+  }
+}
+
+/*
+ * M3 state layer + ripple. The layer colour defaults to the element's content colour
+ * (`currentColor`); override it with `--m3-state-layer-color`. Pair with
+ * `useM3Interaction`, which sets the `data-*` attributes and the ripple origin.
+ */
+@utility state-layer {
+  --m3-state-opacity: 0;
+  --m3-ripple-opacity: 0;
+  --m3-ripple-radius: 0px;
+  background-image:
+    radial-gradient(
+      circle at var(--m3-ripple-x, 50%) var(--m3-ripple-y, 50%),
+      color-mix(
+          in srgb,
+          var(--m3-state-layer-color, currentColor) calc(var(--m3-ripple-opacity) * 100%),
+          transparent
+        )
+        var(--m3-ripple-radius),
+      transparent var(--m3-ripple-radius)
+    ),
+    linear-gradient(
+      color-mix(
+        in srgb,
+        var(--m3-state-layer-color, currentColor) calc(var(--m3-state-opacity) * 100%),
+        transparent
+      ),
+      color-mix(
+        in srgb,
+        var(--m3-state-layer-color, currentColor) calc(var(--m3-state-opacity) * 100%),
+        transparent
+      )
+    );
+  /* On release: fade the ripple, then collapse it once it is invisible. */
+  transition-property: --m3-state-opacity, --m3-ripple-opacity, --m3-ripple-radius;
+  transition-duration:
+    var(--md-sys-motion-spring-effects-fast-duration),
+    var(--md-sys-motion-spring-effects-slow-duration), 0s;
+  transition-delay: 0s, 0s, var(--md-sys-motion-spring-effects-slow-duration);
+  transition-timing-function:
+    var(--md-sys-motion-spring-effects-fast-easing),
+    var(--md-sys-motion-spring-effects-slow-easing), linear;
+
+  &[data-hovered] {
+    --m3-state-opacity: var(--md-sys-state-hover-state-layer-opacity);
+  }
+  &[data-focus-visible] {
+    --m3-state-opacity: var(--md-sys-state-focus-state-layer-opacity);
+  }
+  &[data-dragged] {
+    --m3-state-opacity: var(--md-sys-state-dragged-state-layer-opacity);
+  }
+  /* On press: show the ripple at once and grow it from the press point. */
+  &[data-pressed] {
+    --m3-ripple-opacity: var(--md-sys-state-pressed-state-layer-opacity);
+    --m3-ripple-radius: var(--m3-ripple-size, 0px);
+    transition-duration:
+      var(--md-sys-motion-spring-effects-fast-duration), 0s, var(--md-sys-motion-duration-medium-2);
+    transition-delay: 0s;
+    transition-timing-function:
+      var(--md-sys-motion-spring-effects-fast-easing), linear,
+      var(--md-sys-motion-easing-standard-decelerate);
+  }
+  &[data-disabled] {
+    --m3-state-opacity: 0;
+    --m3-ripple-opacity: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &[data-pressed] {
+      transition-duration: var(--md-sys-motion-spring-effects-fast-duration), 0s, 0s;
+    }
+  }
+}
+
+/* M3 focus indicator: an outline, so clipping ancestors and `overflow-hidden` never hide it. */
+@utility focus-ring {
+  outline: none;
+  &[data-focus-visible] {
+    outline: var(--md-sys-focus-indicator-thickness) solid var(--md-sys-color-secondary);
+    outline-offset: var(--md-sys-focus-indicator-offset);
+  }
+}
+
+/* Same indicator drawn inside the element, for full-bleed items such as list rows. */
+@utility focus-ring-inset {
+  outline: none;
+  &[data-focus-visible] {
+    outline: var(--md-sys-focus-indicator-thickness) solid var(--md-sys-color-secondary);
+    outline-offset: calc(var(--md-sys-focus-indicator-thickness) * -1);
+  }
+}
