@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 3 in progress** (Toolbars, top app bars, search built) · Last updated: 2026-10-03 (rev. 29 — search)
+Status: **Tier 3 in progress** (Toolbars, top app bars, search, badges, dividers built) · Last updated: 2026-10-03 (rev. 30 — badges and dividers)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -523,6 +523,13 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 - **Keyboard and expansion** follow Compose's input field: a press, typing (the query getting longer) or ↓ expands the bar; Tab focus alone doesn't. In the expanded view ↓ moves focus to the first focusable element of the content (Compose moves focus down); Escape or a press outside collapses it.
 - **Deviations / not in v1:** no predictive back, no contained full-screen variant (`ExpandedFullScreenContainedSearchBar`), and the docked view without a gap isn't offered. The content is any node; with Lists built, the suggestion list is composed from them.
 
+### Badges and dividers (built, Tier 3)
+- `Badge`: no children = Compose's small 6px dot; children = the large badge (at least 16px, full corners, 4px side padding, `label-small`), both `error` / `on-error` (`BadgeTokens`). Give the anchor an accessible name that includes the badge's meaning ("Inbox, 3 new").
+- `BadgedBox` (`badge`, anchor as `children`) places it like Compose's `BadgedBox`: a small badge starts 6px inside the anchor's end with its top on the anchor's top; a large one starts 12px inside the end with its bottom 14px below the anchor's top (so it hangs 2px above and past the end).
+  - **No positioning:** the anchor and a zero-size box share one grid cell; the box sits at `margin-inline-start: calc(100% − offset)` and bottom-aligns the badge (flex `items-end`), so the badge overflows it without changing the anchor's size, and mirrors in RTL. Compose's badge rulers (clamping to an outer bound) aren't ported.
+  - A bare SVG anchor gets Compose's default 24px icon size; other sizes go in a sized wrapper.
+- `Divider`: `orientation` = `horizontal | vertical`, `inset` = `none | start | middle` (16px at the start or both ends, from m3.material.io; Compose leaves insets to padding), `decorative` (role `none`). 1px of `outline-variant` (`DividerTokens`), drawn as the background clipped to the content box so insets are padding and the root keeps no margins. It is a `div` with `role="separator"`, since an `<hr>` can't take a vertical orientation.
+
 ## 10. Layout safety (consumer positioning never breaks a component)
 
 **Principle:** a component's internal visuals never depend on the root element's `position`, `overflow`, `display` or `transform`. Consumers may put any layout class on any component — e.g. `<Button className="fixed bottom-4 right-4">` — and it must look and behave the same.
@@ -614,7 +621,7 @@ apps/next-playground   # Next.js App Router + Pages Router test app, Playwright 
 
 - **Tier 1**: Button, IconButton, **Button group** (standard + connected), FAB + Extended FAB, Card, TextField, Checkbox, Radio, Switch, Dialog, Menu (Expressive: standard + vibrant colours, grouped items with gaps, selected state)
 - **Tier 2**: Split button (built), **FAB menu** (built), Chips (built), Tabs (built), **Navigation rail** (collapsed / expanded / modal expanded, built), **Flexible navigation bar** (built), Snackbar (built), Tooltip (built), **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator; built)
-- **Tier 3**: **Toolbars** (floating + docked; built), Flexible app bars (built) + search app bar (built), Slider (XS–XL, vertical, centred, range, inset icons), Expressive lists (segmented/grouped), Carousel (incl. vertical), Bottom/side sheets, Date & time pickers, Badges, Dividers, Search (built)
+- **Tier 3**: **Toolbars** (floating + docked; built), Flexible app bars (built) + search app bar (built), Slider (XS–XL, vertical, centred, range, inset icons), Expressive lists (segmented/grouped), Carousel (incl. vertical), Bottom/side sheets, Date & time pickers, Badges (built), Dividers (built), Search (built)
 
 Build order: Foundations (token source, 6 themes × modes × contrast, motion schemes, ThemeProvider, `cn`, primitives) → Tier 1 → Tier 2 → Tier 3.
 
