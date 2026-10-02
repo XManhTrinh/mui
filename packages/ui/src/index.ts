@@ -87,6 +87,14 @@ export {
   type FabStyleProps,
 } from './components/fab/fab-styles';
 export {
+  Tab,
+  Tabs,
+  type TabProps,
+  type TabsClassNames,
+  type TabsProps,
+} from './components/tabs/Tabs';
+export { tabsStyles, type TabsStyleProps, type TabsVariant } from './components/tabs/tabs-styles';
+export {
   AssistChip,
   FilterChip,
   InputChip,
