@@ -42,7 +42,7 @@ export const tabsStyles = tv({
     icon: 'inline-flex size-[24px] shrink-0 items-center justify-center [&>svg]:size-full',
     label: 'line-clamp-2 text-center',
     indicator: [
-      'pointer-events-none col-start-1 row-start-1 h-[3px] self-end [justify-self:left] bg-primary opacity-0 data-ready:opacity-100',
+      'pointer-events-none row-start-1 h-[3px] self-end [justify-self:left] bg-primary opacity-0 data-ready:opacity-100',
       '[transition-property:translate,width]',
       '[transition-duration:var(--md-sys-motion-spring-spatial-default-duration)]',
       '[transition-timing-function:var(--md-sys-motion-spring-spatial-default-easing)]',

@@ -152,9 +152,12 @@ function TabsInner(props: Omit<TabsProps, 'className' | 'style' | 'ref'>) {
             aria-hidden="true"
             data-ready={indicator ? '' : undefined}
             className={styles.indicator({ class: classNames?.indicator })}
-            style={
-              indicator ? { width: indicator.width, translate: `${indicator.x}px 0` } : undefined
-            }
+            style={{
+              // Span every column so the indicator's origin is the row's left edge in both
+              // directions; translate then positions it.
+              gridColumn: `1 / span ${Math.max(items.length, 1)}`,
+              ...(indicator && { width: indicator.width, translate: `${indicator.x}px 0` }),
+            }}
           />
         </div>
       </div>
