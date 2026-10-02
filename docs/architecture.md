@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 2 in progress** (Loading indicator, FAB menu built) · Last updated: 2026-10-02 (rev. 18 — FAB menu)
+Status: **Tier 2 in progress** (Loading indicator, FAB menu, Split button built) · Last updated: 2026-10-02 (rev. 19 — Split button)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -71,7 +71,6 @@ Four layers. **Dependencies only point downward**, enforced by `eslint-plugin-bo
 3. **Components** — Button, IconButton, FAB, Card, TextField, Checkbox, Radio, Switch… assembled from primitives.
 4. **Composites** — built **only from public components** (dogfooding the public API):
    - Button group (connected) = Buttons / IconButtons + group context
-   - SplitButton = Button group + Button + IconButton + Menu
    - Navigation rail (modal expanded) = Overlay + rail items
    - Select / Combobox reuse `Field` parts + Menu list
 
@@ -335,6 +334,19 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 - **Focus fix:** a menu opens on pointer down and takes focus. React Aria then hides the rest of the page, trigger included, from assistive tech. The browser's follow-up `mousedown` on the trigger would then drop focus on `<body>`, so Escape did nothing. `MenuTrigger` cancels the trigger's `mousedown`; React Aria has already focused it on pointer down. A browser test asserts focus is inside the menu after a mouse open.
 - **Not in v1:** submenus, and the ButtonGroup overflow menu (now unblocked).
 
+### Split button (built, Tier 2; a component, not a composite)
+- `SplitButton`: a leading action (`children` label, `leadingIcon`, `onPress` or `href`) and a trailing button that opens `menu` (a `<Menu>` element, through `MenuTrigger`). Props: `variant` = `filled | tonal | outlined | elevated` (Compose has no text split button), `size` = `xs`–`xl`, `menuLabel` (the trailing button's required name), `open` / `defaultOpen` / `onOpenChange`, `disabled` (both halves), `menuIcon`.
+- **Values** (Compose `SplitButton.kt`, `SplitButton{XSmall…XLarge}Tokens`):
+  - Geometry: two buttons 2px apart, each at least 48px wide, with full outer corners.
+  - Inner corners are 4 / 4 / 4 / 8 / 12px and press to 8 / 12 / 12 / 20 / 20px. Compose's code uses only the pressed corners; the hovered tokens are unused.
+  - Padding: leading 12/10, 16/12, 24, 48 and 64px; trailing 13, 13, 15, 29 and 43px, with a 22 / 22 / 26 / 38 / 50px icon.
+  - Colours and elevation: Button's, shared through `buttonVariantClasses`.
+- **Menu open (Compose `checked`):** the trailing button becomes a circle with a persistent 10% layer of its content colour. It's an `inset-shadow`, so it composes with elevation shadows.
+  - The chevron turns over on the effects default spring, as Compose's sample does with a default no-bounce spring.
+  - The trailing icon is **optically centred** like Compose's `horizontalCenterOptically`: shifted by 0.11 × (start − end corner), rounded. That's −1 / −2 / −3 / −4 / −6px at rest, −1 / −1 / −2 / −3 / −5px pressed, and 0 when round. It's a logical `inset-inline-start` that animates with the corners.
+- **Label type:** follows the Button scale per size. Compose's split button provides `label-large` at every size and leaves larger text to the caller.
+- **Component layer:** the per-size asymmetric corners, pressed shapes and optical offset aren't expressible through the public `Button` / `IconButton`, so the halves use `ButtonBase`. The leading half is shielded from the menu's `TriggerContext`. React Aria names the menu after its trigger.
+
 ### FAB menu (built, Tier 2; a component, not a composite)
 - `FabMenu` with `FabMenuItem` children: `open` / `defaultOpen` / `onOpenChange`, `icon` and an optional `openIcon` (usually add / close), `size` = `default | medium | large` (the FAB the button starts as), `color` = `primary | secondary | tertiary`, and `align` = `start | center | end` (logical). The button's name (`aria-label` / `aria-labelledby`) is required by the types. Items take `icon`, a label and `onPress` or `href`. Position the menu with `className` (`fixed end-4 bottom-4`); the items open upwards.
 - **No shape morph:** Compose's FAB menu doesn't use the shape library. Earlier revisions of this doc assumed it did; the Loading indicator was the only Tier 2 consumer.
@@ -458,7 +470,7 @@ apps/next-playground   # Next.js App Router + Pages Router test app, Playwright 
 ## 15. Component roadmap (M3 Expressive set)
 
 - **Tier 1**: Button, IconButton, **Button group** (standard + connected), FAB + Extended FAB, Card, TextField, Checkbox, Radio, Switch, Dialog, Menu (Expressive: standard + vibrant colours, grouped items with gaps, selected state)
-- **Tier 2**: Split button, **FAB menu** (built), Chips, Tabs, **Navigation rail** (collapsed / expanded / modal expanded), **Flexible navigation bar**, Snackbar, Tooltip, **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator)
+- **Tier 2**: Split button (built), **FAB menu** (built), Chips, Tabs, **Navigation rail** (collapsed / expanded / modal expanded), **Flexible navigation bar**, Snackbar, Tooltip, **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator)
 - **Tier 3**: **Toolbars** (floating + docked), Flexible app bars + search app bar, Slider (XS–XL, vertical, centred, range, inset icons), Expressive lists (segmented/grouped), Carousel (incl. vertical), Bottom/side sheets, Date & time pickers, Badges, Dividers, Search
 
 Build order: Foundations (token source, 6 themes × modes × contrast, motion schemes, ThemeProvider, `cn`, primitives) → Tier 1 → Tier 2 → Tier 3.
