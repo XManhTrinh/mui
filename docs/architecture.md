@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 3 in progress** (Toolbars, top app bars, search, badges, dividers, lists built) · Last updated: 2026-10-03 (rev. 31 — lists)
+Status: **Tier 3 in progress** (Toolbars, top app bars, search, badges, dividers, lists, sliders built) · Last updated: 2026-10-03 (rev. 32 — sliders)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -540,6 +540,16 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
   - **Shapes:** Compose's precedence is pressed, then selected or focused (all 16px), then hovered (12px), else 4px. They're computed into one `data-shape` (`rest | hovered | active`), so no two rules compete, and morph on the fast spatial spring while colours change on the default effects spring. Segmented lists are 2px apart and round the outer corners of the first and last items to 16px at rest (`data-position`), as `segmentedShapes` does. Static items in a standard list have no corners.
 - **Not in v1:** drag-to-reorder (`ReorderListTokens`), swipe-to-reveal, expandable items, and leading video/image size presets (consumers size their media).
 
+### Sliders (built, Tier 3)
+- `Slider` (`value` / `defaultValue` / `onChange` / `onChangeEnd`, `centered`, `startIcon`, `endIcon`) and `RangeSlider` (`[start, end]`, `thumbLabels`), sharing `size` = `xs | sm | md | lg | xl`, `orientation`, `minValue` / `maxValue` / `step` (React Aria's 0–100 by 1), `ticks`, `disabled`, `showValueLabel`, `formatOptions` and `name`. Built on React Aria `useSlider` / `useSliderThumb` (hidden range inputs, arrows, Page Up / Down, Home / End), following the DOM direction via `DomDirectionLocale`. A name is required by the types.
+- **Sizes:** Compose's code ships one size (16px track, 44px handle). The Expressive sizes come from the M3 token values in Material Components Android (`m3_comp_slider_{xsmall…xlarge}_*`), generated from the same token database: track 16 / 24 / 40 / 56 / 96px, corner 8 / 8 / 12 / 16 / 28px, handle 44 / 44 / 44 / 68 / 108px, inset icons 24 / 24 / 32px (md, lg, xl). **The medium handle is 44px** (an earlier assumption of 52px was wrong).
+- **Values** (Compose `Slider.kt`, `SliderTokens`): active track and handle `primary`, inactive track `secondary-container`; a 4px handle that narrows to 2px while pressed, dragged or focused; a 6px gap each side (10px while keyboard-focused, Compose's inset focus ring padding); 2px inside corners; 4px `primary` stop indicators a corner's length from the ends; ticks `secondary-container` on the active track and `primary` on the inactive one. Disabled: active `on-surface` 38%, inactive 12%, handle `on-surface` 38% over `surface`.
+- **Track drawing** ports `SliderDefaults.drawTrack` and `SliderImpl`'s placement as CSS length expressions (`slider-geometry.ts`, unit-tested): discrete values sit between the corners (except at the ends); segments draw only past Compose's thresholds, done with `min(len, max(0, (len − threshold) × 10⁴))`; the centred track leaves a plain 6px gap at the centre; range and centred tracks have stops at both ends; ticks under a thumb, at the centre, or replaced by a stop are left out. Because it is all CSS on the custom properties, the first server render is exact and resizing needs no measuring.
+- **Layout:** the track is one grid cell; segments, ticks, thumbs and the value indicator are placed with logical margins (`margin-inline-start`, `inline-size`), so nothing is positioned (the layout-safety check now ignores visually hidden inputs). A vertical slider writes its track with `writing-mode: vertical-lr` + `direction: rtl`, so the inline axis runs bottom to top and the same geometry and logical radii serve both orientations and RTL. Vertical sliders run bottom to top (Compose's `reverseVerticalDirection = true`) and default to 240px tall; horizontal ones fill the width.
+- **Inset icons** follow MDC (`BaseSlider`): the start icon 10px inside the active track's start, the end icon 10px inside the inactive track's end (replacing the stop indicator), each shown only when its segment fits it plus 20px; `on-primary` / `on-secondary-container`. MDC's other two positions (active end, inactive start) aren't offered.
+- **Value indicator** (`showValueLabel`): while dragging or keyboard-focused, a 44px `inverse-surface` pill with `label-large` `inverse-on-surface` text, 12px above the handle (left of a vertical one), from `ValueIndicator*` tokens. Compose's default slider has none.
+- **Deviations:** pressing the track maps linearly to the value (React Aria) while discrete thumbs are drawn between the corners, so a press near the ends of a discrete track can land one step off Compose; no haptics.
+
 ## 10. Layout safety (consumer positioning never breaks a component)
 
 **Principle:** a component's internal visuals never depend on the root element's `position`, `overflow`, `display` or `transform`. Consumers may put any layout class on any component — e.g. `<Button className="fixed bottom-4 right-4">` — and it must look and behave the same.
@@ -631,7 +641,7 @@ apps/next-playground   # Next.js App Router + Pages Router test app, Playwright 
 
 - **Tier 1**: Button, IconButton, **Button group** (standard + connected), FAB + Extended FAB, Card, TextField, Checkbox, Radio, Switch, Dialog, Menu (Expressive: standard + vibrant colours, grouped items with gaps, selected state)
 - **Tier 2**: Split button (built), **FAB menu** (built), Chips (built), Tabs (built), **Navigation rail** (collapsed / expanded / modal expanded, built), **Flexible navigation bar** (built), Snackbar (built), Tooltip (built), **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator; built)
-- **Tier 3**: **Toolbars** (floating + docked; built), Flexible app bars (built) + search app bar (built), Slider (XS–XL, vertical, centred, range, inset icons), Expressive lists (segmented/grouped; built), Carousel (incl. vertical), Bottom/side sheets, Date & time pickers, Badges (built), Dividers (built), Search (built)
+- **Tier 3**: **Toolbars** (floating + docked; built), Flexible app bars (built) + search app bar (built), Slider (XS–XL, vertical, centred, range, inset icons; built), Expressive lists (segmented/grouped; built), Carousel (incl. vertical), Bottom/side sheets, Date & time pickers, Badges (built), Dividers (built), Search (built)
 
 Build order: Foundations (token source, 6 themes × modes × contrast, motion schemes, ThemeProvider, `cn`, primitives) → Tier 1 → Tier 2 → Tier 3.
 
