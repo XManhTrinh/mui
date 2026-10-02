@@ -41,3 +41,24 @@ export {
 export { selectionControlStyles } from './primitives/selection-control-styles';
 export { TriggerContext, type TriggerContextValue } from './primitives/TriggerContext';
 export { usePresence } from './primitives/use-presence';
+export {
+  getMorph,
+  morphPathAt,
+  useM3Morph,
+  type M3MorphOptions,
+  type MorphShape,
+} from './primitives/use-m3-morph';
+
+// Shape library (port of androidx.graphics.shapes + Compose MaterialShapes)
+export { CornerRounding } from './shapes/corner-rounding';
+export { Cubic } from './shapes/cubic';
+export {
+  MaterialShapes,
+  materialShapeNames,
+  type MaterialShapeName,
+} from './shapes/material-shapes';
+export { Morph } from './shapes/morph';
+export { morphToPath, polygonToPath, type MorphPathOptions, type PathOptions } from './shapes/path';
+export type { PointTransformer } from './shapes/point';
+export { RoundedPolygon } from './shapes/rounded-polygon';
+export { circle, pill, pillStar, rectangle, star } from './shapes/shapes';
