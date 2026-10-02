@@ -5,9 +5,12 @@ import { fileURLToPath } from 'node:url';
 const stylesDir = fileURLToPath(new URL('../src/styles/', import.meta.url));
 
 /** Splits slot outputs into individual classes. */
-export function collectClasses(outputs: Iterable<string>): string[] {
+export function collectClasses(outputs: Iterable<string | undefined>): string[] {
   const classes = new Set<string>();
-  for (const output of outputs) for (const c of output.split(/\s+/)) if (c) classes.add(c);
+  for (const output of outputs) {
+    if (typeof output !== 'string') continue;
+    for (const c of output.split(/\s+/)) if (c) classes.add(c);
+  }
   return [...classes];
 }
 

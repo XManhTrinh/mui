@@ -93,3 +93,13 @@ export {
   type CardStaticProps,
 } from './components/card/Card';
 export { cardStyles, type CardStyleProps, type CardVariant } from './components/card/card-styles';
+export {
+  TextField,
+  type TextFieldClassNames,
+  type TextFieldProps,
+} from './components/text-field/TextField';
+export {
+  textFieldStyles,
+  type TextFieldStyleProps,
+  type TextFieldVariant,
+} from './components/text-field/text-field-styles';
