@@ -63,7 +63,8 @@ export const listStyles = tv({
   },
   variants: {
     variant: {
-      standard: { item: 'bg-surface' },
+      // Standard items take their container's colour (a sheet, a card); see the doc note.
+      standard: { item: 'bg-transparent' },
       segmented: { root: 'gap-[2px]', item: 'bg-surface' },
     },
     interactive: {

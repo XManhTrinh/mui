@@ -379,3 +379,19 @@ export {
   type SliderSize,
   type SliderStyleProps,
 } from './components/slider/slider-styles';
+export { SheetTrigger, type SheetTriggerProps } from './components/sheet/SheetTrigger';
+export {
+  BottomSheet,
+  type BottomSheetClassNames,
+  type BottomSheetProps,
+} from './components/sheet/BottomSheet';
+export {
+  SideSheet,
+  type SideSheetClassNames,
+  type SideSheetProps,
+} from './components/sheet/SideSheet';
+export {
+  bottomSheetStyles,
+  sideSheetStyles,
+  type SideSheetStyleProps,
+} from './components/sheet/sheet-styles';

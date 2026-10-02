@@ -36,7 +36,7 @@ describe('List (static)', () => {
       'pt-[10px]',
       'pb-[10px]',
       'min-h-[56px]',
-      'bg-surface',
+      'bg-transparent',
     );
     expect(two).toHaveClass('min-h-[72px]', 'items-center');
     expect(three).toHaveClass('min-h-[88px]', 'items-start');
