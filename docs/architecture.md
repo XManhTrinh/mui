@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 2 in progress** (Loading indicator, FAB menu, Split button, Chips, Tabs, Navigation rail + bar built) · Last updated: 2026-10-02 (rev. 22 — Navigation)
+Status: **Tier 2 in progress** (Loading indicator, FAB menu, Split button, Chips, Tabs, Navigation rail + bar, Snackbar built) · Last updated: 2026-10-02 (rev. 23 — Snackbar)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -333,6 +333,21 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 - **Focus fix:** a menu opens on pointer down and takes focus. React Aria then hides the rest of the page, trigger included, from assistive tech. The browser's follow-up `mousedown` on the trigger would then drop focus on `<body>`, so Escape did nothing. `MenuTrigger` cancels the trigger's `mousedown`; React Aria has already focused it on pointer down. A browser test asserts focus is inside the menu after a mouse open.
 - **Not in v1:** submenus, and the ButtonGroup overflow menu (now unblocked).
 
+### Snackbar (built, Tier 2)
+- `Snackbar`: the message as `children`, `actionLabel` + `onAction`, `onDismiss` (shows the × button; Escape inside it also dismisses), `dismissLabel`, `actionOnNewLine`.
+- `SnackbarHostState` (from `useSnackbarHostState()`) ports Compose's queue. `showSnackbar({ message, actionLabel, withDismissAction, actionOnNewLine, duration })` shows one snackbar at a time and resolves `'action-performed'` or `'dismissed'`. `SnackbarHost` renders it; the consumer positions it with `className`.
+- **Values** (Compose `Snackbar.kt` with its `isSnackbarStylingFixEnabled` layout, `SnackbarHost.kt`, `SnackbarTokens`):
+  - Container: `inverse-surface`, level 3, 4px corners, 48px minimum height, up to 600px wide.
+  - Text and spacing: `body-medium` `inverse-on-surface` with 16px before it and 14px above and below; 8px after the action when there's no dismiss button.
+  - Actions: the action is our text `Button` in `inverse-primary` (a component-to-component dependency); the dismiss is a standard `IconButton`.
+  - On a new line, the actions sit at the end, 4px from the bottom.
+  - The host pads each snackbar by 12px.
+- **Motion and timing:**
+  - Snackbars fade on fast effects and scale from 80% on fast spatial, on a host-owned wrapper (not the snackbar's root). A leaving snackbar stays, `inert`, while the next one appears, both sharing one grid cell.
+  - Durations: short 4s, long 10s, indefinite by default when there's an action (Compose). There's no platform accessibility multiplier.
+  - **Addition:** the timer pauses while the pointer or focus is on the snackbar (WCAG 2.2.1).
+- **Accessibility:** the host is a persistent `aria-live="polite"` region, so new messages are announced. Snackbars don't take focus.
+
 ### Navigation rail and flexible navigation bar (built, Tier 2)
 - `NavigationRail` with `NavigationRailItem`, and `NavigationBar` with `NavigationBarItem`. Items are links (`href`) or buttons (`onPress`) with `icon`, optional `selectedIcon` and a label; `selected` marks the current destination with `aria-current="page"` (`data-current`, since `ButtonBase` owns `data-selected`). Each is a `nav` landmark that needs a name.
 - **Rail** (Compose `WideNavigationRail.kt`):
@@ -517,7 +532,7 @@ apps/next-playground   # Next.js App Router + Pages Router test app, Playwright 
 ## 15. Component roadmap (M3 Expressive set)
 
 - **Tier 1**: Button, IconButton, **Button group** (standard + connected), FAB + Extended FAB, Card, TextField, Checkbox, Radio, Switch, Dialog, Menu (Expressive: standard + vibrant colours, grouped items with gaps, selected state)
-- **Tier 2**: Split button (built), **FAB menu** (built), Chips (built), Tabs (built), **Navigation rail** (collapsed / expanded / modal expanded, built), **Flexible navigation bar** (built), Snackbar, Tooltip, **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator)
+- **Tier 2**: Split button (built), **FAB menu** (built), Chips (built), Tabs (built), **Navigation rail** (collapsed / expanded / modal expanded, built), **Flexible navigation bar** (built), Snackbar (built), Tooltip, **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator)
 - **Tier 3**: **Toolbars** (floating + docked), Flexible app bars + search app bar, Slider (XS–XL, vertical, centred, range, inset icons), Expressive lists (segmented/grouped), Carousel (incl. vertical), Bottom/side sheets, Date & time pickers, Badges, Dividers, Search
 
 Build order: Foundations (token source, 6 themes × modes × contrast, motion schemes, ThemeProvider, `cn`, primitives) → Tier 1 → Tier 2 → Tier 3.
