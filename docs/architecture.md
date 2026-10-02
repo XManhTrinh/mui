@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 1 in progress** (all done except Menu; shape library port pending, see §17) · Last updated: 2026-10-02 (rev. 14 — Dialog)
+Status: **Tier 1 complete**; Tier 2 next (shape library port first, see §17) · Last updated: 2026-10-02 (rev. 15 — Menu)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -320,6 +320,20 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
   - It runs on a library-owned wrapper that rests at `scale: none`, so it isn't a lasting containing block for fixed children.
 - **Moved to the components layer:** the doc listed Dialog as a composite, but its core is the `Overlay` primitive and React Aria hooks, which composites may not import. Consumers' buttons go in `DialogActions`.
 - **Deferred:** full-screen dialogs (compact windows) need the Tier 3 top app bar.
+
+### Menu (built)
+- `MenuTrigger` (trigger + `Menu`, `open` / `defaultOpen` / `onOpenChange`) and `Menu` with `MenuItem` / `MenuGroup` children. These are typed aliases of React Stately's collection `Item` / `Section`, identified by React `key`.
+- **Built on** React Aria `useMenuTrigger`, `usePopover`, `useMenu`, `useMenuItem`, `useMenuSection`. You get `onAction(key)`, `selectionMode` `none | single | multiple` with `selectedKeys` / `onSelectionChange`, `disabledKeys`, arrow keys, typeahead, Escape / outside-press dismissal and focus return.
+- **Item props:** `leadingIcon`, `selectedIcon`, `description` (accessible description), `shortcut` (rendered as `<kbd>`), `trailingIcon`.
+- **Expressive grouped menu** (Compose `Menu.kt`, `MenuDefaults.kt`, Menu / Standard / Vibrant / Segmented tokens):
+  - **Groups:** each `MenuGroup` is its own surface at elevation 2, 2px apart, with 2px / 4px padding. Corners: only 16px; first 16 / 8px; middle 8px; last 8 / 16px. Loose items form implicit groups.
+  - **Items:** at least 44px tall, 112–280px wide, 12px padding, `label-large`, 20px icons with an 8px gap. Corners: first 12 / 4px, middle and only 4px, last 4 / 12px, and 12px when selected, morphing on fast spatial.
+  - **Selection:** selectable menus show a check that expands in (grid `0fr → 1fr`) when the item has no leading icon.
+  - **`variant`:** `standard` is `surface-container-low` with on-surface content and selects with `tertiary-container`. `vibrant` is `tertiary-container` with `on-tertiary-container` content (icons turn `tertiary` on hover, focus and press) and selects with `tertiary`. Disabled is 38%.
+  - **Motion:** scales from 80% and fades in from the anchor side (transform origin follows placement and direction) on fast spatial / fast effects, settling to `scale: none`.
+- **Placement:** `placement` defaults to `bottom start` with no offset. React Aria resolves `start` / `end` from its locale, not the DOM `dir`, so `Menu` converts them to physical sides from the trigger's computed direction (read with `useSyncExternalStore`).
+- **Focus fix:** a menu opens on pointer down and takes focus. React Aria then hides the rest of the page, trigger included, from assistive tech. The browser's follow-up `mousedown` on the trigger would then drop focus on `<body>`, so Escape did nothing. `MenuTrigger` cancels the trigger's `mousedown`; React Aria has already focused it on pointer down. A browser test asserts focus is inside the menu after a mouse open.
+- **Not in v1:** submenus, and the ButtonGroup overflow menu (now unblocked).
 
 ## 10. Layout safety (consumer positioning never breaks a component)
 
