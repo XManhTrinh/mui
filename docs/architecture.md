@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 1 in progress** (Button, IconButton, ButtonGroup and FAB done; shape library port pending, see §17) · Last updated: 2026-10-02 (rev. 10 — FAB)
+Status: **Tier 1 in progress** (Button, IconButton, ButtonGroup, FAB and Card done; shape library port pending, see §17) · Last updated: 2026-10-02 (rev. 11 — Card)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -248,6 +248,17 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
   - **Colour styles:** `primary-container` (default), `secondary-container`, `tertiary-container`, `primary`, `secondary`, `tertiary`, each a role + on-role pair. Compose only ships tokens for the first two; the other four follow m3.material.io's colour styles.
   - **`expanded` (Extended FAB):** collapses to an icon-only square. The label sits in a CSS grid column that transitions between `0fr` and `1fr`, so the FAB's natural width animates without JavaScript or transforms. It expands on the fast spatial + default effects springs and collapses on default spatial + fast effects, as Compose does. The label stays in the accessible name while collapsed.
   - **Deferred:** Compose's show/hide (`animateFloatingActionButton`, scale to 0.2 + fade) scales the whole FAB, which conflicts with §10 rule 4. It needs its own design, likely a wrapper element the consumer positions.
+
+### Card (built)
+- `variant` = `filled | elevated | outlined` (default `filled`, as Compose's `Card`). All have 12px corners and `on-surface` content: filled is `surface-container-highest`, elevated is `surface-container-low` at level 1, outlined is `surface` with a 1px `outline-variant` border.
+- **Clipping:** cards clip content to their corners (`overflow-hidden`, as Compose clips), so media gets rounded edges; `overflow-visible` turns it off. They're `flex flex-col` with no padding, and content sets its own.
+- **Three forms:**
+  - **Static** (`<div>`).
+  - **Pressable** (`onPress`): renders `<div role="button">` through `ButtonBase`'s new `elementType: 'div'`, because a `<button>` may only contain phrasing content and cards hold headings, media and blocks.
+  - **Link** (`href`, `<a>`).
+- **Interactive cards** fill their container's width (`w-full`), get state layers and the focus ring, and should be named with `aria-labelledby` (their headline). In development they warn if they contain buttons, links or fields, since interactive content can't nest; use a static card with its own actions instead.
+- **Elevation and disabled state follow Compose's code:** filled rises 0→1 on hover, elevated 1→2, dragged 3 / 4 / 3. Outlined cards **don't rise on hover**: the code keeps hover, focus and press at the default level although the token says level 1. Disabled colours are Compose's composites, done with `color-mix`: filled `surface-variant` 38% over its container, elevated `surface`, the outlined border `outline` 12% over `surface-container-low`. Content is `on-surface` 38%.
+- No anatomy sub-components (headline, media, actions) in v1. Compose doesn't ship them, and layout utilities cover them.
 
 ## 10. Layout safety (consumer positioning never breaks a component)
 
