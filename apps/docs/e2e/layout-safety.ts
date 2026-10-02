@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Locator, type Page } from '@playwright/test';
 import { openStory } from './story';
 
 const OVERRIDES = [
@@ -20,13 +20,21 @@ export interface LayoutSafetyExpectations {
   width?: number;
   /** Computed top-left corner radius at rest. */
   radius: string;
+  /**
+   * Non-interactive components (no state layer, press or focus) skip those checks; their
+   * story needs no `count`. @default true
+   */
+  interactive?: boolean;
+  /** Extra component-specific checks, run for every combination. */
+  check?: (page: Page, target: Locator) => Promise<void>;
 }
 
 /**
  * Architecture §10 override matrix for a story that renders `data-testid="target"` with a
- * `override` arg and counts presses in `data-testid="count"`. Every consumer layout class,
- * with and without a transformed ancestor, in both directions, must keep the component's
- * size, corners, background state layer, press handling and outline focus ring.
+ * `override` arg and (for interactive components) counts presses in `data-testid="count"`.
+ * Every consumer layout class, with and without a transformed ancestor, in both directions,
+ * must keep the component's size, corners and unpositioned internals, plus, when
+ * interactive, its background state layer, press handling and outline focus ring.
  */
 export function layoutSafetySuite(storyId: string, expected: LayoutSafetyExpectations) {
   for (const override of OVERRIDES) {
@@ -55,10 +63,12 @@ export function layoutSafetySuite(storyId: string, expected: LayoutSafetyExpecta
           if (expected.width !== undefined && override !== 'fullWidth') {
             expect(layout.width).toBe(expected.width);
           }
-          expect(layout.backgroundImage).toContain('linear-gradient');
           expect(layout.radius).toBe(expected.radius);
           expect(layout.positionedDescendants).toBe(0);
+          await expected.check?.(page, target);
+          if (expected.interactive === false) return;
 
+          expect(layout.backgroundImage).toContain('linear-gradient');
           await target.click();
           await expect(page.getByTestId('count')).toHaveText('Pressed 1');
           await page.keyboard.press('Shift+Tab');
