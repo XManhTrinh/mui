@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 1 in progress** (Button, IconButton, ButtonGroup, FAB and Card done; shape library port pending, see §17) · Last updated: 2026-10-02 (rev. 11 — Card)
+Status: **Tier 1 in progress** (Button, IconButton, ButtonGroup, FAB, Card and TextField done; shape library port pending, see §17) · Last updated: 2026-10-02 (rev. 12 — TextField)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -260,6 +260,26 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 - **Elevation and disabled state follow Compose's code:** filled rises 0→1 on hover, elevated 1→2, dragged 3 / 4 / 3. Outlined cards **don't rise on hover**: the code keeps hover, focus and press at the default level although the token says level 1. Disabled colours are Compose's composites, done with `color-mix`: filled `surface-variant` 38% over its container, elevated `surface`, the outlined border `outline` 12% over `surface-container-low`. Content is `on-surface` 38%.
 - No anatomy sub-components (headline, media, actions) in v1. Compose doesn't ship them, and layout utilities cover them.
 
+### TextField (built)
+- `variant` = `filled | outlined`, a floating `label`, `supportingText`, `errorMessage` / `invalid` / `validate` (React Aria `useTextField`), `required` (visual `*`, `aria-required`), `disabled`, `readOnly`, `leadingIcon`, `trailingIcon` (may be an `IconButton`), `prefix`, `suffix`, `maxLength` with a `count/max` counter, and `multiline` (`<textarea>` that grows from `rows` up to `maxRows`, then scrolls). It's controlled or uncontrolled through `value` / `defaultValue` / `onChange(value)`.
+- **Naming:** a `label` **or** `aria-label` / `aria-labelledby` is required by the types.
+- **Where props go:** `ref`, `className`, `style` and `data-*` go on the root; `inputRef` and every other attribute go to the input.
+- **Values from Compose** (`TextFieldImpl.kt` + tokens):
+  - 56px minimum height, 280px default width (`max-w-full`).
+  - 16px padding; next to an icon it drops to 4px, because icons sit in 48px boxes.
+  - Filled with a label: 8px padding, label floated 8px from the top. 4px above supporting text, 2px around affixes.
+  - Filled has `surface-container-highest` with an `on-surface-variant` indicator (2px `primary` on focus). Outlined has a 1px `outline` border, 2px `primary` on focus, and the label centred on the border at 16px inside a notch with 4px padding.
+  - With a leading icon, an outlined label moves from after the icon to 16px when it floats, while a filled label stays aligned with the text.
+  - Hovered labels stay `on-surface-variant` on filled fields and darken to `on-surface` on outlined ones. Error-hover switches to `on-error-container`.
+  - The label floats on the fast spatial spring and recolours on fast effects.
+- **One state:** colours follow a single computed `data-field-state` (`disabled > error-focus > error-hover > error > focus > hover > rest`), so the styles of each part never compete on CSS order. `data-focused` / `data-hovered` / `data-invalid` / `data-disabled` / `data-floated` are exposed too.
+- **Floating label:** an absolutely positioned `<label>` that transitions `top`, `inset-inline-start` and the type-scale properties, so it needs no transforms and mirrors in RTL. It also floats for browser autofill (`:has(:autofill)`), since autofilled values are hidden from JavaScript until the user interacts.
+- **Outlined notch:** a hidden `fieldset`/`legend` carrying the label text, so the gap matches the label exactly. The outline is shifted up 8px only when there is a label.
+- **Errors:** the error message replaces the supporting text visually, but the supporting text stays in the accessible description (`sr-only`).
+- With a label, the placeholder, prefix and suffix appear only once the label floats (Compose).
+- Pressing the container focuses the input (not when pressing an icon button).
+- **Not in v1:** composable TextField parts (the doc's "two API levels"); only the batteries-included form is exported, built from the Field primitives.
+
 ## 10. Layout safety (consumer positioning never breaks a component)
 
 **Principle:** a component's internal visuals never depend on the root element's `position`, `overflow`, `display` or `transform`. Consumers may put any layout class on any component — e.g. `<Button className="fixed bottom-4 right-4">` — and it must look and behave the same.
@@ -341,6 +361,8 @@ apps/next-playground   # Next.js App Router + Pages Router test app, Playwright 
   - Screenshots are taken against the static Storybook build (`pnpm test:e2e`), with the font loaded locally (`@fontsource-variable/roboto-flex`) so results don't depend on the network.
   - Baselines are platform-specific (`*-darwin.png` today). CI has to render them in a pinned container image and commit that platform's baselines.
   - Every class a `tv` recipe can emit is checked to appear literally in its source and to compile in Tailwind. A class assembled at runtime would never be generated.
+  - **Screenshot tolerance:** `maxDiffPixelRatio` is 0.0002 (0.02%). At 0.2%, a moved hairline (FAB collapse width, TextField outline offset) still matched an outdated baseline. Re-baseline deliberately after visual changes and review the images.
+  - **Storybook server:** the static build is served with `sirv --dev`, which reads files per request, so a server reused across rebuilds never returns 404s for new asset hashes.
 - Layout-safety override matrix (§10)
 - Next playground build + Playwright in CI
 - Changesets for versioning/changelog
