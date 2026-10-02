@@ -19,6 +19,7 @@ import {
 import { useControlledState } from 'react-stately/useControlledState';
 import { CharacterCounter, ErrorText, FieldLabel, SupportingText } from '../../primitives/Field';
 import { cn } from '../../utils/cn';
+import { splitDataAttributes } from '../../utils/split-data-attributes';
 import { textFieldStyles, type TextFieldVariant } from './text-field-styles';
 
 export interface TextFieldClassNames {
@@ -142,11 +143,7 @@ export function TextField(props: TextFieldProps) {
 
   // `data-*` attributes describe the component, so they go on the root with `className`;
   // everything else (ARIA, input attributes, events) goes to the input via React Aria.
-  const rootData: Record<string, unknown> = {};
-  const ariaProps: Record<string, unknown> = {};
-  for (const [key, propValue] of Object.entries(otherProps)) {
-    (key.startsWith('data-') ? rootData : ariaProps)[key] = propValue;
-  }
+  const { data: rootData, rest: ariaProps } = splitDataAttributes(otherProps);
 
   const [value, setValue] = useControlledState(valueProp, defaultValue ?? '', onChange);
   const domInputRef = useObjectRef(inputRef as Ref<HTMLInputElement>);
@@ -209,7 +206,7 @@ export function TextField(props: TextFieldProps) {
       ? errorMessage({ isInvalid, validationErrors, validationDetails })
       : (errorMessage ?? validationErrors.join(' '));
   const showError = isInvalid && Boolean(resolvedError);
-  const maxLength = (ariaProps as { maxLength?: number }).maxLength;
+  const maxLength = ariaProps.maxLength;
   const showCounter = maxLength !== undefined && showCharacterCount !== false;
 
   const styles = textFieldStyles({
