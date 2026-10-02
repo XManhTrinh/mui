@@ -87,6 +87,24 @@ export {
   type FabStyleProps,
 } from './components/fab/fab-styles';
 export {
+  RichTooltip,
+  RichTooltipTrigger,
+  Tooltip,
+  TooltipTrigger,
+  type RichTooltipClassNames,
+  type RichTooltipProps,
+  type RichTooltipTriggerProps,
+  type TooltipClassNames,
+  type TooltipPlacement,
+  type TooltipProps,
+  type TooltipTriggerProps,
+} from './components/tooltip/Tooltip';
+export {
+  richTooltipStyles,
+  tooltipStyles,
+  type RichTooltipStyleProps,
+} from './components/tooltip/tooltip-styles';
+export {
   Snackbar,
   SnackbarHost,
   useSnackbarHostState,
