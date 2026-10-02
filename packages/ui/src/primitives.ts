@@ -58,7 +58,13 @@ export {
   type MaterialShapeName,
 } from './shapes/material-shapes';
 export { Morph } from './shapes/morph';
-export { morphToPath, polygonToPath, type MorphPathOptions, type PathOptions } from './shapes/path';
+export {
+  cubicsToPath,
+  morphToPath,
+  polygonToPath,
+  type MorphPathOptions,
+  type PathOptions,
+} from './shapes/path';
 export type { PointTransformer } from './shapes/point';
 export { RoundedPolygon } from './shapes/rounded-polygon';
 export { circle, pill, pillStar, rectangle, star } from './shapes/shapes';
