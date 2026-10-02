@@ -322,3 +322,20 @@ export {
   type TopAppBarVariant,
 } from './components/app-bar/app-bar-styles';
 export type { TopAppBarScrollBehavior } from './components/app-bar/use-app-bar-scroll';
+export {
+  SearchBar,
+  type SearchBarClassNames,
+  type SearchBarIconState,
+  type SearchBarProps,
+} from './components/search/SearchBar';
+export {
+  SearchAppBar,
+  type SearchAppBarClassNames,
+  type SearchAppBarProps,
+} from './components/search/SearchAppBar';
+export {
+  searchAppBarStyles,
+  searchBarStyles,
+  type SearchAppBarStyleProps,
+  type SearchBarStyleProps,
+} from './components/search/search-styles';
