@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 2 in progress** (Loading indicator, FAB menu, Split button, Chips, Tabs built) · Last updated: 2026-10-02 (rev. 21 — Tabs)
+Status: **Tier 2 in progress** (Loading indicator, FAB menu, Split button, Chips, Tabs, Navigation rail + bar built) · Last updated: 2026-10-02 (rev. 22 — Navigation)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -71,7 +71,6 @@ Four layers. **Dependencies only point downward**, enforced by `eslint-plugin-bo
 3. **Components** — Button, IconButton, FAB, Card, TextField, Checkbox, Radio, Switch… assembled from primitives.
 4. **Composites** — built **only from public components** (dogfooding the public API):
    - Button group (connected) = Buttons / IconButtons + group context
-   - Navigation rail (modal expanded) = Overlay + rail items
    - Select / Combobox reuse `Field` parts + Menu list
 
 ### Rules
@@ -334,6 +333,24 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 - **Focus fix:** a menu opens on pointer down and takes focus. React Aria then hides the rest of the page, trigger included, from assistive tech. The browser's follow-up `mousedown` on the trigger would then drop focus on `<body>`, so Escape did nothing. `MenuTrigger` cancels the trigger's `mousedown`; React Aria has already focused it on pointer down. A browser test asserts focus is inside the menu after a mouse open.
 - **Not in v1:** submenus, and the ButtonGroup overflow menu (now unblocked).
 
+### Navigation rail and flexible navigation bar (built, Tier 2)
+- `NavigationRail` with `NavigationRailItem`, and `NavigationBar` with `NavigationBarItem`. Items are links (`href`) or buttons (`onPress`) with `icon`, optional `selectedIcon` and a label; `selected` marks the current destination with `aria-current="page"` (`data-current`, since `ButtonBase` owns `data-selected`). Each is a `nav` landmark that needs a name.
+- **Rail** (Compose `WideNavigationRail.kt`):
+  - Props: `expanded` / `defaultExpanded` / `onExpandedChange`, `header` (a node, or a function of `{ expanded, toggle }` for the menu button), `modal`, `hideOnCollapse`.
+  - Collapsed: 96px, `surface`, items 4px apart. Content starts 44px down, with the header 40px above the items.
+  - Expanded: as wide as the widest label + 104px of item chrome (20px insets, 16px pill padding, 24px icon, 8px gap), clamped to 220–360px. The width springs on the default spatial spring. It's the `--m3-rail-width` variable, so a consumer `w-*` class still wins.
+  - **Modal** (`modal`): the in-flow rail stays collapsed (or is hidden with `hideOnCollapse`). The expanded rail opens as a dialog sheet (`useModalOverlay` + `useDialog`): `surface-container`, level 2, 16px end corners, over a 32% scrim. It grows from the collapsed width, or slides in from the start edge when the collapsed rail is hidden, on the fast spatial spring. Escape, an outside press or choosing an item collapses it.
+- **Bar** (Compose `ShortNavigationBar.kt`): 64px `surface-container`, no elevation. `iconPosition` = `top` (compact) or `start` (the flexible bar's inline items in medium windows). `arrangement` = `equal`, or `centered` with Compose's side padding of (100% − 10% × (n + 3)) / 2 for up to 6 items.
+- **Items** (Compose `NavigationItem.kt` and tokens):
+  - Rail collapsed: a 56×32 pill centred in the 96px rail; the `label-medium` label sits 4px below and may use the rail's full width, at least 64px tall.
+  - Rail expanded: a 56px pill holding icon · 8px · `label-large`, 16px inside, 20px from the rail edges.
+  - Bar stacked: 6px · 56×32 pill · 4px · `label-medium` · 6px.
+  - Bar inline: a 40px pill holding icon · 4px · `label-medium`, 16px inside.
+  - Colours: `on-surface-variant`. The current item has `on-secondary-container` on a `secondary-container` pill; its label is `secondary` under the icon or `on-secondary-container` beside it. Disabled is 38%.
+  - Pill and states: the pill grows from its centre (`clip-path`) on the default spatial spring, as Compose animates its width. The state layer (`on-secondary-container`) and the focus ring are pill-shaped, as in Compose's indicator ripple.
+- **Layout safety:** the pill, its state layer and its content share one grid cell, so nothing is positioned. The content is `relative` because the indicator's `opacity` / `clip-path` paint it in the positioned layer above plain in-flow content.
+- **Deviation:** when the rail changes mode, Compose cross-fades each label while sliding it. Here items switch layout at once, the labels fade in at their new place (`@starting-style`), and the rail's width does the spring.
+
 ### Tabs (built, Tier 2)
 - `Tabs` with `Tab` children, typed aliases of React Stately's collection `Item`, identified by `key`, with `title`, `icon` and the panel as `children`. Props: `variant` = `primary | secondary`, `scrollable`, `iconPlacement` = `top | start`, `selectedKey` / `defaultSelectedKey` / `onSelectionChange`, `disabledKeys`, `aria-label`.
 - **Built on** React Aria `useTabList` / `useTab` / `useTabPanel`: arrow keys, Home / End, automatic activation. The panel is keyed by the selection (React Aria's pattern) so its id follows it. Tabs with no panels (navigation rows) render no panel and drop `aria-controls`.
@@ -500,7 +517,7 @@ apps/next-playground   # Next.js App Router + Pages Router test app, Playwright 
 ## 15. Component roadmap (M3 Expressive set)
 
 - **Tier 1**: Button, IconButton, **Button group** (standard + connected), FAB + Extended FAB, Card, TextField, Checkbox, Radio, Switch, Dialog, Menu (Expressive: standard + vibrant colours, grouped items with gaps, selected state)
-- **Tier 2**: Split button (built), **FAB menu** (built), Chips (built), Tabs (built), **Navigation rail** (collapsed / expanded / modal expanded), **Flexible navigation bar**, Snackbar, Tooltip, **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator)
+- **Tier 2**: Split button (built), **FAB menu** (built), Chips (built), Tabs (built), **Navigation rail** (collapsed / expanded / modal expanded, built), **Flexible navigation bar** (built), Snackbar, Tooltip, **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator)
 - **Tier 3**: **Toolbars** (floating + docked), Flexible app bars + search app bar, Slider (XS–XL, vertical, centred, range, inset icons), Expressive lists (segmented/grouped), Carousel (incl. vertical), Bottom/side sheets, Date & time pickers, Badges, Dividers, Search
 
 Build order: Foundations (token source, 6 themes × modes × contrast, motion schemes, ThemeProvider, `cn`, primitives) → Tier 1 → Tier 2 → Tier 3.
