@@ -87,6 +87,19 @@ export {
   type FabStyleProps,
 } from './components/fab/fab-styles';
 export {
+  AssistChip,
+  FilterChip,
+  InputChip,
+  SuggestionChip,
+  type AssistChipProps,
+  type ChipClassNames,
+  type FilterChipProps,
+  type InputChipClassNames,
+  type InputChipProps,
+  type SuggestionChipProps,
+} from './components/chip/Chip';
+export { chipStyles, type ChipStyleProps } from './components/chip/chip-styles';
+export {
   SplitButton,
   type SplitButtonClassNames,
   type SplitButtonProps,
