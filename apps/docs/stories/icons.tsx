@@ -40,3 +40,9 @@ export const DeleteIcon = icon(
 export const CloseIcon = icon(
   'm256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z',
 );
+export const MenuIcon = icon(
+  'M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z',
+);
+export const HomeIcon = icon(
+  'M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z',
+);
