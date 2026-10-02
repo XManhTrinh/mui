@@ -86,6 +86,21 @@ export {
   type FabStyleProps,
 } from './components/fab/fab-styles';
 export {
+  FabMenu,
+  FabMenuItem,
+  type FabMenuClassNames,
+  type FabMenuItemClassNames,
+  type FabMenuItemProps,
+  type FabMenuProps,
+} from './components/fab-menu/FabMenu';
+export {
+  fabMenuStyles,
+  type FabMenuAlign,
+  type FabMenuColor,
+  type FabMenuSize,
+  type FabMenuStyleProps,
+} from './components/fab-menu/fab-menu-styles';
+export {
   LoadingIndicator,
   type LoadingIndicatorClassNames,
   type LoadingIndicatorProps,
