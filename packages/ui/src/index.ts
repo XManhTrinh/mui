@@ -87,6 +87,28 @@ export {
   type FabStyleProps,
 } from './components/fab/fab-styles';
 export {
+  NavigationRail,
+  NavigationRailItem,
+  type NavigationRailClassNames,
+  type NavigationRailItemProps,
+  type NavigationRailProps,
+} from './components/navigation/NavigationRail';
+export {
+  NavigationBar,
+  NavigationBarItem,
+  type NavigationBarClassNames,
+  type NavigationBarItemProps,
+  type NavigationBarProps,
+} from './components/navigation/NavigationBar';
+export type { NavItemClassNames } from './components/navigation/NavItem';
+export { navItemStyles, type NavItemLayout } from './components/navigation/nav-item-styles';
+export {
+  navigationBarStyles,
+  navigationRailStyles,
+  type NavigationBarArrangement,
+  type NavigationBarStyleProps,
+} from './components/navigation/navigation-styles';
+export {
   Tab,
   Tabs,
   type TabProps,
