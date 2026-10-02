@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 3 in progress** (Toolbars, top app bars, search, badges, dividers built) · Last updated: 2026-10-03 (rev. 30 — badges and dividers)
+Status: **Tier 3 in progress** (Toolbars, top app bars, search, badges, dividers, lists built) · Last updated: 2026-10-03 (rev. 31 — lists)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -530,6 +530,16 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
   - A bare SVG anchor gets Compose's default 24px icon size; other sizes go in a sized wrapper.
 - `Divider`: `orientation` = `horizontal | vertical`, `inset` = `none | start | middle` (16px at the start or both ends, from m3.material.io; Compose leaves insets to padding), `decorative` (role `none`). 1px of `outline-variant` (`DividerTokens`), drawn as the background clipped to the content box so insets are padding and the root keeps no margins. It is a `div` with `role="separator"`, since an `<hr>` can't take a vertical orientation.
 
+### Lists (built, Tier 3)
+- `List` with `ListItem` children (typed aliases of React Stately's collection `Item`, identified by `key`): `variant` = `standard | segmented`; items take the headline as `children`, `overline`, `supportingText`, `leading`, `trailing`, `href` and `textValue`. A name is required by the types.
+- **Two forms:** with `onAction`, `selectionMode` or link items, the list is a React Aria grid list (`useGridList` / `useGridListItem`): ↑ / ↓ between items, ← / → into trailing controls (following the DOM direction via `DomDirectionLocale`), type-ahead, `selectedKeys` / `onSelectionChange` / `disabledKeys`. Otherwise it is a plain `ul` of `li`s that nothing focuses. This covers Compose's clickable, selectable and checkable `ListItem` overloads and `SegmentedListItem`.
+- **Values** (Compose `ListItem.kt` interactive overloads, `ListItemDefaults`, `ListTokens`):
+  - Padding 16px start / end, 10px top / bottom; 12px between leading content, the text and trailing content.
+  - Heights: at least 56px (one line), 72px (overline or supporting text) and 88px (both). Three-line items align to the top, the others to the centre (Compose's breakpoint). Compose also treats a multi-line supporting text as three lines; that needs measuring and isn't done.
+  - Type and colour: headline `body-large` `on-surface`; supporting `body-medium`, overline `label-small`, leading content (`title-medium` for avatar letters, 24px icons) and trailing content (`label-small` text) `on-surface-variant`. Selected items are `secondary-container` with `on-secondary-container` content; disabled content `on-surface` 38%. The container is `surface` in both variants (`ItemSegmentedContainerColor`), so segmented lists usually sit on a `surface-container` background.
+  - **Shapes:** Compose's precedence is pressed, then selected or focused (all 16px), then hovered (12px), else 4px. They're computed into one `data-shape` (`rest | hovered | active`), so no two rules compete, and morph on the fast spatial spring while colours change on the default effects spring. Segmented lists are 2px apart and round the outer corners of the first and last items to 16px at rest (`data-position`), as `segmentedShapes` does. Static items in a standard list have no corners.
+- **Not in v1:** drag-to-reorder (`ReorderListTokens`), swipe-to-reveal, expandable items, and leading video/image size presets (consumers size their media).
+
 ## 10. Layout safety (consumer positioning never breaks a component)
 
 **Principle:** a component's internal visuals never depend on the root element's `position`, `overflow`, `display` or `transform`. Consumers may put any layout class on any component — e.g. `<Button className="fixed bottom-4 right-4">` — and it must look and behave the same.
@@ -621,7 +631,7 @@ apps/next-playground   # Next.js App Router + Pages Router test app, Playwright 
 
 - **Tier 1**: Button, IconButton, **Button group** (standard + connected), FAB + Extended FAB, Card, TextField, Checkbox, Radio, Switch, Dialog, Menu (Expressive: standard + vibrant colours, grouped items with gaps, selected state)
 - **Tier 2**: Split button (built), **FAB menu** (built), Chips (built), Tabs (built), **Navigation rail** (collapsed / expanded / modal expanded, built), **Flexible navigation bar** (built), Snackbar (built), Tooltip (built), **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator; built)
-- **Tier 3**: **Toolbars** (floating + docked; built), Flexible app bars (built) + search app bar (built), Slider (XS–XL, vertical, centred, range, inset icons), Expressive lists (segmented/grouped), Carousel (incl. vertical), Bottom/side sheets, Date & time pickers, Badges (built), Dividers (built), Search (built)
+- **Tier 3**: **Toolbars** (floating + docked; built), Flexible app bars (built) + search app bar (built), Slider (XS–XL, vertical, centred, range, inset icons), Expressive lists (segmented/grouped; built), Carousel (incl. vertical), Bottom/side sheets, Date & time pickers, Badges (built), Dividers (built), Search (built)
 
 Build order: Foundations (token source, 6 themes × modes × contrast, motion schemes, ThemeProvider, `cn`, primitives) → Tier 1 → Tier 2 → Tier 3.
 
