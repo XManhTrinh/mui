@@ -133,6 +133,38 @@ test.describe('Button ripple', () => {
   });
 });
 
+test.describe('Button ripple origin', () => {
+  /** Where the ripple's centre is on the first frame after a quick press at `x`. */
+  async function firstCentre(page: Page, x: number) {
+    const button = page.getByRole('button').first();
+    const box = (await button.boundingBox())!;
+    await page.mouse.move(box.x + x, box.y + box.height / 2);
+    await page.mouse.down();
+    const centre = button.evaluate(async (el) => {
+      await new Promise(requestAnimationFrame);
+      return parseFloat(getComputedStyle(el).getPropertyValue('--m3-ripple-x'));
+    });
+    await page.mouse.up();
+    return { centre: await centre, width: box.width };
+  }
+
+  test('each press starts at its own point, not the previous one', async ({ page }) => {
+    await openStory(page, 'components-button--playground', {}, { size: 'lg' });
+    const { width } = await firstCentre(page, 4);
+    // Right edge first: starts there, not at the centre.
+    const right = await firstCentre(page, width - 4);
+    expect(right.centre).toBeGreaterThan(width * 0.8);
+    await page.waitForTimeout(500);
+    // Then the left edge: starts there, not where the last ripple was.
+    const left = await firstCentre(page, 4);
+    expect(left.centre).toBeLessThan(width * 0.2);
+    // Pressing again during the previous ripple's fade-out still starts fresh.
+    await page.waitForTimeout(260);
+    const again = await firstCentre(page, width - 4);
+    expect(again.centre).toBeGreaterThan(width * 0.8);
+  });
+});
+
 test.describe('Button layout safety', () => {
   layoutSafetySuite('components-button--layout-override', { height: 40, radius: '20px' });
 });

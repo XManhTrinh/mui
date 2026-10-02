@@ -1,16 +1,19 @@
 'use client';
 
-import type {
-  CSSProperties,
-  InputHTMLAttributes,
-  LabelHTMLAttributes,
-  ReactNode,
-  Ref,
+import {
+  type CSSProperties,
+  type InputHTMLAttributes,
+  type KeyboardEvent,
+  type LabelHTMLAttributes,
+  type PointerEvent,
+  type ReactNode,
+  type Ref,
 } from 'react';
-import { VisuallyHidden } from 'react-aria';
+import { mergeProps, VisuallyHidden } from 'react-aria';
 import { cn } from '../utils/cn';
 import { selectionControlStyles } from './selection-control-styles';
 import { TouchTarget } from './TouchTarget';
+import { restartRipple } from './use-m3-interaction';
 
 export interface SelectionControlClassNames {
   root?: string;
@@ -65,10 +68,23 @@ export function SelectionControl({
   style,
   controlStyle,
 }: SelectionControlProps) {
+  // Every press starts a fresh (centred) ripple on the control, as in Compose.
+  const restart = (label: HTMLElement) => {
+    const control = label.querySelector<HTMLElement>('[data-selection-control]');
+    if (control) restartRipple(control);
+  };
+  const rippleProps = {
+    onPointerDown: (event: PointerEvent<HTMLElement>) => {
+      if (event.button === 0) restart(event.currentTarget);
+    },
+    onKeyDown: (event: KeyboardEvent<HTMLElement>) => {
+      if (event.key === ' ') restart(event.currentTarget);
+    },
+  };
   return (
     <label
       {...rootData}
-      {...rootProps}
+      {...mergeProps(rootProps, rippleProps)}
       {...state}
       ref={ref}
       style={style}
@@ -76,6 +92,7 @@ export function SelectionControl({
     >
       <span
         {...state}
+        data-selection-control=""
         style={controlStyle}
         className={styles.control({ class: classNames?.control })}
       >

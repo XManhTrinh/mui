@@ -122,8 +122,8 @@
   &[data-rippling] {
     --m3-ripple-opacity: var(--md-sys-state-pressed-state-layer-opacity);
     --m3-ripple-radius: var(--m3-ripple-size, 0px);
-    --m3-ripple-x: 50%;
-    --m3-ripple-y: 50%;
+    --m3-ripple-x: var(--m3-ripple-center-x, 50%);
+    --m3-ripple-y: var(--m3-ripple-center-y, 50%);
     transition-duration:
       var(--md-sys-motion-spring-effects-fast-duration), 75ms, 225ms, 225ms, 225ms,
       var(--m3-transition-duration, 0s);
