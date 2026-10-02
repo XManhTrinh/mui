@@ -6,7 +6,7 @@ import { tv, type VariantProps } from '../../utils/tv';
  * and the NavigationRail* / NavigationBar* token files):
  *
  * - rail-top (collapsed rail): 56×32 pill around a 24px icon, `label-medium` 4px below,
- *   20px item inset (so a 96px rail), at least 64px tall.
+ *   centred in the 96px rail (labels may use its full width), at least 64px tall.
  * - rail-start (expanded rail): 56px pill holding icon · 8px · `label-large`, 16px inside,
  *   20px item inset.
  * - bar-top: 6px · 56×32 pill · 4px · `label-medium` · 6px (64px).
@@ -54,7 +54,9 @@ export const navItemStyles = tv({
       '[transition-duration:var(--md-sys-motion-spring-effects-fast-duration)]',
       '[transition-timing-function:var(--md-sys-motion-spring-effects-fast-easing)]',
     ],
-    content: 'col-start-1 row-start-1 flex min-w-0 items-center justify-center',
+    // `relative` keeps the content above the indicator and state layer: elements with
+    // opacity or clip-path paint in the positioned layer, above plain in-flow content.
+    content: 'relative col-start-1 row-start-1 flex min-w-0 items-center justify-center',
     icon: [
       'inline-flex size-[24px] shrink-0 items-center justify-center [&>svg]:size-full',
       'group-data-current/nav:text-on-secondary-container group-data-disabled/nav:text-on-surface-variant/38',
@@ -68,7 +70,8 @@ export const navItemStyles = tv({
   variants: {
     layout: {
       'rail-top': {
-        root: 'min-h-[64px] w-full content-start px-[20px]',
+        // The 56px pill centres in the 96px rail; labels may use the full width (Compose).
+        root: 'min-h-[64px] w-full content-start',
         pill: 'h-[32px] w-[56px]',
         label:
           'mt-[4px] max-w-full text-center text-label-medium group-data-current/nav:text-secondary',

@@ -39,7 +39,8 @@ describe('NavigationRail', () => {
     const inbox = screen.getByRole('link', { name: 'Inbox' });
     expect(inbox).toHaveAttribute('aria-current', 'page');
     expect(inbox).toHaveAttribute('data-current', 'true');
-    expect(inbox).toHaveClass('min-h-[64px]', 'px-[20px]');
+    expect(inbox).toHaveClass('min-h-[64px]');
+    expect(inbox).not.toHaveClass('px-[20px]');
     expect(screen.getByRole('button', { name: 'Sent' })).not.toHaveAttribute('aria-current');
     // The label sits below the 56×32 pill.
     const pill = screen.getByTestId('inbox').closest('[class*="w-[56px]"]')!;
