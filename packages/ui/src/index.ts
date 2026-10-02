@@ -86,6 +86,16 @@ export {
   type FabStyleProps,
 } from './components/fab/fab-styles';
 export {
+  LoadingIndicator,
+  type LoadingIndicatorClassNames,
+  type LoadingIndicatorProps,
+} from './components/loading-indicator/LoadingIndicator';
+export {
+  loadingIndicatorStyles,
+  type LoadingIndicatorStyleProps,
+  type LoadingIndicatorVariant,
+} from './components/loading-indicator/loading-indicator-styles';
+export {
   Card,
   type CardActionProps,
   type CardLinkProps,

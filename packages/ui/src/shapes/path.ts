@@ -19,6 +19,9 @@ export interface PathOptions {
   closePath?: boolean;
   /** Scales the path, e.g. to map a normalized unit shape onto a viewBox. */
   scale?: number;
+  /** Moves the path after scaling. */
+  translateX?: number;
+  translateY?: number;
 }
 
 export interface MorphPathOptions extends PathOptions {
@@ -50,6 +53,11 @@ const fmt = (n: number) => {
   return Object.is(r, -0) ? '0' : String(r);
 };
 
+/** SVG path data for a list of connected cubics. */
+export function cubicsToPath(cubics: readonly Cubic[], options: MorphPathOptions = {}): string {
+  return pathFromCubics(cubics, options);
+}
+
 function pathFromCubics(
   cubics: readonly Cubic[],
   {
@@ -57,12 +65,17 @@ function pathFromCubics(
     repeatPath = false,
     closePath = true,
     scale = 1,
+    translateX = 0,
+    translateY = 0,
     rotationPivotX = 0,
     rotationPivotY = 0,
   }: MorphPathOptions,
 ): string {
   if (cubics.length === 0) return '';
-  let transform = (x: number, y: number): [number, number] => [x * scale, y * scale];
+  let transform = (x: number, y: number): [number, number] => [
+    x * scale + translateX,
+    y * scale + translateY,
+  ];
   if (startAngle !== 0) {
     const first = cubics[0]!;
     const angleToFirstCubic =
@@ -75,8 +88,8 @@ function pathFromCubics(
       const dx = x - rotationPivotX;
       const dy = y - rotationPivotY;
       return [
-        (rotationPivotX + dx * c - dy * s) * scale,
-        (rotationPivotY + dx * s + dy * c) * scale,
+        (rotationPivotX + dx * c - dy * s) * scale + translateX,
+        (rotationPivotY + dx * s + dy * c) * scale + translateY,
       ];
     };
   }
