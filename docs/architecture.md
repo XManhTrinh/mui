@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 1 in progress** (Button, IconButton, ButtonGroup, FAB, Card and TextField done; shape library port pending, see §17) · Last updated: 2026-10-02 (rev. 12 — TextField)
+Status: **Tier 1 in progress** (Button, IconButton, ButtonGroup, FAB, Card, TextField, Checkbox, Radio and Switch done; Dialog and Menu remain; shape library port pending, see §17) · Last updated: 2026-10-02 (rev. 13 — selection controls)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -279,6 +279,30 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 - With a label, the placeholder, prefix and suffix appear only once the label floats (Compose).
 - Pressing the container focuses the input (not when pressing an icon button).
 - **Not in v1:** composable TextField parts (the doc's "two API levels"); only the batteries-included form is exported, built from the Field primitives.
+
+### Selection controls (built: Checkbox, RadioGroup + Radio, Switch)
+- **Shared anatomy:** the `SelectionControl` primitive + `selectionControlStyles`.
+  - A root `<label>` (`ref`, `className`, `style`, `data-*`) with a visually hidden native input (`inputRef`) from React Aria (`useCheckbox` / `useRadio` / `useSwitch`), so forms, labels and assistive tech work natively.
+  - A control holding the focus ring and a 48px touch target, and the label text (`text-body-large`).
+  - `kind: 'circle'` (Checkbox, Radio) makes the control the 40px state-layer circle: `on-surface` unselected, `primary` selected, inverted while pressed, `error` when invalid (M3 spec; this token set has no state-layer colours).
+  - `kind: 'track'` (Switch) makes the control the track, with a state layer that follows the thumb.
+  - The types require a label or an accessible name. Selection is `selected` / `defaultSelected` / `onSelectedChange` (Checkbox, Switch) or the group's `value` / `defaultValue` / `onChange` (RadioGroup).
+- **Checkbox:** Compose's **M3 styling**, i.e. `ComposeMaterial3Flags.isCheckboxStylingFixEnabled = true`. Compose defaults that flag to false, which keeps M2 styling.
+  - Geometry: an 18px box with 2px corners and a 2px outline; check path (0.25, 0.5) → (0.4, 0.65) → (0.75, 0.3), 2px square cap.
+  - Motion: the check draws on default spatial and snaps away 100ms after unchecking; the box fills on default effects and empties on fast effects.
+  - `indeterminate` draws a dash path. **Deviation:** Compose morphs the check into the dash, but CSS can't animate a path shape in Safari, so the dash draws on its own.
+  - Error uses `error` / `on-error`. Disabled checked is `on-surface` 38% with a `surface` check.
+- **Radio:** a 20px ring (2px). The dot is 10px and grows on fast spatial; colour changes on default effects.
+  - The unselected ring darkens to `on-surface` on hover, focus and press. Disabled is `on-surface` 38%, which also overrides the selected colour (stacked variant).
+  - M3 radios have **no error colour**; an invalid `RadioGroup` shows its error text.
+  - `RadioGroup` provides the state, arrow keys, label (`text-title-small`), supporting/error text and orientation. A `Radio` outside a group throws.
+- **Switch:** a 52×32px track (2px outline).
+  - Thumb geometry is computed like Compose's `ThumbNode`: 16px off, 24px on or with an icon, 28px pressed, centred 16 / 36px from the start. It's passed as `--m3-thumb-size` / `--m3-thumb-center`, so no CSS state selectors compete.
+  - Pressing snaps the thumb; release animates `width` / `height` / `top` / `inset-inline-start` on fast spatial. Mirrors in RTL.
+  - Hover, focus and press change the thumb to `on-surface-variant` (off) / `primary-container` (on). Disabled colours are Compose's composites over `surface` (`color-mix`).
+  - `icons` shows the default check / close icons; `selectedIcon` / `unselectedIcon` override them. The focus ring surrounds the track.
+- **No CheckboxGroup** in v1. Compose has none, and a fieldset of Checkboxes with `name` covers forms.
+- `splitDataAttributes` (utils) routes `data-*` to the root for components whose remaining props go to a React Aria hook (TextField, the selection controls). Those hooks forward only the attributes they know, so consumer `data-*` attributes were being dropped.
 
 ## 10. Layout safety (consumer positioning never breaks a component)
 
