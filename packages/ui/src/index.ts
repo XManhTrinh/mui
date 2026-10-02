@@ -339,3 +339,18 @@ export {
   type SearchAppBarStyleProps,
   type SearchBarStyleProps,
 } from './components/search/search-styles';
+export { Divider, type DividerProps } from './components/divider/Divider';
+export {
+  dividerStyles,
+  type DividerInset,
+  type DividerOrientation,
+  type DividerStyleProps,
+} from './components/divider/divider-styles';
+export {
+  Badge,
+  BadgedBox,
+  type BadgedBoxClassNames,
+  type BadgedBoxProps,
+  type BadgeProps,
+} from './components/badge/Badge';
+export { badgedBoxStyles, badgeStyles, type BadgeStyleProps } from './components/badge/badge-styles';
