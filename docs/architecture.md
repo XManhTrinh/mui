@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 1 complete**, shape library ported; Tier 2 next · Last updated: 2026-10-02 (rev. 16 — shape library + `useM3Morph`)
+Status: **Tier 2 in progress** (Loading indicator built) · Last updated: 2026-10-02 (rev. 17 — Loading indicator)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -336,6 +336,22 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 - **Focus fix:** a menu opens on pointer down and takes focus. React Aria then hides the rest of the page, trigger included, from assistive tech. The browser's follow-up `mousedown` on the trigger would then drop focus on `<body>`, so Escape did nothing. `MenuTrigger` cancels the trigger's `mousedown`; React Aria has already focused it on pointer down. A browser test asserts focus is inside the menu after a mouse open.
 - **Not in v1:** submenus, and the ButtonGroup overflow menu (now unblocked).
 
+### Loading indicator (built, Tier 2)
+- `LoadingIndicator`: indeterminate by default; `value` (0–1) makes it determinate. `variant` = `default | contained`, and `shapes` takes at least two `MaterialShapes` names or `RoundedPolygon`s. It's a React Aria `useProgressBar` (`role="progressbar"`, `aria-valuenow` / `aria-valuetext` when determinate), and the types require `aria-label` or `aria-labelledby`.
+- **Values** (Compose `LoadingIndicator.kt`, `LoadingIndicatorTokens`):
+  - Box: 48px, full corners. The indicator is 38px (`ActiveIndicatorScale` 38/48) times Compose's `calculateScaleFactor`, so no shape clips as it rotates.
+  - Colours: `primary`; contained is `on-primary-container` on `primary-container`.
+  - Each frame is centred by its control-point bounds, like Compose's `processPath`.
+- **Indeterminate:** Compose's seven shapes (soft burst, 9-sided cookie, pentagon, pill, sunny, 4-sided cookie, oval) in a loop.
+  - Every 650ms a morph springs to the next shape (damping 0.6, stiffness 200). It ends at Compose's estimated duration for a 0.1 visibility threshold, **297ms**, then the next morph starts at 0 and the target angle gains a quarter turn.
+  - The rotation is `progress × 90°` plus the target angle plus a linear full turn every 4666ms.
+  - The morph uses the **raw spring value**, overshoot included. A Compose comment says the value is coerced, but the code isn't.
+- **Determinate:** a circle (rotated 18°) morphs into a soft burst as `value` rises, turning counter-clockwise by up to 180°. It draws whatever `value` is, so consumers animate it.
+- **Rendering:** every frame is a pure function of elapsed time (`loading-indicator-frames.ts`, unit-tested against Compose's numbers). Motion's `useAnimationFrame` writes the path `d` and the `<g>` rotation straight to the SVG, so animation causes no React renders. The rotation is on the inner `<g>`, never the root (§10 rule 4).
+- **Reduced motion** (§6): the indeterminate indicator only rotates (the first shape at the global rate), with no morphs or springy quarter turns. Compose has no reduced-motion handling here.
+- **Sizing:** there's a single spec size, so there's no `size` prop. `className` (`size-24`) resizes the box; the SVG's viewBox scales the shape and keeps it square and centred.
+- **Tests:** indeterminate screenshots are taken at fixed times under a **paused** Playwright fake clock (`clock.install` + `pauseAt` before navigation). An unpaused installed clock keeps running in real time, which made a frame flaky under parallel load. The layout-safety suite has a non-interactive mode for components without press or focus.
+
 ## 10. Layout safety (consumer positioning never breaks a component)
 
 **Principle:** a component's internal visuals never depend on the root element's `position`, `overflow`, `display` or `transform`. Consumers may put any layout class on any component — e.g. `<Button className="fixed bottom-4 right-4">` — and it must look and behave the same.
@@ -426,7 +442,7 @@ apps/next-playground   # Next.js App Router + Pages Router test app, Playwright 
 ## 15. Component roadmap (M3 Expressive set)
 
 - **Tier 1**: Button, IconButton, **Button group** (standard + connected), FAB + Extended FAB, Card, TextField, Checkbox, Radio, Switch, Dialog, Menu (Expressive: standard + vibrant colours, grouped items with gaps, selected state)
-- **Tier 2**: Split button, **FAB menu**, Chips, Tabs, **Navigation rail** (collapsed / expanded / modal expanded), **Flexible navigation bar**, Snackbar, Tooltip, **Loading indicator** (shape morph), Progress indicators (linear + circular, wavy, with stop indicator)
+- **Tier 2**: Split button, **FAB menu**, Chips, Tabs, **Navigation rail** (collapsed / expanded / modal expanded), **Flexible navigation bar**, Snackbar, Tooltip, **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator)
 - **Tier 3**: **Toolbars** (floating + docked), Flexible app bars + search app bar, Slider (XS–XL, vertical, centred, range, inset icons), Expressive lists (segmented/grouped), Carousel (incl. vertical), Bottom/side sheets, Date & time pickers, Badges, Dividers, Search
 
 Build order: Foundations (token source, 6 themes × modes × contrast, motion schemes, ThemeProvider, `cn`, primitives) → Tier 1 → Tier 2 → Tier 3.
