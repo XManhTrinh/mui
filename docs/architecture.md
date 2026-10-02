@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 1 complete**; Tier 2 next (shape library port first, see §17) · Last updated: 2026-10-02 (rev. 15 — Menu)
+Status: **Tier 1 complete**, shape library ported; Tier 2 next · Last updated: 2026-10-02 (rev. 16 — shape library + `useM3Morph`)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -53,7 +53,7 @@ import { Button, Dialog, DialogTrigger, ThemeProvider } from '@vkieu/mui';
 
 ## 3. Composition architecture (DRY)
 
-Four layers. **Dependencies only point downward**, enforced by `eslint-plugin-boundaries` in `eslint.config.js`. In source, the layers are `src/tokens` → `src/utils` → `src/theme` / `src/motion` → `src/primitives` → `src/components` → `src/composites`. Composites may not import `src/primitives`.
+Four layers. **Dependencies only point downward**, enforced by `eslint-plugin-boundaries` in `eslint.config.js`. In source, the layers are `src/tokens` → `src/utils` → `src/theme` / `src/motion` → `src/primitives` → `src/components` → `src/composites`. Composites may not import `src/primitives`. `src/shapes` (the androidx.graphics.shapes port) is pure geometry: it imports nothing, and primitives and components may import it.
 
 1. **Tokens** — CSS variables for colour, shape, type, motion, elevation, state opacity, z-index.
 2. **Primitives** (internal; also exported from `@vkieu/mui/primitives`)
@@ -64,7 +64,8 @@ Four layers. **Dependencies only point downward**, enforced by `eslint-plugin-bo
    - `Overlay`: portal to `body` that **re-applies the theme attributes and text direction (`dir`) of where it was rendered**, so overlays opened inside a `ThemeScope` or an RTL region keep them. Passes `isExiting` to React Aria so focus containment is released while animating out.
    - `TriggerContext`: an overlay trigger (DialogTrigger, later MenuTrigger) passes its press handler, ARIA attributes and ref to whichever button-like child opens it. `ButtonBase` merges them in, so no cloning or private React Aria APIs are needed. Overlays reset it to `null`.
    - `usePresence`: keeps an overlay mounted until its exit transition ends (fallback 800ms). Dismissal, focus containment and scroll lock come from the React Aria overlay hooks (`useModalOverlay`, `usePopover`, …) used by each component.
-   - `useM3Morph` (shape-library morph driven by Motion `useTransform`)
+   - `useM3Morph` (built): `useM3Morph(shapes, progress, { size, startAngle })` returns a Motion value of SVG path data for an `m.path`'s `d`. `shapes` are `MaterialShapes` names or any normalized `RoundedPolygon`; progress `0…n-1` walks the sequence, and values outside it extrapolate the first or last morph, so springs can overshoot. Morph matching is cached per shape pair. Reduced motion is the caller's job (snap `progress`). `morphPathAt` is the same thing as a plain function.
+   - **Shape library** (`src/shapes`, exported from `@vkieu/mui/primitives`): a TypeScript port of `androidx.graphics.shapes` (`RoundedPolygon`, `CornerRounding`, `Morph`, `circle` / `rectangle` / `star` / `pill` / `pillStar`) and Compose's 35 `MaterialShapes`, from androidx `120345129e`. The androidx commonTest suites are ported too. Deviations: 64-bit numbers (so the tests androidx skips on JS for float rounding pass here); `calculateBounds` seeds with ±Infinity, fixing shapes in negative space; no SVG parser, serializer or validation. `polygonToPath` / `morphToPath` port Compose's internal `ShapeUtil.kt` but emit SVG path data (4 decimals) and rotate about the pivot, since SVG has no re-centering step. **Note:** morphs use each polygon's unsplit feature cubics, so mid-morph control points can sit up to ~1% outside the unit square (as upstream); render with `overflow="visible"` or padding.
    - `useM3Spring` (resolves the active motion scheme → Motion spring config)
    - `Field` parts: `FieldLabel`, `SupportingText`, `ErrorText`, `CharacterCounter`
 3. **Components** — Button, IconButton, FAB, Card, TextField, Checkbox, Radio, Switch… assembled from primitives.
@@ -445,7 +446,7 @@ Build order: Foundations (token source, 6 themes × modes × contrast, motion sc
 - `@vkieu/mui` — **MIT**
 - Roboto Flex — SIL OFL 1.1 (consumer-loaded)
 - Material Symbols — Apache-2.0 (recommended, not bundled)
-- Vendored androidx.graphics.shapes port — Apache-2.0, ship `NOTICE`
+- Vendored androidx.graphics.shapes + Compose `MaterialShapes` port — Apache-2.0; attribution and the list of modifications are in `NOTICE` and `src/shapes/LICENSE-androidx.md`
 - Material Design guidelines/tokens — Google, referenced per decision #3
 
 ## 17. Open checks before / during Foundations
@@ -463,7 +464,7 @@ Build order: Foundations (token source, 6 themes × modes × contrast, motion sc
 - `@vkieu` npm scope must be owned before publishing.
 
 ### Remaining Foundations work
-- **Shape library port + `useM3Morph`** (`androidx.graphics.shapes`, 35 shapes, feature-matched morph). It is not started. Nothing in Tier 1 needs it, since the Button press morph animates `border-radius`. The Loading indicator and FAB menu (Tier 2) do, so it has to land before Tier 2.
+- ✅ **Shape library port + `useM3Morph`** (2026-10-02): see §3. Stories under Foundations/Shapes; Playwright covers the gallery, morph frames, extrapolation, settling and the reduced-motion snap.
 - **Vite 8 directive warnings:** Vite 8 (rolldown) logs `MODULE_LEVEL_DIRECTIVE` for every `"use client"` file when a client-only app bundles the library. The warnings are harmless. The `build.rolldownOptions.onLog` filter is in `packages/ui/README.md` and `apps/docs/.storybook/main.ts`.
 - **Stylesheet size:** the six themes × three contrast levels × light/dark/system are about 120 KB unminified, most of the shipped CSS. If that matters to consumers, a later option is to split medium/high contrast into opt-in files.
 
