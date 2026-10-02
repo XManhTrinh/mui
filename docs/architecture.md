@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 3 in progress** (Toolbars built) · Last updated: 2026-10-02 (rev. 27 — toolbars)
+Status: **Tier 3 in progress** (Toolbars, top app bars built) · Last updated: 2026-10-03 (rev. 28 — top app bars)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -492,6 +492,23 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 - **Unused tokens:** `FloatingToolbarTokens.ContainerBetweenSpace` (4px) and the `VibrantButton*` colours aren't used by Compose's code either; buttons in a vibrant toolbar inherit `on-primary-container`.
 - **Deferred:** `exitAlwaysScrollBehavior` (slides the toolbar off-screen by transforming it, which breaks §10 rule 4, like the FAB show/hide), the docked toolbar's scroll collapse, and `AppBarRow`'s overflow menu.
 
+### Top app bars (built, Tier 3)
+- `TopAppBar` with `variant` = `small | medium | large` (Compose's `TopAppBar`, `MediumFlexibleTopAppBar`, `LargeFlexibleTopAppBar`; the non-flexible medium / large bars and `CenterAlignedTopAppBar` are superseded), `title`, `subtitle`, `titleAlign` = `start | center`, `navigationIcon`, `actions`, `scrollBehavior` = `pinned | enter-always | exit-until-collapsed` and `scrollRef` (the window by default). It renders a `<header>`; consumers wrap the title in a heading when it names the page.
+- **Values** (Compose `AppBar.kt`, `AppBar` / `AppBarSmall` / `AppBarMediumFlexible` / `AppBarLargeFlexible` tokens):
+  - Heights: small 64px; medium 112px (136px with a subtitle); large 120px (152px); both collapse to 64px.
+  - Type: small `title-large` + `label-medium`; medium `headline-medium` + `label-large`; large `display-small` + `title-medium`. The collapsed top row uses the small type.
+  - Colours: `surface`, turning `surface-container` (`OnScrollContainerColor`); navigation icon and title `on-surface`; subtitle and actions `on-surface-variant`. No elevation (the code draws no shadow; the level 2 on-scroll token is unused).
+  - Spacing with our 40px icon buttons reproduces Compose's 48px ones: the navigation icon 8px from the start, the title 56px in (16px with no icon), actions 8px apart and 8px from the end.
+  - Centred titles use a grid of equal side columns (`minmax(max-content, 1fr)`), so the title is centred in the whole bar until a side needs more room, as Compose's clamped placement does.
+  - **Expanded title:** Compose places it by its baseline, 24px (medium) / 28px (large) above the row's bottom, then clamps that padding when the row is too short. With the M3 type scale it is always clamped, which puts the title at the top of the row, and a wrapped title grows the row. Top-aligning the title in a min-height row (48 / 72 / 56 / 88px) reproduces that exactly. With a custom type scale small enough to avoid the clamp, ours would differ.
+- **Scrolling on the web:**
+  - Compose shrinks the bar's height through nested scrolling while the content stops scrolling. On the web, shrinking an in-flow bar would move the content twice as fast. So with a `scrollBehavior` the bar is `sticky` (with the `--md-sys-z-sticky` layer) and keeps its layout height. Compose's `heightOffset` (0 down to minus the collapsible height) becomes its `top`, `--m3-app-bar-offset`, so the bar slides up instead and the content moves exactly with the scroll.
+  - In two-row bars the top row is itself `sticky top-0`, so the expanded row scrolls up beneath it. The collapsible height is measured each frame (the expanded row, or the whole small bar).
+  - Offsets: `exit-until-collapsed` = −min(scroll, limit); `enter-always` moves by each scroll delta within [−limit, 0] (any scroll up brings it back); `pinned` = 0.
+  - Colour: a single row switches when content is under it (scroll > 0) on the default effects spring. Two-row bars blend with the collapsed fraction through fast-out-linear-in in Oklab (`color-mix`), as Compose's `lerp`. The collapsed title's alpha follows `TopTitleAlphaEasing` (0.8, 0, 0.8, 0.15), the expanded title's 1 − fraction.
+  - Everything is written as custom properties from a `requestAnimationFrame` scroll handler, so scrolling causes no React renders. React state flips only when the bar starts or stops being scrolled (`data-scrolled`) or crosses half collapsed (`data-collapsed`, which also swaps which title is `aria-hidden`, as Compose clears one title's semantics).
+- **Deviations:** no fling settle / snap (Compose snaps a part-collapsed bar after a fling; here the offset follows the scroll position or delta exactly), and no dragging the bar itself. A consumer `fixed` class replaces `sticky`; the offset still applies as `top`.
+
 ## 10. Layout safety (consumer positioning never breaks a component)
 
 **Principle:** a component's internal visuals never depend on the root element's `position`, `overflow`, `display` or `transform`. Consumers may put any layout class on any component — e.g. `<Button className="fixed bottom-4 right-4">` — and it must look and behave the same.
@@ -583,7 +600,7 @@ apps/next-playground   # Next.js App Router + Pages Router test app, Playwright 
 
 - **Tier 1**: Button, IconButton, **Button group** (standard + connected), FAB + Extended FAB, Card, TextField, Checkbox, Radio, Switch, Dialog, Menu (Expressive: standard + vibrant colours, grouped items with gaps, selected state)
 - **Tier 2**: Split button (built), **FAB menu** (built), Chips (built), Tabs (built), **Navigation rail** (collapsed / expanded / modal expanded, built), **Flexible navigation bar** (built), Snackbar (built), Tooltip (built), **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator; built)
-- **Tier 3**: **Toolbars** (floating + docked; built), Flexible app bars + search app bar, Slider (XS–XL, vertical, centred, range, inset icons), Expressive lists (segmented/grouped), Carousel (incl. vertical), Bottom/side sheets, Date & time pickers, Badges, Dividers, Search
+- **Tier 3**: **Toolbars** (floating + docked; built), Flexible app bars (built) + search app bar, Slider (XS–XL, vertical, centred, range, inset icons), Expressive lists (segmented/grouped), Carousel (incl. vertical), Bottom/side sheets, Date & time pickers, Badges, Dividers, Search
 
 Build order: Foundations (token source, 6 themes × modes × contrast, motion schemes, ThemeProvider, `cn`, primitives) → Tier 1 → Tier 2 → Tier 3.
 
