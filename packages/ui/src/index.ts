@@ -87,6 +87,20 @@ export {
   type FabStyleProps,
 } from './components/fab/fab-styles';
 export {
+  CircularProgressIndicator,
+  LinearProgressIndicator,
+  type CircularProgressIndicatorClassNames,
+  type CircularProgressIndicatorProps,
+  type LinearProgressIndicatorClassNames,
+  type LinearProgressIndicatorProps,
+} from './components/progress/ProgressIndicator';
+export {
+  circularProgressStyles,
+  linearProgressStyles,
+  type CircularProgressStyleProps,
+  type LinearProgressStyleProps,
+} from './components/progress/progress-styles';
+export {
   RichTooltip,
   RichTooltipTrigger,
   Tooltip,
