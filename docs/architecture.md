@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 1 in progress** (Button, IconButton and ButtonGroup done; shape library port pending, see §17) · Last updated: 2026-10-01 (rev. 9 — ButtonGroup)
+Status: **Tier 1 in progress** (Button, IconButton, ButtonGroup and FAB done; shape library port pending, see §17) · Last updated: 2026-10-02 (rev. 10 — FAB)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -240,7 +240,14 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
   - **Selection:** `selectionMode` = `none | single | multiple` with `selectedKeys` / `defaultSelectedKeys` / `onSelectionChange` / `disallowEmptySelection`. Toggle buttons with a `value` join the group's React Aria toggle-group state (`ToggleGroupStateContext`, read by `ButtonBase`). Single selection renders as a `radiogroup` of `radio`s. React Aria keeps every option tabbable and adds arrow-key movement. No-op changes that React Stately reports (same keys) are not passed to `onSelectionChange`.
   - **Spec gaps:** Compose only has *Small* tokens for groups (standard gap 12px; connected gap 2px, inner corners 8/4px). They are used at every size until per-size values are published. The Compose **overflow menu** is deferred until Menu exists.
   - Children must be direct elements (each is wrapped in its own context provider).
-- **FAB**: `size` = `default | medium | large` (small FAB deprecated); colours per spec; **Extended FAB** `size` = `sm | md | lg`.
+- **FAB** (built, `Fab` + `ExtendedFab`): `Fab` `size` = `default | medium | large` (56 / 80 / 96px; small FAB deprecated); `ExtendedFab` `size` = `sm | md | lg` (56 / 80 / 96px tall).
+  - **Shared:** `color`, `lowered` and `href`.
+  - **Shapes and icons follow Compose's code:** corners are large (16px) / large-increased (20px) / extra-large (28px). Compose's code uses `LargeIncreased` for medium FABs, which **resolves the §17 gap**. Icons are 24 / 28 / 36px; the large icon is 36px, because Compose marks the 32px token incorrect.
+  - **Extended FAB:** padding 16 / 26 / 28px; icon gap 8 / 12 / 16px (Compose overrides the medium and large token gaps); label `title-medium` / `title-large` / `headline-small`.
+  - **Elevation:** level 3, hover 4; `lowered` is level 1, hover 2. There's no press morph, and no `disabled` (FABs have none in M3; the types enforce it).
+  - **Colour styles:** `primary-container` (default), `secondary-container`, `tertiary-container`, `primary`, `secondary`, `tertiary`, each a role + on-role pair. Compose only ships tokens for the first two; the other four follow m3.material.io's colour styles.
+  - **`expanded` (Extended FAB):** collapses to an icon-only square. The label sits in a CSS grid column that transitions between `0fr` and `1fr`, so the FAB's natural width animates without JavaScript or transforms. It expands on the fast spatial + default effects springs and collapses on default spatial + fast effects, as Compose does. The label stays in the accessible name while collapsed.
+  - **Deferred:** Compose's show/hide (`animateFloatingActionButton`, scale to 0.2 + fade) scales the whole FAB, which conflicts with §10 rule 4. It needs its own design, likely a wrapper element the consumer positions.
 
 ## 10. Layout safety (consumer positioning never breaks a component)
 
@@ -364,7 +371,7 @@ Build order: Foundations (token source, 6 themes × modes × contrast, motion sc
   | standard | 0.9 / 1400 | 0.9 / 700 | 0.9 / 300 | 1.0 / 3800 · 1600 · 800 |
 
   Overshoot: expressive spatial 9.5% fast, 1.5% default/slow; standard spatial 0.15%; effects 0%. This matches §6.
-- Open spec gaps: `FabMediumTokens` / `ExtendedFabMediumTokens` have `ContainerShape` commented out in Compose (comment says `CornerLargeIncreased`, 20px). Confirm against m3.material.io before building FAB. (The `LargeIconButtonTokens` `Uniform` question is resolved: it is the default width, see §9.)
+- ✅ Spec gaps resolved: medium FABs use `LargeIncreased` (20px) in Compose's code (§9). `LargeIconButtonTokens` `Uniform` is the default width (§9).
 - `@vkieu` npm scope must be owned before publishing.
 
 ### Remaining Foundations work
