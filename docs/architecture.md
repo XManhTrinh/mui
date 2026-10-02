@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 3 in progress** (Toolbars, top app bars, search, badges, dividers, lists, sliders built) · Last updated: 2026-10-03 (rev. 32 — sliders)
+Status: **Tier 3 in progress** (Toolbars, top app bars, search, badges, dividers, lists, sliders, sheets built) · Last updated: 2026-10-03 (rev. 33 — sheets)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -536,7 +536,7 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 - **Values** (Compose `ListItem.kt` interactive overloads, `ListItemDefaults`, `ListTokens`):
   - Padding 16px start / end, 10px top / bottom; 12px between leading content, the text and trailing content.
   - Heights: at least 56px (one line), 72px (overline or supporting text) and 88px (both). Three-line items align to the top, the others to the centre (Compose's breakpoint). Compose also treats a multi-line supporting text as three lines; that needs measuring and isn't done.
-  - Type and colour: headline `body-large` `on-surface`; supporting `body-medium`, overline `label-small`, leading content (`title-medium` for avatar letters, 24px icons) and trailing content (`label-small` text) `on-surface-variant`. Selected items are `secondary-container` with `on-secondary-container` content; disabled content `on-surface` 38%. The container is `surface` in both variants (`ItemSegmentedContainerColor`), so segmented lists usually sit on a `surface-container` background.
+  - Type and colour: headline `body-large` `on-surface`; supporting `body-medium`, overline `label-small`, leading content (`title-medium` for avatar letters, 24px icons) and trailing content (`label-small` text) `on-surface-variant`. Selected items are `secondary-container` with `on-secondary-container` content; disabled content `on-surface` 38%. Segmented items are `surface` (`ItemSegmentedContainerColor`), so segmented lists usually sit on a `surface-container` background. **Deviation:** standard items are transparent rather than `ItemContainerColor` (`surface`), so a list takes the colour of its sheet, card or pane; in Compose consumers override the colour for that.
   - **Shapes:** Compose's precedence is pressed, then selected or focused (all 16px), then hovered (12px), else 4px. They're computed into one `data-shape` (`rest | hovered | active`), so no two rules compete, and morph on the fast spatial spring while colours change on the default effects spring. Segmented lists are 2px apart and round the outer corners of the first and last items to 16px at rest (`data-position`), as `segmentedShapes` does. Static items in a standard list have no corners.
 - **Not in v1:** drag-to-reorder (`ReorderListTokens`), swipe-to-reveal, expandable items, and leading video/image size presets (consumers size their media).
 
@@ -549,6 +549,17 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 - **Inset icons** follow MDC (`BaseSlider`): the start icon 10px inside the active track's start, the end icon 10px inside the inactive track's end (replacing the stop indicator), each shown only when its segment fits it plus 20px; `on-primary` / `on-secondary-container`. MDC's other two positions (active end, inactive start) aren't offered.
 - **Value indicator** (`showValueLabel`): while dragging or keyboard-focused, a 44px `inverse-surface` pill with `label-large` `inverse-on-surface` text, 12px above the handle (left of a vertical one), from `ValueIndicator*` tokens. Compose's default slider has none.
 - **Deviations:** pressing the track maps linearly to the value (React Aria) while discrete thumbs are drawn between the corners, so a press near the ends of a discrete track can land one step off Compose; no haptics.
+
+### Sheets (built, Tier 3)
+- `SheetTrigger` (trigger + sheet, `open` / `defaultOpen` / `onOpenChange`, like `DialogTrigger`), `BottomSheet` (modal) and `SideSheet` (`variant` = `modal | standard`, `detached`, `title`, `actions`). Modal sheets are `useModalOverlay` + `useDialog` dialogs portalled through `Overlay`; children and `actions` may be functions of `{ close }`. Names: `aria-label` / `aria-labelledby`, or a side sheet's `title`.
+- **Bottom sheet values** (Compose `ModalBottomSheet.kt`, `BottomSheet.kt`, `SheetDefaults.kt`, `SheetBottomTokens`): at most 640px wide, centred; 28px top corners; `surface-container-low` (Compose's level 1 is tonal, not a shadow); a 32 × 4px `on-surface-variant` handle with 22px above and below; a 32% scrim on the default effects spring. It shows on the default spatial spring and hides on the fast effects spring (`showMotionSpec` / `hideMotionSpec`).
+- **Detents:** like Compose's legacy anchors, a sheet taller than half the window opens to half (`PartiallyExpanded` at window / 2) and can expand to its full height (up to the window); shorter sheets open fully. `skipPartiallyExpanded` opens fully.
+- **Handle and dragging:** the handle is a button. Pressed (or Enter / Space), it expands a half-open sheet and closes a fully open one, as Compose's handle click does; its label says which ("Expand sheet" / "Close sheet", configurable). Dragging it moves the sheet (pointer capture, no transition while dragging) and releasing settles with Compose's `AnchoredDraggableState` rules (`sheet-settle.ts`, unit-tested): a fling over 125px/s goes to the next anchor in its direction; otherwise the sheet moves on after 56px and springs back if not; settling past the bottom closes it.
+- **Dismissal:** a press on the scrim closes the sheet (Compose's `animateToDismiss`); Escape behaves like the back button (`settleToDismiss`): a fully open sheet with a half detent returns to half, otherwise it closes.
+- **Side sheets** aren't in Compose; values follow Material Components Android (`m3_comp_sheet_side_*`): 256px wide; modal `surface-container-low` at level 1 with 16px corners on its free (start) edge over a 32% scrim, sliding in from the end edge (mirrored in RTL); detached sheets float 16px from the edges with 16px corners all round; standard sheets are `surface`, level 0, no corners, and sit in the layout, opening and closing their width on a grid track (`0fr ↔ 1fr`, default spatial) and becoming `inert` while closed. They use the bottom sheet's springs rather than MDC's 275ms tween.
+  - **Header:** a `title-large` `on-surface-variant` headline with `actions` after it (the library bundles no close icon, decision #11), in a 72px row with 24px / 12px side padding; content has 24px sides. MDC has no header; these follow m3.material.io's side sheet layout and are not from token files, so treat them as provisional.
+- **Motion and layout safety:** sheets move by `translate` on a library-owned wrapper; the consumer's `className` and `style` go on the panel. The in-flow standard side sheet runs the layout-safety matrix.
+- **Not in v1:** the standard (non-modal) bottom sheet (`BottomSheetScaffold`), dragging from anywhere on the sheet or through nested scrolling (only the handle drags), predictive back, and detents beyond half / full.
 
 ## 10. Layout safety (consumer positioning never breaks a component)
 
@@ -631,7 +642,7 @@ apps/next-playground   # Next.js App Router + Pages Router test app, Playwright 
   - Screenshots are taken against the static Storybook build (`pnpm test:e2e`), with the font loaded locally (`@fontsource-variable/roboto-flex`) so results don't depend on the network.
   - Baselines are platform-specific (`*-darwin.png` today). CI has to render them in a pinned container image and commit that platform's baselines.
   - Every class a `tv` recipe can emit is checked to appear literally in its source and to compile in Tailwind. A class assembled at runtime would never be generated.
-  - **Screenshot tolerance:** `maxDiffPixelRatio` is 0.0002 (0.02%). At 0.2%, a moved hairline (FAB collapse width, TextField outline offset) still matched an outdated baseline. Re-baseline deliberately after visual changes and review the images.
+  - **Screenshot tolerance:** `maxDiffPixelRatio` is 0.0002 (0.02%). Playwright's per-pixel colour `threshold` stays at its default 0.2, which ignores colour shifts as small as `surface` → `surface-container` (found with the list container change): after colour changes, re-baseline with `--update-snapshots=all` and review the images. At 0.2%, a moved hairline (FAB collapse width, TextField outline offset) still matched an outdated baseline. Re-baseline deliberately after visual changes and review the images.
   - **Storybook server:** the static build is served with `sirv --dev`, which reads files per request, so a server reused across rebuilds never returns 404s for new asset hashes.
 - Layout-safety override matrix (§10)
 - Next playground build + Playwright in CI
@@ -641,7 +652,7 @@ apps/next-playground   # Next.js App Router + Pages Router test app, Playwright 
 
 - **Tier 1**: Button, IconButton, **Button group** (standard + connected), FAB + Extended FAB, Card, TextField, Checkbox, Radio, Switch, Dialog, Menu (Expressive: standard + vibrant colours, grouped items with gaps, selected state)
 - **Tier 2**: Split button (built), **FAB menu** (built), Chips (built), Tabs (built), **Navigation rail** (collapsed / expanded / modal expanded, built), **Flexible navigation bar** (built), Snackbar (built), Tooltip (built), **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator; built)
-- **Tier 3**: **Toolbars** (floating + docked; built), Flexible app bars (built) + search app bar (built), Slider (XS–XL, vertical, centred, range, inset icons; built), Expressive lists (segmented/grouped; built), Carousel (incl. vertical), Bottom/side sheets, Date & time pickers, Badges (built), Dividers (built), Search (built)
+- **Tier 3**: **Toolbars** (floating + docked; built), Flexible app bars (built) + search app bar (built), Slider (XS–XL, vertical, centred, range, inset icons; built), Expressive lists (segmented/grouped; built), Carousel (incl. vertical), Bottom/side sheets (built), Date & time pickers, Badges (built), Dividers (built), Search (built)
 
 Build order: Foundations (token source, 6 themes × modes × contrast, motion schemes, ThemeProvider, `cn`, primitives) → Tier 1 → Tier 2 → Tier 3.
 
