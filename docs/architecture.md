@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 2 in progress** (all but Progress indicators built) · Last updated: 2026-10-02 (rev. 24 — Tooltip)
+Status: **Tier 2 complete**; Tier 3 next · Last updated: 2026-10-02 (rev. 25 — Progress indicators; Tier 2 complete)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -333,6 +333,25 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 - **Focus fix:** a menu opens on pointer down and takes focus. React Aria then hides the rest of the page, trigger included, from assistive tech. The browser's follow-up `mousedown` on the trigger would then drop focus on `<body>`, so Escape did nothing. `MenuTrigger` cancels the trigger's `mousedown`; React Aria has already focused it on pointer down. A browser test asserts focus is inside the menu after a mouse open.
 - **Not in v1:** submenus, and the ButtonGroup overflow menu (now unblocked).
 
+### Progress indicators (built, Tier 2)
+- `LinearProgressIndicator`: `value` (0–1; leave it out for indeterminate), `wavy`, `stopIndicator` (default on). `CircularProgressIndicator`: `value` (required) and `wavy`. **There's no indeterminate circular indicator**: it's deprecated in Expressive and `LoadingIndicator` replaces it. Both are React Aria progress bars that need a name.
+- **Values** (Compose `ProgressIndicator.kt`, `WavyProgressIndicator.kt`, `Linear/CircularWavyProgressModifiers.kt`, and the ProgressIndicator / Linear / Circular tokens):
+  - Shared: `primary` active indicator and stop dot on a `secondary-container` track, with 4px round strokes and a 4px gap.
+  - Linear: 240px wide (resize with `className`, e.g. `w-full`), 4px tall, 10px when wavy.
+  - Circular: 40px flat, 48px wavy.
+- **Linear drawing** ports `LinearProgressDrawingCache.updateDrawPaths`:
+  - Segments are inset for the round caps. The track fills the gaps between active segments, after a gap that shrinks while progress enters. The stop dot shrinks once progress reaches it.
+  - The wave is Compose's run of quadratic half-waves, each control point halfway along. It peaks at (height − stroke) / 2 = 3px, is scaled by amplitude about the centre line, and is drawn as exact SVG quadratics.
+  - Wavelength 40px (20px indeterminate), travelling a wavelength per second.
+  - A wavy determinate indicator flattens below 10% and above 95% (`indicatorAmplitude`). The amplitude changes over 500ms: standard easing as it grows, emphasized-accelerate as it shrinks.
+- **Indeterminate linear:** Compose's four keyframed curves over a 1750ms cycle (first head 0–1000ms, first tail 250–1250ms, second head 650–1500ms, second tail 900–1750ms, emphasized-accelerate), drawn as two lines.
+- **Circular drawing:**
+  - Flat: arcs from 12 o'clock with a gap of (4px + stroke) of circumference either side, drawn as dashes on a `pathLength="1"` circle.
+  - Wavy: Compose's `CircularShapes` from our shape library. The active ring is `star(n, innerRadius 0.75, rounding 0.35 / smoothing 0.4, innerRounding 0.5)`, with n = round(2πr / 15px) (9 at 48px), morphed from an n-vertex circle by amplitude.
+  - The ring is drawn twice (`pathLength="2"`, Compose's `repeatPath`). The dash shifts along it while the group rotates back, so the wave travels while the arc stays put: one revolution per n seconds.
+- **Rendering:** geometry and timing are pure functions (`progress-geometry.ts`), unit-tested against Compose's numbers. Animated variants write paths to the SVG from Motion's `useAnimationFrame`. The first render is a deterministic frame at t = 0, so it's SSR-safe. The SVG mirrors in RTL.
+- **Reduced motion:** the wave stops travelling and amplitude changes snap. Indeterminate motion stays, because it conveys activity.
+
 ### Tooltip (built, Tier 2)
 - **Plain:** `TooltipTrigger` (trigger then `<Tooltip>`) on React Aria `useTooltipTrigger` / `useTooltip`. It shows on hover or keyboard focus, describes the trigger (`aria-describedby`), stays while hovered, and Escape hides it. `delay` / `closeDelay` default to 0, since Compose shows at once. `placement` = `top | bottom | left | right`, flipping when there's no room.
 - **Rich:** `RichTooltipTrigger` (trigger then `<RichTooltip title action>`). It can hold actions, so it's a **non-modal popover dialog** (`useOverlayTrigger` type `dialog` + `usePopover isNonModal` + `useDialog`), named by its subhead (or `aria-label`). A press opens it; a press again, Escape or a press outside closes it, which is Compose's persistent rich tooltip.
@@ -546,7 +565,7 @@ apps/next-playground   # Next.js App Router + Pages Router test app, Playwright 
 ## 15. Component roadmap (M3 Expressive set)
 
 - **Tier 1**: Button, IconButton, **Button group** (standard + connected), FAB + Extended FAB, Card, TextField, Checkbox, Radio, Switch, Dialog, Menu (Expressive: standard + vibrant colours, grouped items with gaps, selected state)
-- **Tier 2**: Split button (built), **FAB menu** (built), Chips (built), Tabs (built), **Navigation rail** (collapsed / expanded / modal expanded, built), **Flexible navigation bar** (built), Snackbar (built), Tooltip (built), **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator)
+- **Tier 2**: Split button (built), **FAB menu** (built), Chips (built), Tabs (built), **Navigation rail** (collapsed / expanded / modal expanded, built), **Flexible navigation bar** (built), Snackbar (built), Tooltip (built), **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator; built)
 - **Tier 3**: **Toolbars** (floating + docked), Flexible app bars + search app bar, Slider (XS–XL, vertical, centred, range, inset icons), Expressive lists (segmented/grouped), Carousel (incl. vertical), Bottom/side sheets, Date & time pickers, Badges, Dividers, Search
 
 Build order: Foundations (token source, 6 themes × modes × contrast, motion schemes, ThemeProvider, `cn`, primitives) → Tier 1 → Tier 2 → Tier 3.
