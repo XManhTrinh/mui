@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 2 in progress** (Loading indicator, FAB menu, Split button built) · Last updated: 2026-10-02 (rev. 19 — Split button)
+Status: **Tier 2 in progress** (Loading indicator, FAB menu, Split button, Chips built) · Last updated: 2026-10-02 (rev. 20 — Chips)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -334,6 +334,23 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 - **Focus fix:** a menu opens on pointer down and takes focus. React Aria then hides the rest of the page, trigger included, from assistive tech. The browser's follow-up `mousedown` on the trigger would then drop focus on `<body>`, so Escape did nothing. `MenuTrigger` cancels the trigger's `mousedown`; React Aria has already focused it on pointer down. A browser test asserts focus is inside the menu after a mouse open.
 - **Not in v1:** submenus, and the ButtonGroup overflow menu (now unblocked).
 
+### Chips (built, Tier 2)
+- `AssistChip` (button or link; `leadingIcon`, `trailingIcon`, `elevated`), `SuggestionChip` (button; `leadingIcon`, `elevated`), `FilterChip` (toggle with `aria-pressed`; `selected` / `defaultSelected` / `onSelectedChange`, `leadingIcon`, `trailingIcon`, `elevated`) and `InputChip` (`avatar` or `leadingIcon`, `onPress`, `selected`, `onRemove`, `removeLabel`). There's no chip group; chips are laid out with flex.
+- **Values** (Compose `Chip.kt` and the chip token files):
+  - Size and type: 32px tall (48px touch target), `label-large`, 18px icons, 24px round avatars.
+  - Flat chips have a 1px `outline-variant` border. Elevated chips are `surface-container-low` at level 1 (hover 2, dragged 4).
+  - Disabled: content `on-surface` 38%, borders `on-surface` 12%, containers `on-surface` 12% at level 0.
+  - Colours: assist labels `on-surface`; suggestion, filter and input labels `on-surface-variant`. Assist / suggestion icons are `primary`.
+  - Selected filter and input chips are `secondary-container` with no border. A selected input chip's leading icon is `primary`.
+- **Shapes:** assist and suggestion chips keep 8px corners. Filter and input chips use Compose's **Expressive `shapes` overload**: 12px, 8px while pressed, round when selected, on the fast spatial spring, with the tonal colours (unselected leading icons `on-surface-variant`). The classic 8px filter and input chips aren't offered.
+- **Padding:** reproduces Compose's `ChipArrangement`, which spaces the label asymmetrically, for each icon combination:
+  - Assist / suggestion: 16px without icons, 8px beside an icon, 8px gaps.
+  - Filter: 16 | 16 with no icons; 8 · icon · 4 | 16 with a leading icon; 12 | 8 · icon · 8 with a trailing one; 8 · 4 | 4 · 8 with both.
+  - Input: 12 | 12; 8 · 4 | 12 with an icon; 4 · 4 | 12 with an avatar; trailing gaps 8, or 4 with a leading element; 8px end.
+- **Filter check:** without a `leadingIcon`, a selected filter chip grows a check (grid `0fr → 1fr`, fast spatial + default effects), and its start padding moves 16 → 8px, as in Compose's samples.
+- **Input chip structure:** a chip container holding two buttons, the primary action and a separate remove button (`aria-labelledby` "Remove" + label, so "Remove Alice"), because interactive content can't nest. Backspace / Delete on the chip also removes it. The container shows the state layer of whichever button is interacted with; each button has its own focus ring.
+- **Icon colours:** disabled and selected-input colours on icons go through a named group (`group/chip`), so they win on specificity rather than CSS order.
+
 ### Split button (built, Tier 2; a component, not a composite)
 - `SplitButton`: a leading action (`children` label, `leadingIcon`, `onPress` or `href`) and a trailing button that opens `menu` (a `<Menu>` element, through `MenuTrigger`). Props: `variant` = `filled | tonal | outlined | elevated` (Compose has no text split button), `size` = `xs`–`xl`, `menuLabel` (the trailing button's required name), `open` / `defaultOpen` / `onOpenChange`, `disabled` (both halves), `menuIcon`.
 - **Values** (Compose `SplitButton.kt`, `SplitButton{XSmall…XLarge}Tokens`):
@@ -470,7 +487,7 @@ apps/next-playground   # Next.js App Router + Pages Router test app, Playwright 
 ## 15. Component roadmap (M3 Expressive set)
 
 - **Tier 1**: Button, IconButton, **Button group** (standard + connected), FAB + Extended FAB, Card, TextField, Checkbox, Radio, Switch, Dialog, Menu (Expressive: standard + vibrant colours, grouped items with gaps, selected state)
-- **Tier 2**: Split button (built), **FAB menu** (built), Chips, Tabs, **Navigation rail** (collapsed / expanded / modal expanded), **Flexible navigation bar**, Snackbar, Tooltip, **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator)
+- **Tier 2**: Split button (built), **FAB menu** (built), Chips (built), Tabs, **Navigation rail** (collapsed / expanded / modal expanded), **Flexible navigation bar**, Snackbar, Tooltip, **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator)
 - **Tier 3**: **Toolbars** (floating + docked), Flexible app bars + search app bar, Slider (XS–XL, vertical, centred, range, inset icons), Expressive lists (segmented/grouped), Carousel (incl. vertical), Bottom/side sheets, Date & time pickers, Badges, Dividers, Search
 
 Build order: Foundations (token source, 6 themes × modes × contrast, motion schemes, ThemeProvider, `cn`, primitives) → Tier 1 → Tier 2 → Tier 3.
