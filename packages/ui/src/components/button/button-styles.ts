@@ -199,6 +199,22 @@ const shapeVariants = SIZES.flatMap((size) => [
   },
 ]);
 
+/**
+ * Colours and elevation of each button variant, shared with the split button's halves.
+ * Disabled is `on-surface` 10% / `on-surface-variant` 38% for every variant.
+ */
+export const buttonVariantClasses = {
+  filled:
+    'bg-primary text-on-primary data-hovered:shadow-elevation-1 data-disabled:bg-on-surface/10',
+  elevated:
+    'bg-surface-container-low text-primary shadow-elevation-1 data-hovered:shadow-elevation-2 data-disabled:bg-on-surface/10',
+  tonal:
+    'bg-secondary-container text-on-secondary-container data-hovered:shadow-elevation-1 data-disabled:bg-on-surface/10',
+  outlined:
+    'border border-solid border-outline-variant bg-transparent text-on-surface-variant data-disabled:border-outline-variant/10',
+  text: 'bg-transparent text-primary',
+} as const;
+
 /** Variant definitions for {@link Button}; extend them to add variants. */
 export const buttonStyles = tv({
   slots: {
@@ -215,21 +231,11 @@ export const buttonStyles = tv({
   },
   variants: {
     variant: {
-      filled: {
-        root: 'bg-primary text-on-primary data-hovered:shadow-elevation-1 data-disabled:bg-on-surface/10',
-      },
-      elevated: {
-        root: 'bg-surface-container-low text-primary shadow-elevation-1 data-hovered:shadow-elevation-2 data-disabled:bg-on-surface/10',
-      },
-      tonal: {
-        root: 'bg-secondary-container text-on-secondary-container data-hovered:shadow-elevation-1 data-disabled:bg-on-surface/10',
-      },
-      outlined: {
-        root: 'border border-solid border-outline-variant bg-transparent text-on-surface-variant data-disabled:border-outline-variant/10',
-      },
-      text: {
-        root: 'bg-transparent text-primary',
-      },
+      filled: { root: buttonVariantClasses.filled },
+      elevated: { root: buttonVariantClasses.elevated },
+      tonal: { root: buttonVariantClasses.tonal },
+      outlined: { root: buttonVariantClasses.outlined },
+      text: { root: buttonVariantClasses.text },
     },
     size: {
       xs: {

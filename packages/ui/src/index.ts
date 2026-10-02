@@ -40,6 +40,7 @@ export {
 } from './components/button/ButtonContext';
 export {
   buttonStyles,
+  buttonVariantClasses,
   type ButtonShape,
   type ButtonSize,
   type ButtonStyleProps,
@@ -85,6 +86,17 @@ export {
   type FabSize,
   type FabStyleProps,
 } from './components/fab/fab-styles';
+export {
+  SplitButton,
+  type SplitButtonClassNames,
+  type SplitButtonProps,
+} from './components/split-button/SplitButton';
+export {
+  splitButtonStyles,
+  type SplitButtonSize,
+  type SplitButtonStyleProps,
+  type SplitButtonVariant,
+} from './components/split-button/split-button-styles';
 export {
   FabMenu,
   FabMenuItem,
