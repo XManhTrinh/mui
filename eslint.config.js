@@ -8,6 +8,7 @@ import tseslint from 'typescript-eslint';
 /**
  * Library layers (architecture §3). Dependencies only point downward:
  * tokens → utils → theme / motion → primitives → components → composites.
+ * `shapes` (the androidx.graphics.shapes port) is pure geometry and imports nothing.
  * Composites are built from public components only, never from primitives.
  */
 const layers = [
@@ -15,6 +16,7 @@ const layers = [
   { type: 'utils', pattern: 'packages/ui/src/utils' },
   { type: 'theme', pattern: 'packages/ui/src/theme' },
   { type: 'motion', pattern: 'packages/ui/src/motion' },
+  { type: 'shapes', pattern: 'packages/ui/src/shapes' },
   { type: 'primitives', pattern: 'packages/ui/src/primitives' },
   { type: 'components', pattern: 'packages/ui/src/components' },
   { type: 'composites', pattern: 'packages/ui/src/composites' },
@@ -72,8 +74,17 @@ export default tseslint.config(
             allow('utils', ['tokens', 'utils']),
             allow('theme', ['tokens', 'utils', 'theme']),
             allow('motion', ['tokens', 'theme', 'motion']),
-            allow('primitives', ['tokens', 'utils', 'theme', 'motion', 'primitives']),
-            allow('components', ['tokens', 'utils', 'theme', 'motion', 'primitives', 'components']),
+            allow('shapes', ['shapes']),
+            allow('primitives', ['tokens', 'utils', 'theme', 'motion', 'shapes', 'primitives']),
+            allow('components', [
+              'tokens',
+              'utils',
+              'theme',
+              'motion',
+              'shapes',
+              'primitives',
+              'components',
+            ]),
             allow('composites', ['tokens', 'utils', 'theme', 'motion', 'components', 'composites']),
             allow('next', ['tokens', 'utils', 'theme', 'next']),
           ],
