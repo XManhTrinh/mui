@@ -48,6 +48,19 @@ type OwnKeys = keyof ButtonBaseCommonProps | 'color';
 export interface ButtonBaseActionProps
   extends ButtonBaseCommonProps, Omit<ComponentPropsWithoutRef<'button'>, OwnKeys> {
   ref?: Ref<HTMLButtonElement>;
+  elementType?: 'button';
+  href?: undefined;
+  toggle?: false;
+}
+
+/**
+ * A `div` with `role="button"`, for pressable containers whose content a `<button>` may
+ * not hold (headings, images, block layout), such as clickable cards.
+ */
+export interface ButtonBaseDivActionProps
+  extends ButtonBaseCommonProps, Omit<ComponentPropsWithoutRef<'div'>, OwnKeys> {
+  ref?: Ref<HTMLDivElement>;
+  elementType: 'div';
   href?: undefined;
   toggle?: false;
 }
@@ -77,7 +90,8 @@ export interface ButtonBaseToggleProps
   onSelectedChange?: (selected: boolean) => void;
 }
 
-export type ButtonBaseProps = ButtonBaseActionProps | ButtonBaseLinkProps | ButtonBaseToggleProps;
+export type ButtonBaseProps =
+  ButtonBaseActionProps | ButtonBaseDivActionProps | ButtonBaseLinkProps | ButtonBaseToggleProps;
 
 function splitProps<T extends ButtonBaseCommonProps>(props: T) {
   const {
@@ -104,24 +118,31 @@ function splitProps<T extends ButtonBaseCommonProps>(props: T) {
 const render = (children: ButtonBaseCommonProps['children'], isSelected: boolean) =>
   typeof children === 'function' ? children({ isSelected }) : children;
 
-function ActionBase({ ref, type = 'button', ...props }: ButtonBaseActionProps) {
-  const { disabled, element, children, press, dom } = splitProps(props);
-  const domRef = useObjectRef(ref);
+function ActionBase(props: ButtonBaseActionProps | ButtonBaseDivActionProps) {
+  const { ref, elementType = 'button', ...rest } = props;
+  const type =
+    elementType === 'button' ? ((rest as ButtonBaseActionProps).type ?? 'button') : undefined;
+  const { disabled, element, children, press, dom } = splitProps(rest);
+  const domRef = useObjectRef(ref as Ref<HTMLElement>);
   const { buttonProps, isPressed } = useButton(
-    { ...press, type, isDisabled: disabled, elementType: 'button' },
+    { ...press, type, isDisabled: disabled, elementType },
     domRef,
   );
   const { interactionProps, dataAttributes } = useM3Interaction(
     { isDisabled: disabled, isPressed },
     domRef,
   );
-  return (
-    <button
-      {...mergeProps(dom, buttonProps, interactionProps)}
-      {...dataAttributes}
-      {...element}
-      ref={domRef}
-    >
+  const elementProps = {
+    ...mergeProps(dom, buttonProps, interactionProps),
+    ...dataAttributes,
+    ...element,
+  };
+  return elementType === 'div' ? (
+    <div {...elementProps} ref={domRef as Ref<HTMLDivElement>}>
+      {render(children, false)}
+    </div>
+  ) : (
+    <button {...elementProps} ref={domRef as Ref<HTMLButtonElement>}>
       {render(children, false)}
     </button>
   );

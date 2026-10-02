@@ -16,6 +16,7 @@ export { TouchTarget, type TouchTargetProps } from './primitives/TouchTarget';
 export {
   ButtonBase,
   type ButtonBaseActionProps,
+  type ButtonBaseDivActionProps,
   type ButtonBaseLinkProps,
   type ButtonBaseProps,
   type ButtonBaseRenderState,
