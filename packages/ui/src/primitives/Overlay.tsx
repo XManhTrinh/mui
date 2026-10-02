@@ -1,6 +1,6 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { useLayoutEffect, useRef, type ReactNode } from 'react';
 import { Overlay as AriaOverlay } from 'react-aria';
 import { useThemeScope } from '../theme/context';
 import { themeAttributes } from '../theme/state';
@@ -11,26 +11,52 @@ export interface OverlayProps {
   portalContainer?: Element;
   /** Leave focus handling to the caller instead of restoring it on unmount. */
   disableFocusManagement?: boolean;
+  /** Whether the overlay is animating out; focus containment is released meanwhile. */
+  isExiting?: boolean;
 }
 
 /**
  * Portals overlay content (dialogs, menus, sheets, tooltips) to `document.body`
- * while keeping the theme, mode, contrast and motion scheme of the place it was
- * rendered from, so overlays opened inside a `ThemeScope` still match it.
- * Dismissal, focus containment and scroll locking come from the React Aria overlay
- * hooks (`useModalOverlay`, `usePopover`, …) of the component using it.
+ * while keeping the theme, mode, contrast, motion scheme **and text direction** of the
+ * place it was rendered from, so overlays opened inside a `ThemeScope` or an RTL region
+ * still match it. Dismissal, focus containment and scroll locking come from the React
+ * Aria overlay hooks (`useModalOverlay`, `usePopover`, …) of the component using it.
  */
-export function Overlay({ children, portalContainer, disableFocusManagement }: OverlayProps) {
+export function Overlay({
+  children,
+  portalContainer,
+  disableFocusManagement,
+  isExiting,
+}: OverlayProps) {
   const scope = useThemeScope();
+  const markerRef = useRef<HTMLSpanElement>(null);
+  const scopeRef = useRef<HTMLDivElement>(null);
+
+  // `dir` is inherited through the DOM, which a portal leaves; copy the direction in
+  // effect where the overlay is declared onto the portalled wrapper.
+  useLayoutEffect(() => {
+    if (markerRef.current && scopeRef.current) {
+      scopeRef.current.dir = getComputedStyle(markerRef.current).direction;
+    }
+  });
+
   return (
-    <AriaOverlay portalContainer={portalContainer} disableFocusManagement={disableFocusManagement}>
-      <div
-        {...themeAttributes(scope)}
-        data-overlay-scope=""
-        style={{ display: 'contents', color: 'var(--md-sys-color-on-surface)' }}
+    <>
+      <span ref={markerRef} hidden />
+      <AriaOverlay
+        portalContainer={portalContainer}
+        disableFocusManagement={disableFocusManagement}
+        isExiting={isExiting}
       >
-        {children}
-      </div>
-    </AriaOverlay>
+        <div
+          ref={scopeRef}
+          {...themeAttributes(scope)}
+          data-overlay-scope=""
+          style={{ display: 'contents', color: 'var(--md-sys-color-on-surface)' }}
+        >
+          {children}
+        </div>
+      </AriaOverlay>
+    </>
   );
 }

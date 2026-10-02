@@ -22,4 +22,17 @@ describe('Overlay', () => {
     expect(wrapper).toHaveAttribute('data-motion', 'standard');
     expect(wrapper).toHaveStyle({ display: 'contents' });
   });
+
+  it('keeps the text direction of where it was rendered', () => {
+    render(
+      <div dir="rtl">
+        <Overlay>
+          <div>Menu</div>
+        </Overlay>
+      </div>,
+    );
+    const wrapper = screen.getByText('Menu').closest('[data-overlay-scope]');
+    expect(wrapper?.parentElement).toBe(document.body);
+    expect(wrapper).toHaveAttribute('dir', 'rtl');
+  });
 });

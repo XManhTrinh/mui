@@ -39,3 +39,5 @@ export {
   type SelectionControlProps,
 } from './primitives/SelectionControl';
 export { selectionControlStyles } from './primitives/selection-control-styles';
+export { TriggerContext, type TriggerContextValue } from './primitives/TriggerContext';
+export { usePresence } from './primitives/use-presence';

@@ -10,6 +10,7 @@ import {
 } from 'react';
 import {
   mergeProps,
+  mergeRefs,
   useButton,
   useLink,
   useObjectRef,
@@ -18,6 +19,7 @@ import {
   type PressEvents,
 } from 'react-aria';
 import { useToggleState, type ToggleGroupState } from 'react-stately';
+import { TriggerContext, type TriggerContextValue } from './TriggerContext';
 import { useM3Interaction } from './use-m3-interaction';
 
 /**
@@ -245,14 +247,28 @@ function GroupItemBase({
   );
 }
 
+function withTrigger(
+  props: ButtonBaseProps,
+  { ref: triggerRef, ...trigger }: TriggerContextValue,
+): ButtonBaseProps {
+  const merged = mergeProps(trigger, props) as ButtonBaseProps;
+  return {
+    ...merged,
+    ref: mergeRefs(props.ref as Ref<HTMLElement>, triggerRef as Ref<HTMLElement>),
+  } as ButtonBaseProps;
+}
+
 /**
  * Unstyled button behaviour shared by every button-like component: a `<button>`, a
  * link (`href`) or a toggle (`toggle`), with React Aria press, focus and keyboard
  * handling, and the M3 interaction `data-*` attributes and ripple origin from
  * `useM3Interaction`. DOM props pass through; `className` and `style` go on the element.
  */
-export function ButtonBase(props: ButtonBaseProps) {
+export function ButtonBase(ownProps: ButtonBaseProps) {
   const groupState = useContext(ToggleGroupStateContext);
+  const trigger = useContext(TriggerContext);
+  // An enclosing overlay trigger adds its press handler (chained), ARIA attributes and ref.
+  const props = trigger ? withTrigger(ownProps, trigger) : ownProps;
   if (props.href !== undefined) return <LinkBase {...props} />;
   if (props.toggle) {
     if (groupState && props.value !== undefined) {
