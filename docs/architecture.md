@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 2 in progress** (Loading indicator, FAB menu, Split button, Chips, Tabs, Navigation rail + bar, Snackbar built) · Last updated: 2026-10-02 (rev. 23 — Snackbar)
+Status: **Tier 2 in progress** (all but Progress indicators built) · Last updated: 2026-10-02 (rev. 24 — Tooltip)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -333,6 +333,20 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 - **Focus fix:** a menu opens on pointer down and takes focus. React Aria then hides the rest of the page, trigger included, from assistive tech. The browser's follow-up `mousedown` on the trigger would then drop focus on `<body>`, so Escape did nothing. `MenuTrigger` cancels the trigger's `mousedown`; React Aria has already focused it on pointer down. A browser test asserts focus is inside the menu after a mouse open.
 - **Not in v1:** submenus, and the ButtonGroup overflow menu (now unblocked).
 
+### Tooltip (built, Tier 2)
+- **Plain:** `TooltipTrigger` (trigger then `<Tooltip>`) on React Aria `useTooltipTrigger` / `useTooltip`. It shows on hover or keyboard focus, describes the trigger (`aria-describedby`), stays while hovered, and Escape hides it. `delay` / `closeDelay` default to 0, since Compose shows at once. `placement` = `top | bottom | left | right`, flipping when there's no room.
+- **Rich:** `RichTooltipTrigger` (trigger then `<RichTooltip title action>`). It can hold actions, so it's a **non-modal popover dialog** (`useOverlayTrigger` type `dialog` + `usePopover isNonModal` + `useDialog`), named by its subhead (or `aria-label`). A press opens it; a press again, Escape or a press outside closes it, which is Compose's persistent rich tooltip.
+- **Values** (Compose `Tooltip.kt`, Plain / RichTooltipTokens):
+  - Plain: `inverse-surface`, `body-small`, 8 × 4px padding, at least 40×24px, at most 200px wide, 4px corners.
+  - Rich: `surface-container` at level 2, 12px corners, 16px sides, up to 320px. A `title-small` subhead with its first baseline 28px down. `body-medium` text with its first baseline 24px below the subhead and 16px under it, or 4px above and below without a subhead or action. The action row is at least 36px tall with 8px under it.
+  - Baselines become padding from Roboto Flex metrics: subhead 13px, text 9px.
+  - Both sit 4px from the anchor (12px with the optional 16×8 caret) and scale from 80% on fast spatial while fading on fast effects, from the anchor's side.
+- **Deviations:**
+  - A focus-triggered plain tooltip doesn't auto-hide after 1.5s (Compose's `TooltipDuration`); it stays until blur, leave or Escape (WCAG 1.4.13).
+  - Plain tooltips don't open on touch long-press; React Aria tooltips are pointer and keyboard only.
+  - Triggers must read `TriggerContext` (library buttons do), as with `MenuTrigger`.
+- **Testing note:** React Aria counts a hover only after a pointer move has set its interaction modality. Tests move the pointer before hovering, as any real approach does.
+
 ### Snackbar (built, Tier 2)
 - `Snackbar`: the message as `children`, `actionLabel` + `onAction`, `onDismiss` (shows the × button; Escape inside it also dismisses), `dismissLabel`, `actionOnNewLine`.
 - `SnackbarHostState` (from `useSnackbarHostState()`) ports Compose's queue. `showSnackbar({ message, actionLabel, withDismissAction, actionOnNewLine, duration })` shows one snackbar at a time and resolves `'action-performed'` or `'dismissed'`. `SnackbarHost` renders it; the consumer positions it with `className`.
@@ -532,7 +546,7 @@ apps/next-playground   # Next.js App Router + Pages Router test app, Playwright 
 ## 15. Component roadmap (M3 Expressive set)
 
 - **Tier 1**: Button, IconButton, **Button group** (standard + connected), FAB + Extended FAB, Card, TextField, Checkbox, Radio, Switch, Dialog, Menu (Expressive: standard + vibrant colours, grouped items with gaps, selected state)
-- **Tier 2**: Split button (built), **FAB menu** (built), Chips (built), Tabs (built), **Navigation rail** (collapsed / expanded / modal expanded, built), **Flexible navigation bar** (built), Snackbar (built), Tooltip, **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator)
+- **Tier 2**: Split button (built), **FAB menu** (built), Chips (built), Tabs (built), **Navigation rail** (collapsed / expanded / modal expanded, built), **Flexible navigation bar** (built), Snackbar (built), Tooltip (built), **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator)
 - **Tier 3**: **Toolbars** (floating + docked), Flexible app bars + search app bar, Slider (XS–XL, vertical, centred, range, inset icons), Expressive lists (segmented/grouped), Carousel (incl. vertical), Bottom/side sheets, Date & time pickers, Badges, Dividers, Search
 
 Build order: Foundations (token source, 6 themes × modes × contrast, motion schemes, ThemeProvider, `cn`, primitives) → Tier 1 → Tier 2 → Tier 3.
