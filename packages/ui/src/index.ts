@@ -366,3 +366,16 @@ export {
   type ListProps,
 } from './components/list/List';
 export { listStyles, type ListStyleProps, type ListVariant } from './components/list/list-styles';
+export {
+  RangeSlider,
+  Slider,
+  type RangeSliderProps,
+  type SliderClassNames,
+  type SliderProps,
+} from './components/slider/Slider';
+export {
+  sliderStyles,
+  type SliderOrientation,
+  type SliderSize,
+  type SliderStyleProps,
+} from './components/slider/slider-styles';
