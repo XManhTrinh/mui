@@ -87,6 +87,26 @@ export {
   type FabStyleProps,
 } from './components/fab/fab-styles';
 export {
+  Snackbar,
+  SnackbarHost,
+  useSnackbarHostState,
+  type SnackbarClassNames,
+  type SnackbarHostProps,
+  type SnackbarProps,
+} from './components/snackbar/Snackbar';
+export {
+  SnackbarHostState,
+  type SnackbarData,
+  type SnackbarDuration,
+  type SnackbarResult,
+  type SnackbarVisuals,
+} from './components/snackbar/snackbar-state';
+export {
+  snackbarHostStyles,
+  snackbarStyles,
+  type SnackbarStyleProps,
+} from './components/snackbar/snackbar-styles';
+export {
   NavigationRail,
   NavigationRailItem,
   type NavigationRailClassNames,
