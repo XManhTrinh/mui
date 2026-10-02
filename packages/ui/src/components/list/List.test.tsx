@@ -157,8 +157,8 @@ describe('List (interactive)', () => {
   });
 
   it('requires a name in its types', () => {
-    // @ts-expect-error aria-label or aria-labelledby is required
     const unnamed = (
+      // @ts-expect-error aria-label or aria-labelledby is required
       <List>
         <ListItem key="a">A</ListItem>
       </List>
