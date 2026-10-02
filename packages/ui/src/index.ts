@@ -125,3 +125,18 @@ export {
 } from './components/radio/radio-styles';
 export { Switch, type SwitchClassNames, type SwitchProps } from './components/switch/Switch';
 export { switchStyles, type SwitchStyleProps } from './components/switch/switch-styles';
+export {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+  type DialogActionsProps,
+  type DialogClassNames,
+  type DialogContentProps,
+  type DialogProps,
+  type DialogRenderProps,
+  type DialogTitleProps,
+  type DialogTriggerProps,
+} from './components/dialog/Dialog';
+export { dialogStyles, type DialogStyleProps } from './components/dialog/dialog-styles';
