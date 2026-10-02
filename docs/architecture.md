@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 2 in progress** (Loading indicator built) · Last updated: 2026-10-02 (rev. 17 — Loading indicator)
+Status: **Tier 2 in progress** (Loading indicator, FAB menu built) · Last updated: 2026-10-02 (rev. 18 — FAB menu)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -72,7 +72,6 @@ Four layers. **Dependencies only point downward**, enforced by `eslint-plugin-bo
 4. **Composites** — built **only from public components** (dogfooding the public API):
    - Button group (connected) = Buttons / IconButtons + group context
    - SplitButton = Button group + Button + IconButton + Menu
-   - FAB menu = FAB + Menu-style items
    - Navigation rail (modal expanded) = Overlay + rail items
    - Select / Combobox reuse `Field` parts + Menu list
 
@@ -336,6 +335,23 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 - **Focus fix:** a menu opens on pointer down and takes focus. React Aria then hides the rest of the page, trigger included, from assistive tech. The browser's follow-up `mousedown` on the trigger would then drop focus on `<body>`, so Escape did nothing. `MenuTrigger` cancels the trigger's `mousedown`; React Aria has already focused it on pointer down. A browser test asserts focus is inside the menu after a mouse open.
 - **Not in v1:** submenus, and the ButtonGroup overflow menu (now unblocked).
 
+### FAB menu (built, Tier 2; a component, not a composite)
+- `FabMenu` with `FabMenuItem` children: `open` / `defaultOpen` / `onOpenChange`, `icon` and an optional `openIcon` (usually add / close), `size` = `default | medium | large` (the FAB the button starts as), `color` = `primary | secondary | tertiary`, and `align` = `start | center | end` (logical). The button's name (`aria-label` / `aria-labelledby`) is required by the types. Items take `icon`, a label and `onPress` or `href`. Position the menu with `className` (`fixed end-4 bottom-4`); the items open upwards.
+- **No shape morph:** Compose's FAB menu doesn't use the shape library. Earlier revisions of this doc assumed it did; the Loading indicator was the only Tier 2 consumer.
+- **Values** (Compose `FloatingActionButtonMenu.kt`, `FabMenuBaselineTokens`):
+  - **Toggle button:** keeps its FAB's layout box (56 / 80 / 96px, corners 16 / 20 / 28px, icons 24 / 28 / 36px) in a library-owned anchor box. Open, it becomes the 56px close button with 28px corners and a 20px icon. Compose's `TopEnd` alignment inside the box becomes the `align` side here.
+  - **Button motion:** size, corners, container colour (`*-container` → the vibrant role) and icon all follow one fast spatial spring, as Compose's single `checkedProgress` does. Elevation is level 3.
+  - **Items:** 56px pills (min 56px wide, 24px side padding, 8px icon gap, 24px icon, `title-medium`), 4px apart and 8px above the button's box. They're `*-container` / `on-*-container`.
+  - **Item elevation:** none, because Compose's item `Surface` sets no elevation (the token's level 3 is unused).
+- **Stagger:** Compose animates the visible item count as an `Int` on the slow effects spring (ratio 1, stiffness 800, the same in both schemes), truncating it and ending within one item of the target.
+  - `fab-menu-stagger.ts` solves that spring for the step times. Opening shows the item nearest the button first (3 items: ~42ms, then the top two together at ~81ms). Closing hides the top item at once.
+  - Each item then springs its width (fast spatial, overshoot included) between 0 and its measured content width (`ResizeObserver`), and its opacity on fast effects, clipping its content from the aligned side. The list stays laid out until the bottom item has faded.
+- **Accessibility and keyboard:** the button has `aria-expanded` / `aria-controls`. DOM order is button then items (shown above it with `flex-col-reverse`), so Tab goes from the button to the top item, as in Compose. ↓ from the button and ↑ / ↓ between items move focus; ↑ from the top item and ↓ from the bottom one return to the button. Hidden items are `inert`.
+- **Closing:** Escape, choosing an item, or an outside press (React Aria `useInteractOutside`) closes the menu, and focus returns to the button if it was inside. Compose relies on the system back button, which the web lacks, so outside press is our equivalent.
+- **Colour sets:** primary / secondary / tertiary follow m3.material.io; Compose's defaults are the primary set.
+- **Component layer:** the toggle button needs `ButtonBase` and a size morph the public `Fab` doesn't offer, and composites may not import primitives.
+- **Not in v1:** Compose's scroll when the items exceed the available height; the icon swap happens on the state change rather than at 50% progress.
+
 ### Loading indicator (built, Tier 2)
 - `LoadingIndicator`: indeterminate by default; `value` (0–1) makes it determinate. `variant` = `default | contained`, and `shapes` takes at least two `MaterialShapes` names or `RoundedPolygon`s. It's a React Aria `useProgressBar` (`role="progressbar"`, `aria-valuenow` / `aria-valuetext` when determinate), and the types require `aria-label` or `aria-labelledby`.
 - **Values** (Compose `LoadingIndicator.kt`, `LoadingIndicatorTokens`):
@@ -442,7 +458,7 @@ apps/next-playground   # Next.js App Router + Pages Router test app, Playwright 
 ## 15. Component roadmap (M3 Expressive set)
 
 - **Tier 1**: Button, IconButton, **Button group** (standard + connected), FAB + Extended FAB, Card, TextField, Checkbox, Radio, Switch, Dialog, Menu (Expressive: standard + vibrant colours, grouped items with gaps, selected state)
-- **Tier 2**: Split button, **FAB menu**, Chips, Tabs, **Navigation rail** (collapsed / expanded / modal expanded), **Flexible navigation bar**, Snackbar, Tooltip, **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator)
+- **Tier 2**: Split button, **FAB menu** (built), Chips, Tabs, **Navigation rail** (collapsed / expanded / modal expanded), **Flexible navigation bar**, Snackbar, Tooltip, **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator)
 - **Tier 3**: **Toolbars** (floating + docked), Flexible app bars + search app bar, Slider (XS–XL, vertical, centred, range, inset icons), Expressive lists (segmented/grouped), Carousel (incl. vertical), Bottom/side sheets, Date & time pickers, Badges, Dividers, Search
 
 Build order: Foundations (token source, 6 themes × modes × contrast, motion schemes, ThemeProvider, `cn`, primitives) → Tier 1 → Tier 2 → Tier 3.
