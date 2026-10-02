@@ -14,10 +14,17 @@ export function collectClasses(outputs: Iterable<string | undefined>): string[] 
   return [...classes];
 }
 
-/** Classes that do not appear literally in the source file (Tailwind would never see them). */
-export async function nonLiteralClasses(sourceUrl: URL, classes: string[]): Promise<string[]> {
-  const source = await readFile(fileURLToPath(sourceUrl), 'utf8');
-  return classes.filter((c) => !source.includes(c));
+/**
+ * Classes that do not appear literally in any of the source files (Tailwind would never
+ * see them). Pass every file the recipe draws classes from, including `extend`ed bases.
+ */
+export async function nonLiteralClasses(
+  sourceUrls: URL | URL[],
+  classes: string[],
+): Promise<string[]> {
+  const urls = Array.isArray(sourceUrls) ? sourceUrls : [sourceUrls];
+  const sources = await Promise.all(urls.map((url) => readFile(fileURLToPath(url), 'utf8')));
+  return classes.filter((c) => !sources.some((source) => source.includes(c)));
 }
 
 /** Classes that Tailwind plus the M3 stylesheet do not generate a rule for. */

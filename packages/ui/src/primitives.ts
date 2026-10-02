@@ -33,3 +33,9 @@ export {
   type SupportingTextProps,
 } from './primitives/Field';
 export { getM3Spring, useM3Spring } from './motion/use-m3-spring';
+export {
+  SelectionControl,
+  type SelectionControlClassNames,
+  type SelectionControlProps,
+} from './primitives/SelectionControl';
+export { selectionControlStyles } from './primitives/selection-control-styles';
