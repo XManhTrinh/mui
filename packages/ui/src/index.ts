@@ -358,3 +358,11 @@ export {
   badgeStyles,
   type BadgeStyleProps,
 } from './components/badge/badge-styles';
+export {
+  List,
+  ListItem,
+  type ListClassNames,
+  type ListItemProps,
+  type ListProps,
+} from './components/list/List';
+export { listStyles, type ListStyleProps, type ListVariant } from './components/list/list-styles';
