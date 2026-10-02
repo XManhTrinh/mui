@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 2 in progress** (Loading indicator, FAB menu, Split button, Chips built) · Last updated: 2026-10-02 (rev. 20 — Chips)
+Status: **Tier 2 in progress** (Loading indicator, FAB menu, Split button, Chips, Tabs built) · Last updated: 2026-10-02 (rev. 21 — Tabs)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -334,6 +334,19 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 - **Focus fix:** a menu opens on pointer down and takes focus. React Aria then hides the rest of the page, trigger included, from assistive tech. The browser's follow-up `mousedown` on the trigger would then drop focus on `<body>`, so Escape did nothing. `MenuTrigger` cancels the trigger's `mousedown`; React Aria has already focused it on pointer down. A browser test asserts focus is inside the menu after a mouse open.
 - **Not in v1:** submenus, and the ButtonGroup overflow menu (now unblocked).
 
+### Tabs (built, Tier 2)
+- `Tabs` with `Tab` children, typed aliases of React Stately's collection `Item`, identified by `key`, with `title`, `icon` and the panel as `children`. Props: `variant` = `primary | secondary`, `scrollable`, `iconPlacement` = `top | start`, `selectedKey` / `defaultSelectedKey` / `onSelectionChange`, `disabledKeys`, `aria-label`.
+- **Built on** React Aria `useTabList` / `useTab` / `useTabPanel`: arrow keys, Home / End, automatic activation. The panel is keyed by the selection (React Aria's pattern) so its id follows it. Tabs with no panels (navigation rows) render no panel and drop `aria-controls`.
+- **Values** (Compose `Tab.kt`, `TabRow.kt`, Primary / SecondaryNavigationTab tokens):
+  - Row and tabs: `surface` row with a 1px `outline-variant` divider; 48px tabs, 72px with icons above labels; `title-small`, 16px side padding, 24px icons.
+  - Icon above label: Compose's baseline layout works out to the icon, a 5px gap, and the label 12px from the bottom.
+  - Colours: labels `on-surface-variant`, `on-surface` on hover / focus / press. Selected labels are `primary` (primary) or `on-surface` (secondary). Selection recolours on default effects, deselection on fast effects. The state layer is the selected colour.
+  - Indicator: 3px `primary`, sliding on the default spatial spring. Primary tabs: as wide as the content (min 24px) with 3px corners. Secondary: the whole tab (Compose's default 3px height).
+  - Scrollable: tabs at least 90px, a 52px start inset, and the selection animates to the centre on the default spatial spring (`scrollLeft` driven by Motion).
+- **Colour deviation:** Compose's `Tab` defaults its unselected colour to the selected one; the token colours are used instead.
+- **Layout safety:** the indicator shares the tab row's grid cell, spans every column, sits at the bottom edge and moves with `translate`, so no element is positioned. Each tab is placed in its grid column explicitly, and the divider is an inset shadow so the indicator paints over it.
+- **RTL:** React Aria takes arrow-key direction from its locale, not the DOM `dir`, so `Tabs` reads its laid-out direction and supplies an `I18nProvider` with a matching locale when they differ (as `Menu` does for placement).
+
 ### Chips (built, Tier 2)
 - `AssistChip` (button or link; `leadingIcon`, `trailingIcon`, `elevated`), `SuggestionChip` (button; `leadingIcon`, `elevated`), `FilterChip` (toggle with `aria-pressed`; `selected` / `defaultSelected` / `onSelectedChange`, `leadingIcon`, `trailingIcon`, `elevated`) and `InputChip` (`avatar` or `leadingIcon`, `onPress`, `selected`, `onRemove`, `removeLabel`). There's no chip group; chips are laid out with flex.
 - **Values** (Compose `Chip.kt` and the chip token files):
@@ -487,7 +500,7 @@ apps/next-playground   # Next.js App Router + Pages Router test app, Playwright 
 ## 15. Component roadmap (M3 Expressive set)
 
 - **Tier 1**: Button, IconButton, **Button group** (standard + connected), FAB + Extended FAB, Card, TextField, Checkbox, Radio, Switch, Dialog, Menu (Expressive: standard + vibrant colours, grouped items with gaps, selected state)
-- **Tier 2**: Split button (built), **FAB menu** (built), Chips (built), Tabs, **Navigation rail** (collapsed / expanded / modal expanded), **Flexible navigation bar**, Snackbar, Tooltip, **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator)
+- **Tier 2**: Split button (built), **FAB menu** (built), Chips (built), Tabs (built), **Navigation rail** (collapsed / expanded / modal expanded), **Flexible navigation bar**, Snackbar, Tooltip, **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator)
 - **Tier 3**: **Toolbars** (floating + docked), Flexible app bars + search app bar, Slider (XS–XL, vertical, centred, range, inset icons), Expressive lists (segmented/grouped), Carousel (incl. vertical), Bottom/side sheets, Date & time pickers, Badges, Dividers, Search
 
 Build order: Foundations (token source, 6 themes × modes × contrast, motion schemes, ThemeProvider, `cn`, primitives) → Tier 1 → Tier 2 → Tier 3.
