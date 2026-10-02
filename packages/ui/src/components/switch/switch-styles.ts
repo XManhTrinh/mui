@@ -31,7 +31,7 @@ export const switchStyles = tv({
     ],
     stateLayer: [
       'pointer-events-none absolute -top-[6px] start-[calc(var(--m3-thumb-center)-22px)] size-[40px] rounded-full',
-      'state-layer [--m3-ripple-size:20px]',
+      'state-layer [--m3-ripple-size:20px] [--m3-ripple-start:12px]',
       '[--m3-state-layer-color:var(--md-sys-color-on-surface)]',
       'data-selected:[--m3-state-layer-color:var(--md-sys-color-primary)]',
       '[--m3-transition-property:inset-inline-start]',

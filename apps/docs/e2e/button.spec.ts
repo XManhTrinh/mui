@@ -1,16 +1,16 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { layoutSafetySuite } from './layout-safety';
 import { MODES, THEMES, shotWithMargin } from './shots';
 import { openStory } from './story';
-
-
 
 test.describe('Button visual regression', () => {
   for (const theme of THEMES) {
     for (const mode of MODES) {
       test(`variants · ${theme} · ${mode}`, async ({ page }) => {
         await openStory(page, 'components-button--variants', { theme, mode });
-        await expect(page.getByTestId('variants')).toHaveScreenshot(`variants-${theme}-${mode}.png`);
+        await expect(page.getByTestId('variants')).toHaveScreenshot(
+          `variants-${theme}-${mode}.png`,
+        );
       });
     }
   }
@@ -90,6 +90,46 @@ test.describe('Button interaction states', () => {
       { x: box.x + box.width / 2, y: box.y - 7 },
     );
     expect(hit).toBe(true);
+  });
+});
+
+test.describe('Button ripple', () => {
+  /** Samples the ripple's radius and opacity every frame for `ms`. */
+  const sample = (page: Page, ms: number) =>
+    page
+      .getByRole('button')
+      .first()
+      .evaluate(async (el, duration) => {
+        const out: { t: number; radius: number; opacity: number }[] = [];
+        const start = performance.now();
+        while (performance.now() - start < duration) {
+          await new Promise(requestAnimationFrame);
+          const s = getComputedStyle(el);
+          out.push({
+            t: performance.now() - start,
+            radius: parseFloat(s.getPropertyValue('--m3-ripple-radius')),
+            opacity: parseFloat(s.getPropertyValue('--m3-ripple-opacity')),
+          });
+        }
+        return out;
+      }, ms);
+
+  test('a quick click still grows the ripple to the edges, then fades it', async ({ page }) => {
+    await openStory(page, 'components-button--playground', {}, { size: 'md' });
+    const button = page.getByRole('button').first();
+    const box = (await button.boundingBox())!;
+    const end = Math.ceil(Math.hypot(box.width, box.height) / 2 + 10);
+    await page.mouse.move(box.x + 10, box.y + box.height / 2);
+    await page.mouse.down();
+    const frames = sample(page, 450);
+    await page.mouse.up();
+    const result = await frames;
+    // Released at once, yet the radius reaches its end (half the diagonal + 10px)…
+    expect(Math.max(...result.map((f) => f.radius))).toBeGreaterThanOrEqual(end - 1);
+    // …while still visible, and only afterwards fades out.
+    const full = result.find((f) => f.radius >= end - 1)!;
+    expect(full.opacity).toBeGreaterThan(0.05);
+    expect(result.at(-1)!.opacity).toBe(0);
   });
 });
 

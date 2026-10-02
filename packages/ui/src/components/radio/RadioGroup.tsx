@@ -20,6 +20,7 @@ import {
 import { cn } from '../../utils/cn';
 import { splitDataAttributes } from '../../utils/split-data-attributes';
 import { radioGroupStyles, radioStyles } from './radio-styles';
+import { useRippleHold } from '../../primitives/use-m3-interaction';
 
 const RadioGroupContext = createContext<RadioGroupState | null>(null);
 
@@ -203,6 +204,7 @@ export function Radio({
   );
   const { focusProps, isFocusVisible } = useFocusRing();
   const { hoverProps, isHovered } = useHover({ isDisabled });
+  const rippling = useRippleHold(isPressed && !isDisabled);
   const styles = radioStyles();
 
   return (
@@ -217,6 +219,7 @@ export function Radio({
         'data-disabled': isDisabled || undefined,
         'data-hovered': (isHovered && !isDisabled) || undefined,
         'data-pressed': (isPressed && !isDisabled) || undefined,
+        'data-rippling': rippling || undefined,
         'data-focus-visible': isFocusVisible || undefined,
       }}
       styles={styles}

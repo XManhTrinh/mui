@@ -69,7 +69,7 @@ describe('useM3Interaction', () => {
     expect(target).toHaveAttribute('data-focus-visible');
   });
 
-  it('positions the ripple at the pointer and centres it for keyboard presses', () => {
+  it('starts the ripple at the pointer, or centred for keyboard presses (Compose)', () => {
     render(<Pressable />);
     const target = screen.getByRole('button');
     target.getBoundingClientRect = () =>
@@ -84,17 +84,25 @@ describe('useM3Interaction', () => {
         y: 20,
       }) as DOMRect;
 
-    fireEvent.pointerDown(target, { clientX: 30, clientY: 30, pointerId: 1 });
-    expect(target.style.getPropertyValue('--m3-ripple-x')).toBe('20px');
-    expect(target.style.getPropertyValue('--m3-ripple-y')).toBe('10px');
-    // Farthest corner from (20, 10) in a 100×40 box is (100, 40).
+    fireEvent.pointerDown(target, { clientX: 30, clientY: 30, pointerId: 1, button: 0 });
+    expect(target.style.getPropertyValue('--m3-ripple-origin-x')).toBe('20px');
+    expect(target.style.getPropertyValue('--m3-ripple-origin-y')).toBe('10px');
+    // Starts at 30% of the longer side and ends at half the diagonal plus 10px.
+    expect(target.style.getPropertyValue('--m3-ripple-start')).toBe('30px');
     expect(target.style.getPropertyValue('--m3-ripple-size')).toBe(
-      `${Math.ceil(Math.hypot(80, 30))}px`,
+      `${Math.ceil(Math.hypot(100, 40) / 2 + 10)}px`,
     );
 
     fireEvent.keyDown(target, { key: 'Enter' });
-    expect(target.style.getPropertyValue('--m3-ripple-x')).toBe('50px');
-    expect(target.style.getPropertyValue('--m3-ripple-y')).toBe('20px');
+    expect(target.style.getPropertyValue('--m3-ripple-origin-x')).toBe('50px');
+    expect(target.style.getPropertyValue('--m3-ripple-origin-y')).toBe('20px');
+  });
+
+  it('ignores secondary-button presses for the ripple', () => {
+    render(<Pressable />);
+    const target = screen.getByRole('button');
+    fireEvent.pointerDown(target, { clientX: 5, clientY: 5, pointerId: 1, button: 2 });
+    expect(target.style.getPropertyValue('--m3-ripple-origin-x')).toBe('');
   });
 
   it('suppresses interaction states when disabled', async () => {

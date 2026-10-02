@@ -17,6 +17,7 @@ import {
 import { cn } from '../../utils/cn';
 import { splitDataAttributes } from '../../utils/split-data-attributes';
 import { checkboxStyles } from './checkbox-styles';
+import { useRippleHold } from '../../primitives/use-m3-interaction';
 
 export interface CheckboxClassNames extends SelectionControlClassNames {
   box?: string;
@@ -112,6 +113,7 @@ export function Checkbox({
   const { hoverProps, isHovered } = useHover({ isDisabled: disabled });
 
   const filled = isSelected || indeterminate;
+  const rippling = useRippleHold(isPressed && !disabled);
   const styles = checkboxStyles();
 
   return (
@@ -129,6 +131,7 @@ export function Checkbox({
         'data-disabled': disabled || undefined,
         'data-hovered': (isHovered && !disabled) || undefined,
         'data-pressed': (isPressed && !disabled) || undefined,
+        'data-rippling': rippling || undefined,
         'data-focus-visible': isFocusVisible || undefined,
       }}
       styles={styles}

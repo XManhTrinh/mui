@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 2 complete**; Tier 3 next · Last updated: 2026-10-02 (rev. 25 — Progress indicators; Tier 2 complete)
+Status: **Tier 2 complete**; Tier 3 next · Last updated: 2026-10-02 (rev. 26 — ripple follows Compose's RippleAnimation)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -57,7 +57,7 @@ Four layers. **Dependencies only point downward**, enforced by `eslint-plugin-bo
 
 1. **Tokens** — CSS variables for colour, shape, type, motion, elevation, state opacity, z-index.
 2. **Primitives** (internal; also exported from `@vkieu/mui/primitives`)
-   - `useM3Interaction` — wraps React Aria `usePress` / `useHover` / `useFocusRing` / drag → emits `data-pressed`, `data-hovered`, `data-focus-visible`, `data-dragged`, `data-disabled`, `data-selected`. Pass `isPressed` from another React Aria hook (e.g. `useButton`) to skip its own press handling. It also sets the ripple origin (`--m3-ripple-x/y/size`) on pointer-down or Enter/Space.
+   - `useM3Interaction` — wraps React Aria `usePress` / `useHover` / `useFocusRing` / drag → emits `data-pressed`, `data-hovered`, `data-focus-visible`, `data-dragged`, `data-disabled`, `data-selected`. Pass `isPressed` from another React Aria hook (e.g. `useButton`) to skip its own press handling. It also sets the ripple origin on pointer-down (primary button) or Enter/Space. The **ripple follows Compose's `RippleAnimation`**: it fades in over 75ms; its radius grows from 30% of the longer side to half the diagonal + 10px over 225ms (fast-out-slow-in) while its centre moves to the middle; it fades out over 150ms. `data-rippling` (from `useRippleHold`, also used by Checkbox, Radio and Switch) stays on from press start until release, but for at least 225ms, so a quick tap still grows to the edges before fading. Earlier the growth was tied to `data-pressed` and froze wherever it was on a short press.
    - `ButtonBase` — unstyled button behaviour shared by every button-like component: `<button>`, link (`href`, via `useLink`) or toggle (`toggle`, via `useToggleButton`), with `useM3Interaction` applied. `children` may be a function of `{ isSelected }`. Button, IconButton and later FAB / chips render it and only add styling.
    - `TouchTarget` — 48×48px hit area for small controls, placed in the inner wrapper.
    - State layer + ripple as **background-layer utilities** on the root (no child elements — see §10): `state-layer`, plus `focus-ring` / `focus-ring-inset` (outline). `Surface` (`container` role + `elevation` 0–5 + `shape`) covers elevation; there is no separate `Elevation` component.

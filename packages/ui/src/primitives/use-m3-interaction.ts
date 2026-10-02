@@ -1,7 +1,14 @@
 'use client';
 
 import { mergeProps, useFocusRing, useHover, usePress, type PressEvents } from 'react-aria';
-import type { DOMAttributes, KeyboardEvent, PointerEvent, RefObject } from 'react';
+import {
+  useEffect,
+  useState,
+  type DOMAttributes,
+  type KeyboardEvent,
+  type PointerEvent,
+  type RefObject,
+} from 'react';
 
 export interface M3InteractionOptions extends PressEvents {
   isDisabled?: boolean;
@@ -30,6 +37,8 @@ export interface M3InteractionState {
 export interface M3InteractionDataAttributes {
   'data-hovered'?: true;
   'data-pressed'?: true;
+  /** The ripple is showing: from press start until release, but at least 225ms. */
+  'data-rippling'?: true;
   'data-focused'?: true;
   'data-focus-visible'?: true;
   'data-disabled'?: true;
@@ -46,15 +55,52 @@ export interface M3InteractionResult {
 
 const flag = (value: boolean | undefined): true | undefined => (value ? true : undefined);
 
-/** Positions the ripple at the press point, sized to reach the farthest corner. */
+/** Compose `RippleAnimation`: the radius grows (and the centre travels) over 225ms. */
+export const RIPPLE_GROW_MS = 225;
+
+/**
+ * Starts a ripple at the press point (Compose `RippleAnimation`): it grows from 30% of the
+ * element's longer side to half its diagonal plus 10px while its centre moves to the
+ * middle. The new origin is flushed to style before `data-rippling` turns on, so the
+ * transition starts from this press rather than the last one.
+ */
 function setRippleOrigin(element: HTMLElement, clientX?: number, clientY?: number) {
   const rect = element.getBoundingClientRect();
   const x = clientX === undefined ? rect.width / 2 : clientX - rect.left;
   const y = clientY === undefined ? rect.height / 2 : clientY - rect.top;
-  const radius = Math.hypot(Math.max(x, rect.width - x), Math.max(y, rect.height - y));
-  element.style.setProperty('--m3-ripple-x', `${x}px`);
-  element.style.setProperty('--m3-ripple-y', `${y}px`);
-  element.style.setProperty('--m3-ripple-size', `${Math.ceil(radius)}px`);
+  element.style.setProperty('--m3-ripple-origin-x', `${x}px`);
+  element.style.setProperty('--m3-ripple-origin-y', `${y}px`);
+  element.style.setProperty('--m3-ripple-start', `${Math.max(rect.width, rect.height) * 0.3}px`);
+  element.style.setProperty(
+    '--m3-ripple-size',
+    `${Math.ceil(Math.hypot(rect.width, rect.height) / 2 + 10)}px`,
+  );
+  getComputedStyle(element).getPropertyValue('--m3-ripple-x');
+}
+
+/**
+ * Whether a ripple should be showing. Compose always finishes a ripple's 225ms growth
+ * before fading it out, so a quick tap still reaches the edges: this stays true from press
+ * start until release, but for at least 225ms.
+ */
+export function useRippleHold(isPressed: boolean): boolean {
+  const [wasPressed, setWasPressed] = useState(isPressed);
+  const [held, setHeld] = useState(false);
+  const [presses, setPresses] = useState(0);
+  // Adjust state while rendering when a press starts (no effect, no extra paint).
+  if (isPressed !== wasPressed) {
+    setWasPressed(isPressed);
+    if (isPressed) {
+      setHeld(true);
+      setPresses((n) => n + 1);
+    }
+  }
+  useEffect(() => {
+    if (!held) return;
+    const timer = setTimeout(() => setHeld(false), RIPPLE_GROW_MS);
+    return () => clearTimeout(timer);
+  }, [held, presses]);
+  return isPressed || held;
 }
 
 /**
@@ -83,10 +129,13 @@ export function useM3Interaction(
   });
 
   const isPressed = hasExternalPress ? Boolean(options.isPressed) : isOwnPressed;
+  const isRippling = useRippleHold(isPressed && !isDisabled);
 
   const rippleProps: DOMAttributes<HTMLElement> = {
     onPointerDown: (event: PointerEvent<HTMLElement>) => {
-      if (!isDisabled) setRippleOrigin(event.currentTarget, event.clientX, event.clientY);
+      if (!isDisabled && event.button === 0) {
+        setRippleOrigin(event.currentTarget, event.clientX, event.clientY);
+      }
     },
     onKeyDown: (event: KeyboardEvent<HTMLElement>) => {
       if (!isDisabled && (event.key === 'Enter' || event.key === ' ')) {
@@ -105,6 +154,7 @@ export function useM3Interaction(
     dataAttributes: {
       'data-hovered': flag(isHovered && !isDisabled),
       'data-pressed': flag(isPressed && !isDisabled),
+      'data-rippling': flag(isRippling),
       'data-focused': flag(isFocused),
       'data-focus-visible': flag(isFocusVisible),
       'data-disabled': flag(isDisabled),

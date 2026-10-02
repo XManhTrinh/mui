@@ -24,7 +24,7 @@ export const selectionControlStyles = tv({
       // Checkboxes and radio buttons: the control is the 40px state-layer circle.
       circle: {
         control: [
-          'size-[40px] rounded-full state-layer [--m3-ripple-size:20px]',
+          'size-[40px] rounded-full state-layer [--m3-ripple-size:20px] [--m3-ripple-start:12px]',
           '[--m3-state-layer-color:var(--md-sys-color-on-surface)]',
           'data-selected:[--m3-state-layer-color:var(--md-sys-color-primary)]',
           'data-pressed:[--m3-state-layer-color:var(--md-sys-color-primary)]',

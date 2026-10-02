@@ -16,6 +16,7 @@ import {
 } from '../../primitives/SelectionControl';
 import { splitDataAttributes } from '../../utils/split-data-attributes';
 import { switchStyles } from './switch-styles';
+import { useRippleHold } from '../../primitives/use-m3-interaction';
 
 const CheckIcon = () => (
   <svg viewBox="0 -960 960 960" fill="currentColor">
@@ -118,12 +119,14 @@ export function Switch({
     ? (selectedIcon ?? (icons ? <CheckIcon /> : null))
     : (unselectedIcon ?? (icons ? <CloseIcon /> : null));
   const pressed = isPressed && !disabled;
+  const rippling = useRippleHold(pressed);
   const { size, center } = thumbGeometry(isSelected, pressed, Boolean(icon));
   const stateAttributes = {
     'data-selected': isSelected || undefined,
     'data-disabled': disabled || undefined,
     'data-hovered': (isHovered && !disabled) || undefined,
     'data-pressed': pressed || undefined,
+    'data-rippling': rippling || undefined,
     'data-focus-visible': isFocusVisible || undefined,
     'data-has-icon': Boolean(icon) || undefined,
   };
