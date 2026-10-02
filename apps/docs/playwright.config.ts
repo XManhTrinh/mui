@@ -8,12 +8,13 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   // Baselines are platform-specific; CI must render them in the same container image.
   snapshotPathTemplate: '{testDir}/__screenshots__/{testFilePath}/{arg}-{projectName}-{platform}{ext}',
-  expect: { toHaveScreenshot: { animations: 'disabled', caret: 'hide', maxDiffPixelRatio: 0.002 } },
+  expect: { toHaveScreenshot: { animations: 'disabled', caret: 'hide', maxDiffPixelRatio: 0.0002 } },
   use: { baseURL: `http://localhost:${PORT}`, trace: 'retain-on-failure' },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'], deviceScaleFactor: 1 } }],
-  // Serves the static Storybook build (`turbo run test:e2e` builds it first).
+  // Serves the static Storybook build (`turbo run test:e2e` builds it first). `--dev` reads
+  // files per request, so a reused server never serves a previous build's asset list.
   webServer: {
-    command: `sirv storybook-static --port ${PORT} --quiet`,
+    command: `sirv storybook-static --port ${PORT} --quiet --dev`,
     port: PORT,
     reuseExistingServer: !process.env.CI,
   },
