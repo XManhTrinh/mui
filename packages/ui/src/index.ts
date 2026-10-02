@@ -68,3 +68,20 @@ export {
   type ButtonGroupSelectionMode,
   type ButtonGroupVariant,
 } from './composites/button-group/ButtonGroup';
+export {
+  ExtendedFab,
+  Fab,
+  type ExtendedFabClassNames,
+  type ExtendedFabProps,
+  type FabClassNames,
+  type FabProps,
+} from './components/fab/Fab';
+export {
+  extendedFabStyles,
+  fabStyles,
+  type ExtendedFabSize,
+  type ExtendedFabStyleProps,
+  type FabColor,
+  type FabSize,
+  type FabStyleProps,
+} from './components/fab/fab-styles';
