@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 1 in progress** (Button, IconButton, ButtonGroup, FAB, Card, TextField, Checkbox, Radio and Switch done; Dialog and Menu remain; shape library port pending, see §17) · Last updated: 2026-10-02 (rev. 13 — selection controls)
+Status: **Tier 1 in progress** (all done except Menu; shape library port pending, see §17) · Last updated: 2026-10-02 (rev. 14 — Dialog)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -61,7 +61,9 @@ Four layers. **Dependencies only point downward**, enforced by `eslint-plugin-bo
    - `ButtonBase` — unstyled button behaviour shared by every button-like component: `<button>`, link (`href`, via `useLink`) or toggle (`toggle`, via `useToggleButton`), with `useM3Interaction` applied. `children` may be a function of `{ isSelected }`. Button, IconButton and later FAB / chips render it and only add styling.
    - `TouchTarget` — 48×48px hit area for small controls, placed in the inner wrapper.
    - State layer + ripple as **background-layer utilities** on the root (no child elements — see §10): `state-layer`, plus `focus-ring` / `focus-ring-inset` (outline). `Surface` (`container` role + `elevation` 0–5 + `shape`) covers elevation; there is no separate `Elevation` component.
-   - `Overlay`: portal to `body` that **re-applies the theme attributes of where it was rendered**, so overlays opened inside a `ThemeScope` keep its theme. Dismissal, focus containment and scroll lock come from the React Aria overlay hooks (`useModalOverlay`, `usePopover`, …) used by each component.
+   - `Overlay`: portal to `body` that **re-applies the theme attributes and text direction (`dir`) of where it was rendered**, so overlays opened inside a `ThemeScope` or an RTL region keep them. Passes `isExiting` to React Aria so focus containment is released while animating out.
+   - `TriggerContext`: an overlay trigger (DialogTrigger, later MenuTrigger) passes its press handler, ARIA attributes and ref to whichever button-like child opens it. `ButtonBase` merges them in, so no cloning or private React Aria APIs are needed. Overlays reset it to `null`.
+   - `usePresence`: keeps an overlay mounted until its exit transition ends (fallback 800ms). Dismissal, focus containment and scroll lock come from the React Aria overlay hooks (`useModalOverlay`, `usePopover`, …) used by each component.
    - `useM3Morph` (shape-library morph driven by Motion `useTransform`)
    - `useM3Spring` (resolves the active motion scheme → Motion spring config)
    - `Field` parts: `FieldLabel`, `SupportingText`, `ErrorText`, `CharacterCounter`
@@ -70,7 +72,6 @@ Four layers. **Dependencies only point downward**, enforced by `eslint-plugin-bo
    - Button group (connected) = Buttons / IconButtons + group context
    - SplitButton = Button group + Button + IconButton + Menu
    - FAB menu = FAB + Menu-style items
-   - Dialog = Overlay + Surface + Buttons
    - Navigation rail (modal expanded) = Overlay + rail items
    - Select / Combobox reuse `Field` parts + Menu list
 
@@ -303,6 +304,22 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
   - `icons` shows the default check / close icons; `selectedIcon` / `unselectedIcon` override them. The focus ring surrounds the track.
 - **No CheckboxGroup** in v1. Compose has none, and a fieldset of Checkboxes with `name` covers forms.
 - `splitDataAttributes` (utils) routes `data-*` to the root for components whose remaining props go to a React Aria hook (TextField, the selection controls). Those hooks forward only the attributes they know, so consumer `data-*` attributes were being dropped.
+
+### Dialog (built; a component, not a composite)
+- `DialogTrigger` (trigger + dialog, `open` / `defaultOpen` / `onOpenChange`) or a standalone controlled `Dialog`. Flat parts: `DialogTitle`, `DialogContent`, `DialogActions`. Children may be `({ close }) => …`. `icon` centres the title. `role="alertdialog"` is not dismissed by pressing outside. `dismissable` and `keyboardDismissDisabled` are configurable.
+- **Built on** `Overlay` + React Aria `useModalOverlay` (dismissal, scroll lock, hiding the rest of the page) + `useDialog` (labelling, initial focus). Focus is contained and returns to the trigger. React Aria sets no `aria-haspopup` for dialog triggers; it does set `aria-expanded` / `aria-controls`.
+- **Values** (Compose `AlertDialog.kt`, `DialogTokens`):
+  - Size: 280–560px wide, 24px padding, 28px corners, `surface-container-high`, level 3.
+  - Text: a 24px `secondary` icon, a `headline-small` title and `body-medium` `on-surface-variant` text.
+  - Spacing: 16px below the icon and the title, 24px below the text, 8px between actions.
+  - Stacked actions put the confirm action (last) **on top**, matching Compose's flipped `FlowRow` (`flex-wrap-reverse`).
+  - Long content scrolls inside the panel. The scrim is `scrim` at 32%.
+- **Motion (not from Compose,** which uses platform window animations):
+  - Enter: the scrim fades and the panel fades + scales from 90% on the default springs (CSS `@starting-style`).
+  - Exit: fade + scale to 95% on the fast springs.
+  - It runs on a library-owned wrapper that rests at `scale: none`, so it isn't a lasting containing block for fixed children.
+- **Moved to the components layer:** the doc listed Dialog as a composite, but its core is the `Overlay` primitive and React Aria hooks, which composites may not import. Consumers' buttons go in `DialogActions`.
+- **Deferred:** full-screen dialogs (compact windows) need the Tier 3 top app bar.
 
 ## 10. Layout safety (consumer positioning never breaks a component)
 
