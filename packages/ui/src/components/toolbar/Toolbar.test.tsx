@@ -219,8 +219,8 @@ describe('FloatingToolbar', () => {
 
   it('keeps FABs and leading content apart in its types', () => {
     const fab = <ToolbarFab icon={<Icon />} aria-label="New" />;
-    // @ts-expect-error a FAB position needs a FAB
     const noFab = (
+      // @ts-expect-error a FAB position needs a FAB
       <FloatingToolbar aria-label="A" fabPosition="end">
         x
       </FloatingToolbar>

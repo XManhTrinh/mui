@@ -310,3 +310,15 @@ export {
   useToolbarScrollExpansion,
   type ToolbarScrollExpansionOptions,
 } from './components/toolbar/use-toolbar-scroll-expansion';
+export {
+  TopAppBar,
+  type TopAppBarClassNames,
+  type TopAppBarProps,
+} from './components/app-bar/TopAppBar';
+export {
+  topAppBarStyles,
+  type TopAppBarStyleProps,
+  type TopAppBarTitleAlign,
+  type TopAppBarVariant,
+} from './components/app-bar/app-bar-styles';
+export type { TopAppBarScrollBehavior } from './components/app-bar/use-app-bar-scroll';
