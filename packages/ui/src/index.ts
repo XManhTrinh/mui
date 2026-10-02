@@ -353,4 +353,8 @@ export {
   type BadgedBoxProps,
   type BadgeProps,
 } from './components/badge/Badge';
-export { badgedBoxStyles, badgeStyles, type BadgeStyleProps } from './components/badge/badge-styles';
+export {
+  badgedBoxStyles,
+  badgeStyles,
+  type BadgeStyleProps,
+} from './components/badge/badge-styles';
