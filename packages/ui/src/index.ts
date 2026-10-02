@@ -285,3 +285,28 @@ export {
   type MenuTriggerProps,
 } from './components/menu/Menu';
 export { menuStyles, type MenuStyleProps, type MenuVariant } from './components/menu/menu-styles';
+export {
+  DockedToolbar,
+  FloatingToolbar,
+  ToolbarFab,
+  type DockedToolbarClassNames,
+  type DockedToolbarProps,
+  type FloatingToolbarClassNames,
+  type FloatingToolbarProps,
+  type ToolbarFabClassNames,
+  type ToolbarFabProps,
+} from './components/toolbar/Toolbar';
+export {
+  dockedToolbarStyles,
+  floatingToolbarStyles,
+  toolbarFabStyles,
+  type DockedToolbarArrangement,
+  type DockedToolbarStyleProps,
+  type FloatingToolbarColor,
+  type FloatingToolbarStyleProps,
+  type ToolbarOrientation,
+} from './components/toolbar/toolbar-styles';
+export {
+  useToolbarScrollExpansion,
+  type ToolbarScrollExpansionOptions,
+} from './components/toolbar/use-toolbar-scroll-expansion';
