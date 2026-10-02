@@ -52,11 +52,16 @@ export function layoutSafetySuite(storyId: string, expected: LayoutSafetyExpecta
               width: (el as HTMLElement).offsetWidth,
               backgroundImage: s.backgroundImage,
               radius: s.borderTopLeftRadius,
-              positionedDescendants: [...el.querySelectorAll('*')].filter(
-                (child) =>
+              // Touch targets and visually hidden inputs (clipped to nothing) can't affect
+              // what the component looks like.
+              positionedDescendants: [...el.querySelectorAll('*')].filter((child) => {
+                const style = getComputedStyle(child);
+                return (
                   child.closest('[data-touch-target]') === null &&
-                  ['absolute', 'fixed'].includes(getComputedStyle(child).position),
-              ).length,
+                  style.clipPath !== 'inset(50%)' &&
+                  ['absolute', 'fixed'].includes(style.position)
+                );
+              }).length,
             };
           });
           expect(layout.height).toBe(expected.height);
