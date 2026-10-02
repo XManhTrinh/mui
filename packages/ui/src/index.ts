@@ -85,3 +85,11 @@ export {
   type FabSize,
   type FabStyleProps,
 } from './components/fab/fab-styles';
+export {
+  Card,
+  type CardActionProps,
+  type CardLinkProps,
+  type CardProps,
+  type CardStaticProps,
+} from './components/card/Card';
+export { cardStyles, type CardStyleProps, type CardVariant } from './components/card/card-styles';
