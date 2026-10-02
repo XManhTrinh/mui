@@ -6,6 +6,8 @@ import type { PressEvent } from 'react-aria';
 /** Props an overlay trigger (dialog, menu) gives the button that opens it. */
 export interface TriggerContextValue extends DOMAttributes<HTMLElement> {
   onPress?: (event: PressEvent) => void;
+  /** Menus open on press start. */
+  onPressStart?: (event: PressEvent) => void;
   'aria-haspopup'?: boolean | 'dialog' | 'menu' | 'listbox' | 'tree' | 'grid' | 'true' | 'false';
   'aria-expanded'?: boolean;
   'aria-controls'?: string;

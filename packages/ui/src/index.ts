@@ -140,3 +140,16 @@ export {
   type DialogTriggerProps,
 } from './components/dialog/Dialog';
 export { dialogStyles, type DialogStyleProps } from './components/dialog/dialog-styles';
+export {
+  Menu,
+  MenuGroup,
+  MenuItem,
+  MenuTrigger,
+  type MenuClassNames,
+  type MenuGroupProps,
+  type MenuItemProps,
+  type MenuKey,
+  type MenuProps,
+  type MenuTriggerProps,
+} from './components/menu/Menu';
+export { menuStyles, type MenuStyleProps, type MenuVariant } from './components/menu/menu-styles';
