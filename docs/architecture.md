@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 3 in progress** (Toolbars, top app bars, search, badges, dividers, lists, sliders, sheets built) · Last updated: 2026-10-03 (rev. 33 — sheets)
+Status: **Tier 3 in progress** (all but date & time pickers built) · Last updated: 2026-10-03 (rev. 34 — carousel)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -561,6 +561,14 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 - **Motion and layout safety:** sheets move by `translate` on a library-owned wrapper; the consumer's `className` and `style` go on the panel. The in-flow standard side sheet runs the layout-safety matrix.
 - **Not in v1:** the standard (non-modal) bottom sheet (`BottomSheetScaffold`), dragging from anywhere on the sheet or through nested scrolling (only the handle drags), predictive back, and detents beyond half / full.
 
+### Carousel (built, Tier 3)
+- `Carousel` with `variant` = `multi-browse | uncontained | hero`, `orientation`, `preferredItemSize` (multi-browse 186px by default, hero the whole carousel), `itemSize` (uncontained, 240px), `itemSpacing` (8px), `heroAlignment` = `start | center`, `minSmallItemSize` / `maxSmallItemSize` (40 / 56px). Children are the items (any elements, usually images), each filling its slot. The consumer gives the carousel its cross-axis size. It is a `region` with `aria-roledescription="carousel"` and a required name; items are `group`s labelled "n of N" (`slide`).
+- **Keylines** are a TypeScript port of Compose's `carousel` package (`carousel-keylines.ts`, unit-tested): `Arrangement` (lowest-cost fit of large / medium / small items, the 10% medium flex), `multiBrowseKeylineList`, `uncontainedKeylineList`, `heroKeylineList`, keyline lists with pivots and cutoffs, `Strategy` (start / end shift steps and interpolation points; no content padding), `getKeylineListForScrollOffset`, `getSnapPositionOffset` and `carouselItem`'s placement (keyline before / after the item's centre, interpolated size and offset, out-of-bounds offset). With 360px, 186px preferred and 8px spacing that gives 186 · 118 · 40, mirrored at the end, as Compose does.
+- **Web rendering:** Compose drives a pager; here the carousel scrolls natively. Each item keeps a natural slot the size of the large item (so the scroll range is Compose's `calculateMaxScrollOffset`), and on every scroll frame a library-owned mask layer inside it is translated and clipped (`clip-path: inset(… round var(--m3-carousel-corner))`) to its keyline. The root and slots are never transformed; nothing re-renders while scrolling. `--m3-carousel-item-size` on each mask exposes the visible size (Compose's `carouselItemDrawInfo`) for parallax.
+- **Snapping:** multi-browse and hero snap one item at a time (`scroll-snap-stop: always`, Compose's `singleAdvanceFlingBehavior`), each item's snap point placed by `scroll-margin` from `getSnapPositionOffset`; uncontained doesn't snap (`noSnapFlingBehavior`). Mouse drag scrolls (snapping pauses while dragging); touch, trackpads and the arrow keys (the scroller is focusable) scroll natively. RTL reads the absolute scroll offset and mirrors the translation.
+- **Corners and spacing:** items are masked with 28px (extra-large) corners, as Compose's samples use `maskClip(MaterialTheme.shapes.extraLarge)`; `--m3-carousel-corner` overrides it. Spacing defaults to 8px (m3.material.io; Compose's default is 0 and its samples use 8dp).
+- **Deviations / not in v1:** no content padding (Compose's padding-aware shift steps), no parallax helper, items aren't z-ordered by distance from the current item, and before hydration items render unmasked at the preferred size.
+
 ## 10. Layout safety (consumer positioning never breaks a component)
 
 **Principle:** a component's internal visuals never depend on the root element's `position`, `overflow`, `display` or `transform`. Consumers may put any layout class on any component — e.g. `<Button className="fixed bottom-4 right-4">` — and it must look and behave the same.
@@ -652,7 +660,7 @@ apps/next-playground   # Next.js App Router + Pages Router test app, Playwright 
 
 - **Tier 1**: Button, IconButton, **Button group** (standard + connected), FAB + Extended FAB, Card, TextField, Checkbox, Radio, Switch, Dialog, Menu (Expressive: standard + vibrant colours, grouped items with gaps, selected state)
 - **Tier 2**: Split button (built), **FAB menu** (built), Chips (built), Tabs (built), **Navigation rail** (collapsed / expanded / modal expanded, built), **Flexible navigation bar** (built), Snackbar (built), Tooltip (built), **Loading indicator** (shape morph, built), Progress indicators (linear + circular, wavy, with stop indicator; built)
-- **Tier 3**: **Toolbars** (floating + docked; built), Flexible app bars (built) + search app bar (built), Slider (XS–XL, vertical, centred, range, inset icons; built), Expressive lists (segmented/grouped; built), Carousel (incl. vertical), Bottom/side sheets (built), Date & time pickers, Badges (built), Dividers (built), Search (built)
+- **Tier 3**: **Toolbars** (floating + docked; built), Flexible app bars (built) + search app bar (built), Slider (XS–XL, vertical, centred, range, inset icons; built), Expressive lists (segmented/grouped; built), Carousel (incl. vertical; built), Bottom/side sheets (built), Date & time pickers, Badges (built), Dividers (built), Search (built)
 
 Build order: Foundations (token source, 6 themes × modes × contrast, motion schemes, ThemeProvider, `cn`, primitives) → Tier 1 → Tier 2 → Tier 3.
 
