@@ -41,7 +41,11 @@ export {
 export { selectionControlStyles } from './primitives/selection-control-styles';
 export { TriggerContext, type TriggerContextValue } from './primitives/TriggerContext';
 export { usePresence } from './primitives/use-presence';
-export { DomDirectionLocale, type DomDirectionLocaleProps } from './primitives/DomDirectionLocale';
+export {
+  DomDirectionLocale,
+  localeWithDirection,
+  type DomDirectionLocaleProps,
+} from './primitives/DomDirectionLocale';
 export {
   getMorph,
   morphPathAt,

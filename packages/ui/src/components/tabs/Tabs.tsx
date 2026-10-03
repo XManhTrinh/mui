@@ -22,6 +22,7 @@ import {
 import { Item, useTabListState, type Node, type TabListState } from 'react-stately';
 import { useM3Spring } from '../../motion/use-m3-spring';
 import { useM3Interaction } from '../../primitives/use-m3-interaction';
+import { localeWithDirection } from '../../primitives/DomDirectionLocale';
 import { cn } from '../../utils/cn';
 import { splitDataAttributes } from '../../utils/split-data-attributes';
 import { tabsStyles, type TabsVariant } from './tabs-styles';
@@ -91,7 +92,7 @@ export function Tabs(props: TabsProps) {
     if (rootRef.current) setDirection(getComputedStyle(rootRef.current).direction as 'ltr' | 'rtl');
   }, [rootRef]);
   const effectiveLocale =
-    direction === localeDirection ? locale : direction === 'rtl' ? 'ar' : 'en-US';
+    direction === localeDirection ? locale : localeWithDirection(locale, direction);
 
   return (
     <div
