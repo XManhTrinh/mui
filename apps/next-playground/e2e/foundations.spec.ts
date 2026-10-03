@@ -77,9 +77,10 @@ test.describe('App Router', () => {
     await expect(pressable).toHaveAttribute('data-hovered', 'true');
     await page.mouse.down();
     await expect(pressable).toHaveAttribute('data-pressed', 'true');
-    expect(await pressable.evaluate((el) => el.style.getPropertyValue('--m3-ripple-x'))).toBe(
-      '20px',
-    );
+    // The ripple starts at the press point (rev. 26 renamed the origin property).
+    expect(
+      await pressable.evaluate((el) => el.style.getPropertyValue('--m3-ripple-origin-x')),
+    ).toBe('20px');
     await page.mouse.up();
     await expect(pressable).not.toHaveAttribute('data-pressed');
     await expect(pressable).toContainText('Pressed 1 times');
