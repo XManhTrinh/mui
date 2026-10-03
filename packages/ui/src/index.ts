@@ -401,3 +401,33 @@ export {
   type CarouselProps,
 } from './components/carousel/Carousel';
 export { carouselStyles, type CarouselStyleProps } from './components/carousel/carousel-styles';
+export {
+  DatePicker,
+  DateRangePicker,
+  type DatePickerClassNames,
+  type DatePickerProps,
+  type DatePickerStrings,
+  type DateRange,
+  type DateRangePickerProps,
+} from './components/date-picker/DatePicker';
+export {
+  dateFieldStyles,
+  datePickerStyles,
+  type DatePickerStyleProps,
+} from './components/date-picker/date-picker-styles';
+export {
+  PickerDialog,
+  type PickerDialogClassNames,
+  type PickerDialogProps,
+} from './components/date-picker/PickerDialog';
+export { pickerDialogStyles } from './components/date-picker/picker-dialog-styles';
+export {
+  TimePicker,
+  type TimePickerClassNames,
+  type TimePickerProps,
+  type TimePickerStrings,
+} from './components/time-picker/TimePicker';
+export {
+  timePickerStyles,
+  type TimePickerStyleProps,
+} from './components/time-picker/time-picker-styles';
