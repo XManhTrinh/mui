@@ -395,3 +395,9 @@ export {
   sideSheetStyles,
   type SideSheetStyleProps,
 } from './components/sheet/sheet-styles';
+export {
+  Carousel,
+  type CarouselClassNames,
+  type CarouselProps,
+} from './components/carousel/Carousel';
+export { carouselStyles, type CarouselStyleProps } from './components/carousel/carousel-styles';
