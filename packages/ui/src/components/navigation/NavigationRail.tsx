@@ -40,6 +40,8 @@ type Naming = { 'aria-label': string } | { 'aria-labelledby': string };
 
 export interface NavigationRailClassNames {
   root?: string;
+  /** The in-flow rail's scrolling column, which holds the 44px top inset. */
+  body?: string;
   header?: string;
   items?: string;
   sheet?: string;
@@ -145,7 +147,7 @@ export function NavigationRail({
           data-expanded={inlineExpanded || undefined}
           className={styles.root({ class: cn(classNames?.root, className) })}
         >
-          <div className={styles.body()}>
+          <div className={styles.body({ class: classNames?.body })}>
             {headerContent != null && (
               <div data-rail-header="" className={styles.header({ class: classNames?.header })}>
                 {headerContent}

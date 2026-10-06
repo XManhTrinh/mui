@@ -100,6 +100,13 @@ describe('NavigationRail', () => {
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull(), { timeout: 1500 });
   });
 
+  it('lets classNames.body replace the top inset', () => {
+    render(<Rail classNames={{ body: 'pt-2' }} />);
+    const body = screen.getByRole('navigation').firstElementChild!;
+    expect(body).toHaveClass('pt-2');
+    expect(body).not.toHaveClass('pt-[44px]');
+  });
+
   it('hides the collapsed rail with hideOnCollapse', () => {
     render(<Rail modal hideOnCollapse />);
     expect(screen.queryByRole('navigation')).toBeNull();
