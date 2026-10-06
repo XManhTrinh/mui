@@ -22,6 +22,7 @@ import {
 import { Item, useListState, type ListState, type Node } from 'react-stately';
 import { DomDirectionLocale } from '../../primitives/DomDirectionLocale';
 import { useM3Interaction } from '../../primitives/use-m3-interaction';
+import { assertCollectionChildren } from '../../utils/assert-collection-children';
 import { cn } from '../../utils/cn';
 import { splitDataAttributes } from '../../utils/split-data-attributes';
 import { listStyles, type ListVariant } from './list-styles';
@@ -220,6 +221,7 @@ function GridList({
 }: ListProps & { directionRef: (element: HTMLElement | null) => void }) {
   const { data, rest: ariaProps } = splitDataAttributes(rest);
   const gridProps_ = ariaProps as unknown as AriaGridListProps<object>;
+  assertCollectionChildren(rest.children, 'List', 'ListItem elements');
   const state = useListState(gridProps_);
   const rootRef = useObjectRef(ref as Ref<HTMLDivElement>);
   const { gridProps } = useGridList(gridProps_, state, rootRef);

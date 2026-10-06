@@ -23,6 +23,7 @@ import { Item, useTabListState, type Node, type TabListState } from 'react-state
 import { useM3Spring } from '../../motion/use-m3-spring';
 import { useM3Interaction } from '../../primitives/use-m3-interaction';
 import { localeWithDirection } from '../../primitives/DomDirectionLocale';
+import { assertCollectionChildren } from '../../utils/assert-collection-children';
 import { cn } from '../../utils/cn';
 import { splitDataAttributes } from '../../utils/split-data-attributes';
 import { tabsStyles, type TabsVariant } from './tabs-styles';
@@ -113,6 +114,7 @@ export function Tabs(props: TabsProps) {
 
 function TabsInner(props: Omit<TabsProps, 'className' | 'style' | 'ref'>) {
   const { variant, scrollable = false, iconPlacement = 'top', classNames } = props;
+  assertCollectionChildren(props.children, 'Tabs', 'Tab elements');
   const state = useTabListState(props as AriaTabListProps<object>);
   const listRef = useRef<HTMLDivElement>(null);
   const scrollerRef = useRef<HTMLDivElement>(null);

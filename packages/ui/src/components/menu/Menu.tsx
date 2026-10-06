@@ -39,6 +39,7 @@ import { Overlay } from '../../primitives/Overlay';
 import { TriggerContext, type TriggerContextValue } from '../../primitives/TriggerContext';
 import { useM3Interaction } from '../../primitives/use-m3-interaction';
 import { usePresence } from '../../primitives/use-presence';
+import { assertCollectionChildren } from '../../utils/assert-collection-children';
 import { cn } from '../../utils/cn';
 import { menuStyles, type MenuVariant } from './menu-styles';
 
@@ -281,6 +282,7 @@ type MenuListProps = Omit<MenuProps, 'placement'> &
 
 function MenuList({ variant = 'standard', className, classNames, style, ...props }: MenuListProps) {
   // MenuItem / MenuGroup are React Stately Item / Section, so children are a collection.
+  assertCollectionChildren(props.children, 'Menu', 'MenuItem and MenuGroup elements');
   const state = useTreeState(props as AriaMenuProps<object>);
   const ref = useRef<HTMLDivElement>(null);
   const { menuProps } = useMenu(props as AriaMenuOptions<object>, state, ref);
