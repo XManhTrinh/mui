@@ -8,6 +8,8 @@ export interface TriggerContextValue extends DOMAttributes<HTMLElement> {
   onPress?: (event: PressEvent) => void;
   /** Menus open on press start. */
   onPressStart?: (event: PressEvent) => void;
+  /** Menu triggers keep focus where it is on press (React Aria `useMenuTrigger`). */
+  preventFocusOnPress?: boolean;
   'aria-haspopup'?: boolean | 'dialog' | 'menu' | 'listbox' | 'tree' | 'grid' | 'true' | 'false';
   'aria-expanded'?: boolean;
   'aria-controls'?: string;

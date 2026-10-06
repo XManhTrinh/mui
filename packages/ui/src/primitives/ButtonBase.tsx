@@ -31,7 +31,10 @@ export const ToggleGroupStateContext = createContext<ToggleGroupState | null>(nu
 type PressHandlers = Pick<
   PressEvents,
   'onPress' | 'onPressStart' | 'onPressEnd' | 'onPressChange' | 'onPressUp'
->;
+> & {
+  /** Don't move focus to the element on press (set by menu triggers). */
+  preventFocusOnPress?: boolean;
+};
 
 export interface ButtonBaseRenderState {
   isSelected: boolean;
@@ -106,13 +109,15 @@ function splitProps<T extends ButtonBaseCommonProps>(props: T) {
     onPressEnd,
     onPressChange,
     onPressUp,
+    preventFocusOnPress,
     ...dom
   } = props;
   return {
     disabled,
     element: { className, style },
     children,
-    press: { onPress, onPressStart, onPressEnd, onPressChange, onPressUp },
+    // React Aria options, not DOM attributes: they go to the press hooks.
+    press: { onPress, onPressStart, onPressEnd, onPressChange, onPressUp, preventFocusOnPress },
     dom,
   };
 }
