@@ -52,7 +52,10 @@ export const floatingToolbarStyles = tv({
     collapse: [
       'grid visible data-collapsed:invisible',
       '[transition-property:grid-template-columns,grid-template-rows,visibility]',
-      '[transition-duration:var(--md-sys-motion-spring-spatial-fast-duration),var(--md-sys-motion-spring-spatial-fast-duration),var(--md-sys-motion-spring-spatial-fast-duration)]',
+      // Visible at once when expanding (so keyboard focus can reach the content in the
+      // first frame); invisible only after the track has closed.
+      '[transition-duration:var(--md-sys-motion-spring-spatial-fast-duration),var(--md-sys-motion-spring-spatial-fast-duration),0s]',
+      'data-collapsed:[transition-duration:var(--md-sys-motion-spring-spatial-fast-duration),var(--md-sys-motion-spring-spatial-fast-duration),var(--md-sys-motion-spring-spatial-fast-duration)]',
       '[transition-timing-function:var(--md-sys-motion-spring-spatial-fast-easing),var(--md-sys-motion-spring-spatial-fast-easing),linear]',
     ],
     // Clips the content horizontally (or vertically) while it collapses, leaving room for
@@ -64,7 +67,8 @@ export const floatingToolbarStyles = tv({
       'visible overflow-hidden rounded-corner-full shadow-elevation-1',
       'data-collapsed:invisible data-collapsed:shadow-elevation-0',
       '[transition-property:width,height,box-shadow,visibility]',
-      '[transition-duration:var(--md-sys-motion-spring-spatial-fast-duration),var(--md-sys-motion-spring-spatial-fast-duration),var(--md-sys-motion-spring-spatial-fast-duration),var(--md-sys-motion-spring-spatial-fast-duration)]',
+      '[transition-duration:var(--md-sys-motion-spring-spatial-fast-duration),var(--md-sys-motion-spring-spatial-fast-duration),var(--md-sys-motion-spring-spatial-fast-duration),0s]',
+      'data-collapsed:[transition-duration:var(--md-sys-motion-spring-spatial-fast-duration),var(--md-sys-motion-spring-spatial-fast-duration),var(--md-sys-motion-spring-spatial-fast-duration),var(--md-sys-motion-spring-spatial-fast-duration)]',
       '[transition-timing-function:var(--md-sys-motion-spring-spatial-fast-easing),var(--md-sys-motion-spring-spatial-fast-easing),var(--md-sys-motion-spring-spatial-fast-easing),linear]',
     ],
     content: 'flex items-center',
