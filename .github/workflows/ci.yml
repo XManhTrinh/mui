@@ -1,0 +1,77 @@
+# CI for the vkieu-mui monorepo.
+#
+# NOTE: this is a NEW workflow — the repository had no CI configuration before. It wires the
+# full Turborepo pipeline so the library (`@vkieu/mui`) and the docs site (`apps/site`) are both
+# built and checked, and runs the site's internal link checker + Playwright smoke suite against a
+# freshly built static export (with Chromium installed).
+#
+# The sandbox-only env workarounds `NODE_TLS_REJECT_UNAUTHORIZED=0` / turbo `--env-mode=loose`
+# (needed locally because next/font fetches Google Fonts through a TLS-intercepting proxy) are
+# intentionally NOT used here: CI has real certificates and network access.
+name: CI
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build-and-check:
+    name: Build, typecheck, lint & test
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Builds `@vkieu/mui` and `apps/site`, then typechecks, lints (--max-warnings 0) and runs
+      # the library's Vitest suite across the whole monorepo.
+      - name: Build, typecheck, lint & test
+        run: pnpm turbo run build typecheck lint test
+
+  site-e2e:
+    name: Site link check & Playwright smoke suite
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    env:
+      CI: 'true'
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm --filter site exec playwright install --with-deps chromium
+
+      # `link-check` and `test:e2e` both depend on `site#build`, so turbo builds the static export
+      # first, then the link checker and the full Playwright smoke suite run against `out/`.
+      - name: Link check & Playwright smoke suite
+        run: pnpm turbo run link-check test:e2e --filter=site

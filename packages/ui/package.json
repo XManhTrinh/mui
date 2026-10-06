@@ -24,6 +24,10 @@
       "types": "./dist/next.d.ts",
       "import": "./dist/next.js"
     },
+    "./vk": {
+      "types": "./dist/vk.d.ts",
+      "import": "./dist/vk.js"
+    },
     "./styles.css": "./dist/styles/styles.css",
     "./styles.compiled.css": "./dist/styles.compiled.css",
     "./package.json": "./package.json"

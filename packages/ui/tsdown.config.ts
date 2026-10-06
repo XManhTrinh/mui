@@ -7,6 +7,7 @@ export default defineConfig({
     index: 'src/index.ts',
     primitives: 'src/primitives.ts',
     next: 'src/next.ts',
+    vk: 'src/vk.ts',
     cli: 'src/cli.ts',
   },
   format: 'esm',

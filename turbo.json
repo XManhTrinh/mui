@@ -68,6 +68,12 @@
         "build"
       ],
       "cache": false
+    },
+    "link-check": {
+      "dependsOn": [
+        "build"
+      ],
+      "cache": false
     }
   }
 }

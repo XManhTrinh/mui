@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 3 complete** · Last updated: 2026-10-03 (rev. 35 — date & time pickers; Tier 3 complete)
+Status: **Tier 3 complete** · Last updated: 2026-10-05 (rev. 38 — consumer docs site at `apps/site`)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -35,6 +35,8 @@ import { Button, Dialog, DialogTrigger, ThemeProvider } from '@vkieu/mui';
 | 19 | Toolchain | Node 24 (`.nvmrc`), pnpm 12 (`packageManager`), **TypeScript 6.0**: TS 7 is out, but typescript-eslint only supports TS < 6.1, so type-aware linting pins 6.0 |
 | 20 | Library build | **tsdown** in unbundle mode (one output file per module, so per-file `"use client"` survives). `scripts/check-dist.ts` verifies directives, extensions and paths after every build |
 | 21 | Colour library | `@material/material-color-utilities` is a devDependency **bundled into `dist/vendor/`** (Apache-2.0 notice in `NOTICE`), because its published ESM cannot be loaded by plain Node (§17) |
+| 22 | Non-M3 components | Anything the library needs that is **not an M3 component** (e.g. a code block or props table for the docs site) is built in **`packages/ui/src/vk`** and exported from **`@vkieu/mui/vk`**, never improvised in an app. Same quality bar as M3 components; see §3 |
+| 23 | Consumer docs site | A **Next.js App Router static-export app at `apps/site`** (MDX guides, generated props tables, live examples), built **only with `@vkieu/mui`** (enforced by `no-restricted-imports`). It is the library's first real consumer and doubles as proof of Next.js support; Storybook (`apps/docs`) stays the workbench, not the consumer docs. See §13 |
 
 ## 2. Stack
 
@@ -55,6 +57,8 @@ import { Button, Dialog, DialogTrigger, ThemeProvider } from '@vkieu/mui';
 ## 3. Composition architecture (DRY)
 
 Four layers. **Dependencies only point downward**, enforced by `eslint-plugin-boundaries` in `eslint.config.js`. In source, the layers are `src/tokens` → `src/utils` → `src/theme` / `src/motion` → `src/primitives` → `src/components` → `src/composites`. Composites may not import `src/primitives`. `src/shapes` (the androidx.graphics.shapes port) is pure geometry: it imports nothing, and primitives and components may import it.
+
+**`src/vk` (non-M3 components, decision #22):** components outside the M3 spec live in `src/vk`, so `src/components` stays M3 only. They sit beside the components layer: they may import tokens, utils, theme, motion, primitives, shapes and public M3 components, and M3 components and composites never import them. They follow every rule here (semantic tokens only, `className` / `classNames`, layout safety, React Aria, tests, axe, a story, visual regression) and say in their TSDoc that they aren't M3. They are exported from a **separate `@vkieu/mui/vk` entry**, so the main `@vkieu/mui` entry stays M3 only and consumers opt in. When the first one is built, add a `vk` layer to `eslint-plugin-boundaries` and the `./vk` entry to `package.json` `exports` and the build.
 
 1. **Tokens** — CSS variables for colour, shape, type, motion, elevation, state opacity, z-index.
 2. **Primitives** (internal; also exported from `@vkieu/mui/primitives`)
@@ -627,6 +631,7 @@ An **override matrix** in CI: every component rendered with `fixed`, `absolute`,
 ### Exports
 - `@vkieu/mui` — components, ThemeProvider, hooks, `cn`
 - `@vkieu/mui/primitives` — building blocks
+- `@vkieu/mui/vk` — non-M3 components (decision #22; added with the first one)
 - `@vkieu/mui/next` — Next.js helpers
 - `@vkieu/mui/styles.css` — tokens + themes for Tailwind projects
 - `@vkieu/mui/styles.compiled.css` — precompiled for non-Tailwind projects
@@ -658,6 +663,7 @@ turbo.json
 packages/ui            # @vkieu/mui (MIT)
 apps/docs              # Storybook 10 (theme/mode/contrast/motion/direction toolbars) + Playwright visual tests
 apps/next-playground   # Next.js App Router + Pages Router test app, Playwright e2e (pnpm test:e2e)
+apps/site              # Consumer docs site: Next.js App Router, static export (output: 'export'), MDX guides + generated per-component props tables + live examples, built only with @vkieu/mui
 ```
 
 ## 14. Quality
@@ -672,6 +678,7 @@ apps/next-playground   # Next.js App Router + Pages Router test app, Playwright 
   - **Storybook server:** the static build is served with `sirv --dev`, which reads files per request, so a server reused across rebuilds never returns 404s for new asset hashes.
 - Layout-safety override matrix (§10)
 - Next playground build + Playwright in CI
+- Docs site (`apps/site`, §1 #23): build + static export, an internal link checker over `out/`, and a registry-driven Playwright smoke suite over every page (home, guides, all component slugs) asserting render, no console errors, an axe scan, RTL and dark mode — all run in CI
 - Changesets for versioning/changelog
 
 ## 15. Component roadmap (M3 Expressive set)

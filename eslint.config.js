@@ -21,6 +21,7 @@ const layers = [
   { type: 'components', pattern: 'packages/ui/src/components' },
   { type: 'composites', pattern: 'packages/ui/src/composites' },
   { type: 'next', pattern: 'packages/ui/src/next' },
+  { type: 'vk', pattern: 'packages/ui/src/vk' },
 ];
 
 const allow = (from, to) => ({
@@ -34,8 +35,10 @@ export default tseslint.config(
       '**/dist/**',
       '**/coverage/**',
       '**/.next/**',
+      '**/out/**',
       '**/storybook-static/**',
       '**/generated/**',
+      '**/.generated/**',
       '**/next-env.d.ts',
     ],
   },
@@ -87,6 +90,62 @@ export default tseslint.config(
             ]),
             allow('composites', ['tokens', 'utils', 'theme', 'motion', 'components', 'composites']),
             allow('next', ['tokens', 'utils', 'theme', 'next']),
+            allow('vk', [
+              'tokens',
+              'utils',
+              'theme',
+              'motion',
+              'shapes',
+              'primitives',
+              'components',
+              'vk',
+            ]),
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // The docs site is built only with @vkieu/mui ("Only our components"). Allow the bare
+    // entry and the three approved subpaths; block every other @vkieu/mui subpath and the
+    // known third-party UI libraries and docs themes.
+    files: ['apps/site/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '@vkieu/mui/*',
+                '!@vkieu/mui/next',
+                '!@vkieu/mui/vk',
+                '!@vkieu/mui/styles.css',
+              ],
+              message:
+                'apps/site may import UI only from @vkieu/mui, @vkieu/mui/next or @vkieu/mui/vk.',
+            },
+            {
+              group: [
+                '@mui/*',
+                '@mui/material',
+                '@mui/material/*',
+                '@radix-ui/*',
+                '@headlessui/react',
+                'shadcn',
+                'shadcn/*',
+                'nextra',
+                'nextra/*',
+                'fumadocs-*',
+                'fumadocs',
+                '@chakra-ui/*',
+                'antd',
+                'antd/*',
+                '@mantine/*',
+              ],
+              message:
+                'apps/site is built only with @vkieu/mui components (plan: "Only our components").',
+            },
           ],
         },
       ],

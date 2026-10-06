@@ -11,6 +11,7 @@ playwright-report/
 .env*
 !.env.example
 apps/next-playground/next-env.d.ts
+apps/site/next-env.d.ts
 apps/docs/test-results/
 
 # Local git worktrees

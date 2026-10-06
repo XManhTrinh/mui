@@ -42,6 +42,12 @@ export default defineConfig({
 });
 ```
 
+## Documentation
+
+The full documentation site — getting started, theming, motion, customisation, accessibility
+and Next.js guides, plus a page per component with live examples and generated props tables — is
+in [`apps/site`](../../apps/site). Run it locally with `pnpm --filter site dev`.
+
 See [`docs/architecture.md`](../../docs/architecture.md) for theming, overrides, motion and
 Next.js setup.
 

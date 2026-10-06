@@ -10,19 +10,53 @@ Give teams consuming `@vkieu/mui` a real documentation site: how to install it, 
 
 | # | Decision | Value |
 |---|---|---|
-| 1 | Where the docs live | A dedicated **Next.js App Router site**, `apps/site`, written in MDX (`@next/mdx`) |
-| 2 | Why Next.js | It uses the library the way consumers will (server rendering, cookie theming with no flash, `next/font`, App Router routing), so the site doubles as proof of the Next.js support |
-| 3 | Output | **Static export** (`output: 'export'`); hosting decided later (any static host: GitHub Pages, Vercel, …) |
-| 4 | Props tables | **Generated** from the TSDoc already on every public API (`react-docgen-typescript` at build time), never hand-written, so they can't drift from the code |
-| 5 | Examples | Live components rendered on the page, with their source shown next to them (one file per example, imported both as a component and as raw text) |
-| 6 | Migration notes | **None.** This is a new library with nothing to migrate from |
+| 1 | Where the docs live | A **new Next.js App Router app at `apps/site`**, written in MDX (`@next/mdx`). Not `apps/next-playground` (see "Where it's built") |
+| 2 | Next.js version | **The latest stable Next.js** (16.3.8 on npm `latest` as of 2026-10-03; re-check with `npm view next version` when scaffolding), with the React 19 version the workspace already uses |
+| 3 | Why Next.js | It uses the library the way consumers will (App Router, `next/font`, `NextRouterProvider`, `"use client"` boundaries, pre-rendered pages), so the site doubles as proof of the Next.js support |
+| 4 | Output | **Static export** (`output: 'export'`); hosting decided later (any static host: GitHub Pages, Vercel, …). With no server to read cookies, the theme is applied before hydration with `ThemeScript` |
+| 5 | Components | **Built only with `@vkieu/mui`** (see "Only our components") |
+| 6 | Props tables | **Generated** from the TSDoc already on every public API (`react-docgen-typescript` at build time), never hand-written, so they can't drift from the code |
+| 7 | Examples | Live components rendered on the page, with their source shown next to them (one file per example, imported both as a component and as raw text) |
+| 8 | Migration notes | **None.** This is a new library with nothing to migrate from |
+| 9 | `vk` components | Exported from **`@vkieu/mui/vk`**; the docs need a `CodeBlock` and a docs-specific **`PropsTable`** (not a general `DataTable`) |
+
+## Where it's built
+
+A new app, `apps/site`, created with the latest Next.js (`create-next-app` or a hand-written minimal app matching the workspace's TypeScript, ESLint and Tailwind v4 setup), added to the pnpm workspace and Turborepo.
+
+`apps/next-playground` stays as it is. It is a test fixture with a different job:
+
+| | `apps/next-playground` | `apps/site` |
+|---|---|---|
+| Purpose | Proves the library works in Next.js | Docs for consumers |
+| Routers | App Router **and** Pages Router | App Router only |
+| Rendering | Per-request server rendering: reads the theme cookie to test the no-flash cookie path | Static export: no server, so `ThemeScript` |
+| Size | Deliberately tiny, so its Playwright checks stay fast and failures point at the library | About 50 pages of MDX, examples and generated props tables |
+
+A static export can't read cookies, so merging the two would either drop the playground's cookie-path test or stop the site being static, and a docs change could break the library's compatibility checks. The site copies the playground's setup pattern (`next/font`, `ThemeProvider`, `NextRouterProvider` in the layout); it doesn't import from it.
+
+## Only our components
+
+The site is built **only with `@vkieu/mui`**: it is the library's showcase and its first real consumer.
+
+- **Every UI element is a library component:** navigation (navigation rail, flexible navigation bar), the top app bar, search (`SearchBar` / `SearchAppBar`), theme and mode controls (`ButtonGroup`, `Menu`, `Switch`), cards, lists, tabs for example source, chips, dialogs, snackbars, tooltips, buttons and icon buttons.
+- **No other UI library** (no shadcn, Radix, MUI, Headless UI, docs themes such as Nextra or Fumadocs), and no hand-built widgets that duplicate a library component.
+- **Styling** uses only the library's semantic tokens and Tailwind utilities (`bg-surface`, `text-on-surface-variant`, `text-body-large`, `rounded-corner-large`, …). No raw colours, no other fonts besides Roboto Flex, no custom design tokens.
+- **Plain content** (headings, paragraphs, inline code, simple tables) is semantic HTML styled with those tokens; MDX elements map to the library's type scale and colour roles.
+- **Gaps go into the library, not the site.** Anything the site needs that isn't an M3 component is built in **`packages/ui/src/vk`** (architecture decision #22) with its own tests, axe checks, story and visual coverage, then used by the site. M3 components the library lacks go in `packages/ui/src/components` as usual. Nothing is improvised inside `apps/site`. Known `vk` components to build first:
+  - **`CodeBlock`:** highlighted source for examples and install snippets, with a copy button (an M3 `IconButton`). Highlighting runs at build time (e.g. Shiki produces the markup); colours map to the library's colour roles, so it follows every theme, mode and contrast level.
+  - **`PropsTable`:** the generated props tables (name, type, default, description), keyboard-navigable and readable on small screens. Docs-specific on purpose; a general `DataTable` (sorting, selection, pagination) waits until something needs it.
+  - **Page index search:** uses the M3 `SearchBar`; the static search index is data, not UI, so it needs no `vk` component.
+- **Icons:** Material Symbols SVGs passed to components, as the library documents (no icon font).
+
+**Enforcement:** an ESLint `no-restricted-imports` rule on `apps/site` allows UI imports only from `@vkieu/mui`, `@vkieu/mui/next`, React and Next.js, so `pnpm lint` fails if another component source is added.
 
 ## Site structure
 
 ```
 apps/site
   app/
-    layout.tsx               ThemeProvider (cookie storage), Roboto Flex via next/font, NextRouterProvider
+    layout.tsx               ThemeProvider + ThemeScript, Roboto Flex via next/font, NextRouterProvider
     page.tsx                 Home: what the library is, quick start, component gallery
     (docs)/
       layout.tsx             Navigation rail / bar + top app bar with search, theme controls
@@ -38,7 +72,7 @@ apps/site
   scripts/generate-props.ts  TSDoc → props JSON per component
 ```
 
-The site is built from the library's own components: navigation rail / flexible navigation bar, top app bar, search bar for the page index, lists, cards, tabs for example source, and a theme / mode / contrast / motion / direction switcher.
+Every piece of the layout is a library component (see "Only our components"): navigation rail / flexible navigation bar, top app bar, search bar for the page index, lists, cards, tabs for example source, and a theme / mode / contrast / motion / direction switcher.
 
 ## Content
 
@@ -82,8 +116,8 @@ The site is built from the library's own components: navigation rail / flexible 
 
 ## Build steps
 
-1. **Shell:** scaffold `apps/site` in the workspace and Turborepo (`build`, `typecheck`, `lint`, `test:e2e`), static export, MDX, layout with navigation and theme controls, home page.
-2. **Props generation:** `scripts/generate-props.ts` reads the library's TypeScript and writes props JSON per component; a `<PropsTable>` component renders it. Runs before `build` / `dev`.
+1. **Shell:** create `apps/site` with the latest Next.js, add it to the workspace and Turborepo (`build`, `typecheck`, `lint`, `test:e2e`), static export, MDX, layout with navigation and theme controls, home page.
+2. **`vk` components and props generation:** build `CodeBlock` and `PropsTable` in `packages/ui/src/vk` (with the `vk` lint layer and the `@vkieu/mui/vk` export entry); `scripts/generate-props.ts` reads the library's TypeScript and writes props JSON per component for `PropsTable`. Runs before `build` / `dev`.
 3. **Guide pages:** getting started, theming, motion, customisation, accessibility, Next.js.
 4. **Component pages** in batches (actions; inputs and selection; containment and overlays; navigation; feedback and pickers), committing per batch.
 5. **Checks:**
