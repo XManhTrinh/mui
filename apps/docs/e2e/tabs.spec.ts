@@ -109,6 +109,24 @@ test.describe('Tabs behaviour', () => {
       .toBe(true);
   });
 
+  for (const dir of ['ltr', 'rtl'] as const) {
+    test(`scrollable indicators sit under the selected label (${dir})`, async ({ page }) => {
+      await openStory(page, 'components-tabs--scrollable', { dir });
+      const list = page.getByRole('tablist');
+      for (const name of ['Overview', 'Reviews', 'Accessories']) {
+        const tab = page.getByRole('tab', { name });
+        await tab.click();
+        await expect
+          .poll(async () => {
+            const label = await box(tab.locator('[data-tab-part]').first());
+            const bar = await box(indicator(page, list));
+            return Math.abs(bar.x + bar.width / 2 - (label.x + label.width / 2));
+          })
+          .toBeLessThan(2);
+      }
+    });
+  }
+
   test('scrollable rows centre the selected tab', async ({ page }) => {
     await openStory(page, 'components-tabs--scrollable');
     const scroller = page.getByRole('tablist').locator('..');

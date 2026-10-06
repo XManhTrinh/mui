@@ -190,7 +190,10 @@ function useIndicator(
         (el) => el.dataset.key === String(selectedKey),
       );
       if (!tab) return setIndicator(null);
-      const listLeft = list.getBoundingClientRect().left;
+      // Grid items sit in the content box, so measure from inside the start padding
+      // (52px on scrollable rows; on the right in RTL, where paddingLeft is 0).
+      const listLeft =
+        list.getBoundingClientRect().left + parseFloat(getComputedStyle(list).paddingLeft);
       const tabRect = tab.getBoundingClientRect();
       if (variant === 'secondary') {
         setIndicator({ x: tabRect.left - listLeft, width: tabRect.width });
