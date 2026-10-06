@@ -61,7 +61,7 @@ export interface TabsProps extends Omit<
   variant?: TabsVariant;
   /** Tabs keep their natural width (at least 90px) and the row scrolls. @default false */
   scrollable?: boolean;
-  /** Icons above the label (72px tabs) or before it (48px). @default "top" */
+  /** Icons above the label (64px tabs) or before it (48px). @default "top" */
   iconPlacement?: 'top' | 'start';
   className?: string;
   style?: CSSProperties;

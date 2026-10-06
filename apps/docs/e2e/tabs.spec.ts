@@ -67,6 +67,34 @@ test.describe('Tabs behaviour', () => {
     });
   }
 
+  test('tabs are 48px, or 64px with the icon above the label (M3 token)', async ({ page }) => {
+    await openStory(page, 'components-tabs--variants');
+    const height = (name: string) =>
+      page
+        .getByRole('tablist', { name })
+        .getByRole('tab')
+        .first()
+        .evaluate((el) => Math.round(el.getBoundingClientRect().height));
+    expect(await height('primary text')).toBe(48);
+    expect(await height('primary icons')).toBe(64);
+    expect(await height('primary inline icons')).toBe(48);
+    expect(await height('secondary icons')).toBe(64);
+    // The icon, a 2px gap and the 20px label line are centred: 9px above and below.
+    const layout = await page
+      .getByRole('tablist', { name: 'primary icons' })
+      .getByRole('tab')
+      .first()
+      .evaluate((tab) => {
+        const box = tab.getBoundingClientRect();
+        const icon = tab.querySelector('svg')!.getBoundingClientRect();
+        return {
+          iconTop: Math.round(icon.top - box.top),
+          iconBottom: Math.round(icon.bottom - box.top),
+        };
+      });
+    expect(layout).toEqual({ iconTop: 9, iconBottom: 33 });
+  });
+
   test('secondary indicators span the tab', async ({ page }) => {
     await openStory(page, 'components-tabs--playground', {}, { variant: 'secondary' });
     const list = page.getByRole('tablist');

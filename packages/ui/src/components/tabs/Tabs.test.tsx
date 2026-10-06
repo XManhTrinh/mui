@@ -65,7 +65,7 @@ describe('Tabs', () => {
     expect(screen.getByRole('tab', { name: 'Cars' })).toHaveAttribute('aria-selected', 'true');
   });
 
-  it('uses 72px tabs for icons above labels and 48px for icons before them', () => {
+  it('uses 64px tabs (the M3 token) for icons above labels and 48px for icons before them', () => {
     const { unmount } = render(
       <Tabs aria-label="Media">
         <Tab key="photos" title="Photos" icon={<Icon id="p" />} />
@@ -73,9 +73,10 @@ describe('Tabs', () => {
       </Tabs>,
     );
     expect(screen.getByRole('tab', { name: 'Photos' })).toHaveClass(
-      'h-[72px]',
+      'h-[64px]',
       'flex-col',
-      'pb-[12px]',
+      'justify-center',
+      'gap-[2px]',
     );
     expect(screen.getByTestId('p').parentElement).toHaveAttribute('aria-hidden', 'true');
     unmount();
