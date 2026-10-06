@@ -1,3 +1,5 @@
+'use client';
+
 import { Menu, MenuItem, SplitButton } from '@vkieu/mui';
 import { EditIcon } from '../../components/icons';
 

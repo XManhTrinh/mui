@@ -153,6 +153,18 @@ export default async function NextjsPage() {
             only on the client.
           </li>
           <li>
+            Build the items of a <code className="text-on-surface">Menu</code>,{' '}
+            <code className="text-on-surface">Tabs</code> or interactive{' '}
+            <code className="text-on-surface">List</code> (
+            <code className="text-on-surface">MenuItem</code>,{' '}
+            <code className="text-on-surface">MenuGroup</code>,{' '}
+            <code className="text-on-surface">Tab</code>,{' '}
+            <code className="text-on-surface">ListItem</code>) in a client component, including a
+            menu passed to <code className="text-on-surface">SplitButton</code>. React Aria reads
+            each item&apos;s element type, and items created in a Server Component arrive as client
+            references it can&apos;t read. In development the library throws an error saying so.
+          </li>
+          <li>
             Client links are one line: <code className="text-on-surface">NextRouterProvider</code>{' '}
             wraps React Aria’s <code className="text-on-surface">RouterProvider</code> with the Next
             router’s <code className="text-on-surface">push</code>.
