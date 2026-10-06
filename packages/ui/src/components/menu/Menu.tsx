@@ -260,6 +260,12 @@ type Position = 'only' | 'first' | 'middle' | 'last';
 const positionOf = (index: number, count: number): Position =>
   count === 1 ? 'only' : index === 0 ? 'first' : index === count - 1 ? 'last' : 'middle';
 
+/** Which of a group's edges have its 16px corners (the others have 8px). */
+const roundEdges = (position: Position) => ({
+  top: position === 'only' || position === 'first',
+  bottom: position === 'only' || position === 'last',
+});
+
 /** Sections become groups; runs of loose items between them form implicit groups. */
 function toGroups(nodes: Node<object>[]): (Node<object> | Node<object>[])[] {
   const groups: (Node<object> | Node<object>[])[] = [];
@@ -307,7 +313,13 @@ function MenuList({ variant = 'standard', className, classNames, style, ...props
               class: classNames?.group,
             })}
           >
-            <MenuItems nodes={group} state={state} variant={variant} classNames={classNames} />
+            <MenuItems
+              nodes={group}
+              state={state}
+              variant={variant}
+              edges={roundEdges(position)}
+              classNames={classNames}
+            />
           </div>
         ) : (
           <MenuSection
@@ -354,6 +366,8 @@ function MenuSection({
           nodes={[...section.childNodes]}
           state={state}
           variant={variant}
+          // A heading takes the group's top edge, so the first item doesn't touch it.
+          edges={{ ...roundEdges(position), top: !section.rendered && roundEdges(position).top }}
           classNames={classNames}
         />
       </div>
@@ -361,15 +375,21 @@ function MenuSection({
   );
 }
 
+/**
+ * Items nest their corners inside the group's: an item on a 16px group edge gets 12px
+ * corners there (16px minus the 4px padding), and every other corner is 4px.
+ */
 function MenuItems({
   nodes,
   state,
   variant,
+  edges,
   classNames,
 }: {
   nodes: Node<object>[];
   state: TreeState<object>;
   variant: MenuVariant;
+  edges: { top: boolean; bottom: boolean };
   classNames?: MenuClassNames;
 }) {
   return nodes.map((node, index) => (
@@ -378,7 +398,8 @@ function MenuItems({
       node={node}
       state={state}
       variant={variant}
-      position={positionOf(index, nodes.length)}
+      top={index === 0 && edges.top ? 'nested' : 'plain'}
+      bottom={index === nodes.length - 1 && edges.bottom ? 'nested' : 'plain'}
       classNames={classNames}
     />
   ));
@@ -388,13 +409,15 @@ function MenuItemView({
   node,
   state,
   variant,
-  position,
+  top,
+  bottom,
   classNames,
 }: {
   node: Node<object>;
   state: TreeState<object>;
   variant: MenuVariant;
-  position: Position;
+  top: 'nested' | 'plain';
+  bottom: 'nested' | 'plain';
   classNames?: MenuClassNames;
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -415,7 +438,8 @@ function MenuItemView({
   const selectable = state.selectionManager.selectionMode !== 'none';
   const styles = menuStyles({
     variant,
-    itemPosition: position,
+    itemTop: top,
+    itemBottom: bottom,
     hasDescription: Boolean(props.description),
   });
   const selectedIcon = props.selectedIcon ?? (selectable ? <CheckIcon /> : null);

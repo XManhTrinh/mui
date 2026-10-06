@@ -42,7 +42,8 @@ test.describe('Menu behaviour', () => {
     test(`opens below the trigger, aligned to its start edge · ${dir}`, async ({ page }) => {
       const menu = await openGrouped(page, { dir });
       const trigger = await box(page.getByRole('button', { name: 'More' }));
-      const m = await box(menu);
+      // The visible surface is the first group (the list keeps a shadow margin around it).
+      const m = await box(menu.locator('> *').first());
       expect(Math.round(m.y)).toBe(Math.round(trigger.y + trigger.height));
       if (dir === 'ltr') expect(Math.round(m.x)).toBe(Math.round(trigger.x));
       else expect(Math.round(m.x + m.width)).toBe(Math.round(trigger.x + trigger.width));
@@ -65,6 +66,26 @@ test.describe('Menu behaviour', () => {
     expect(await groups.nth(0).evaluate((el) => getComputedStyle(el).borderTopLeftRadius)).toBe(
       '16px',
     );
+  });
+
+  test("the scrolling list doesn't clip the groups' shadows", async ({ page }) => {
+    const menu = await openGrouped(page, {});
+    // Every group sits at least 8px inside the list's scroll box, so its elevation-2
+    // shadow (about 8px) fades out before the box edge and follows the rounded corners.
+    const insets = await menu.evaluate((list) => {
+      const outer = list.getBoundingClientRect();
+      return [...list.children].map((group) => {
+        const r = group.getBoundingClientRect();
+        return Math.min(
+          r.left - outer.left,
+          outer.right - r.right,
+          r.top - outer.top,
+          outer.bottom - r.bottom,
+        );
+      });
+    });
+    expect(Math.min(...insets)).toBeGreaterThanOrEqual(8);
+    expect(await menu.evaluate((el) => getComputedStyle(el).overflowY)).toBe('auto');
   });
 
   test('opening with the mouse moves focus into the menu', async ({ page }) => {
@@ -110,6 +131,11 @@ test.describe('Menu behaviour', () => {
     expect(await name.evaluate((el) => getComputedStyle(el).borderBottomLeftRadius)).toBe('12px');
     const check = name.locator('svg').first();
     expect((await box(check)).width).toBe(20);
-    expect(await date.locator('[aria-hidden] > span').first().evaluate((el) => el.getBoundingClientRect().width)).toBe(0);
+    expect(
+      await date
+        .locator('[aria-hidden] > span')
+        .first()
+        .evaluate((el) => el.getBoundingClientRect().width),
+    ).toBe(0);
   });
 });

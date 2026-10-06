@@ -8,15 +8,17 @@ import {
 import { menuStyles } from './menu-styles';
 
 const POSITIONS = ['only', 'first', 'middle', 'last'] as const;
+const CORNERS = ['nested', 'plain'] as const;
 
 function* outputs() {
   for (const variant of ['standard', 'vibrant'] as const)
     for (const groupPosition of POSITIONS)
-      for (const itemPosition of POSITIONS)
-        for (const hasDescription of [false, true])
-          yield* Object.values(
-            menuStyles({ variant, groupPosition, itemPosition, hasDescription }),
-          ).map((slot) => slot());
+      for (const itemTop of CORNERS)
+        for (const itemBottom of CORNERS)
+          for (const hasDescription of [false, true])
+            yield* Object.values(
+              menuStyles({ variant, groupPosition, itemTop, itemBottom, hasDescription }),
+            ).map((slot) => slot());
 }
 
 describe('menuStyles', () => {

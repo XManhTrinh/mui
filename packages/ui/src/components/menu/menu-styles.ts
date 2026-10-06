@@ -3,16 +3,20 @@ import { tv, type VariantProps } from '../../utils/tv';
 /*
  * Values follow Compose Material 3's Expressive menu (Menu.kt, MenuDefaults.kt and the
  * Menu / StandardMenu / VibrantMenu / SegmentedMenu token files):
- * - groups are separate surfaces 2px apart at elevation 2, with 2px vertical and 4px
- *   horizontal padding; corners: only 16px; first 16px top / 8px bottom; middle 8px;
- *   last 8px top / 16px bottom;
+ * - groups are separate surfaces 2px apart at elevation 2, with 4px padding (the
+ *   SegmentedMenu `GroupPadding` token; Compose's code insets items 2px vertically);
+ *   corners: only 16px; first 16px top / 8px bottom; middle 8px; last 8px top / 16px bottom;
  * - items are 44px minimum, 112–280px wide, 12px horizontal padding, label-large, 20px
- *   icons with an 8px gap; corners: first 12px top / 4px bottom, middle and single 4px,
- *   last 4px top / 12px bottom, and 12px when selected (morph on the fast spatial spring);
+ *   icons with an 8px gap; 12px when selected (morph on the fast spatial spring);
+ * - item corners nest inside their group's: an edge item takes the group's corner minus
+ *   the 4px padding (16px → 12px, 8px → 4px), other corners are 4px. Compose picks item
+ *   shapes per group alone, so a last item could be rounder than its group's 8px corner;
+ * - group labels start 12px from the group's edge and end 4px from it (Compose);
  * - standard: surface-container-low, on-surface text, on-surface-variant icons, selected
  *   tertiary-container; vibrant: tertiary-container, on-tertiary-container content
  *   (icons turn tertiary on hover, focus and press), selected tertiary;
- * - the menu scales from 80% and fades in from its anchor side on the fast springs.
+ * - the menu scales from 80% and fades in from its anchor side on the fast springs;
+ * - the scrolling list keeps 8px of room around the groups so their shadows aren't clipped.
  * Every class is written out in full so Tailwind can find it.
  */
 
@@ -30,9 +34,16 @@ export const menuStyles = tv({
       'origin-top-left rtl:origin-top-right',
       'data-[placement=top]:origin-bottom-left rtl:data-[placement=top]:origin-bottom-right',
     ],
-    menu: 'flex max-h-[inherit] min-w-[112px] max-w-[280px] flex-col gap-[2px] overflow-y-auto outline-none',
-    group: 'flex flex-col px-[4px] py-[2px] shadow-elevation-2',
-    heading: 'flex min-h-[32px] items-center px-[12px] text-label-large',
+    // The list scrolls when tall, and a scroll container clips its children's shadows to
+    // its box. 8px of padding (cancelled by a negative margin, so nothing moves) leaves room
+    // for the groups' elevation-2 shadows; that ring lets clicks through, so a press just
+    // outside the menu still dismisses it. Widths include the padding: 112–280px groups.
+    menu: [
+      '-m-[8px] p-[8px] pointer-events-none',
+      'flex max-h-[inherit] min-w-[128px] max-w-[296px] flex-col gap-[2px] overflow-y-auto outline-none',
+    ],
+    group: 'pointer-events-auto flex flex-col p-[4px] shadow-elevation-2',
+    heading: 'flex min-h-[32px] items-center ps-[8px] text-label-large',
     item: [
       'group/item flex min-h-[44px] w-full cursor-pointer items-center px-[12px] text-start',
       'text-label-large outline-none select-none',
@@ -108,11 +119,15 @@ export const menuStyles = tv({
       middle: { group: 'rounded-corner-small' },
       last: { group: 'rounded-t-corner-small rounded-b-corner-large' },
     },
-    itemPosition: {
-      only: { item: 'rounded-corner-extra-small' },
-      first: { item: 'rounded-t-corner-medium rounded-b-corner-extra-small' },
-      middle: { item: 'rounded-corner-extra-small' },
-      last: { item: 'rounded-t-corner-extra-small rounded-b-corner-medium' },
+    /** The item's top corners: `nested` inside a 16px group corner, else 4px. */
+    itemTop: {
+      nested: { item: 'rounded-t-corner-medium' },
+      plain: { item: 'rounded-t-corner-extra-small' },
+    },
+    /** The item's bottom corners: `nested` inside a 16px group corner, else 4px. */
+    itemBottom: {
+      nested: { item: 'rounded-b-corner-medium' },
+      plain: { item: 'rounded-b-corner-extra-small' },
     },
     hasDescription: {
       true: { item: 'py-[8px]' },
@@ -122,7 +137,8 @@ export const menuStyles = tv({
   defaultVariants: {
     variant: 'standard',
     groupPosition: 'only',
-    itemPosition: 'only',
+    itemTop: 'plain',
+    itemBottom: 'plain',
     hasDescription: false,
   },
 });

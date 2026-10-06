@@ -70,14 +70,45 @@ describe('Menu', () => {
       'rounded-t-corner-small',
       'rounded-b-corner-large',
     );
+    // Item corners nest inside the group's: 12px only where an item meets a 16px corner.
+    // Cut sits under the heading and Paste above the group's 8px corner, so both stay 4px.
     expect(screen.getByRole('menuitem', { name: /Cut/ })).toHaveClass(
-      'rounded-t-corner-medium',
+      'rounded-t-corner-extra-small',
       'rounded-b-corner-extra-small',
     );
-    expect(screen.getByRole('menuitem', { name: /Copy/ })).toHaveClass(
-      'rounded-corner-extra-small',
+    expect(screen.getByRole('menuitem', { name: /Paste/ })).toHaveClass(
+      'rounded-t-corner-extra-small',
+      'rounded-b-corner-extra-small',
     );
-    expect(screen.getByRole('menuitem', { name: /Paste/ })).toHaveClass('rounded-b-corner-medium');
+    expect(screen.getByRole('menuitem', { name: /Delete/ })).toHaveClass(
+      'rounded-t-corner-extra-small',
+      'rounded-b-corner-medium',
+    );
+  });
+
+  it('nests the corners of a single group of items inside its 16px corners', async () => {
+    render(
+      <MenuTrigger>
+        <Button>Send</Button>
+        <Menu aria-label="Send">
+          <MenuItem key="later">Send later</MenuItem>
+          <MenuItem key="draft">Save draft</MenuItem>
+          <MenuItem key="discard">Discard</MenuItem>
+        </Menu>
+      </MenuTrigger>,
+    );
+    await openMenu('Send');
+    const later = screen.getByRole('menuitem', { name: 'Send later' });
+    expect(later.parentElement).toHaveClass('rounded-corner-large', 'p-[4px]');
+    expect(later).toHaveClass('rounded-t-corner-medium', 'rounded-b-corner-extra-small');
+    expect(screen.getByRole('menuitem', { name: 'Save draft' })).toHaveClass(
+      'rounded-t-corner-extra-small',
+      'rounded-b-corner-extra-small',
+    );
+    expect(screen.getByRole('menuitem', { name: 'Discard' })).toHaveClass(
+      'rounded-t-corner-extra-small',
+      'rounded-b-corner-medium',
+    );
   });
 
   it('runs an action, closes and returns focus to the trigger', async () => {
