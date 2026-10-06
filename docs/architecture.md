@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 3 complete** · Last updated: 2026-10-06 (rev. 39 — docs site verified and fixed: shell, search, a11y, CI)
+Status: **Tier 3 complete** · Last updated: 2026-10-06 (rev. 40 — collection items and Server Components)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -618,6 +618,7 @@ An **override matrix** in CI: every component rendered with `fixed`, `absolute`,
 
 - Next.js 15/16, App Router primary, Pages Router supported; Turbopack + webpack.
 - `"use client"` preserved at the top of every interactive component file in the build; utilities (`cn`, tokens, `createTheme`) are server-safe.
+- **Collection items must be created in client components.** `Menu`, `Tabs` and interactive `List` are React Aria collections, which read each item's element type (`MenuItem` / `MenuGroup` / `Tab` / `ListItem` are React Stately's `Item` / `Section`). Items created in a Server Component reach the client as client references, so React Stately fails with "Unknown element <[object Object]> in collection" (found in the docs site, where a server-rendered example passed a `Menu` to `SplitButton`). In development the components check their children (`utils/assert-collection-children.ts`) and throw an error naming the cause. The site's `menus.spec.ts` opens every menu on every component page, against the static export and again under `next dev`, where the failure shows first.
 - No `window`/`document` access at module load; overlays portal only on the client.
 - **No theme flash**:
   - Cookie (recommended): `getThemeFromCookies()` from `@vkieu/mui/next` → render `<html data-theme data-mode data-contrast data-motion>` on the server.
@@ -674,6 +675,8 @@ apps/site              # Consumer docs site: Next.js App Router, static export (
   - Screenshots are taken against the static Storybook build (`pnpm test:e2e`), with the font loaded locally (`@fontsource-variable/roboto-flex`) so results don't depend on the network.
   - Baselines are platform-specific (`*-darwin.png` today). CI has to render them in a pinned container image and commit that platform's baselines.
   - Every class a `tv` recipe can emit is checked to appear literally in its source and to compile in Tailwind. A class assembled at runtime would never be generated.
+  - **Docs site e2e projects:** `chromium` runs every suite against the static export; `next-dev` runs the menu suite under `next dev` with its own build directory (`NEXT_DIST_DIR=.next-e2e`), so it can run while a developer's `next dev` holds the `.next` lock.
+  - **Turbo env:** `NODE_EXTRA_CA_CERTS` is a global pass-through variable, so builds behind a TLS-intercepting proxy can still download fonts for `next/font` (strict env mode dropped it).
   - **CI** (`.github/workflows/ci.yml`): builds, typechecks, lints and tests everything, then runs the site's link check and smoke suite. The pnpm version comes from `packageManager`; also passing `version` to `pnpm/action-setup` fails the job. Storybook screenshots aren't in CI until Linux baselines exist.
   - **Wait for animations before measuring** an element for a screenshot clip: an entering overlay is still scaling, and a baseline taken mid-animation is cut off (found in the rich tooltip test).
   - **Screenshot tolerance:** `maxDiffPixelRatio` is 0.0002 (0.02%). Playwright's per-pixel colour `threshold` stays at its default 0.2, which ignores colour shifts as small as `surface` → `surface-container` (found with the list container change): after colour changes, re-baseline with `--update-snapshots=all` and review the images. At 0.2%, a moved hairline (FAB collapse width, TextField outline offset) still matched an outdated baseline. Re-baseline deliberately after visual changes and review the images.
