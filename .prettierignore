@@ -9,3 +9,4 @@ docs/
 CLAUDE.md
 **/out
 .agents/
+**/.next-e2e

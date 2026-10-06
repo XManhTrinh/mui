@@ -35,6 +35,7 @@ export default tseslint.config(
       '**/dist/**',
       '**/coverage/**',
       '**/.next/**',
+      '**/.next-e2e/**',
       '**/out/**',
       '**/storybook-static/**',
       '**/generated/**',
