@@ -22,7 +22,12 @@ export function ListStatic() {
         <ListItem key="one" leading={<HomeIcon />} trailing={<StarIcon />}>
           One line
         </ListItem>
-        <ListItem key="two" leading={<Avatar letter="B" />} supportingText="Supporting text" trailing="9:41">
+        <ListItem
+          key="two"
+          leading={<Avatar letter="B" />}
+          supportingText="Supporting text"
+          trailing="9:41"
+        >
           Two lines
         </ListItem>
         <ListItem

@@ -14,7 +14,13 @@ export function ButtonGroupMultiple() {
       aria-label="Text format"
     >
       <IconButton toggle variant="tonal" value="bold" icon={<FormatBoldIcon />} aria-label="Bold" />
-      <IconButton toggle variant="tonal" value="italic" icon={<FormatItalicIcon />} aria-label="Italic" />
+      <IconButton
+        toggle
+        variant="tonal"
+        value="italic"
+        icon={<FormatItalicIcon />}
+        aria-label="Italic"
+      />
       <IconButton
         toggle
         variant="tonal"

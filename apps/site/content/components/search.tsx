@@ -22,12 +22,13 @@ export async function SearchBody() {
         <p className="text-body-large text-on-surface-variant">
           A <code className="text-on-surface">SearchBar</code> is a 56px pill that expands into a
           search view holding suggestions or results. With{' '}
-          <code className="text-on-surface">view=&quot;docked&quot;</code> (the default) it opens a dropdown
-          below the bar over a scrim; with{' '}
-          <code className="text-on-surface">view=&quot;full-screen&quot;</code> it grows to fill the window,
-          for compact windows. It is controlled with{' '}
-          <code className="text-on-surface">value</code> / <code className="text-on-surface">onChange</code>,
-          and <code className="text-on-surface">onSubmit</code> fires on Enter.
+          <code className="text-on-surface">view=&quot;docked&quot;</code> (the default) it opens a
+          dropdown below the bar over a scrim; with{' '}
+          <code className="text-on-surface">view=&quot;full-screen&quot;</code> it grows to fill the
+          window, for compact windows. It is controlled with{' '}
+          <code className="text-on-surface">value</code> /{' '}
+          <code className="text-on-surface">onChange</code>, and{' '}
+          <code className="text-on-surface">onSubmit</code> fires on Enter.
         </p>
         <p className="text-body-large text-on-surface-variant">
           <code className="text-on-surface">leadingIcon</code> and{' '}
@@ -67,14 +68,15 @@ export async function SearchBody() {
         <ul className="flex flex-col gap-2 ps-5 text-body-large text-on-surface-variant [&>li]:list-disc">
           <li>
             Name the bar with <code className="text-on-surface">aria-label</code> or{' '}
-            <code className="text-on-surface">aria-labelledby</code> (required by the types); the bar
-            inside a <code className="text-on-surface">SearchAppBar</code> still needs its own name.
+            <code className="text-on-surface">aria-labelledby</code> (required by the types); the
+            bar inside a <code className="text-on-surface">SearchAppBar</code> still needs its own
+            name.
           </li>
           <li>
             The collapsed input is a <code className="text-on-surface">combobox</code> with{' '}
             <code className="text-on-surface">aria-haspopup=&quot;dialog&quot;</code> and{' '}
-            <code className="text-on-surface">aria-expanded</code>. A press, typing, or ↓ expands it;
-            Tab focus alone does not.
+            <code className="text-on-surface">aria-expanded</code>. A press, typing, or ↓ expands
+            it; Tab focus alone does not.
           </li>
           <li>
             The expanded view is a modal dialog named like the bar. It has its own input (the
@@ -92,10 +94,10 @@ export async function SearchBody() {
         <h2 className="text-headline-small text-on-surface">Differences from Compose</h2>
         <ul className="flex flex-col gap-2 ps-5 text-body-large text-on-surface-variant [&>li]:list-disc">
           <li>
-            The docked dropdown slides down from half its height on the default spatial spring over a
-            32% scrim; the full-screen view grows from the bar&apos;s bounds via a{' '}
-            <code className="text-on-surface">clip-path</code> on the slow spatial spring, so nothing
-            is transformed.
+            The docked dropdown slides down from half its height on the default spatial spring over
+            a 32% scrim; the full-screen view grows from the bar&apos;s bounds via a{' '}
+            <code className="text-on-surface">clip-path</code> on the slow spatial spring, so
+            nothing is transformed.
           </li>
           <li>
             The field is 360px wide by default and at most 720px (Compose&apos;s{' '}

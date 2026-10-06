@@ -73,18 +73,18 @@ export async function PrimitivesBody() {
           layers, elevation, morphing shapes) without re-implementing it.
         </p>
         <p className="text-body-large text-on-surface-variant">
-          Reach for primitives only when a finished component does not fit — a bespoke control, a new
-          surface, a custom morphing graphic. If an M3 component (
+          Reach for primitives only when a finished component does not fit — a bespoke control, a
+          new surface, a custom morphing graphic. If an M3 component (
           <code className="text-on-surface">Button</code>,{' '}
           <code className="text-on-surface">TextField</code>,{' '}
-          <code className="text-on-surface">Dialog</code>…) covers the need, use it; it already wires
-          these primitives together correctly.
+          <code className="text-on-surface">Dialog</code>…) covers the need, use it; it already
+          wires these primitives together correctly.
         </p>
         <p className="text-body-medium text-on-surface-variant">
           Because the docs site is restricted to the public M3 entries, this page cannot import
-          primitives for live demos and has no generated props table. Sections <em>Live examples</em>{' '}
-          and <em>Props</em> are therefore not applicable here; the snippets below are illustrative
-          strings. The authoritative API lives in the source and TSDoc under{' '}
+          primitives for live demos and has no generated props table. Sections{' '}
+          <em>Live examples</em> and <em>Props</em> are therefore not applicable here; the snippets
+          below are illustrative strings. The authoritative API lives in the source and TSDoc under{' '}
           <code className="text-on-surface">packages/ui/src/primitives.ts</code>.
         </p>
       </section>
@@ -92,8 +92,8 @@ export async function PrimitivesBody() {
       <section className="flex flex-col gap-6">
         <h2 className="text-headline-small text-on-surface">The exported surface</h2>
         <p className="text-body-large text-on-surface-variant">
-          Everything re-exported from <code className="text-on-surface">@vkieu/mui/primitives</code>,
-          grouped by what it does:
+          Everything re-exported from <code className="text-on-surface">@vkieu/mui/primitives</code>
+          , grouped by what it does:
         </p>
         <CodeBlock
           code={importSnippet}
@@ -143,10 +143,9 @@ export async function PrimitivesBody() {
             <code className="text-on-surface">TriggerContext</code> (an overlay trigger hands its
             press handler and ARIA to a button-like child),{' '}
             <code className="text-on-surface">usePresence</code> (keeps an overlay mounted until its
-            exit transition ends), and{' '}
-            <code className="text-on-surface">DomDirectionLocale</code> /{' '}
-            <code className="text-on-surface">localeWithDirection</code> (give React Aria the keyboard
-            direction of the DOM without changing the app&apos;s language).
+            exit transition ends), and <code className="text-on-surface">DomDirectionLocale</code> /{' '}
+            <code className="text-on-surface">localeWithDirection</code> (give React Aria the
+            keyboard direction of the DOM without changing the app&apos;s language).
           </li>
           <li>
             The morph engine (<code className="text-on-surface">useM3Morph</code>,{' '}
@@ -179,8 +178,18 @@ export async function PrimitivesBody() {
           <code className="text-on-surface">focus-ring</code>) draw it on the background layer with
           no child elements, so consumer layout can never break it (architecture §10).
         </p>
-        <CodeBlock code={interactionSnippet} html={interactionHtml} lang="tsx" title="useM3Interaction" />
-        <CodeBlock code={surfaceSnippet} html={surfaceHtml} lang="tsx" title="Surface + ButtonBase" />
+        <CodeBlock
+          code={interactionSnippet}
+          html={interactionHtml}
+          lang="tsx"
+          title="useM3Interaction"
+        />
+        <CodeBlock
+          code={surfaceSnippet}
+          html={surfaceHtml}
+          lang="tsx"
+          title="Surface + ButtonBase"
+        />
         <p className="text-body-large text-on-surface-variant">
           Morphing shapes: the shape library is pure geometry ported from{' '}
           <code className="text-on-surface">androidx.graphics.shapes</code> and Compose&apos;s{' '}
@@ -206,8 +215,8 @@ export async function PrimitivesBody() {
             hit area for small controls.
           </li>
           <li>
-            <code className="text-on-surface">DomDirectionLocale</code> fixes a subtle bug: React Aria
-            reads keyboard direction from its locale, not the DOM{' '}
+            <code className="text-on-surface">DomDirectionLocale</code> fixes a subtle bug: React
+            Aria reads keyboard direction from its locale, not the DOM{' '}
             <code className="text-on-surface">dir</code>. It supplies the same locale with only its
             script changed, so arrow keys follow the layout while dates and numbers keep the
             app&apos;s language.
@@ -215,8 +224,8 @@ export async function PrimitivesBody() {
           <li>
             <code className="text-on-surface">Overlay</code> re-applies the theme and direction of
             where it was rendered and releases focus containment while animating out (via{' '}
-            <code className="text-on-surface">usePresence</code>), so overlays opened inside a themed
-            or RTL region stay correct.
+            <code className="text-on-surface">usePresence</code>), so overlays opened inside a
+            themed or RTL region stay correct.
           </li>
         </ul>
       </section>
@@ -231,16 +240,16 @@ export async function PrimitivesBody() {
             public components, so they may not import primitives directly.
           </li>
           <li>
-            <code className="text-on-surface">src/shapes</code> is pure geometry that imports nothing,
-            so both primitives and components may use it. Primitives are internal first; the{' '}
-            <code className="text-on-surface">@vkieu/mui/primitives</code> entry exposes them for
-            advanced consumers, kept separate from the main M3 entry.
+            <code className="text-on-surface">src/shapes</code> is pure geometry that imports
+            nothing, so both primitives and components may use it. Primitives are internal first;
+            the <code className="text-on-surface">@vkieu/mui/primitives</code> entry exposes them
+            for advanced consumers, kept separate from the main M3 entry.
           </li>
           <li>
-            These are not M3 components, so they carry no M3 spec guarantees — they are the mechanism
-            M3 components are built from. Non-M3 finished components live instead under{' '}
-            <code className="text-on-surface">@vkieu/mui/vk</code>; primitives are a lower layer than
-            that.
+            These are not M3 components, so they carry no M3 spec guarantees — they are the
+            mechanism M3 components are built from. Non-M3 finished components live instead under{' '}
+            <code className="text-on-surface">@vkieu/mui/vk</code>; primitives are a lower layer
+            than that.
           </li>
         </ul>
       </section>

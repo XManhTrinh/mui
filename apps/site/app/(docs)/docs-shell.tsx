@@ -6,12 +6,16 @@ import {
   NavigationBarItem,
   NavigationRail,
   NavigationRailItem,
-  SearchBar,
+  SearchAppBar,
+  SheetTrigger,
+  SideSheet,
   TopAppBar,
 } from '@vkieu/mui';
 import { usePathname } from 'next/navigation';
 import { useState, type ReactNode } from 'react';
-import { MenuIcon, SearchIcon } from '../../components/icons';
+import { CloseIcon, MenuIcon, SettingsIcon } from '../../components/icons';
+import { DocsSearch } from './docs-search';
+import type { SearchEntry } from './search-index';
 import { DOCS_SECTIONS } from './sections';
 import { ThemeControls } from './theme-controls';
 
@@ -19,13 +23,38 @@ function isActive(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
+/** The display settings (theme, mode, contrast, motion, direction) in a modal side sheet. */
+function DisplaySettings() {
+  return (
+    <SheetTrigger>
+      <IconButton icon={<SettingsIcon />} aria-label="Display settings" />
+      <SideSheet
+        title="Display"
+        className="w-[320px]"
+        actions={({ close }) => (
+          <IconButton icon={<CloseIcon />} aria-label="Close display settings" onPress={close} />
+        )}
+      >
+        <ThemeControls />
+      </SideSheet>
+    </SheetTrigger>
+  );
+}
+
 /**
  * The documentation shell: a navigation rail (medium+) and flexible navigation bar
- * (compact), a top app bar with search and theme controls, and a modal navigation drawer
- * opened from the app bar on compact widths. Every element is a `@vkieu/mui` component;
- * active-route state comes from `usePathname()`.
+ * (compact), a modal navigation drawer on compact widths, and a top bar with the page
+ * search and the display settings: a top app bar on medium+ windows and an app bar with
+ * search on compact ones. Every element is a `@vkieu/mui` component; active-route state
+ * comes from `usePathname()`.
  */
-export function DocsShell({ children }: { children: ReactNode }) {
+export function DocsShell({
+  children,
+  searchEntries,
+}: {
+  children: ReactNode;
+  searchEntries: SearchEntry[];
+}) {
   const pathname = usePathname();
   const [navOpen, setNavOpen] = useState(false);
 
@@ -64,30 +93,37 @@ export function DocsShell({ children }: { children: ReactNode }) {
       </NavigationRail>
 
       <div className="flex min-w-0 flex-1 flex-col">
+        {/* Medium and wider: title, search and settings. */}
         <TopAppBar
           variant="small"
-          title={<span className="text-title-large text-on-surface">@vkieu/mui</span>}
+          className="hidden medium:flex"
+          title={
+            // The package name reads left to right on RTL pages too.
+            <span dir="ltr" className="text-title-large text-on-surface">
+              @vkieu/mui
+            </span>
+          }
+          actions={
+            <>
+              <DocsSearch entries={searchEntries} view="docked" className="w-[280px]" />
+              <DisplaySettings />
+            </>
+          }
+        />
+        {/* Compact: the search fills the bar between the drawer button and the settings. */}
+        <SearchAppBar
+          className="medium:hidden"
           navigationIcon={
             <IconButton
-              className="medium:hidden"
               icon={<MenuIcon />}
               aria-label="Open navigation"
               onPress={() => setNavOpen(true)}
             />
           }
-          actions={
-            <div className="flex items-center gap-2">
-              <SearchBar
-                aria-label="Search documentation"
-                placeholder="Search"
-                leadingIcon={<SearchIcon />}
-                view="docked"
-                className="hidden w-56 medium:flex"
-              />
-              <ThemeControls />
-            </div>
-          }
-        />
+          actions={<DisplaySettings />}
+        >
+          <DocsSearch entries={searchEntries} view="full-screen" />
+        </SearchAppBar>
         <main className="min-w-0 flex-1 p-6 pb-28 medium:pb-6">{children}</main>
       </div>
 

@@ -2,7 +2,7 @@ import { AssistChip, Button, Card, Switch } from '@vkieu/mui';
 import { CodeBlock } from '@vkieu/mui/vk';
 import { highlightSource } from '../lib/highlight';
 
-const INSTALL_SNIPPET = `pnpm add @vkieu/mui`;
+const INSTALL_SNIPPET = `npm i @vkieu/mui motion`;
 
 const CSS_SNIPPET = `@import "tailwindcss";
 @import "@vkieu/mui/styles.css";
@@ -19,9 +19,9 @@ export default async function HomePage() {
       <section className="flex flex-col gap-4 pt-8">
         <h1 className="text-display-small text-on-surface">@vkieu/mui</h1>
         <p className="max-w-2xl text-body-large text-on-surface-variant">
-          A React component library implementing Material Design 3 Expressive, built on React
-          Aria, Tailwind CSS v4 and Motion. Six themes, light and dark, three contrast levels and
-          two motion schemes — all driven by semantic tokens.
+          A React component library implementing Material Design 3 Expressive, built on React Aria,
+          Tailwind CSS v4 and Motion. Six themes, light and dark, three contrast levels and two
+          motion schemes — all driven by semantic tokens.
         </p>
         <div className="flex flex-wrap gap-3">
           <Button variant="filled" href="/getting-started">

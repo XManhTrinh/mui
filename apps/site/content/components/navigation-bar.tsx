@@ -21,11 +21,12 @@ export async function NavigationBarBody() {
         <h2 className="text-headline-small text-on-surface">Purpose</h2>
         <p className="text-body-large text-on-surface-variant">
           The flexible navigation bar holds 3–5 top-level destinations along the bottom of compact
-          and medium windows. With <code className="text-on-surface">iconPosition=&quot;top&quot;</code>{' '}
-          (the default) items stack the icon above the label; with{' '}
-          <code className="text-on-surface">iconPosition=&quot;start&quot;</code> the icon sits beside the
-          label in a pill, for the flexible bar in medium windows. For larger windows use a{' '}
-          <code className="text-on-surface">NavigationRail</code> instead.
+          and medium windows. With{' '}
+          <code className="text-on-surface">iconPosition=&quot;top&quot;</code> (the default) items
+          stack the icon above the label; with{' '}
+          <code className="text-on-surface">iconPosition=&quot;start&quot;</code> the icon sits
+          beside the label in a pill, for the flexible bar in medium windows. For larger windows use
+          a <code className="text-on-surface">NavigationRail</code> instead.
         </p>
         <p className="text-body-large text-on-surface-variant">
           Items are links (<code className="text-on-surface">href</code>) or buttons (
@@ -33,8 +34,8 @@ export async function NavigationBarBody() {
           <code className="text-on-surface">icon</code>, an optional{' '}
           <code className="text-on-surface">selectedIcon</code> and a label;{' '}
           <code className="text-on-surface">selected</code> marks the current one.{' '}
-          <code className="text-on-surface">arrangement=&quot;centered&quot;</code> groups the items within
-          side padding instead of spreading them equally.
+          <code className="text-on-surface">arrangement=&quot;centered&quot;</code> groups the items
+          within side padding instead of spreading them equally.
         </p>
       </section>
 
@@ -71,8 +72,9 @@ export async function NavigationBarBody() {
             hidden from assistive tech and the label names the item.
           </li>
           <li>
-            The selected item sets <code className="text-on-surface">aria-current=&quot;page&quot;</code> so
-            the current destination is announced.
+            The selected item sets{' '}
+            <code className="text-on-surface">aria-current=&quot;page&quot;</code> so the current
+            destination is announced.
           </li>
         </ul>
       </section>
@@ -81,14 +83,14 @@ export async function NavigationBarBody() {
         <h2 className="text-headline-small text-on-surface">Differences from Compose</h2>
         <ul className="flex flex-col gap-2 ps-5 text-body-large text-on-surface-variant [&>li]:list-disc">
           <li>
-            This is Compose&apos;s short / flexible navigation bar
-            (<code className="text-on-surface">ShortNavigationBar</code>), which replaces the original
-            navigation bar; it is 64px <code className="text-on-surface">surface-container</code> with
-            no elevation.
+            This is Compose&apos;s short / flexible navigation bar (
+            <code className="text-on-surface">ShortNavigationBar</code>), which replaces the
+            original navigation bar; it is 64px{' '}
+            <code className="text-on-surface">surface-container</code> with no elevation.
           </li>
           <li>
-            <code className="text-on-surface">arrangement=&quot;centered&quot;</code> reproduces Compose&apos;s
-            side padding of (100% − 10% × (n + 3)) / 2 for up to 6 items.
+            <code className="text-on-surface">arrangement=&quot;centered&quot;</code> reproduces
+            Compose&apos;s side padding of (100% − 10% × (n + 3)) / 2 for up to 6 items.
           </li>
           <li>
             The pill grows from its centre on the default spatial spring, and the state layer and

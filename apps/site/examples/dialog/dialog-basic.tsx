@@ -1,6 +1,13 @@
 'use client';
 
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, DialogTrigger } from '@vkieu/mui';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from '@vkieu/mui';
 
 /**
  * A basic dialog opened from a `DialogTrigger`: the first child is the trigger, the rest

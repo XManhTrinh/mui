@@ -68,9 +68,9 @@ export async function TopAppBarBody() {
             heading when it is the page&apos;s name.
           </li>
           <li>
-            The navigation icon and actions are ordinary <code className="text-on-surface">IconButton</code>s,
-            so each needs an <code className="text-on-surface">aria-label</code>; Tab reaches them in
-            order.
+            The navigation icon and actions are ordinary{' '}
+            <code className="text-on-surface">IconButton</code>s, so each needs an{' '}
+            <code className="text-on-surface">aria-label</code>; Tab reaches them in order.
           </li>
           <li>
             In a two-row bar only one title is announced at a time — the expanded one until it is
@@ -84,7 +84,8 @@ export async function TopAppBarBody() {
         <ul className="flex flex-col gap-2 ps-5 text-body-large text-on-surface-variant [&>li]:list-disc">
           <li>
             These are Compose&apos;s flexible bars; the non-flexible medium / large bars and the
-            centre-aligned bar are superseded by <code className="text-on-surface">titleAlign</code>.
+            centre-aligned bar are superseded by <code className="text-on-surface">titleAlign</code>
+            .
           </li>
           <li>
             Compose shrinks the bar&apos;s height through nested scrolling. On the web the bar is{' '}

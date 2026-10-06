@@ -16,3 +16,6 @@ apps/docs/test-results/
 
 # Local git worktrees
 .worktrees/
+
+# Local agent working notes
+.agents/

@@ -81,9 +81,9 @@ async function assertPageHealthy(
   page.on('pageerror', (error) => errors.push(error.message));
 
   if (variant.dir === 'rtl') {
-    // Flip the whole tree to RTL before any page script runs; `<html>` has
-    // suppressHydrationWarning and React does not manage `dir`, so it sticks after hydration.
-    await page.addInitScript(() => document.documentElement.setAttribute('dir', 'rtl'));
+    // The site's direction switch keeps the choice in local storage and applies it on load.
+    // (An init script can't set `dir`: it runs before the page's own <html> is parsed.)
+    await page.addInitScript(() => localStorage.setItem('vkieu-mui-site-dir', 'rtl'));
   }
   if (variant.dark) {
     // ThemeScript (pre-paint) and ThemeProvider (hydration) both read this cookie (storage
@@ -137,9 +137,11 @@ test('component gallery lists exactly the generated slugs', async ({ page }) => 
   await page.goto('/components');
   await expect(page.getByRole('heading', { level: 1, name: 'Components' })).toBeVisible();
 
-  const hrefs = await page.locator('a[href^="/components/"]').evaluateAll((anchors) =>
-    anchors.map((a) => (a as HTMLAnchorElement).getAttribute('href') ?? ''),
-  );
+  const hrefs = await page
+    .locator('a[href^="/components/"]')
+    .evaluateAll((anchors) =>
+      anchors.map((a) => (a as HTMLAnchorElement).getAttribute('href') ?? ''),
+    );
   const linkedSlugs = new Set(
     hrefs
       .map((href) => href.replace(/[?#].*$/, '').replace(/\/$/, ''))

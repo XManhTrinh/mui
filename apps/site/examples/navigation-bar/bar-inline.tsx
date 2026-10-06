@@ -20,7 +20,7 @@ export function BarInline() {
   const [current, setCurrent] = useState('home');
   return (
     <div className="w-full overflow-hidden rounded-corner-large border border-outline-variant">
-      <NavigationBar aria-label="Primary" iconPosition="start" arrangement="centered">
+      <NavigationBar aria-label="Inline example" iconPosition="start" arrangement="centered">
         {DESTINATIONS.map(({ id, label, icon }) => (
           <NavigationBarItem
             key={id}

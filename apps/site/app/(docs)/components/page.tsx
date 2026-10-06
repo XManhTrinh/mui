@@ -18,12 +18,10 @@ const GROUP_ORDER: ComponentGroup[] = [
 ];
 
 function pagesByGroup(): [ComponentGroup, ComponentPageMeta[]][] {
-  return GROUP_ORDER.map(
-    (group): [ComponentGroup, ComponentPageMeta[]] => [
-      group,
-      COMPONENT_PAGES.filter((page) => page.group === group),
-    ],
-  ).filter(([, pages]) => pages.length > 0);
+  return GROUP_ORDER.map((group): [ComponentGroup, ComponentPageMeta[]] => [
+    group,
+    COMPONENT_PAGES.filter((page) => page.group === group),
+  ]).filter(([, pages]) => pages.length > 0);
 }
 
 export default function ComponentsPage() {

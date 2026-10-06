@@ -20,9 +20,9 @@ export async function SnackbarBody() {
       <section className="flex flex-col gap-3">
         <h2 className="text-headline-small text-on-surface">Purpose</h2>
         <p className="text-body-large text-on-surface-variant">
-          A snackbar shows a brief message about an app process at the bottom of the screen, with
-          an optional single action and dismiss button. Use it for low-priority, transient
-          feedback that does not interrupt the task. Reach for a{' '}
+          A snackbar shows a brief message about an app process at the bottom of the screen, with an
+          optional single action and dismiss button. Use it for low-priority, transient feedback
+          that does not interrupt the task. Reach for a{' '}
           <code className="text-on-surface">Dialog</code> when the user must act before continuing,
           and a <code className="text-on-surface">Tooltip</code> for a label on hover or focus.
         </p>
@@ -30,8 +30,8 @@ export async function SnackbarBody() {
           Most apps show snackbars through a <code className="text-on-surface">SnackbarHost</code>:
           create a state with <code className="text-on-surface">useSnackbarHostState()</code>, place
           one host, and call <code className="text-on-surface">showSnackbar</code>. The host queues
-          messages and shows one at a time. Render a <code className="text-on-surface">Snackbar</code>{' '}
-          directly only for custom placement.
+          messages and shows one at a time. Render a{' '}
+          <code className="text-on-surface">Snackbar</code> directly only for custom placement.
         </p>
       </section>
 
@@ -60,9 +60,9 @@ export async function SnackbarBody() {
         <h2 className="text-headline-small text-on-surface">Keyboard &amp; screen reader</h2>
         <ul className="flex flex-col gap-2 ps-5 text-body-large text-on-surface-variant [&>li]:list-disc">
           <li>
-            The host is a persistent <code className="text-on-surface">aria-live=&quot;polite&quot;</code>{' '}
-            region, so each new message is announced without moving focus. Snackbars never take
-            focus themselves.
+            The host is a persistent{' '}
+            <code className="text-on-surface">aria-live=&quot;polite&quot;</code> region, so each
+            new message is announced without moving focus. Snackbars never take focus themselves.
           </li>
           <li>
             When a snackbar has a dismiss (×) button, Escape dismisses it while focus is inside it.
@@ -83,7 +83,8 @@ export async function SnackbarBody() {
             <code className="text-on-surface">SnackbarHostState</code> ports Compose&apos;s queue:{' '}
             <code className="text-on-surface">showSnackbar</code> resolves{' '}
             <code className="text-on-surface">&apos;action-performed&apos;</code> or{' '}
-            <code className="text-on-surface">&apos;dismissed&apos;</code>, so you can react to Undo.
+            <code className="text-on-surface">&apos;dismissed&apos;</code>, so you can react to
+            Undo.
           </li>
           <li>
             Durations match Compose: <code className="text-on-surface">short</code> 4s,{' '}
@@ -99,9 +100,9 @@ export async function SnackbarBody() {
             <code className="text-on-surface">IconButton</code>.
           </li>
           <li>
-            A leaving snackbar stays <code className="text-on-surface">inert</code> while the next one
-            fades in, both sharing one grid cell, matching Compose&apos;s cross-fade. The pause on
-            hover or focus is an addition on top of Compose.
+            A leaving snackbar stays <code className="text-on-surface">inert</code> while the next
+            one fades in, both sharing one grid cell, matching Compose&apos;s cross-fade. The pause
+            on hover or focus is an addition on top of Compose.
           </li>
         </ul>
       </section>

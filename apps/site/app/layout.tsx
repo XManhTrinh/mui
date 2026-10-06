@@ -3,6 +3,7 @@ import { NextRouterProvider } from '@vkieu/mui/next';
 import type { Metadata } from 'next';
 import { Roboto_Flex } from 'next/font/google';
 import type { ReactNode } from 'react';
+import { DIRECTION_SCRIPT } from './direction';
 import './globals.css';
 
 const robotoFlex = Roboto_Flex({
@@ -23,6 +24,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         {/* Applies the stored theme before first paint, so the static export never flashes. */}
         <ThemeScript defaults={DEFAULT_THEME_STATE} />
+        {/* Applies the stored text direction before first paint, on every page. */}
+        <script dangerouslySetInnerHTML={{ __html: DIRECTION_SCRIPT }} />
       </head>
       <body
         className="bg-surface text-on-surface font-plain"

@@ -10,10 +10,7 @@ export async function PickerDialogBody() {
     readExampleSource('picker-dialog/picker-dialog-date.tsx'),
     readExampleSource('picker-dialog/picker-dialog-time.tsx'),
   ]);
-  const [dateHtml, timeHtml] = await Promise.all([
-    highlightSource(date),
-    highlightSource(time),
-  ]);
+  const [dateHtml, timeHtml] = await Promise.all([highlightSource(date), highlightSource(time)]);
 
   return (
     <>
@@ -93,14 +90,14 @@ export async function PickerDialogBody() {
           </li>
           <li>
             The panel is <code className="text-on-surface">surface-container-high</code> with 28px
-            corners at elevation 3, on the dialog&apos;s scrim and motion. Date actions sit 8px apart
-            with 8px below and 6px from the end; the time variant puts the mode toggle at the start
-            of the actions row.
+            corners at elevation 3, on the dialog&apos;s scrim and motion. Date actions sit 8px
+            apart with 8px below and 6px from the end; the time variant puts the mode toggle at the
+            start of the actions row.
           </li>
           <li>
             <code className="text-on-surface">children</code> may be a function of{' '}
-            <code className="text-on-surface">{'{ close }'}</code>, so a confirm action can apply its
-            value and close in one place.
+            <code className="text-on-surface">{'{ close }'}</code>, so a confirm action can apply
+            its value and close in one place.
           </li>
         </ul>
       </section>

@@ -24,7 +24,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     th: (p) => (
       <th className="border-b border-outline-variant p-2 text-start text-title-small" {...p} />
     ),
-    td: (p) => <td className="border-b border-outline-variant p-2 text-on-surface-variant" {...p} />,
+    td: (p) => (
+      <td className="border-b border-outline-variant p-2 text-on-surface-variant" {...p} />
+    ),
     code: (p) => (
       <code
         className="rounded-corner-extra-small bg-surface-container px-1 text-on-surface"

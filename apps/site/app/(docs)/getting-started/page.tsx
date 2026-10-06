@@ -129,14 +129,19 @@ export default async function GettingStartedPage() {
           In a Tailwind v4 project (Vite or Next.js), import Tailwind and the library tokens into
           your CSS entry. The <code className="text-on-surface">@source</code> line tells Tailwind
           to scan the compiled library so it generates the utility classes the components use. The
-          library’s own stylesheet does the same with <code className="text-on-surface">@source
-          &apos;../&apos;</code>.
+          library’s own stylesheet does the same with{' '}
+          <code className="text-on-surface">@source &apos;../&apos;</code>.
         </p>
         <CodeBlock code={CSS_SNIPPET} html={cssHtml} lang="css" title="globals.css" />
         <p className="text-body-large text-on-surface-variant">
           Not using Tailwind? Import the precompiled stylesheet instead and skip the Tailwind setup.
         </p>
-        <CodeBlock code={COMPILED_CSS_SNIPPET} html={compiledHtml} lang="ts" title="Without Tailwind" />
+        <CodeBlock
+          code={COMPILED_CSS_SNIPPET}
+          html={compiledHtml}
+          lang="ts"
+          title="Without Tailwind"
+        />
       </section>
 
       <section className="flex flex-col gap-4">
@@ -198,21 +203,16 @@ export default async function GettingStartedPage() {
           </a>
           .
         </p>
-        <CodeBlock
-          code={NEXT_ROUTER_SNIPPET}
-          html={nextRouterHtml}
-          lang="tsx"
-          title="layout.tsx"
-        />
+        <CodeBlock code={NEXT_ROUTER_SNIPPET} html={nextRouterHtml} lang="tsx" title="layout.tsx" />
       </section>
 
       <section className="flex flex-col gap-4">
         <h2 className="text-headline-small text-on-surface">Vite 8 note</h2>
         <p className="text-body-large text-on-surface-variant">
-          Interactive modules ship with a <code className="text-on-surface">&quot;use
-          client&quot;</code> directive. Vite 8 (rolldown) logs a harmless{' '}
-          <code className="text-on-surface">MODULE_LEVEL_DIRECTIVE</code> warning for each one in
-          client-only builds. Silence it in your Vite config.
+          Interactive modules ship with a{' '}
+          <code className="text-on-surface">&quot;use client&quot;</code> directive. Vite 8
+          (rolldown) logs a harmless <code className="text-on-surface">MODULE_LEVEL_DIRECTIVE</code>{' '}
+          warning for each one in client-only builds. Silence it in your Vite config.
         </p>
         <CodeBlock code={VITE_SNIPPET} html={viteHtml} lang="ts" title="vite.config.ts" />
       </section>

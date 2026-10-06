@@ -45,7 +45,10 @@ async function resolveAllowlist(): Promise<Set<string>> {
     for (const raw of match[1]!.split(',')) {
       const part = raw.trim();
       if (!part || part.startsWith('type ')) continue;
-      const name = part.split(/\s+as\s+/).pop()!.trim();
+      const name = part
+        .split(/\s+as\s+/)
+        .pop()!
+        .trim();
       if (/^[A-Z]/.test(name)) allow.add(name);
     }
   }
@@ -101,7 +104,9 @@ async function main(): Promise<void> {
     allow = await resolveAllowlist();
     if (allow.size === 0) throw new Error('no public components found in index.ts');
   } catch (error) {
-    console.error(`[generate-props] cannot resolve the public component allowlist: ${(error as Error).message}`);
+    console.error(
+      `[generate-props] cannot resolve the public component allowlist: ${(error as Error).message}`,
+    );
     process.exit(1);
   }
 
@@ -120,7 +125,10 @@ async function main(): Promise<void> {
     await mkdir(outDir, { recursive: true });
     await Promise.all(
       records.map((record) =>
-        writeFile(join(outDir, `${record.displayName}.json`), `${JSON.stringify(record, null, 2)}\n`),
+        writeFile(
+          join(outDir, `${record.displayName}.json`),
+          `${JSON.stringify(record, null, 2)}\n`,
+        ),
       ),
     );
   } catch (error) {

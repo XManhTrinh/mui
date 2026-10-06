@@ -10,10 +10,7 @@ export async function TimePickerBody() {
     readExampleSource('time-picker/time-picker-dial.tsx'),
     readExampleSource('time-picker/time-picker-modes.tsx'),
   ]);
-  const [dialHtml, modesHtml] = await Promise.all([
-    highlightSource(dial),
-    highlightSource(modes),
-  ]);
+  const [dialHtml, modesHtml] = await Promise.all([highlightSource(dial), highlightSource(modes)]);
 
   return (
     <>
@@ -69,8 +66,8 @@ export async function TimePickerBody() {
             edits, and AM / PM is a radio group.
           </li>
           <li>
-            Input mode&apos;s hour and minute fields are labelled numeric inputs; ↑ / ↓ step and wrap,
-            and an out-of-range value is marked{' '}
+            Input mode&apos;s hour and minute fields are labelled numeric inputs; ↑ / ↓ step and
+            wrap, and an out-of-range value is marked{' '}
             <code className="text-on-surface">aria-invalid</code>.
           </li>
           <li>
@@ -94,7 +91,8 @@ export async function TimePickerBody() {
           </li>
           <li>
             The AM / PM selector keeps the token&apos;s{' '}
-            <code className="text-on-surface">tertiary-container</code> selected colour (Compose&apos;s{' '}
+            <code className="text-on-surface">tertiary-container</code> selected colour
+            (Compose&apos;s{' '}
             <code className="text-on-surface">isUpdatedTimepickerToggleEnabled</code> flag would
             switch it to <code className="text-on-surface">primary-container</code>), as with the
             checkbox flag.

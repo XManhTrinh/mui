@@ -52,9 +52,10 @@ export function RailInline() {
           </NavigationRailItem>
         ))}
       </NavigationRail>
-      <main className="flex-1 bg-surface-container-low p-6 text-body-large text-on-surface-variant">
+      {/* A plain region: the docs page already has the page's one <main>. */}
+      <div className="flex-1 bg-surface-container-low p-6 text-body-large text-on-surface-variant">
         Current: {current}
-      </main>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,13 @@
 'use client';
 
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, DialogTrigger } from '@vkieu/mui';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from '@vkieu/mui';
 import { DeleteIcon } from '../../components/icons';
 
 /**

@@ -74,8 +74,9 @@ export async function ToolbarsBody() {
         <h2 className="text-headline-small text-on-surface">Keyboard &amp; screen reader</h2>
         <ul className="flex flex-col gap-2 ps-5 text-body-large text-on-surface-variant [&>li]:list-disc">
           <li>
-            Both toolbars are React Aria toolbars: <code className="text-on-surface">role=&quot;toolbar&quot;</code>,
-            a required name (<code className="text-on-surface">aria-label</code> or{' '}
+            Both toolbars are React Aria toolbars:{' '}
+            <code className="text-on-surface">role=&quot;toolbar&quot;</code>, a required name (
+            <code className="text-on-surface">aria-label</code> or{' '}
             <code className="text-on-surface">aria-labelledby</code>), and arrow keys between the
             controls, following the DOM direction.
           </li>
@@ -102,10 +103,10 @@ export async function ToolbarsBody() {
             pointer focus does not.
           </li>
           <li>
-            Collapsing closes the leading / trailing content through a grid track on the fast spatial
-            spring, clipping only along the toolbar so focus rings and touch targets survive. With a
-            FAB, the toolbar keeps its measured width while the surface springs to 0 and the FAB&apos;s
-            box grows 56 → 80px.
+            Collapsing closes the leading / trailing content through a grid track on the fast
+            spatial spring, clipping only along the toolbar so focus rings and touch targets
+            survive. With a FAB, the toolbar keeps its measured width while the surface springs to 0
+            and the FAB&apos;s box grows 56 → 80px.
           </li>
           <li>
             <code className="text-on-surface">useToolbarScrollExpansion</code> ports Compose&apos;s
@@ -114,8 +115,8 @@ export async function ToolbarsBody() {
             it.
           </li>
           <li>
-            Deferred: the exit-always scroll behaviour, the docked toolbar&apos;s scroll collapse, and
-            the overflow menu.
+            Deferred: the exit-always scroll behaviour, the docked toolbar&apos;s scroll collapse,
+            and the overflow menu.
           </li>
         </ul>
       </section>

@@ -16,9 +16,27 @@ export function IconButtonSizes() {
         <IconButton variant="tonal" size="xl" icon={<SearchIcon />} aria-label="Search" />
       </div>
       <div className="flex items-center gap-4">
-        <IconButton variant="filled" size="md" width="narrow" icon={<SearchIcon />} aria-label="Search narrow" />
-        <IconButton variant="filled" size="md" width="default" icon={<SearchIcon />} aria-label="Search default" />
-        <IconButton variant="filled" size="md" width="wide" icon={<SearchIcon />} aria-label="Search wide" />
+        <IconButton
+          variant="filled"
+          size="md"
+          width="narrow"
+          icon={<SearchIcon />}
+          aria-label="Search narrow"
+        />
+        <IconButton
+          variant="filled"
+          size="md"
+          width="default"
+          icon={<SearchIcon />}
+          aria-label="Search default"
+        />
+        <IconButton
+          variant="filled"
+          size="md"
+          width="wide"
+          icon={<SearchIcon />}
+          aria-label="Search wide"
+        />
       </div>
     </div>
   );

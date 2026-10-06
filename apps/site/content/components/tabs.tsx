@@ -26,8 +26,9 @@ export async function TabsBody() {
           Tabs organise content into peer sections on one screen and switch between them. Primary
           tabs sit at the top level with a content-width indicator; secondary tabs mark a nested
           level with a full-width indicator. Each <code className="text-on-surface">Tab</code> is a
-          React Stately collection item identified by its <code className="text-on-surface">key</code>,
-          with a <code className="text-on-surface">title</code>, an optional{' '}
+          React Stately collection item identified by its{' '}
+          <code className="text-on-surface">key</code>, with a{' '}
+          <code className="text-on-surface">title</code>, an optional{' '}
           <code className="text-on-surface">icon</code> and its panel as{' '}
           <code className="text-on-surface">children</code>.
         </p>
@@ -70,8 +71,8 @@ export async function TabsBody() {
         <h2 className="text-headline-small text-on-surface">Keyboard &amp; screen reader</h2>
         <ul className="flex flex-col gap-2 ps-5 text-body-large text-on-surface-variant [&>li]:list-disc">
           <li>
-            Built on React Aria&apos;s tab list: arrow keys move between tabs (mirrored in RTL), Home
-            and End jump to the ends, and the selection activates automatically.
+            Built on React Aria&apos;s tab list: arrow keys move between tabs (mirrored in RTL),
+            Home and End jump to the ends, and the selection activates automatically.
           </li>
           <li>
             Name the row with <code className="text-on-surface">aria-label</code>. An icon-only tab
@@ -100,8 +101,8 @@ export async function TabsBody() {
           </li>
           <li>
             Where Compose defaults an unselected tab&apos;s colour to the selected one, the token
-            colours are used (labels <code className="text-on-surface">on-surface-variant</code>, and{' '}
-            <code className="text-on-surface">on-surface</code> on hover, focus or press).
+            colours are used (labels <code className="text-on-surface">on-surface-variant</code>,
+            and <code className="text-on-surface">on-surface</code> on hover, focus or press).
           </li>
           <li>
             A scrollable row animates the selected tab to the centre on the default spatial spring.

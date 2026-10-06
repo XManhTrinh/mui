@@ -24,7 +24,9 @@ export function SheetStandard() {
         title="Details"
         open={open}
         onOpenChange={setOpen}
-        actions={<IconButton icon={<CloseIcon />} aria-label="Close" onPress={() => setOpen(false)} />}
+        actions={
+          <IconButton icon={<CloseIcon />} aria-label="Close" onPress={() => setOpen(false)} />
+        }
       >
         <p className="text-body-medium text-on-surface-variant">
           Supplementary content that sits beside the page.

@@ -240,7 +240,8 @@ export const COMPONENT_PAGES: ComponentPageMeta[] = [
     slug: 'dialog',
     title: 'Dialog',
     group: 'Containment & overlays',
-    summary: 'A modal surface for a focused task or a decision, with flat title, content and actions.',
+    summary:
+      'A modal surface for a focused task or a decision, with flat title, content and actions.',
     propsComponents: ['Dialog', 'DialogTrigger', 'DialogTitle', 'DialogContent', 'DialogActions'],
     Body: DialogBody,
   },
@@ -248,7 +249,8 @@ export const COMPONENT_PAGES: ComponentPageMeta[] = [
     slug: 'menu',
     title: 'Menu',
     group: 'Containment & overlays',
-    summary: 'A temporary list of choices anchored to a trigger, with groups, selection and typeahead.',
+    summary:
+      'A temporary list of choices anchored to a trigger, with groups, selection and typeahead.',
     propsComponents: ['Menu', 'MenuItem', 'MenuGroup', 'MenuTrigger'],
     Body: MenuBody,
   },
@@ -280,7 +282,8 @@ export const COMPONENT_PAGES: ComponentPageMeta[] = [
     slug: 'carousel',
     title: 'Carousel',
     group: 'Containment & overlays',
-    summary: 'A scrollable row of items that resize along keylines: multi-browse, uncontained or hero.',
+    summary:
+      'A scrollable row of items that resize along keylines: multi-browse, uncontained or hero.',
     propsComponents: ['Carousel'],
     Body: CarouselBody,
   },
@@ -304,7 +307,8 @@ export const COMPONENT_PAGES: ComponentPageMeta[] = [
     slug: 'navigation-rail',
     title: 'Navigation rail',
     group: 'Navigation',
-    summary: 'Top-level destinations along the start edge, collapsed or expanded, in medium windows.',
+    summary:
+      'Top-level destinations along the start edge, collapsed or expanded, in medium windows.',
     propsComponents: ['NavigationRail', 'NavigationRailItem'],
     Body: NavigationRailBody,
   },
@@ -320,7 +324,8 @@ export const COMPONENT_PAGES: ComponentPageMeta[] = [
     slug: 'tabs',
     title: 'Tabs',
     group: 'Navigation',
-    summary: 'Primary and secondary tab rows with a sliding indicator, scrollable when they overflow.',
+    summary:
+      'Primary and secondary tab rows with a sliding indicator, scrollable when they overflow.',
     propsComponents: ['Tabs', 'Tab'],
     Body: TabsBody,
   },
@@ -336,7 +341,8 @@ export const COMPONENT_PAGES: ComponentPageMeta[] = [
     slug: 'search',
     title: 'Search',
     group: 'Navigation',
-    summary: 'A search bar that expands into a docked or full-screen view, and an app bar with search.',
+    summary:
+      'A search bar that expands into a docked or full-screen view, and an app bar with search.',
     propsComponents: ['SearchBar', 'SearchAppBar'],
     Body: SearchBody,
   },
@@ -344,7 +350,8 @@ export const COMPONENT_PAGES: ComponentPageMeta[] = [
     slug: 'toolbars',
     title: 'Toolbars',
     group: 'Navigation',
-    summary: 'Docked and floating toolbars of related actions, with an optional FAB and scroll collapse.',
+    summary:
+      'Docked and floating toolbars of related actions, with an optional FAB and scroll collapse.',
     propsComponents: ['DockedToolbar', 'FloatingToolbar', 'ToolbarFab'],
     Body: ToolbarsBody,
   },
@@ -392,7 +399,8 @@ export const COMPONENT_PAGES: ComponentPageMeta[] = [
     slug: 'picker-dialog',
     title: 'Picker dialog',
     group: 'Feedback & pickers',
-    summary: 'The modal form of a date or time picker, with confirm, dismiss and mode-toggle slots.',
+    summary:
+      'The modal form of a date or time picker, with confirm, dismiss and mode-toggle slots.',
     propsComponents: ['PickerDialog'],
     Body: PickerDialogBody,
   },
@@ -400,7 +408,8 @@ export const COMPONENT_PAGES: ComponentPageMeta[] = [
     slug: 'primitives',
     title: 'Primitives',
     group: 'Primitives',
-    summary: 'The internal building blocks M3 components are made from, exported for custom controls.',
+    summary:
+      'The internal building blocks M3 components are made from, exported for custom controls.',
     propsComponents: [],
     Body: PrimitivesBody,
   },

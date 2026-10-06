@@ -89,8 +89,12 @@ export default async function CustomisationPage() {
           <li>
             <span className="text-on-surface">Component level</span> —{' '}
             <code className="text-on-surface">className</code> /{' '}
-            <code className="text-on-surface">classNames={'{'}{'{'} root, label, icon {'}'}{'}'}</code>, or
-            extend the exported variant definitions.
+            <code className="text-on-surface">
+              classNames={'{'}
+              {'{'} root, label, icon {'}'}
+              {'}'}
+            </code>
+            , or extend the exported variant definitions.
           </li>
         </ol>
         <p className="text-body-large text-on-surface-variant">
@@ -184,9 +188,10 @@ export default async function CustomisationPage() {
         </ul>
         <CodeBlock code={LAYOUT_SNIPPET} html={layoutHtml} lang="tsx" title="layout.tsx" />
         <p className="text-body-large text-on-surface-variant">
-          Two documented exceptions: overlays portal to <code className="text-on-surface">body</code>{' '}
-          on a z-index token scale (<code className="text-on-surface">--md-sys-z-*</code>, which you
-          can override), and scroll-driven app bars and toolbars manage their own expansion (
+          Two documented exceptions: overlays portal to{' '}
+          <code className="text-on-surface">body</code> on a z-index token scale (
+          <code className="text-on-surface">--md-sys-z-*</code>, which you can override), and
+          scroll-driven app bars and toolbars manage their own expansion (
           <code className="text-on-surface">useToolbarScrollExpansion</code>,{' '}
           <code className="text-on-surface">TopAppBarScrollBehavior</code>).
         </p>

@@ -23,8 +23,20 @@ const CSS_SNIPPET = `/* Utilities read --md-sys-motion-* variables, which switch
 <div className="transition-transform ease-m3-spatial-fast duration-m3-spatial-fast" />`;
 
 const SPRINGS = [
-  { scheme: 'expressive', family: 'spatial', fast: '0.6 / 800', def: '0.8 / 380', slow: '0.8 / 200' },
-  { scheme: 'standard', family: 'spatial', fast: '0.9 / 1400', def: '0.9 / 700', slow: '0.9 / 300' },
+  {
+    scheme: 'expressive',
+    family: 'spatial',
+    fast: '0.6 / 800',
+    def: '0.8 / 380',
+    slow: '0.8 / 200',
+  },
+  {
+    scheme: 'standard',
+    family: 'spatial',
+    fast: '0.9 / 1400',
+    def: '0.9 / 700',
+    slow: '0.9 / 300',
+  },
   { scheme: 'both', family: 'effects', fast: '1 / 3800', def: '1 / 1600', slow: '1 / 800' },
 ] as const;
 
@@ -101,9 +113,8 @@ export default async function MotionPage() {
       <section className="flex flex-col gap-4">
         <h2 className="text-headline-small text-on-surface">Spring tokens</h2>
         <p className="text-body-large text-on-surface-variant">
-          Compose springs, given as damping ratio / stiffness (mass 1). Motion’s damping
-          coefficient is derived as{' '}
-          <code className="text-on-surface">2 · dampingRatio · √stiffness</code>.
+          Compose springs, given as damping ratio / stiffness (mass 1). Motion’s damping coefficient
+          is derived as <code className="text-on-surface">2 · dampingRatio · √stiffness</code>.
         </p>
         <table className="w-full border-collapse text-body-medium">
           <thead>
@@ -165,9 +176,10 @@ export default async function MotionPage() {
         </p>
         <CodeBlock code={HOOK_SNIPPET} html={hookHtml} lang="tsx" title="useM3Spring" />
         <p className="text-body-large text-on-surface-variant">
-          In CSS, the <code className="text-on-surface">--md-sys-motion-spring-*</code> variables and
-          the generated <code className="text-on-surface">ease-m3-&lt;family&gt;-&lt;speed&gt;</code>{' '}
-          / <code className="text-on-surface">duration-m3-&lt;family&gt;-&lt;speed&gt;</code>{' '}
+          In CSS, the <code className="text-on-surface">--md-sys-motion-spring-*</code> variables
+          and the generated{' '}
+          <code className="text-on-surface">ease-m3-&lt;family&gt;-&lt;speed&gt;</code> /{' '}
+          <code className="text-on-surface">duration-m3-&lt;family&gt;-&lt;speed&gt;</code>{' '}
           utilities switch with <code className="text-on-surface">data-motion</code>.
         </p>
         <CodeBlock code={CSS_SNIPPET} html={cssHtml} lang="tsx" title="motion utilities" />
@@ -179,8 +191,9 @@ export default async function MotionPage() {
           <code className="text-on-surface">useM3Spring</code> forces the{' '}
           <code className="text-on-surface">standard</code> scheme when{' '}
           <code className="text-on-surface">prefers-reduced-motion</code> is set (via Motion’s{' '}
-          <code className="text-on-surface">useReducedMotion</code>), so it never visibly overshoots.
-          Morphs and overshoot are removed; indeterminate motion that conveys activity stays.
+          <code className="text-on-surface">useReducedMotion</code>), so it never visibly
+          overshoots. Morphs and overshoot are removed; indeterminate motion that conveys activity
+          stays.
         </p>
       </section>
 

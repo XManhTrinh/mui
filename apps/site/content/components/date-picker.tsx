@@ -63,19 +63,21 @@ export async function DatePickerBody() {
         <ul className="flex flex-col gap-2 ps-5 text-body-large text-on-surface-variant [&>li]:list-disc">
           <li>
             The grid is a React Aria calendar: arrow keys move by day, Page Up / Down by month, Home
-            / End to the ends of a row, honouring <code className="text-on-surface">minValue</code> /{' '}
-            <code className="text-on-surface">maxValue</code> and{' '}
+            / End to the ends of a row, honouring <code className="text-on-surface">minValue</code>{' '}
+            / <code className="text-on-surface">maxValue</code> and{' '}
             <code className="text-on-surface">isDateUnavailable</code>.
           </li>
           <li>
             The year list is a radio group reached from the month button; arrow keys move between
-            years. The headline is an <code className="text-on-surface">aria-live=&quot;polite&quot;</code>{' '}
-            region, so the selection is announced.
+            years. The headline is an{' '}
+            <code className="text-on-surface">aria-live=&quot;polite&quot;</code> region, so the
+            selection is announced.
           </li>
           <li>
             Input mode uses React Aria date-field segments: type or arrow a segment, with validation
             messages when a date is out of range. The calendar follows the locale&apos;s first
-            weekday and keyboard direction (via <code className="text-on-surface">DomDirectionLocale</code>).
+            weekday and keyboard direction (via{' '}
+            <code className="text-on-surface">DomDirectionLocale</code>).
           </li>
         </ul>
       </section>

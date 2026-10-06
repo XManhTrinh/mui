@@ -70,8 +70,8 @@ export async function LoadingIndicatorBody() {
             It is a React Aria <code className="text-on-surface">useProgressBar</code> (
             <code className="text-on-surface">role=&quot;progressbar&quot;</code>), so the types
             require an <code className="text-on-surface">aria-label</code> or{' '}
-            <code className="text-on-surface">aria-labelledby</code>. A determinate indicator exposes{' '}
-            <code className="text-on-surface">aria-valuenow</code> /{' '}
+            <code className="text-on-surface">aria-labelledby</code>. A determinate indicator
+            exposes <code className="text-on-surface">aria-valuenow</code> /{' '}
             <code className="text-on-surface">aria-valuetext</code>.
           </li>
           <li>It is not focusable and has no keyboard interaction; the drawing is decorative.</li>
@@ -86,9 +86,8 @@ export async function LoadingIndicatorBody() {
         <h2 className="text-headline-small text-on-surface">Differences from Compose</h2>
         <ul className="flex flex-col gap-2 ps-5 text-body-large text-on-surface-variant [&>li]:list-disc">
           <li>
-            A single 48px box with full corners and no{' '}
-            <code className="text-on-surface">size</code> prop — there is one spec size.{' '}
-            <code className="text-on-surface">className</code> (e.g.{' '}
+            A single 48px box with full corners and no <code className="text-on-surface">size</code>{' '}
+            prop — there is one spec size. <code className="text-on-surface">className</code> (e.g.{' '}
             <code className="text-on-surface">size-24</code>) resizes the box and the shape scales
             with it, kept square and centred by the viewBox.
           </li>
@@ -101,8 +100,8 @@ export async function LoadingIndicatorBody() {
             <code className="text-on-surface">primary-container</code> circle).
           </li>
           <li>
-            Indeterminate loops Compose&apos;s seven shapes, springing to the next every 650ms with a
-            quarter-turn of rotation; determinate morphs a circle into a soft burst as{' '}
+            Indeterminate loops Compose&apos;s seven shapes, springing to the next every 650ms with
+            a quarter-turn of rotation; determinate morphs a circle into a soft burst as{' '}
             <code className="text-on-surface">value</code> rises.{' '}
             <code className="text-on-surface">shapes</code> overrides the sequence with two or more{' '}
             <code className="text-on-surface">MaterialShapes</code> names or{' '}

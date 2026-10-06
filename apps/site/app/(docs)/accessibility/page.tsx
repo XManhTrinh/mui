@@ -35,10 +35,19 @@ const NAMES = [
 ] as const;
 
 const KEYBOARD = [
-  ['Menu', 'Arrow keys move, typeahead jumps, Esc or an outside press dismisses, focus returns to the trigger.'],
-  ['ButtonGroup (single select)', 'Renders a radiogroup; arrow keys move between options, each stays tabbable.'],
+  [
+    'Menu',
+    'Arrow keys move, typeahead jumps, Esc or an outside press dismisses, focus returns to the trigger.',
+  ],
+  [
+    'ButtonGroup (single select)',
+    'Renders a radiogroup; arrow keys move between options, each stays tabbable.',
+  ],
   ['Tabs', 'Arrow keys plus Home / End move the selection; activation is automatic.'],
-  ['Dialog', 'Focus is contained while open and returns to the trigger on close; Esc dismisses (unless alertdialog / disabled).'],
+  [
+    'Dialog',
+    'Focus is contained while open and returns to the trigger on close; Esc dismisses (unless alertdialog / disabled).',
+  ],
   ['Tooltip', 'Shows on hover or keyboard focus, stays while focused, and Esc hides it.'],
   ['Slider', 'Arrow keys adjust the value; Home / End jump to the ends.'],
 ] as const;
@@ -70,7 +79,11 @@ export default async function AccessibilityPage() {
           </li>
           <li>
             <code className="text-on-surface">prefers-reduced-motion</code> removes non-essential
-            movement (see the <a className="text-primary underline" href="/motion">Motion guide</a>).
+            movement (see the{' '}
+            <a className="text-primary underline" href="/motion">
+              Motion guide
+            </a>
+            ).
           </li>
           <li>Right-to-left layouts via logical properties, so components mirror automatically.</li>
           <li>Accessible names required by the component types wherever one is needed.</li>

@@ -7,3 +7,5 @@ storybook-static
 .changeset/*.md
 docs/
 CLAUDE.md
+**/out
+.agents/

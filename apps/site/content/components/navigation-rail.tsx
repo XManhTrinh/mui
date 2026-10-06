@@ -66,16 +66,17 @@ export async function NavigationRailBody() {
           <li>
             The rail is a <code className="text-on-surface">nav</code> landmark; name it with{' '}
             <code className="text-on-surface">aria-label</code> or{' '}
-            <code className="text-on-surface">aria-labelledby</code> (required by the types) so it is
-            distinct from other navigation.
+            <code className="text-on-surface">aria-labelledby</code> (required by the types) so it
+            is distinct from other navigation.
           </li>
           <li>
             Each item is a real link or button, so Tab reaches it and Enter or Space activates it.
             The icon is hidden from assistive tech; the label names the item.
           </li>
           <li>
-            The selected item sets <code className="text-on-surface">aria-current=&quot;page&quot;</code>, so
-            a screen reader announces the current destination. A disabled item is skipped.
+            The selected item sets{' '}
+            <code className="text-on-surface">aria-current=&quot;page&quot;</code>, so a screen
+            reader announces the current destination. A disabled item is skipped.
           </li>
           <li>
             The modal rail is a dialog: it traps focus, and Escape, an outside press or choosing an
@@ -98,8 +99,8 @@ export async function NavigationRailBody() {
             width does the spring.
           </li>
           <li>
-            Selection is <code className="text-on-surface">aria-current=&quot;page&quot;</code> via a{' '}
-            <code className="text-on-surface">data-current</code> attribute, because{' '}
+            Selection is <code className="text-on-surface">aria-current=&quot;page&quot;</code> via
+            a <code className="text-on-surface">data-current</code> attribute, because{' '}
             <code className="text-on-surface">ButtonBase</code> owns{' '}
             <code className="text-on-surface">data-selected</code>.
           </li>

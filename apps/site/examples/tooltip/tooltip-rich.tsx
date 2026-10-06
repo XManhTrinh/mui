@@ -11,11 +11,7 @@ export function TooltipRich() {
   return (
     <RichTooltipTrigger>
       <Button variant="tonal">What are grouped tabs?</Button>
-      <RichTooltip
-        caret
-        title="Grouped tabs"
-        action={<Button variant="text">Learn more</Button>}
-      >
+      <RichTooltip caret title="Grouped tabs" action={<Button variant="text">Learn more</Button>}>
         Tabs from the same site stay together, so related pages are easy to find.
       </RichTooltip>
     </RichTooltipTrigger>

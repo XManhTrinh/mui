@@ -20,7 +20,11 @@ export function ListInteractive() {
         <ListItem key="starred" leading={<StarIcon />}>
           Starred
         </ListItem>
-        <ListItem key="sent" leading={<SendIcon />} trailing={<Switch aria-label="Notify for sent mail" />}>
+        <ListItem
+          key="sent"
+          leading={<SendIcon />}
+          trailing={<Switch aria-label="Notify for sent mail" />}
+        >
           Sent
         </ListItem>
         <ListItem key="trash" leading={<DeleteIcon />}>

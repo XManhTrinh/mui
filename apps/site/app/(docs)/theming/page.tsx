@@ -105,12 +105,7 @@ export default async function ThemingPage() {
           preview card, so the controls re-theme the card without touching the rest of the page.
         </p>
         <ThemeSwitcherDemo />
-        <CodeBlock
-          code={demoSource}
-          html={demoHtml}
-          lang="tsx"
-          title="theme-switcher-demo.tsx"
-        />
+        <CodeBlock code={demoSource} html={demoHtml} lang="tsx" title="theme-switcher-demo.tsx" />
       </section>
 
       <section className="flex flex-col gap-4">
@@ -168,8 +163,9 @@ export default async function ThemingPage() {
           <code className="text-on-surface">motion</code> with the matching{' '}
           <code className="text-on-surface">onChange</code>) or uncontrolled (the{' '}
           <code className="text-on-surface">default*</code> props). The selection is remembered via{' '}
-          <code className="text-on-surface">storage</code> (<code className="text-on-surface">cookie</code>{' '}
-          by default, or <code className="text-on-surface">local-storage</code>/
+          <code className="text-on-surface">storage</code> (
+          <code className="text-on-surface">cookie</code> by default, or{' '}
+          <code className="text-on-surface">local-storage</code>/
           <code className="text-on-surface">none</code>) under{' '}
           <code className="text-on-surface">storageKey</code> (default{' '}
           <code className="text-on-surface">vkieu-mui-theme</code>), read with{' '}
@@ -245,11 +241,17 @@ export default async function ThemingPage() {
       <section className="flex flex-col gap-4">
         <h2 className="text-headline-small text-on-surface">No theme flash</h2>
         <p className="text-body-large text-on-surface-variant">
-          With a server, read the cookie: <code className="text-on-surface">getThemeFromCookies()</code>{' '}
-          from <code className="text-on-surface">@vkieu/mui/next</code> and render{' '}
-          <code className="text-on-surface">&lt;html {'{'}...themeAttributes(theme){'}'}&gt;</code>{' '}
-          — see the <a className="text-primary underline" href="/nextjs">Next.js guide</a>. For a
-          static or exported site, render{' '}
+          With a server, read the cookie:{' '}
+          <code className="text-on-surface">getThemeFromCookies()</code> from{' '}
+          <code className="text-on-surface">@vkieu/mui/next</code> and render{' '}
+          <code className="text-on-surface">
+            &lt;html {'{'}...themeAttributes(theme){'}'}&gt;
+          </code>{' '}
+          — see the{' '}
+          <a className="text-primary underline" href="/nextjs">
+            Next.js guide
+          </a>
+          . For a static or exported site, render{' '}
           <code className="text-on-surface">ThemeScript</code> in{' '}
           <code className="text-on-surface">&lt;head&gt;</code> with{' '}
           <code className="text-on-surface">suppressHydrationWarning</code> on{' '}

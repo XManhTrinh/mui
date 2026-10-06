@@ -15,7 +15,13 @@ export function ToolbarFabScroll() {
   const expanded = useToolbarScrollExpansion({ scrollRef });
   return (
     <div className="relative h-[420px] w-[360px] max-w-full overflow-hidden rounded-corner-large border border-outline-variant">
-      <div ref={scrollRef} className="h-full overflow-y-auto p-4">
+      <div
+        ref={scrollRef}
+        tabIndex={0}
+        role="region"
+        aria-label="Messages"
+        className="h-full overflow-y-auto p-4"
+      >
         {Array.from({ length: 40 }, (_, index) => (
           <p key={index} className="py-2 text-body-large text-on-surface-variant">
             Message {index + 1}

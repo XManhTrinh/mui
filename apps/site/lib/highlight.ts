@@ -6,7 +6,11 @@ import { createCssVariablesTheme, createHighlighter, type Highlighter } from 'sh
  * properties to the library's semantic colour roles, so a single build-time highlight
  * follows every theme, mode and contrast level.
  */
-const theme = createCssVariablesTheme({ name: 'vkieu', variablePrefix: '--shiki-', fontStyle: true });
+const theme = createCssVariablesTheme({
+  name: 'vkieu',
+  variablePrefix: '--shiki-',
+  fontStyle: true,
+});
 
 const LANGUAGES = ['tsx', 'ts', 'jsx', 'js', 'bash', 'css', 'json', 'html'] as const;
 

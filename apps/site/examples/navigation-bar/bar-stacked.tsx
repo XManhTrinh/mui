@@ -21,7 +21,7 @@ export function BarStacked() {
   const [current, setCurrent] = useState('home');
   return (
     <div className="w-[412px] max-w-full overflow-hidden rounded-corner-large border border-outline-variant">
-      <NavigationBar aria-label="Primary">
+      <NavigationBar aria-label="Stacked example">
         {DESTINATIONS.map(({ id, label, icon }) => (
           <NavigationBarItem
             key={id}

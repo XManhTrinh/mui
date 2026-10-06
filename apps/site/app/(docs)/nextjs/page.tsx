@@ -140,8 +140,8 @@ export default async function NextjsPage() {
         <h2 className="text-headline-small text-on-surface">Server &amp; client boundaries</h2>
         <ul className="list-disc ps-6 text-body-large text-on-surface-variant">
           <li>
-            Interactive component files ship with <code className="text-on-surface">&quot;use
-            client&quot;</code>; server-safe utilities (
+            Interactive component files ship with{' '}
+            <code className="text-on-surface">&quot;use client&quot;</code>; server-safe utilities (
             <code className="text-on-surface">cn</code>, tokens,{' '}
             <code className="text-on-surface">createTheme</code>,{' '}
             <code className="text-on-surface">getThemeFromCookies</code>,{' '}
@@ -163,8 +163,9 @@ export default async function NextjsPage() {
       <section className="flex flex-col gap-4">
         <h2 className="text-headline-small text-on-surface">Static export (this site)</h2>
         <p className="text-body-large text-on-surface-variant">
-          This documentation site uses <code className="text-on-surface">output: &apos;export&apos;</code>,
-          so there is no server to read cookies. It therefore uses the{' '}
+          This documentation site uses{' '}
+          <code className="text-on-surface">output: &apos;export&apos;</code>, so there is no server
+          to read cookies. It therefore uses the{' '}
           <code className="text-on-surface">ThemeScript</code> path (in the root layout’s{' '}
           <code className="text-on-surface">&lt;head&gt;</code>) rather than the cookie path the
           playground uses. Pick the cookie path when you have a server, and the script path for

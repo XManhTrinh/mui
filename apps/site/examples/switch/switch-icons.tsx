@@ -11,11 +11,7 @@ export function SwitchIcons() {
       <Switch defaultSelected icons>
         Show icons
       </Switch>
-      <Switch
-        defaultSelected
-        selectedIcon={<StarIcon />}
-        unselectedIcon={<StarOutlineIcon />}
-      >
+      <Switch defaultSelected selectedIcon={<StarIcon />} unselectedIcon={<StarOutlineIcon />}>
         Favourite
       </Switch>
     </div>

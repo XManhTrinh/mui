@@ -11,7 +11,11 @@ export function ToolbarDocked() {
   return (
     <div className="flex w-[412px] max-w-full flex-col gap-6">
       {(['space-between', 'centered'] as const).map((arrangement) => (
-        <DockedToolbar key={arrangement} aria-label={`Message actions (${arrangement})`} arrangement={arrangement}>
+        <DockedToolbar
+          key={arrangement}
+          aria-label={`Message actions (${arrangement})`}
+          arrangement={arrangement}
+        >
           <IconButton icon={<SearchIcon />} aria-label="Search" />
           <IconButton icon={<StarIcon />} aria-label="Starred" />
           <IconButton icon={<SendIcon />} aria-label="Sent" />
