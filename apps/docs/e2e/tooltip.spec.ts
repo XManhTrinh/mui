@@ -20,6 +20,10 @@ test.describe('Tooltip visual regression', () => {
     const dialog = page.getByRole('dialog', { name: 'Grouped tabs' });
     await expect(dialog).toBeVisible();
     await page.mouse.move(0, 0);
+    // Measure once the entry animation (a scale from 80%) has finished, or the clip moves.
+    await page.evaluate(() =>
+      Promise.allSettled(document.getAnimations().map((animation) => animation.finished)),
+    );
     const box = (await dialog.boundingBox())!;
     await expect(page).toHaveScreenshot('rich-caret.png', {
       clip: {
