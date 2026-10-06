@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 3 complete** · Last updated: 2026-10-06 (rev. 40 — collection items and Server Components)
+Status: **Tier 3 complete** · Last updated: 2026-10-06 (rev. 41 — 64px icon tabs, the M3 token)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -409,8 +409,8 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
 - `Tabs` with `Tab` children, typed aliases of React Stately's collection `Item`, identified by `key`, with `title`, `icon` and the panel as `children`. Props: `variant` = `primary | secondary`, `scrollable`, `iconPlacement` = `top | start`, `selectedKey` / `defaultSelectedKey` / `onSelectionChange`, `disabledKeys`, `aria-label`.
 - **Built on** React Aria `useTabList` / `useTab` / `useTabPanel`: arrow keys, Home / End, automatic activation. The panel is keyed by the selection (React Aria's pattern) so its id follows it. Tabs with no panels (navigation rows) render no panel and drop `aria-controls`.
 - **Values** (Compose `Tab.kt`, `TabRow.kt`, Primary / SecondaryNavigationTab tokens):
-  - Row and tabs: `surface` row with a 1px `outline-variant` divider; 48px tabs, 72px with icons above labels; `title-small`, 16px side padding, 24px icons.
-  - Icon above label: Compose's baseline layout works out to the icon, a 5px gap, and the label 12px from the bottom.
+  - Row and tabs: `surface` row with a 1px `outline-variant` divider; 48px tabs; `title-small`, 16px side padding, 24px icons.
+  - **Icon above label: 64px** (rev. 41). That is the M3 token (`PrimaryNavigationTabTokens.IconAndLabelTextContainerHeight`) and what Material Web uses: the icon, a 2px gap and the label, centred (9px above and below). Compose's `Tab.kt` (`LargeTabHeight`) and MDC's `TabLayout` still hard-code 72dp, the Material Design 1 value, so this is a deliberate exception to following Compose's code over its tokens. Until rev. 41 the tabs were 72px with Compose's baseline layout.
   - Colours: labels `on-surface-variant`, `on-surface` on hover / focus / press. Selected labels are `primary` (primary) or `on-surface` (secondary). Selection recolours on default effects, deselection on fast effects. The state layer is the selected colour.
   - Indicator: 3px `primary`, sliding on the default spatial spring. Primary tabs: as wide as the content (min 24px) with 3px corners. Secondary: the whole tab (Compose's default 3px height).
   - Scrollable: tabs at least 90px, a 52px start inset, and the selection animates to the centre on the default spatial spring (`scrollLeft` driven by Motion).
