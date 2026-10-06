@@ -1,6 +1,6 @@
 # @vkieu/mui — Architecture Plan
 
-Status: **Tier 3 complete** · Last updated: 2026-10-05 (rev. 38 — consumer docs site at `apps/site`)
+Status: **Tier 3 complete** · Last updated: 2026-10-06 (rev. 39 — docs site verified and fixed: shell, search, a11y, CI)
 
 A production-ready React component library implementing the **latest Material Design 3 Expressive** specification, consumed by many React and Next.js projects.
 
@@ -36,7 +36,7 @@ import { Button, Dialog, DialogTrigger, ThemeProvider } from '@vkieu/mui';
 | 20 | Library build | **tsdown** in unbundle mode (one output file per module, so per-file `"use client"` survives). `scripts/check-dist.ts` verifies directives, extensions and paths after every build |
 | 21 | Colour library | `@material/material-color-utilities` is a devDependency **bundled into `dist/vendor/`** (Apache-2.0 notice in `NOTICE`), because its published ESM cannot be loaded by plain Node (§17) |
 | 22 | Non-M3 components | Anything the library needs that is **not an M3 component** (e.g. a code block or props table for the docs site) is built in **`packages/ui/src/vk`** and exported from **`@vkieu/mui/vk`**, never improvised in an app. Same quality bar as M3 components; see §3 |
-| 23 | Consumer docs site | A **Next.js App Router static-export app at `apps/site`** (MDX guides, generated props tables, live examples), built **only with `@vkieu/mui`** (enforced by `no-restricted-imports`). It is the library's first real consumer and doubles as proof of Next.js support; Storybook (`apps/docs`) stays the workbench, not the consumer docs. See §13 |
+| 23 | Consumer docs site | A **Next.js App Router static-export app at `apps/site`** (MDX guides, generated props tables, live examples), built **only with `@vkieu/mui`** (enforced by `no-restricted-imports`). It is the library's first real consumer and doubles as proof of Next.js support; Storybook (`apps/docs`) stays the workbench, not the consumer docs. **Shell:** a top app bar (medium+) or an app bar with search (compact) holding the page search (a `SearchBar` listing matching guides and components, built from the registry on the server) and a "Display settings" side sheet (theme, mode, contrast, motion and a right-to-left switch, whose choice a pre-paint script applies on every page). See §13 |
 
 ## 2. Stack
 
@@ -489,7 +489,7 @@ Adaptive components (Navigation rail ↔ Flexible navigation bar, dialogs ↔ fu
   - **Spacing for icon buttons:** Compose's icon buttons take 48px of layout, ours 40px (the touch target is overlaid). Each content group adds 4px at its ends and 8px between items, so a toolbar of icon buttons matches Compose (12px from the edge, 8px between). The docked toolbar keeps the literal token spacing.
   - With a FAB: 8px between them; the toolbar is level 1 expanded and level 0 collapsed. `ToolbarFab` is Compose's `Standard/VibrantFloatingActionButton`: 16px corners, level 2 (hover 3), `primary-container` on a standard toolbar and `tertiary-container` on a vibrant one, a 24px icon.
 - **Collapsing:**
-  - Leading / trailing content closes on the fast spatial spring through a grid track (`1fr → 0fr`), anchored like Compose's `AnimatedVisibility` (horizontally, leading content expands from the start and shrinks towards the end; vertically, leading stays at the bottom and trailing at the top). A `clip-path` clips only along the toolbar, so focus rings and touch targets survive. Collapsed content is `inert` and turns `invisible` when the track has closed.
+  - Leading / trailing content closes on the fast spatial spring through a grid track (`1fr → 0fr`); it turns visible at once when expanding (0s visibility transition), so keyboard focus can reach it in the first frame, anchored like Compose's `AnimatedVisibility` (horizontally, leading content expands from the start and shrinks towards the end; vertically, leading stays at the bottom and trailing at the top). A `clip-path` clips only along the toolbar, so focus rings and touch targets survive. Collapsed content is `inert` and turns `invisible` when the track has closed.
   - With a FAB, the component keeps its expanded size (Compose's layout): the toolbar's slot holds the measured width (`ResizeObserver`, `--m3-toolbar-size`) while the surface's width springs to 0 towards the FAB, and the FAB's box grows 56 → 80px from its own edge. The root is 80px tall (wide, vertically) for the grown FAB.
 - **Keyboard (deviation):** Compose forces the toolbar open when a screen reader is on and adds expand / collapse accessibility actions. The web can't detect either, so keyboard focus inside the toolbar (`useFocusRing({ within: true })`) counts as expanded. Pointer focus doesn't.
 - **`fabPosition`:** `start | end | top | bottom`, where `top` means `start` and `bottom` means `end`, so it can stay put when the orientation adapts. The FAB comes after the toolbar in reading order wherever it sits, as in Compose.
@@ -674,6 +674,8 @@ apps/site              # Consumer docs site: Next.js App Router, static export (
   - Screenshots are taken against the static Storybook build (`pnpm test:e2e`), with the font loaded locally (`@fontsource-variable/roboto-flex`) so results don't depend on the network.
   - Baselines are platform-specific (`*-darwin.png` today). CI has to render them in a pinned container image and commit that platform's baselines.
   - Every class a `tv` recipe can emit is checked to appear literally in its source and to compile in Tailwind. A class assembled at runtime would never be generated.
+  - **CI** (`.github/workflows/ci.yml`): builds, typechecks, lints and tests everything, then runs the site's link check and smoke suite. The pnpm version comes from `packageManager`; also passing `version` to `pnpm/action-setup` fails the job. Storybook screenshots aren't in CI until Linux baselines exist.
+  - **Wait for animations before measuring** an element for a screenshot clip: an entering overlay is still scaling, and a baseline taken mid-animation is cut off (found in the rich tooltip test).
   - **Screenshot tolerance:** `maxDiffPixelRatio` is 0.0002 (0.02%). Playwright's per-pixel colour `threshold` stays at its default 0.2, which ignores colour shifts as small as `surface` → `surface-container` (found with the list container change): after colour changes, re-baseline with `--update-snapshots=all` and review the images. At 0.2%, a moved hairline (FAB collapse width, TextField outline offset) still matched an outdated baseline. Re-baseline deliberately after visual changes and review the images.
   - **Storybook server:** the static build is served with `sirv --dev`, which reads files per request, so a server reused across rebuilds never returns 404s for new asset hashes.
 - Layout-safety override matrix (§10)
