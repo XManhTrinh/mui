@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type Ref } from 'react';
-import { useObjectRef } from 'react-aria';
+import { useFocusRing, useObjectRef } from 'react-aria';
 import { IconButton } from '../../components/icon-button/IconButton';
 import { cn } from '../../utils/cn';
 import { codeBlockStyles } from './code-block-styles';
@@ -39,7 +39,7 @@ export interface CodeBlockProps {
   html?: string;
   /** Language label, exposed on the root as `data-lang`. */
   lang?: string;
-  /** Optional title shown in the header, e.g. a file name. */
+  /** Optional title shown in the header, e.g. a file name. It also names the code region. */
   title?: string;
   showLineNumbers?: boolean;
   /** @default true */
@@ -99,8 +99,12 @@ export function CodeBlock({
     }
   };
 
+  // The source scrolls sideways, so it is a focusable, named region keyboard users can
+  // scroll (WCAG 2.1.1; axe `scrollable-region-focusable`).
+  const { focusProps, isFocusVisible } = useFocusRing();
   const styles = codeBlockStyles({ showLineNumbers });
   const showHeader = title != null || copyable;
+  const regionLabel = title ?? (lang ? `${lang} code` : 'Code');
 
   return (
     <div
@@ -128,7 +132,16 @@ export function CodeBlock({
           )}
         </div>
       )}
-      <pre className={styles.pre({ class: classNames?.pre })}>
+      {/* Code always reads left to right, also on RTL pages. */}
+      <pre
+        {...focusProps}
+        tabIndex={0}
+        role="region"
+        aria-label={regionLabel}
+        dir="ltr"
+        data-focus-visible={isFocusVisible || undefined}
+        className={styles.pre({ class: classNames?.pre })}
+      >
         {html != null ? (
           <code
             className={styles.code({ class: classNames?.code })}

@@ -18,6 +18,17 @@ describe('CodeBlock', () => {
     expect(code).toHaveTextContent('const a = 1;');
   });
 
+  it('makes the scrolling source a named, focusable region that reads left to right', async () => {
+    render(<CodeBlock code="const a = 1;" lang="tsx" copyable={false} />);
+    const region = screen.getByRole('region', { name: 'tsx code' });
+    expect(region.tagName).toBe('PRE');
+    expect(region).toHaveAttribute('dir', 'ltr');
+    expect(region).toHaveClass('focus-ring-inset', 'overflow-x-auto');
+    await userEvent.tab();
+    expect(region).toHaveFocus();
+    expect(region).toHaveAttribute('data-focus-visible', 'true');
+  });
+
   it('renders trusted html inside the code element', () => {
     render(<CodeBlock code="const a = 1;" html='<span class="tok">const</span> a = 1;' />);
     const code = document.querySelector('pre > code');

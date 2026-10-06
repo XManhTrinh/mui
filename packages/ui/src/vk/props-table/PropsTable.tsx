@@ -82,7 +82,9 @@ export function PropsTable({ rows, caption, className, classNames, ref }: PropsT
                 className={styles.nameCell({ class: cn(classNames?.th, classNames?.name) })}
               >
                 <span className={styles.nameText()}>
-                  <code className={styles.code()}>{row.name}</code>
+                  <code dir="ltr" className={styles.code()}>
+                    {row.name}
+                  </code>
                   {row.required && (
                     <>
                       <span aria-hidden="true" className={styles.required()}>
@@ -94,11 +96,17 @@ export function PropsTable({ rows, caption, className, classNames, ref }: PropsT
                 </span>
               </th>
               <td className={styles.td({ class: cn(classNames?.td, classNames?.type) })}>
-                {row.type ? <code className={styles.code()}>{row.type}</code> : null}
+                {row.type ? (
+                  <code dir="ltr" className={styles.code()}>
+                    {row.type}
+                  </code>
+                ) : null}
               </td>
               <td className={styles.td({ class: cn(classNames?.td, classNames?.default) })}>
                 {row.defaultValue != null && row.defaultValue !== '' ? (
-                  <code className={styles.code()}>{row.defaultValue}</code>
+                  <code dir="ltr" className={styles.code()}>
+                    {row.defaultValue}
+                  </code>
                 ) : null}
               </td>
               <td

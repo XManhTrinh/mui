@@ -35,7 +35,7 @@ const shikiTokens = [
 export const codeBlockStyles = tv({
   slots: {
     root: [
-      'relative flex flex-col overflow-hidden rounded-corner-medium',
+      'flex flex-col overflow-hidden rounded-corner-medium',
       'border border-outline-variant bg-surface-container text-on-surface',
       ...shikiTokens,
     ],
@@ -44,7 +44,7 @@ export const codeBlockStyles = tv({
       'border-b border-outline-variant',
     ],
     title: 'min-w-0 truncate font-plain text-label-large text-on-surface-variant',
-    pre: 'overflow-x-auto p-4 font-mono text-body-medium [color:var(--shiki-foreground)]',
+    pre: 'focus-ring-inset overflow-x-auto p-4 font-mono text-body-medium [color:var(--shiki-foreground)]',
     code: 'font-mono [color:var(--shiki-foreground)]',
     copyButton: '',
   },
