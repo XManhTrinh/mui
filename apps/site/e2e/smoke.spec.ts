@@ -137,7 +137,10 @@ test('component gallery lists exactly the generated slugs', async ({ page }) => 
   await page.goto('/components');
   await expect(page.getByRole('heading', { level: 1, name: 'Components' })).toBeVisible();
 
+  // Scope to the gallery article so the rail's group-trigger links (which also point at
+  // /components/<slug>) don't count — the gallery is the browse surface under test.
   const hrefs = await page
+    .getByRole('article')
     .locator('a[href^="/components/"]')
     .evaluateAll((anchors) =>
       anchors.map((a) => (a as HTMLAnchorElement).getAttribute('href') ?? ''),
@@ -149,7 +152,9 @@ test('component gallery lists exactly the generated slugs', async ({ page }) => 
       .map((href) => href.slice('/components/'.length))
       .filter((slug) => slug !== '' && !slug.includes('/')),
   );
-  expect([...linkedSlugs].sort()).toEqual(SLUGS);
+  // The gallery browses component families only; the Primitives reference page is reachable
+  // from the rail, not listed as a gallery card, so the hero stat equals the card count.
+  expect([...linkedSlugs].sort()).toEqual(SLUGS.filter((slug) => slug !== 'primitives'));
 });
 
 test('theming page has a live theme switcher', async ({ page }) => {

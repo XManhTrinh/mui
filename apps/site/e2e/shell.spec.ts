@@ -9,7 +9,9 @@ test.describe('Docs shell', () => {
     const dialog = page.getByRole('dialog', { name: 'Search documentation' });
     await dialog.getByRole('searchbox').fill('slid');
     await dialog.getByRole('row', { name: /^Slider/ }).click();
-    await expect(page).toHaveURL(/\/components\/slider$/);
+    // Slider has a full Playground, whose island reflects its state in the query string once
+    // it hydrates — so allow an optional query (same pattern as rail.spec.ts).
+    await expect(page).toHaveURL(/\/components\/slider(\?|$)/);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Slider/);
   });
 

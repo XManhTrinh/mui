@@ -1,18 +1,21 @@
 import { ExampleViewer } from '../../components/example-viewer';
 import { DialogAlert } from '../../examples/dialog/dialog-alert';
 import { DialogBasic } from '../../examples/dialog/dialog-basic';
+import { DialogScrollable } from '../../examples/dialog/dialog-scrollable';
 import { readExampleSource } from '../../lib/example-source';
 import { highlightSource } from '../../lib/highlight';
 
-/** Dialog page body: the flat parts, basic and alert dialogs. */
+/** Dialog page body: the flat parts, basic, alert and scrollable-content dialogs. */
 export async function DialogBody() {
-  const [basic, alert] = await Promise.all([
+  const [basic, alert, scrollable] = await Promise.all([
     readExampleSource('dialog/dialog-basic.tsx'),
     readExampleSource('dialog/dialog-alert.tsx'),
+    readExampleSource('dialog/dialog-scrollable.tsx'),
   ]);
-  const [basicHtml, alertHtml] = await Promise.all([
+  const [basicHtml, alertHtml, scrollableHtml] = await Promise.all([
     highlightSource(basic),
     highlightSource(alert),
+    highlightSource(scrollable),
   ]);
 
   return (
@@ -54,6 +57,14 @@ export async function DialogBody() {
           fileName="dialog-alert.tsx"
         >
           <DialogAlert />
+        </ExampleViewer>
+        <ExampleViewer
+          title="Scrollable content"
+          code={scrollable}
+          html={scrollableHtml}
+          fileName="dialog-scrollable.tsx"
+        >
+          <DialogScrollable />
         </ExampleViewer>
       </section>
 

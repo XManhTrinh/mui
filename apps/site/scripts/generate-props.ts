@@ -8,8 +8,9 @@
  * so a component page can later do `rows={json.props}` straight into `PropsTable`.
  */
 import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { argv } from 'node:process';
 import { dirname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { withCustomConfig } from 'react-docgen-typescript';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -28,6 +29,8 @@ export interface PropsRecord {
   required: boolean;
   defaultValue?: string;
   description?: string;
+  /** For enum (string-literal union) props: the member values, used by the Playground. */
+  options?: string[];
 }
 
 export interface ComponentPropsFile {
@@ -69,6 +72,25 @@ async function collectSources(dirs: string[]): Promise<string[]> {
   return files;
 }
 
+/** A react-docgen prop `type` as far as we read it (name + optional enum member values). */
+export interface DocgenPropType {
+  name?: string;
+  value?: unknown;
+}
+
+/**
+ * Pure core: extracts the enum member list from a docgen prop `type`. Returns the string
+ * members (surrounding quotes stripped, `undefined` dropped) for a string-literal union, or
+ * `undefined` for a non-enum type or an empty list. Testable in isolation.
+ */
+export function enumOptionsFromType(type: DocgenPropType | undefined): string[] | undefined {
+  if (!type || type.name !== 'enum' || !Array.isArray(type.value)) return undefined;
+  const options = (type.value as { value?: unknown }[])
+    .map((member) => String(member.value).replace(/^"|"$/g, ''))
+    .filter((value) => value !== 'undefined');
+  return options.length > 0 ? options : undefined;
+}
+
 /** Pure core: parse each file and keep the docgen entries in the allowlist. Testable. */
 export function extractProps(
   files: string[],
@@ -80,15 +102,21 @@ export function extractProps(
     try {
       for (const doc of parser.parse(file)) {
         if (!allow.has(doc.displayName)) continue;
-        const props: PropsRecord[] = Object.values(doc.props).map((prop) => ({
-          name: prop.name,
-          type: prop.type?.name ?? 'unknown',
-          required: prop.required,
-          ...(prop.defaultValue?.value != null
-            ? { defaultValue: String(prop.defaultValue.value) }
-            : {}),
-          ...(prop.description ? { description: prop.description } : {}),
-        }));
+        const props: PropsRecord[] = Object.values(doc.props).map((prop) => {
+          // Enum (string-literal union) props carry their members in `type.value`; emit them
+          // as `options` (quotes stripped) so the Playground can build a segmented control.
+          const options = enumOptionsFromType(prop.type);
+          return {
+            name: prop.name,
+            type: prop.type?.name ?? 'unknown',
+            required: prop.required,
+            ...(prop.defaultValue?.value != null
+              ? { defaultValue: String(prop.defaultValue.value) }
+              : {}),
+            ...(prop.description ? { description: prop.description } : {}),
+            ...(options && options.length > 0 ? { options } : {}),
+          };
+        });
         records.push({ displayName: doc.displayName, description: doc.description ?? '', props });
       }
     } catch (error) {
@@ -139,4 +167,7 @@ async function main(): Promise<void> {
   console.log(`[generate-props] wrote ${records.length} files to ${outDir}`);
 }
 
-await main();
+// Run only when invoked directly as a script, not when imported (e.g. by a unit test).
+if (argv[1] && import.meta.url === pathToFileURL(argv[1]).href) {
+  await main();
+}

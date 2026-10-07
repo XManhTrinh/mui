@@ -1,6 +1,6 @@
 'use client';
 
-import { List, ListItem, SearchBar } from '@vkieu/mui';
+import { List, ListItem, SearchBar, type SearchBarClassNames } from '@vkieu/mui';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { SearchIcon } from '../../components/icons';
@@ -14,10 +14,13 @@ export function DocsSearch({
   entries,
   view,
   className,
+  classNames,
 }: {
   entries: SearchEntry[];
   view: 'docked' | 'full-screen';
   className?: string;
+  /** Forwarded to the `SearchBar` slots — e.g. `field` to condense the pill height. */
+  classNames?: SearchBarClassNames;
 }) {
   const router = useRouter();
   const [query, setQuery] = useState('');
@@ -44,6 +47,7 @@ export function DocsSearch({
         if (results[0]) open(results[0].href);
       }}
       className={className}
+      classNames={classNames}
     >
       {results.length > 0 ? (
         <List aria-label="Matching pages" onAction={(key) => open(String(key))}>

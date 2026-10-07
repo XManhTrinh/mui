@@ -33,31 +33,70 @@ import { TimePickerBody } from './time-picker';
 import { ToolbarsBody } from './toolbars';
 import { TooltipBody } from './tooltip';
 import { TopAppBarBody } from './top-app-bar';
+import { COMPONENT_META, type ComponentMeta } from './catalog';
 
-/** The groups the component gallery is organised into, in display order. */
-export type ComponentGroup =
-  | 'Actions'
-  | 'Inputs & selection'
-  | 'Containment & overlays'
-  | 'Navigation'
-  | 'Feedback & pickers'
-  | 'Primitives';
+// Re-export the pure catalog surface so existing server imports keep resolving via registry.
+export type {
+  ComponentGroup,
+  ComponentMeta,
+  ComponentSpecs,
+  RailGroup,
+  RailGroupId,
+} from './catalog';
+export {
+  CATEGORY_COUNT,
+  COMPONENT_META,
+  COMPONENT_META_MAP,
+  COMPONENT_PAGE_COUNT,
+  GALLERY_RAIL_GROUPS,
+  RAIL_GROUPS,
+  RAIL_GROUP_MAP,
+  pagesInRailGroup,
+} from './catalog';
 
-export interface ComponentPageMeta {
-  /** URL slug under `/components/`. */
-  slug: string;
-  title: string;
-  group: ComponentGroup;
-  /** One-line summary shown in the gallery and the page header. */
-  summary: string;
-  /**
-   * Generated-props `displayName`s whose JSON the template renders as a `PropsTable`.
-   * The template skips any whose JSON is absent (`readComponentPropsSafe`).
-   */
-  propsComponents: string[];
+/** A fully-wired component page: catalog metadata plus its rendered body. */
+export interface ComponentPageMeta extends ComponentMeta {
   /** The per-component page body: sections (a) purpose, (b) examples, (d) a11y, (e) Compose. */
   Body: ComponentType;
 }
+
+/** The page body for each slug, kept separate from the pure catalog so clients can import it. */
+const BODIES: Record<string, ComponentType> = {
+  button: ButtonBody,
+  'icon-button': IconButtonBody,
+  'button-group': ButtonGroupBody,
+  'split-button': SplitButtonBody,
+  fab: FabBody,
+  'fab-menu': FabMenuBody,
+  'text-field': TextFieldBody,
+  checkbox: CheckboxBody,
+  'radio-group': RadioGroupBody,
+  switch: SwitchBody,
+  slider: SliderBody,
+  chips: ChipsBody,
+  card: CardBody,
+  dialog: DialogBody,
+  menu: MenuBody,
+  tooltip: TooltipBody,
+  sheets: SheetsBody,
+  list: ListBody,
+  carousel: CarouselBody,
+  badge: BadgeBody,
+  divider: DividerBody,
+  'navigation-rail': NavigationRailBody,
+  'navigation-bar': NavigationBarBody,
+  tabs: TabsBody,
+  'top-app-bar': TopAppBarBody,
+  search: SearchBody,
+  toolbars: ToolbarsBody,
+  snackbar: SnackbarBody,
+  progress: ProgressBody,
+  'loading-indicator': LoadingIndicatorBody,
+  'date-picker': DatePickerBody,
+  'time-picker': TimePickerBody,
+  'picker-dialog': PickerDialogBody,
+  primitives: PrimitivesBody,
+};
 
 /**
  * `classNames` slot names per component `displayName`, listed from each `*ClassNames` type
@@ -129,291 +168,12 @@ export const COMPONENT_SLOTS: Record<string, string[]> = {
   PickerDialog: ['scrim', 'panel', 'actions'],
 };
 
-/** Every component page, in display order. Batches append their entries here. */
-export const COMPONENT_PAGES: ComponentPageMeta[] = [
-  {
-    slug: 'button',
-    title: 'Button',
-    group: 'Actions',
-    summary: 'Five variants and five sizes for text actions, with a toggle form and a press morph.',
-    propsComponents: ['Button'],
-    Body: ButtonBody,
-  },
-  {
-    slug: 'icon-button',
-    title: 'Icon button',
-    group: 'Actions',
-    summary: 'A compact icon-only action; requires an accessible name.',
-    propsComponents: ['IconButton'],
-    Body: IconButtonBody,
-  },
-  {
-    slug: 'button-group',
-    title: 'Button group',
-    group: 'Actions',
-    summary: 'Groups buttons as a unit; the connected variant replaces segmented buttons.',
-    propsComponents: ['ButtonGroup'],
-    Body: ButtonGroupBody,
-  },
-  {
-    slug: 'split-button',
-    title: 'Split button',
-    group: 'Actions',
-    summary: 'A primary action beside a trailing button that opens a menu of related actions.',
-    propsComponents: ['SplitButton'],
-    Body: SplitButtonBody,
-  },
-  {
-    slug: 'fab',
-    title: 'FAB',
-    group: 'Actions',
-    summary: "A screen's single most important action, as an icon or an extended label.",
-    propsComponents: ['Fab', 'ExtendedFab'],
-    Body: FabBody,
-  },
-  {
-    slug: 'fab-menu',
-    title: 'FAB menu',
-    group: 'Actions',
-    summary: 'A FAB that opens a stack of related actions above it.',
-    propsComponents: ['FabMenu', 'FabMenuItem'],
-    Body: FabMenuBody,
-  },
-  {
-    slug: 'text-field',
-    title: 'Text field',
-    group: 'Inputs & selection',
-    summary:
-      'Filled or outlined text input with a floating label, icons, affixes, counter and multiline.',
-    propsComponents: ['TextField'],
-    Body: TextFieldBody,
-  },
-  {
-    slug: 'checkbox',
-    title: 'Checkbox',
-    group: 'Inputs & selection',
-    summary: 'Selects any number of options, with checked, unchecked and indeterminate states.',
-    propsComponents: ['Checkbox'],
-    Body: CheckboxBody,
-  },
-  {
-    slug: 'radio-group',
-    title: 'Radio group',
-    group: 'Inputs & selection',
-    summary: 'A set of radio buttons for picking exactly one option; a Radio needs a RadioGroup.',
-    propsComponents: ['RadioGroup', 'Radio'],
-    Body: RadioGroupBody,
-  },
-  {
-    slug: 'switch',
-    title: 'Switch',
-    group: 'Inputs & selection',
-    summary: 'Toggles a single setting on or off, with optional icons in the thumb.',
-    propsComponents: ['Switch'],
-    Body: SwitchBody,
-  },
-  {
-    slug: 'slider',
-    title: 'Slider',
-    group: 'Inputs & selection',
-    summary: 'Chooses a value or a range on a continuous or stepped scale, in five sizes.',
-    propsComponents: ['Slider', 'RangeSlider'],
-    Body: SliderBody,
-  },
-  {
-    slug: 'chips',
-    title: 'Chips',
-    group: 'Inputs & selection',
-    summary: 'Assist, suggestion, filter and input chips for compact actions and entries.',
-    propsComponents: ['AssistChip', 'SuggestionChip', 'FilterChip', 'InputChip'],
-    Body: ChipsBody,
-  },
-  {
-    slug: 'card',
-    title: 'Card',
-    group: 'Containment & overlays',
-    summary: 'A container for related content in three forms: static, pressable or a link.',
-    propsComponents: ['Card'],
-    Body: CardBody,
-  },
-  {
-    slug: 'dialog',
-    title: 'Dialog',
-    group: 'Containment & overlays',
-    summary:
-      'A modal surface for a focused task or a decision, with flat title, content and actions.',
-    propsComponents: ['Dialog', 'DialogTrigger', 'DialogTitle', 'DialogContent', 'DialogActions'],
-    Body: DialogBody,
-  },
-  {
-    slug: 'menu',
-    title: 'Menu',
-    group: 'Containment & overlays',
-    summary:
-      'A temporary list of choices anchored to a trigger, with groups, selection and typeahead.',
-    propsComponents: ['Menu', 'MenuItem', 'MenuGroup', 'MenuTrigger'],
-    Body: MenuBody,
-  },
-  {
-    slug: 'tooltip',
-    title: 'Tooltip',
-    group: 'Containment & overlays',
-    summary: 'A plain label on hover or focus, or a rich tooltip with a subhead and an action.',
-    propsComponents: ['Tooltip', 'RichTooltip', 'TooltipTrigger', 'RichTooltipTrigger'],
-    Body: TooltipBody,
-  },
-  {
-    slug: 'sheets',
-    title: 'Sheets',
-    group: 'Containment & overlays',
-    summary: 'Bottom and side sheets for supplementary content, modal or standing in the layout.',
-    propsComponents: ['BottomSheet', 'SideSheet', 'SheetTrigger'],
-    Body: SheetsBody,
-  },
-  {
-    slug: 'list',
-    title: 'List',
-    group: 'Containment & overlays',
-    summary: 'Rows with headline, overline, supporting text and leading or trailing content.',
-    propsComponents: ['List', 'ListItem'],
-    Body: ListBody,
-  },
-  {
-    slug: 'carousel',
-    title: 'Carousel',
-    group: 'Containment & overlays',
-    summary:
-      'A scrollable row of items that resize along keylines: multi-browse, uncontained or hero.',
-    propsComponents: ['Carousel'],
-    Body: CarouselBody,
-  },
-  {
-    slug: 'badge',
-    title: 'Badge',
-    group: 'Containment & overlays',
-    summary: 'A small dot or a short count or label, placed on an anchor with BadgedBox.',
-    propsComponents: ['Badge', 'BadgedBox'],
-    Body: BadgeBody,
-  },
-  {
-    slug: 'divider',
-    title: 'Divider',
-    group: 'Containment & overlays',
-    summary: 'A thin line that separates content, horizontal or vertical, with optional insets.',
-    propsComponents: ['Divider'],
-    Body: DividerBody,
-  },
-  {
-    slug: 'navigation-rail',
-    title: 'Navigation rail',
-    group: 'Navigation',
-    summary:
-      'Top-level destinations along the start edge, collapsed or expanded, in medium windows.',
-    propsComponents: ['NavigationRail', 'NavigationRailItem'],
-    Body: NavigationRailBody,
-  },
-  {
-    slug: 'navigation-bar',
-    title: 'Navigation bar',
-    group: 'Navigation',
-    summary: '3–5 destinations along the bottom of compact and medium windows, stacked or inline.',
-    propsComponents: ['NavigationBar', 'NavigationBarItem'],
-    Body: NavigationBarBody,
-  },
-  {
-    slug: 'tabs',
-    title: 'Tabs',
-    group: 'Navigation',
-    summary:
-      'Primary and secondary tab rows with a sliding indicator, scrollable when they overflow.',
-    propsComponents: ['Tabs', 'Tab'],
-    Body: TabsBody,
-  },
-  {
-    slug: 'top-app-bar',
-    title: 'Top app bar',
-    group: 'Navigation',
-    summary: 'A header with the screen title and actions, in three sizes, with scroll behaviour.',
-    propsComponents: ['TopAppBar'],
-    Body: TopAppBarBody,
-  },
-  {
-    slug: 'search',
-    title: 'Search',
-    group: 'Navigation',
-    summary:
-      'A search bar that expands into a docked or full-screen view, and an app bar with search.',
-    propsComponents: ['SearchBar', 'SearchAppBar'],
-    Body: SearchBody,
-  },
-  {
-    slug: 'toolbars',
-    title: 'Toolbars',
-    group: 'Navigation',
-    summary:
-      'Docked and floating toolbars of related actions, with an optional FAB and scroll collapse.',
-    propsComponents: ['DockedToolbar', 'FloatingToolbar', 'ToolbarFab'],
-    Body: ToolbarsBody,
-  },
-  {
-    slug: 'snackbar',
-    title: 'Snackbar',
-    group: 'Feedback & pickers',
-    summary: 'A brief message with an optional action and dismiss, queued through a host.',
-    propsComponents: ['Snackbar', 'SnackbarHost'],
-    Body: SnackbarBody,
-  },
-  {
-    slug: 'progress',
-    title: 'Progress indicators',
-    group: 'Feedback & pickers',
-    summary: 'Linear and circular indicators, determinate or indeterminate, flat or wavy.',
-    propsComponents: ['LinearProgressIndicator', 'CircularProgressIndicator'],
-    Body: ProgressBody,
-  },
-  {
-    slug: 'loading-indicator',
-    title: 'Loading indicator',
-    group: 'Feedback & pickers',
-    summary: 'An Expressive shape that morphs while it rotates; replaces the spinning circle.',
-    propsComponents: ['LoadingIndicator'],
-    Body: LoadingIndicatorBody,
-  },
-  {
-    slug: 'date-picker',
-    title: 'Date picker',
-    group: 'Feedback & pickers',
-    summary: 'Pick a single date or a range on a month grid or by typing, with a year list.',
-    propsComponents: ['DatePicker', 'DateRangePicker'],
-    Body: DatePickerBody,
-  },
-  {
-    slug: 'time-picker',
-    title: 'Time picker',
-    group: 'Feedback & pickers',
-    summary: 'Pick an hour and minute on a clock dial or by typing, 12- or 24-hour.',
-    propsComponents: ['TimePicker'],
-    Body: TimePickerBody,
-  },
-  {
-    slug: 'picker-dialog',
-    title: 'Picker dialog',
-    group: 'Feedback & pickers',
-    summary:
-      'The modal form of a date or time picker, with confirm, dismiss and mode-toggle slots.',
-    propsComponents: ['PickerDialog'],
-    Body: PickerDialogBody,
-  },
-  {
-    slug: 'primitives',
-    title: 'Primitives',
-    group: 'Primitives',
-    summary:
-      'The internal building blocks M3 components are made from, exported for custom controls.',
-    propsComponents: [],
-    Body: PrimitivesBody,
-  },
-];
+/** Every component page, in display order: catalog metadata wired to its page body. */
+export const COMPONENT_PAGES: ComponentPageMeta[] = COMPONENT_META.map((meta) => {
+  const Body = BODIES[meta.slug];
+  if (!Body) throw new Error(`No page body registered for component slug "${meta.slug}"`);
+  return { ...meta, Body };
+});
 
 /** The registry keyed by slug, for the dynamic route to resolve a page. */
 export const COMPONENT_PAGE_MAP: Record<string, ComponentPageMeta> = Object.fromEntries(
