@@ -38,6 +38,7 @@
   "scripts": {
     "generate": "tsx scripts/generate.ts",
     "build": "tsdown && tsx scripts/build-css.ts && tsx scripts/check-dist.ts",
+    "prepare": "pnpm run generate && pnpm run build",
     "typecheck": "tsc -p tsconfig.json",
     "lint": "eslint --max-warnings 0 . --config ../../eslint.config.js",
     "test": "vitest run"
@@ -85,6 +86,7 @@
     "tailwindcss": "^4.3.3",
     "tsdown": "^0.23.0",
     "tsx": "^4.23.15",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
     "vite": "^8.3.3",
     "vitest": "^5.0.3"
   }
