@@ -8,6 +8,8 @@ and [Motion](https://motion.dev). Semantic design tokens, light/dark + contrast 
 RTL support, and accessible-by-default components. Works with Vite and Next.js (App Router and
 Pages Router).
 
+**Live demo & docs → [vkieu-mui.vercel.app](https://vkieu-mui.vercel.app/)**
+
 ## What's inside
 
 | Package | Description |
@@ -50,7 +52,8 @@ Fonts. See [`packages/ui/README.md`](packages/ui/README.md) for the full consume
 
 ## Documentation
 
-The documentation site lives in [`apps/site`](apps/site). Run it locally:
+The documentation site is deployed at **[vkieu-mui.vercel.app](https://vkieu-mui.vercel.app/)**
+and lives in [`apps/site`](apps/site). Run it locally:
 
 ```bash
 pnpm --filter site dev
