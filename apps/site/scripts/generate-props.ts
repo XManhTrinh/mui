@@ -17,8 +17,12 @@ const here = dirname(fileURLToPath(import.meta.url));
 const siteRoot = resolve(here, '..');
 const uiRoot = resolve(siteRoot, '../../packages/ui');
 const tsconfigPath = join(uiRoot, 'tsconfig.json');
-const indexPath = join(uiRoot, 'src/index.ts');
-const sourceRoots = [join(uiRoot, 'src/components'), join(uiRoot, 'src/composites')];
+const entryPaths = [join(uiRoot, 'src/index.ts'), join(uiRoot, 'src/vk.ts')];
+const sourceRoots = [
+  join(uiRoot, 'src/components'),
+  join(uiRoot, 'src/composites'),
+  join(uiRoot, 'src/vk'),
+];
 const outDir = join(siteRoot, '.generated/props');
 
 type Parser = ReturnType<typeof withCustomConfig>;
@@ -39,11 +43,14 @@ export interface ComponentPropsFile {
   props: PropsRecord[];
 }
 
-/** Reads `index.ts` and collects the capitalised value exports from components/composites. */
+/**
+ * Reads `index.ts` and `vk.ts` and collects the capitalised value exports from
+ * components, composites and vk components.
+ */
 async function resolveAllowlist(): Promise<Set<string>> {
-  const source = await readFile(indexPath, 'utf8');
+  const source = (await Promise.all(entryPaths.map((path) => readFile(path, 'utf8')))).join('\n');
   const allow = new Set<string>();
-  const block = /export\s*\{([^}]*)\}\s*from\s*['"]\.\/(?:components|composites)\/[^'"]+['"]/g;
+  const block = /export\s*\{([^}]*)\}\s*from\s*['"]\.\/(?:components|composites|vk)\/[^'"]+['"]/g;
   for (const match of source.matchAll(block)) {
     for (const raw of match[1]!.split(',')) {
       const part = raw.trim();
@@ -130,7 +137,7 @@ async function main(): Promise<void> {
   let allow: Set<string>;
   try {
     allow = await resolveAllowlist();
-    if (allow.size === 0) throw new Error('no public components found in index.ts');
+    if (allow.size === 0) throw new Error('no public components found in index.ts or vk.ts');
   } catch (error) {
     console.error(
       `[generate-props] cannot resolve the public component allowlist: ${(error as Error).message}`,

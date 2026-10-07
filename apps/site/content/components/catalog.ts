@@ -41,7 +41,7 @@ export const RAIL_GROUPS: RailGroup[] = [
   { id: 'inputs', railLabel: 'Inputs', fullName: 'Inputs & selection' },
   { id: 'containment', railLabel: 'Containment', fullName: 'Containment & overlays' },
   { id: 'navigation', railLabel: 'Navigation', fullName: 'Navigation' },
-  // feedback members: snackbar, progress, loading-indicator
+  // feedback members: snackbar, progress, loading-indicator, skeleton
   { id: 'feedback', railLabel: 'Feedback', fullName: 'Feedback' },
   // pickers members: date-picker, time-picker, picker-dialog
   { id: 'pickers', railLabel: 'Pickers', fullName: 'Pickers' },
@@ -532,6 +532,23 @@ export const COMPONENT_META: ComponentMeta[] = [
     },
     related: ['progress'],
     whenNotToUse: 'When progress can be measured, use a determinate Progress indicator instead.',
+  },
+  {
+    slug: 'skeleton',
+    title: 'Skeleton',
+    group: 'Feedback & pickers',
+    railGroup: 'feedback',
+    summary:
+      'A placeholder in the shape of loading content, pure CSS with pulse or shimmer. Not an M3 component (@vkieu/mui/vk).',
+    propsComponents: ['Skeleton', 'SkeletonGroup'],
+    playground: 'showcase',
+    specs: {
+      shape: 'rounded-corner-small',
+      variants: ['rectangle', 'text', 'circle'],
+    },
+    related: ['loading-indicator', 'progress'],
+    whenNotToUse:
+      'When the shape of the coming content is unknown, or a whole page is loading, use the Loading indicator.',
   },
   {
     slug: 'date-picker',

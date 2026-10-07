@@ -23,6 +23,7 @@ import { ProgressBody } from './progress';
 import { RadioGroupBody } from './radio-group';
 import { SearchBody } from './search';
 import { SheetsBody } from './sheets';
+import { SkeletonBody } from './skeleton';
 import { SliderBody } from './slider';
 import { SnackbarBody } from './snackbar';
 import { SplitButtonBody } from './split-button';
@@ -92,6 +93,7 @@ const BODIES: Record<string, ComponentType> = {
   snackbar: SnackbarBody,
   progress: ProgressBody,
   'loading-indicator': LoadingIndicatorBody,
+  skeleton: SkeletonBody,
   'date-picker': DatePickerBody,
   'time-picker': TimePickerBody,
   'picker-dialog': PickerDialogBody,

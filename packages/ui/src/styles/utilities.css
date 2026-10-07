@@ -194,3 +194,82 @@
     outline-offset: calc(var(--md-sys-focus-indicator-thickness) * -1);
   }
 }
+
+/*
+ * Skeleton placeholders (`@vkieu/mui/vk`, not an M3 component; docs/plans/skeleton.md).
+ * Pure CSS, so a skeleton animates inside a server-streamed Suspense fallback before any JS
+ * runs. The animation comes from the nearest `SkeletonGroup` (`data-skeleton-animation`) and
+ * a skeleton's own `data-animation` overrides it. Pulse fades the opacity on the M3 duration
+ * and easing tokens; shimmer sweeps an `on-surface` highlight at the hover state-layer
+ * opacity from the start edge to the end edge. Both stop under reduced motion, and forced
+ * colours (which drop backgrounds) get an outline so the placeholder stays visible.
+ */
+@keyframes vk-skeleton-pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.4;
+  }
+}
+
+@keyframes vk-skeleton-shimmer {
+  from {
+    background-position-x: 150%;
+  }
+  to {
+    background-position-x: -50%;
+  }
+}
+
+@utility vk-skeleton {
+  background-color: var(--vk-skeleton-fill, var(--md-sys-color-surface-container-highest));
+  --vk-skeleton-highlight: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface) calc(var(--md-sys-state-hover-state-layer-opacity) * 100%),
+    transparent
+  );
+  animation: vk-skeleton-pulse var(--md-sys-motion-duration-extra-long-4)
+    var(--md-sys-motion-easing-standard) infinite alternate;
+
+  &:where([data-skeleton-animation='shimmer'] *),
+  &[data-animation='shimmer'] {
+    background-image: linear-gradient(
+      90deg,
+      transparent 25%,
+      var(--vk-skeleton-highlight) 50%,
+      transparent 75%
+    );
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    animation: vk-skeleton-shimmer calc(var(--md-sys-motion-duration-extra-long-4) * 1.5)
+      var(--md-sys-motion-easing-standard) infinite;
+  }
+  /*
+   * Right-to-left by the `dir` attribute: Lightning CSS rewrites `:dir(rtl)` into
+   * `:lang(...)` for older targets, which never matches a `dir="rtl"` page.
+   */
+  &:where([data-skeleton-animation='shimmer'] *):where([dir='rtl'], [dir='rtl'] *),
+  &[data-animation='shimmer']:where([dir='rtl'], [dir='rtl'] *) {
+    animation-direction: reverse;
+  }
+  &:where([data-skeleton-animation='none'] *),
+  &[data-animation='none'] {
+    animation: none;
+  }
+  &[data-animation='pulse'] {
+    background-image: none;
+    animation: vk-skeleton-pulse var(--md-sys-motion-duration-extra-long-4)
+      var(--md-sys-motion-easing-standard) infinite alternate;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &,
+    &[data-animation] {
+      animation: none;
+    }
+  }
+  @media (forced-colors: active) {
+    outline: 1px solid CanvasText;
+    outline-offset: -1px;
+  }
+}

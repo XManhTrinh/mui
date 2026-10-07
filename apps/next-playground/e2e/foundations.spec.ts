@@ -178,3 +178,28 @@ test.describe('Pages Router', () => {
     expect(errors).toEqual([]);
   });
 });
+
+test.describe('Streaming', () => {
+  test('a skeleton animates in a streamed Suspense fallback, before its content arrives', async ({
+    page,
+  }) => {
+    await page.goto('/streaming', { waitUntil: 'commit' });
+    const skeleton = page.locator('.vk-skeleton').first();
+    await expect(skeleton).toBeVisible();
+    await expect(page.getByRole('status')).toHaveText('Loading content');
+    const playing = () =>
+      skeleton.evaluate((el) =>
+        el.getAnimations().map((animation) => ({
+          name: (animation as CSSAnimation).animationName,
+          time: Number(animation.currentTime),
+        })),
+      );
+    const first = await playing();
+    await page.waitForTimeout(200);
+    const second = await playing();
+    expect(first[0]?.name).toBe('vk-skeleton-pulse');
+    expect(second[0]!.time).toBeGreaterThan(first[0]!.time);
+    await expect(page.getByTestId('streamed')).toBeVisible();
+    await expect(page.locator('.vk-skeleton')).toHaveCount(0);
+  });
+});
