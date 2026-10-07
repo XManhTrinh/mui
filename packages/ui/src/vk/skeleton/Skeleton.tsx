@@ -32,7 +32,10 @@ export interface SkeletonClassNames {
 }
 
 interface SkeletonBaseProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'children'> {
-  /** Corner from the M3 shape scale. @default "small" (`extra-small` for text, `full` for a circle) */
+  /**
+   * Corner from the M3 shape scale, measured on the visible bar.
+   * @default "small" (`extra-small` for text lines, `full` for circles)
+   */
   corner?: SkeletonCorner;
   /**
    * Fill colour role: `highest` (surface-container-highest) reads on every surface up to

@@ -203,3 +203,33 @@ test.describe('Streaming', () => {
     await expect(page.locator('.vk-skeleton')).toHaveCount(0);
   });
 });
+
+test.describe('Avatar', () => {
+  test('renders on the server, so the photo and fallbacks show without JS', async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    await page.goto('/avatar');
+    const photo = page.getByRole('img', { name: 'Lan', exact: true }).locator('img');
+    await expect(photo).toBeVisible();
+    expect(
+      await photo.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0),
+    ).toBe(true);
+    await expect(page.getByRole('img', { name: 'An', exact: true })).toHaveText('NA');
+    await expect(
+      page.getByRole('img', { name: 'Minh', exact: true }).getByText('LM'),
+    ).toBeVisible();
+    await context.close();
+  });
+
+  test('after hydration a broken photo is marked and hidden', async ({ page }) => {
+    const errors = collectConsoleErrors(page);
+    await page.goto('/avatar');
+    const broken = page.getByTestId('broken');
+    await expect(broken).toHaveAttribute('data-status', 'error');
+    await expect(broken.locator('img')).toBeHidden();
+    await expect(page.getByTestId('photo')).toHaveAttribute('data-status', 'loaded');
+    expect(
+      errors.filter((error) => !error.includes('missing.png') && !error.includes('404')),
+    ).toEqual([]);
+  });
+});

@@ -75,6 +75,7 @@ export function Playground({ slug, componentName, props }: PlaygroundProps) {
     codeImports: descriptor.codeImports,
     codeSlots: descriptor.codeSlots,
     codeChildren: descriptor.codeChildren,
+    importFrom: descriptor.importFrom,
   });
 
   async function copy() {
@@ -88,8 +89,7 @@ export function Playground({ slug, componentName, props }: PlaygroundProps) {
     }
   }
 
-  const set = (name: string, value: unknown) =>
-    setValues((prev) => ({ ...prev, [name]: value }));
+  const set = (name: string, value: unknown) => setValues((prev) => ({ ...prev, [name]: value }));
 
   return (
     <section className="flex flex-col gap-4" aria-label={`${componentName} playground`}>

@@ -27,3 +27,22 @@ export {
   skeletonStyles,
   type SkeletonStyleProps,
 } from './vk/skeleton/skeleton-styles';
+export {
+  Avatar,
+  avatarShapes,
+  type AvatarClassNames,
+  type AvatarLabels,
+  type AvatarPresence,
+  type AvatarProps,
+  type AvatarShape,
+  type AvatarSize,
+  type AvatarTone,
+} from './vk/avatar/Avatar';
+export {
+  AvatarGroup,
+  type AvatarGroupClassNames,
+  type AvatarGroupProps,
+} from './vk/avatar/AvatarGroup';
+export { avatarGroupStyles, avatarStyles, type AvatarStyleProps } from './vk/avatar/avatar-styles';
+export { getInitials } from './vk/avatar/get-initials';
+export type { AvatarImageElementProps } from './vk/avatar/avatar-image';

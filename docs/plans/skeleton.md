@@ -1,6 +1,6 @@
 # Plan: Skeleton (`@vkieu/mui/vk`)
 
-Status: **approved by Mike, 2026-10-07; built on `feat/vk-skeleton`, in review**
+Status: **built and merged (584c7f4), 2026-10-07**
 
 ## Goal
 
@@ -26,7 +26,7 @@ The docs page states this, so consumers don't use a skeleton where M3 expects a 
 | 2 | Parts | `Skeleton` (one placeholder shape) and `SkeletonGroup` (the loading region that names it and runs one shared animation) |
 | 3 | Rendering | **Pure CSS, a server component (no `"use client"`, no JS animation).** It must animate inside a React Suspense fallback streamed from the server, which stays static HTML until its content arrives and so never runs JS (found in VKIEU: a JS-driven indicator in a streamed fallback stays frozen) |
 | 4 | Colour | Semantic roles only: `surface-container-highest` by default, so it reads on `surface` and `surface-container-low`; a `tone` of `highest` (reads on every surface up to `surface-container`) or `high` (a subtler fill for `surface` and `surface-container-low`). Follows all six themes × light/dark × three contrast levels with no extra work |
-| 5 | Shape | The M3 shape scale (`corner` = `none` … `extra-large`, `full`), default `small`; `text` uses `extra-small`, `circle` uses `full` |
+| 5 | Shape | The M3 shape scale (`corner` = `none` … `extra-large`, `full`), measured on the visible bar: a text line is drawn inside padding, so the padding is added back to its radius. Defaults: `small` for rectangles, `extra-small` for text lines (gently rounded, not pills; Mike, 2026-10-08), `full` for circles |
 | 6 | Text lines | `variant="text"` takes a type-scale role (`typescale="body-medium"`, …) so each line is as tall as that role's line height with the glyph-height bar centred inside it, and `lines={n}` stacks lines with the last at 60% width, so a text skeleton is the same height as the text it stands for |
 | 7 | Motion | `animation` = `pulse` (default) \| `shimmer` \| `none` (Mike, 2026-10-07: support both). **Pulse** fades the placeholder's opacity with M3 duration and easing tokens. **Shimmer** sweeps a highlight across it: an `on-surface` overlay at the M3 hover state-layer opacity (8%), so it follows every theme and mode, moving from the start edge to the end edge (mirrored in right-to-left). `SkeletonGroup` sets the animation for all its placeholders, so a region moves together; a `Skeleton` can override it |
 | 8 | Reduced motion | Static under `prefers-reduced-motion: reduce`, for both animations. The `standard` motion scheme keeps the animation: it is a calmer scheme, not reduced motion |

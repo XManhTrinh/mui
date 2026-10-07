@@ -385,6 +385,22 @@ export const COMPONENT_META: ComponentMeta[] = [
     whenNotToUse: 'When every item must be seen at once, use a grid of Cards instead.',
   },
   {
+    slug: 'avatar',
+    title: 'Avatar',
+    group: 'Containment & overlays',
+    railGroup: 'containment',
+    summary:
+      'A picture with an initials or icon fallback, badges, 35 Expressive shapes and groups. Not an M3 component (@vkieu/mui/vk).',
+    propsComponents: ['Avatar', 'AvatarGroup'],
+    playground: 'full',
+    specs: {
+      sizes: ['xs', 'sm', 'md', 'lg', 'xl', '2xl'],
+      shape: 'rounded-corner-full',
+    },
+    related: ['badge', 'chips', 'list'],
+    whenNotToUse: 'For a status count or dot on an icon, use a Badge.',
+  },
+  {
     slug: 'badge',
     title: 'Badge',
     group: 'Containment & overlays',
@@ -541,7 +557,7 @@ export const COMPONENT_META: ComponentMeta[] = [
     summary:
       'A placeholder in the shape of loading content, pure CSS with pulse or shimmer. Not an M3 component (@vkieu/mui/vk).',
     propsComponents: ['Skeleton', 'SkeletonGroup'],
-    playground: 'showcase',
+    playground: 'full',
     specs: {
       shape: 'rounded-corner-small',
       variants: ['rectangle', 'text', 'circle'],
@@ -600,9 +616,14 @@ export const COMPONENT_META_MAP: Record<string, ComponentMeta> = Object.fromEntr
   COMPONENT_META.map((meta) => [meta.slug, meta]),
 );
 
-/** The pages in a rail group, in catalog order. */
+/**
+ * The pages in a rail group, in alphabetical order by title, so the flyout, the drawer and
+ * the gallery list them the same way.
+ */
 export const pagesInRailGroup = (id: RailGroupId): ComponentMeta[] =>
-  COMPONENT_META.filter((meta) => meta.railGroup === id);
+  COMPONENT_META.filter((meta) => meta.railGroup === id).sort((a, b) =>
+    a.title.localeCompare(b.title, 'en'),
+  );
 
 /**
  * The rail groups shown in the Browse-components gallery: every rail group EXCEPT the

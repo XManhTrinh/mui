@@ -84,3 +84,21 @@ describe('emitSnippet', () => {
     expect(code).not.toMatch(/icon=\{<[A-Z][A-Za-z]*Icon/);
   });
 });
+
+describe('emitSnippet import source', () => {
+  it('imports vk components from @vkieu/mui/vk', () => {
+    const snippet = emitSnippet({
+      component: 'Avatar',
+      values: {},
+      surfacedProps: [],
+      importFrom: '@vkieu/mui/vk',
+    });
+    expect(snippet).toContain("import { Avatar } from '@vkieu/mui/vk';");
+  });
+
+  it('defaults to @vkieu/mui', () => {
+    expect(emitSnippet({ component: 'Button', values: {}, surfacedProps: [] })).toContain(
+      "from '@vkieu/mui';",
+    );
+  });
+});

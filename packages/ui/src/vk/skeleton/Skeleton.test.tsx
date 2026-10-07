@@ -13,18 +13,34 @@ describe('Skeleton', () => {
     const root = first(container);
     expect(root).toHaveAttribute('aria-hidden', 'true');
     expect(root).toHaveAttribute('data-variant', 'rectangle');
-    expect(root).toHaveClass('vk-skeleton', 'h-24', 'w-full', 'rounded-corner-small');
+    expect(root).toHaveClass(
+      'vk-skeleton',
+      'h-24',
+      'w-full',
+      'rounded-(--vk-skeleton-corner)',
+      '[--vk-skeleton-corner:var(--md-sys-shape-corner-small)]',
+    );
   });
 
   it('defaults a circle to the full corner', () => {
     const { container } = render(<Skeleton variant="circle" />);
-    expect(first(container)).toHaveClass('vk-skeleton', 'size-10', 'rounded-corner-full');
+    expect(first(container)).toHaveClass(
+      'vk-skeleton',
+      'size-10',
+      '[--vk-skeleton-corner:var(--md-sys-shape-corner-full)]',
+    );
   });
 
   it('sizes a text line from its type-scale role', () => {
     const { container } = render(<Skeleton variant="text" typescale="title-large" />);
     const root = first(container);
-    expect(root).toHaveClass('vk-skeleton', 'bg-clip-content', 'rounded-corner-extra-small');
+    expect(root).toHaveClass(
+      'vk-skeleton',
+      'bg-clip-content',
+      '[--vk-skeleton-corner:var(--md-sys-shape-corner-extra-small)]',
+      // The padding is added back, so the visible bar keeps the shape-scale corner.
+      'rounded-[calc(var(--vk-skeleton-corner)+(var(--vk-skeleton-line-height)-var(--vk-skeleton-glyph-size))/2)]',
+    );
     expect(root.style.getPropertyValue('--vk-skeleton-line-height')).toBe(
       'var(--md-sys-typescale-title-large-line-height)',
     );
@@ -80,14 +96,16 @@ describe('Skeleton', () => {
         variant="text"
         lines={2}
         className="w-40"
-        classNames={{ root: 'gap-2', line: 'rounded-corner-full' }}
+        classNames={{ root: 'gap-2', line: 'rounded-corner-small' }}
       />,
     );
     const root = first(container);
     expect(root).toHaveClass('w-40', 'gap-2');
     expect(root).not.toHaveClass('w-full');
-    expect(root.firstElementChild).toHaveClass('rounded-corner-full');
-    expect(root.firstElementChild).not.toHaveClass('rounded-corner-extra-small');
+    expect(root.firstElementChild).toHaveClass('rounded-corner-small');
+    expect(root.firstElementChild).not.toHaveClass(
+      'rounded-[calc(var(--vk-skeleton-corner)+(var(--vk-skeleton-line-height)-var(--vk-skeleton-glyph-size))/2)]',
+    );
   });
 
   it('keeps the consumer style beside the type-scale variables', () => {

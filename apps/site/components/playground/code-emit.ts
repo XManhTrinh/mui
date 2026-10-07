@@ -19,6 +19,8 @@ export interface EmitInput {
   codeSlots?: Record<string, string>;
   /** Verbatim children JSX, e.g. label text. */
   codeChildren?: string;
+  /** The entry the component is imported from. @default '@vkieu/mui' */
+  importFrom?: string;
 }
 
 /**
@@ -83,10 +85,11 @@ export function emitSnippet(input: EmitInput): string {
   const members = [input.component, ...(input.importMembers ?? [])];
   const importLines = [
     ...(input.codeImports ?? []),
-    `import { ${members.join(', ')} } from '@vkieu/mui';`,
+    `import { ${members.join(', ')} } from '${input.importFrom ?? '@vkieu/mui'}';`,
   ];
 
-  const open = attrs.length > 0 ? `<${input.component}\n  ${attrs.join('\n  ')}\n` : `<${input.component}`;
+  const open =
+    attrs.length > 0 ? `<${input.component}\n  ${attrs.join('\n  ')}\n` : `<${input.component}`;
   let element: string;
   if (input.codeChildren != null && input.codeChildren !== '') {
     const head = attrs.length > 0 ? `${open}>` : `${open}>`;

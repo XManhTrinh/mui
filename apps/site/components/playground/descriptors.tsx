@@ -26,6 +26,7 @@ import {
   Tabs,
   TextField,
 } from '@vkieu/mui';
+import { Avatar, avatarShapes, Skeleton, SkeletonGroup } from '@vkieu/mui/vk';
 import { createElement, type ComponentType, type ReactElement } from 'react';
 import { AddIcon, EditIcon, SendIcon, StarIcon } from '../icons';
 
@@ -50,6 +51,8 @@ export interface PlaygroundDescriptor {
   codeSlots?: Record<string, string>;
   /** Verbatim children JSX emitted in the copied snippet. */
   codeChildren?: string;
+  /** The entry the component is imported from in the snippet. @default '@vkieu/mui' */
+  importFrom?: '@vkieu/mui' | '@vkieu/mui/vk';
 }
 
 /** Casts a typed component to a loose one so arbitrary control values can be spread. */
@@ -78,6 +81,8 @@ const LinearProgressIndicatorAny = loose(LinearProgressIndicator);
 const LoadingIndicatorAny = loose(LoadingIndicator);
 const RadioAny = loose(Radio);
 const ListItemAny = loose(ListItem);
+const AvatarAny = loose(Avatar);
+const SkeletonAny = loose(Skeleton);
 const TabAny = loose(Tab);
 
 /** A no-op change handler so controlled inputs driven by the panel don't warn in preview. */
@@ -86,7 +91,9 @@ const noop = () => {};
 /** Self-contained inline SVGs for the copied snippets (no icon package in this repo). */
 const svg = (path: string) =>
   `<svg viewBox="0 -960 960 960" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="${path}" /></svg>`;
-const STAR = svg('m233-120 65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z');
+const STAR = svg(
+  'm233-120 65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z',
+);
 const ADD = svg('M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z');
 const EDIT = svg(
   'M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Z',
@@ -157,8 +164,7 @@ export const PLAYGROUND_DESCRIPTORS: Record<string, PlaygroundDescriptor> = {
   },
   fab: {
     component: 'Fab',
-    render: (props) =>
-      createElement(FabAny, { ...props, 'aria-label': 'Add', icon: <AddIcon /> }),
+    render: (props) => createElement(FabAny, { ...props, 'aria-label': 'Add', icon: <AddIcon /> }),
     defaultProps: { size: 'default', color: 'primary-container', lowered: false },
     surfacedProps: ['size', 'color', 'lowered'],
     initialState: { size: 'default', color: 'primary-container' },
@@ -348,6 +354,67 @@ export const PLAYGROUND_DESCRIPTORS: Record<string, PlaygroundDescriptor> = {
     surfacedProps: ['value', 'wavy'],
     initialState: { value: 0.4, wavy: false },
     codeSlots: { 'aria-label': '"Uploading"', className: '"w-full"' },
+  },
+  skeleton: {
+    component: 'Skeleton',
+    importFrom: '@vkieu/mui/vk',
+    render: ({ animation, corner, ...props }) =>
+      createElement(
+        SkeletonGroup,
+        {
+          label: 'Loading',
+          animation: animation as 'pulse' | 'shimmer' | 'none',
+          className: 'w-72',
+        },
+        createElement(SkeletonAny, {
+          ...props,
+          ...(corner !== 'default' && { corner }),
+          ...(props.variant === 'circle' && { className: 'size-16' }),
+        }),
+      ),
+    defaultProps: {
+      variant: 'rectangle',
+      corner: 'default',
+      tone: 'highest',
+      animation: 'pulse',
+      typescale: 'body-medium',
+      lines: 1,
+    },
+    surfacedProps: ['variant', 'animation', 'corner', 'tone', 'typescale', 'lines'],
+    initialState: { variant: 'text', lines: 3, animation: 'pulse' },
+    enumOptions: {
+      variant: ['rectangle', 'text', 'circle'],
+      animation: ['pulse', 'shimmer', 'none'],
+      corner: ['default', 'none', 'extra-small', 'small', 'medium', 'large', 'extra-large', 'full'],
+      tone: ['highest', 'high'],
+    },
+  },
+  avatar: {
+    component: 'Avatar',
+    importFrom: '@vkieu/mui/vk',
+    render: ({ presence, ...props }) =>
+      createElement(AvatarAny, {
+        ...props,
+        alt: String(props.name ?? ''),
+        ...(presence !== 'none' && { presence }),
+      }),
+    defaultProps: {
+      name: 'Nguyễn Văn An',
+      size: 'md',
+      shape: 'circle',
+      tone: 'auto',
+      presence: 'none',
+      verified: false,
+    },
+    surfacedProps: ['name', 'size', 'shape', 'tone', 'presence', 'verified'],
+    initialState: { name: 'Nguyễn Văn An', size: 'xl', shape: 'Cookie12Sided', presence: 'online' },
+    enumOptions: {
+      size: ['xs', 'sm', 'md', 'lg', 'xl', '2xl'],
+      shape: [...avatarShapes],
+      tone: ['auto', 'primary', 'secondary', 'tertiary', 'neutral'],
+      presence: ['none', 'online', 'away', 'offline'],
+    },
+    codeSlots: { alt: '"Nguyễn Văn An"' },
   },
   'loading-indicator': {
     component: 'LoadingIndicator',

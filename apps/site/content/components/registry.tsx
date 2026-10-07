@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react';
+import { AvatarBody } from './avatar';
 import { BadgeBody } from './badge';
 import { ButtonBody } from './button';
 import { ButtonGroupBody } from './button-group';
@@ -83,6 +84,7 @@ const BODIES: Record<string, ComponentType> = {
   list: ListBody,
   carousel: CarouselBody,
   badge: BadgeBody,
+  avatar: AvatarBody,
   divider: DividerBody,
   'navigation-rail': NavigationRailBody,
   'navigation-bar': NavigationBarBody,

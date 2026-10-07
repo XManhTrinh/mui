@@ -12,6 +12,9 @@ const textLine = [
   'vk-skeleton block w-full bg-clip-content',
   'h-(--vk-skeleton-line-height)',
   'py-[calc((var(--vk-skeleton-line-height)-var(--vk-skeleton-glyph-size))/2)]',
+  // The bar is painted inside the padding, which would shrink the corner; add it back so the
+  // visible bar has the shape-scale corner.
+  'rounded-[calc(var(--vk-skeleton-corner)+(var(--vk-skeleton-line-height)-var(--vk-skeleton-glyph-size))/2)]',
 ];
 
 /** Variant definitions for {@link Skeleton}. */
@@ -22,19 +25,20 @@ export const skeletonStyles = tv({
   },
   variants: {
     shape: {
-      rectangle: { root: 'vk-skeleton h-24 w-full' },
-      circle: { root: 'vk-skeleton size-10' },
+      rectangle: { root: 'vk-skeleton h-24 w-full rounded-(--vk-skeleton-corner)' },
+      circle: { root: 'vk-skeleton size-10 rounded-(--vk-skeleton-corner)' },
       line: { root: textLine },
       lines: { root: 'flex w-full flex-col', line: 'last:w-3/5' },
     },
+    // The corner is a variable, so text lines can measure it on their visible bar.
     corner: {
-      none: { root: 'rounded-corner-none', line: 'rounded-corner-none' },
-      'extra-small': { root: 'rounded-corner-extra-small', line: 'rounded-corner-extra-small' },
-      small: { root: 'rounded-corner-small', line: 'rounded-corner-small' },
-      medium: { root: 'rounded-corner-medium', line: 'rounded-corner-medium' },
-      large: { root: 'rounded-corner-large', line: 'rounded-corner-large' },
-      'extra-large': { root: 'rounded-corner-extra-large', line: 'rounded-corner-extra-large' },
-      full: { root: 'rounded-corner-full', line: 'rounded-corner-full' },
+      none: { root: '[--vk-skeleton-corner:var(--md-sys-shape-corner-none)]' },
+      'extra-small': { root: '[--vk-skeleton-corner:var(--md-sys-shape-corner-extra-small)]' },
+      small: { root: '[--vk-skeleton-corner:var(--md-sys-shape-corner-small)]' },
+      medium: { root: '[--vk-skeleton-corner:var(--md-sys-shape-corner-medium)]' },
+      large: { root: '[--vk-skeleton-corner:var(--md-sys-shape-corner-large)]' },
+      'extra-large': { root: '[--vk-skeleton-corner:var(--md-sys-shape-corner-extra-large)]' },
+      full: { root: '[--vk-skeleton-corner:var(--md-sys-shape-corner-full)]' },
     },
     tone: {
       highest: { root: '[--vk-skeleton-fill:var(--md-sys-color-surface-container-highest)]' },

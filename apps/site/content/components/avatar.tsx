@@ -1,0 +1,122 @@
+import { ExampleViewer } from '../../components/example-viewer';
+import { AvatarBadges } from '../../examples/avatar/avatar-badges';
+import { AvatarFallbacks } from '../../examples/avatar/avatar-fallbacks';
+import { AvatarGroupExample } from '../../examples/avatar/avatar-group';
+import { AvatarShapes } from '../../examples/avatar/avatar-shapes';
+import { readExampleSource } from '../../lib/example-source';
+import { highlightSource } from '../../lib/highlight';
+
+const EXAMPLES = [
+  { file: 'avatar/avatar-fallbacks.tsx', title: 'Fallbacks and sizes', Example: AvatarFallbacks },
+  { file: 'avatar/avatar-shapes.tsx', title: 'All 35 Expressive shapes', Example: AvatarShapes },
+  { file: 'avatar/avatar-badges.tsx', title: 'Presence and verified', Example: AvatarBadges },
+  { file: 'avatar/avatar-group.tsx', title: 'Groups', Example: AvatarGroupExample },
+] as const;
+
+/** Avatar page body: purpose, examples, accessibility and theming. */
+export async function AvatarBody() {
+  const examples = await Promise.all(
+    EXAMPLES.map(async (example) => {
+      const code = await readExampleSource(example.file);
+      return { ...example, code, html: await highlightSource(code) };
+    }),
+  );
+
+  return (
+    <>
+      <section className="flex flex-col gap-3">
+        <h2 className="text-headline-small text-on-surface">Purpose</h2>
+        <p className="text-body-large text-on-surface-variant">
+          An avatar is a small picture that stands for an account, with initials or an icon when
+          there is no photo. It is <strong className="text-on-surface">not an M3 component</strong>:
+          it comes from <code className="text-on-surface">@vkieu/mui/vk</code> and fits the avatar
+          slots of M3 components, such as the 24px avatar of an input chip and the 40px leading
+          avatar of a list item.
+        </p>
+        <p className="text-body-large text-on-surface-variant">
+          It renders on the server. The photo sits over the fallback, so it shows as soon as it
+          loads, with or without JS; if it fails, the fallback shows. Pass{' '}
+          <code className="text-on-surface">image</code> to use your framework&apos;s image
+          component, such as <code className="text-on-surface">next/image</code>.
+        </p>
+        <p className="text-body-large text-on-surface-variant">
+          <code className="text-on-surface">shape</code> is{' '}
+          <code className="text-on-surface">circle</code> by default, or{' '}
+          <code className="text-on-surface">rounded</code> (a shape-scale corner for its size), or
+          any of the 35 M3 Expressive shapes. <code className="text-on-surface">icon</code> sets the
+          fallback when there is no name.
+        </p>
+      </section>
+
+      <section className="flex flex-col gap-6">
+        <h2 className="text-headline-small text-on-surface">Examples</h2>
+        {examples.map(({ file, title, code, html, Example }) => (
+          <ExampleViewer
+            key={file}
+            title={title}
+            code={code}
+            html={html}
+            fileName={file.split('/')[1] ?? file}
+          >
+            <Example />
+          </ExampleViewer>
+        ))}
+      </section>
+      <section className="flex flex-col gap-3">
+        <h2 className="text-headline-small text-on-surface">Keyboard &amp; screen reader</h2>
+        <ul className="flex flex-col gap-2 ps-5 text-body-large text-on-surface-variant [&>li]:list-disc">
+          <li>
+            A static avatar is an image named by <code className="text-on-surface">alt</code>, or
+            hidden with <code className="text-on-surface">decorative</code> when the name is written
+            next to it. The types require one of the two.
+          </li>
+          <li>
+            Presence and verified join the name (&quot;Lan, online, verified&quot;); pass{' '}
+            <code className="text-on-surface">labels</code> to translate them.
+          </li>
+          <li>
+            With <code className="text-on-surface">href</code> or{' '}
+            <code className="text-on-surface">onPress</code> it is a link or button with a state
+            layer, a focus ring and a 48px touch target.
+          </li>
+          <li>
+            <code className="text-on-surface">AvatarGroup</code> is read once by its{' '}
+            <code className="text-on-surface">label</code>; its static avatars become decorative.
+          </li>
+        </ul>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-headline-small text-on-surface">Theming</h2>
+        <ul className="flex flex-col gap-2 ps-5 text-body-large text-on-surface-variant [&>li]:list-disc">
+          <li>
+            <code className="text-on-surface">tone=&quot;auto&quot;</code> picks a primary,
+            secondary, tertiary or neutral container from the name, so each name keeps the same
+            colour in every theme, mode and contrast level.
+          </li>
+          <li>
+            Status colours default to M3 roles (online{' '}
+            <code className="text-on-surface">primary</code>, away{' '}
+            <code className="text-on-surface">tertiary</code>, offline an{' '}
+            <code className="text-on-surface">outline</code> ring, verified{' '}
+            <code className="text-on-surface">primary</code>). Override them with{' '}
+            <code className="text-on-surface">--vk-avatar-online</code>,{' '}
+            <code className="text-on-surface">--vk-avatar-away</code>,{' '}
+            <code className="text-on-surface">--vk-avatar-offline</code>,{' '}
+            <code className="text-on-surface">--vk-avatar-verified</code> and{' '}
+            <code className="text-on-surface">--vk-avatar-on-verified</code>, on{' '}
+            <code className="text-on-surface">:root</code>, a section or one avatar.
+          </li>
+          <li>
+            Rounded squares take a corner from the shape scale for their size; Expressive shapes are
+            masks, so they scale with the avatar.
+          </li>
+          <li>
+            Initials are whole graphemes in the locale&apos;s casing, so Vietnamese diacritics stay
+            with their letters (&quot;Đỗ Ứng&quot; → &quot;ĐỨ&quot;).
+          </li>
+        </ul>
+      </section>
+    </>
+  );
+}

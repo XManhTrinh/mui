@@ -1,0 +1,28 @@
+'use client';
+
+import { Avatar, AvatarGroup } from '@vkieu/mui/vk';
+import { useState } from 'react';
+
+const PEOPLE = ['Nguyễn Văn An', 'Trần Thị Lan', 'Lê Minh', 'Phạm Bảo Châu', 'Đỗ Ứng', 'Hà Khoa'];
+
+/**
+ * Avatars overlap with a surface ring, and `max` turns the rest into "+N". The group is
+ * named once by `label`; here "+N" is a button that would open the full list.
+ */
+export function AvatarGroupExample() {
+  const [opened, setOpened] = useState(0);
+  return (
+    <div className="flex flex-col items-start gap-3">
+      <AvatarGroup
+        label="Nguyễn Văn An, Trần Thị Lan and 4 others"
+        max={3}
+        onOverflowPress={() => setOpened((count) => count + 1)}
+      >
+        {PEOPLE.map((name) => (
+          <Avatar key={name} name={name} decorative />
+        ))}
+      </AvatarGroup>
+      <p className="text-body-medium text-on-surface-variant">Opened the list {opened} times</p>
+    </div>
+  );
+}
