@@ -32,6 +32,20 @@ describe('searchPages', () => {
     }
   });
 
+  it('finds Select and Autocomplete by the words people use for them', () => {
+    for (const query of ['dropdown', 'picker']) {
+      const hrefs = searchPages(entries, query).map((entry) => entry.href);
+      expect(hrefs, query).toContain('/components/select');
+      expect(hrefs, query).toContain('/components/autocomplete');
+    }
+    for (const query of ['combobox', 'typeahead', 'multi-select']) {
+      expect(
+        searchPages(entries, query).map((entry) => entry.href),
+        query,
+      ).toContain('/components/autocomplete');
+    }
+  });
+
   it('ranks title matches before summary and keyword matches', () => {
     const results = searchPages(entries, 'text field');
     expect(results[0]?.href).toBe('/components/text-field');

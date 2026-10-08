@@ -2,6 +2,8 @@
 
 import {
   AssistChip,
+  Autocomplete,
+  AutocompleteItem,
   Button,
   ButtonGroup,
   Card,
@@ -19,6 +21,8 @@ import {
   MenuItem,
   Radio,
   RadioGroup,
+  Select,
+  SelectItem,
   Slider,
   SplitButton,
   Switch,
@@ -84,6 +88,10 @@ const ListItemAny = loose(ListItem);
 const AvatarAny = loose(Avatar);
 const PinInputAny = loose(PinInput);
 const PhoneFieldAny = loose(PhoneField);
+const SelectAny = loose(Select);
+const SelectItemAny = loose(SelectItem);
+const AutocompleteAny = loose(Autocomplete);
+const AutocompleteItemAny = loose(AutocompleteItem);
 const SkeletonAny = loose(Skeleton);
 const TabAny = loose(Tab);
 
@@ -197,6 +205,78 @@ export const PLAYGROUND_DESCRIPTORS: Record<string, PlaygroundDescriptor> = {
     surfacedProps: ['variant', 'disabled'],
     initialState: { variant: 'filled' },
     codeSlots: { label: '"Label"' },
+  },
+  select: {
+    component: 'Select',
+    render: (props) =>
+      createElement(
+        SelectAny,
+        {
+          ...props,
+          // Single and multiple values differ in shape, so a mode change starts afresh.
+          key: String(props.selectionMode),
+          label: 'Sort by',
+          errorMessage: 'Choose how to sort',
+        },
+        createElement(SelectItemAny, { key: 'newest' }, 'Newest first'),
+        createElement(SelectItemAny, { key: 'low' }, 'Price, low to high'),
+        createElement(SelectItemAny, { key: 'high' }, 'Price, high to low'),
+      ),
+    defaultProps: {
+      variant: 'filled',
+      selectionMode: 'single',
+      presentation: 'menu',
+      invalid: false,
+      disabled: false,
+      required: false,
+    },
+    surfacedProps: ['variant', 'selectionMode', 'presentation', 'invalid', 'disabled', 'required'],
+    initialState: { variant: 'filled' },
+    enumOptions: { selectionMode: ['single', 'multiple'], presentation: ['menu', 'sheet', 'auto'] },
+    importMembers: ['SelectItem'],
+    codeSlots: { label: '"Sort by"' },
+    codeChildren:
+      '<SelectItem key="newest">Newest first</SelectItem>\n  <SelectItem key="low">Price, low to high</SelectItem>\n  <SelectItem key="high">Price, high to low</SelectItem>',
+  },
+  autocomplete: {
+    component: 'Autocomplete',
+    render: (props) =>
+      createElement(
+        AutocompleteAny,
+        {
+          ...props,
+          // Single and multiple values differ in shape, so a mode change starts afresh.
+          key: String(props.selectionMode),
+          label: 'City',
+          errorMessage: 'Choose a city',
+        },
+        createElement(AutocompleteItemAny, { key: 'hn' }, 'Hà Nội'),
+        createElement(AutocompleteItemAny, { key: 'ldn' }, 'London'),
+        createElement(AutocompleteItemAny, { key: 'syd' }, 'Sydney'),
+        createElement(AutocompleteItemAny, { key: 'hou' }, 'Houston'),
+      ),
+    defaultProps: {
+      variant: 'filled',
+      selectionMode: 'single',
+      allowsCustomValue: false,
+      invalid: false,
+      disabled: false,
+      required: false,
+    },
+    surfacedProps: [
+      'variant',
+      'selectionMode',
+      'allowsCustomValue',
+      'invalid',
+      'disabled',
+      'required',
+    ],
+    initialState: { variant: 'filled' },
+    enumOptions: { selectionMode: ['single', 'multiple'] },
+    importMembers: ['AutocompleteItem'],
+    codeSlots: { label: '"City"' },
+    codeChildren:
+      '<AutocompleteItem key="hn">Hà Nội</AutocompleteItem>\n  <AutocompleteItem key="ldn">London</AutocompleteItem>\n  <AutocompleteItem key="syd">Sydney</AutocompleteItem>\n  <AutocompleteItem key="hou">Houston</AutocompleteItem>',
   },
   'phone-field': {
     component: 'PhoneField',

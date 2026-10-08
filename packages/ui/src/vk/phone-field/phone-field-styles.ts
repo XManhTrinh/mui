@@ -4,10 +4,9 @@ import { tv, type VariantProps } from '../../utils/tv';
  * PhoneField (`@vkieu/mui/vk`, not an M3 component; docs/plans/phone-field.md). The number
  * is the library's TextField; the country field beside it uses the same text field tokens
  * (56px, outline or filled container, `on-surface`, 2px `primary` when focused, `error`
- * when invalid, 38% / 12% when disabled). The picker's list is the library's M3 menu: its
- * panel colour (`surface-container-low`) and elevation, and its item styles from
- * `menuStyles` (44px items, `tertiary-container` for the chosen country, state layers and
- * the inset focus ring), so the two can't drift apart.
+ * when invalid, 38% / 12% when disabled). The picker's list is `Select` and
+ * `Autocomplete`'s option list, in the M3 menu's panel colour (`surface-container-low`) and
+ * elevation, so the three can't drift apart.
  */
 
 /** Variant definitions for {@link PhoneField}. */
@@ -45,12 +44,8 @@ export const phoneFieldStyles = tv({
       'focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-primary',
     ],
     searchIcon: 'pointer-events-none absolute ms-[12px] size-[24px] text-on-surface-variant',
-    list: 'min-h-0 flex-1 overflow-y-auto px-[4px] pb-[8px] outline-none',
-    heading: 'px-[12px] pt-[8px] pb-[4px] text-label-medium text-on-surface-variant',
-    divider: 'mx-[12px] my-[4px] h-px bg-outline-variant',
-    // The dialling code beside each country name, in the menu's trailing slot.
-    optionDial: 'tabular-nums [direction:ltr]',
-    empty: 'px-[16px] py-[16px] text-body-medium text-on-surface-variant',
+    // The shared option list (Select and Autocomplete's), inside the picker's own panel.
+    list: 'min-h-0 flex-1 px-[4px] pb-[8px]',
   },
   variants: {
     variant: {

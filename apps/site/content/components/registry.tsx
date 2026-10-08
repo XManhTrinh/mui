@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react';
+import { AutocompleteBody } from './autocomplete';
 import { AvatarBody } from './avatar';
 import { BadgeBody } from './badge';
 import { ButtonBody } from './button';
@@ -19,6 +20,7 @@ import { MenuBody } from './menu';
 import { NavigationBarBody } from './navigation-bar';
 import { NavigationRailBody } from './navigation-rail';
 import { PhoneFieldBody } from './phone-field';
+import { SelectBody } from './select';
 import { PickerDialogBody } from './picker-dialog';
 import { PinInputBody } from './pin-input';
 import { PrimitivesBody } from './primitives';
@@ -75,6 +77,8 @@ const BODIES: Record<string, ComponentType> = {
   'text-field': TextFieldBody,
   'pin-input': PinInputBody,
   'phone-field': PhoneFieldBody,
+  select: SelectBody,
+  autocomplete: AutocompleteBody,
   checkbox: CheckboxBody,
   'radio-group': RadioGroupBody,
   switch: SwitchBody,
@@ -134,6 +138,33 @@ export const COMPONENT_SLOTS: Record<string, string[]> = {
   ],
   PinInput: ['root', 'label', 'boxes', 'box', 'separator', 'supportingText', 'errorText'],
   PhoneField: ['root', 'country', 'input', 'picker', 'supportingText', 'errorText'],
+  Select: [
+    'root',
+    'container',
+    'label',
+    'field',
+    'value',
+    'leadingIcon',
+    'trailingIcon',
+    'list',
+    'item',
+    'supportingText',
+    'errorText',
+  ],
+  Autocomplete: [
+    'root',
+    'container',
+    'label',
+    'field',
+    'input',
+    'chip',
+    'leadingIcon',
+    'trailingIcon',
+    'list',
+    'item',
+    'supportingText',
+    'errorText',
+  ],
   Checkbox: ['root', 'control', 'label', 'box'],
   RadioGroup: ['root', 'label', 'options', 'supportingText', 'errorText'],
   Radio: ['root', 'control', 'label', 'ring', 'dot'],

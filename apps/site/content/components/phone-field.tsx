@@ -99,10 +99,10 @@ export async function PhoneFieldBody() {
             <code className="text-on-surface">error</code> when the number is invalid.
           </li>
           <li>
-            The list is a <code className="text-on-surface">surface-container</code> panel at
-            elevation 2, with the chosen country in{' '}
-            <code className="text-on-surface">secondary-container</code> and state layers for hover
-            and keyboard focus.
+            The list is the one Select and Autocomplete use: the M3 menu&apos;s{' '}
+            <code className="text-on-surface">surface-container-low</code> panel at elevation 2,
+            with the chosen country in <code className="text-on-surface">tertiary-container</code>{' '}
+            with a check, and state layers for hover and keyboard focus.
           </li>
         </ul>
       </section>

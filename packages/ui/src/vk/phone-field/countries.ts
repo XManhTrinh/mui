@@ -1,3 +1,4 @@
+import { normalizeSearch } from '../../utils/search';
 import { dialCode, PHONE_COUNTRIES, type PhoneCountry } from './phone';
 
 export interface CountryOption {
@@ -7,10 +8,6 @@ export interface CountryOption {
   /** `+44` */
   dial: string;
 }
-
-/** Lower case without accents, so "viet" finds "Việt Nam" and "cote" "Côte d'Ivoire". */
-export const normalizeSearch = (text: string): string =>
-  text.normalize('NFD').replace(/\p{M}/gu, '').replace(/đ/gi, 'd').toLowerCase().trim();
 
 /**
  * Every country with its name in `locale` (from `Intl.DisplayNames`, so no names ship with

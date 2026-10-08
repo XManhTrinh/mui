@@ -34,7 +34,14 @@ export function Playground({ slug, componentName, props }: PlaygroundProps) {
 
   const controls = useMemo(
     () =>
-      descriptor ? inferControls(props, descriptor.surfacedProps, descriptor.enumOptions) : [],
+      descriptor
+        ? inferControls(
+            props,
+            descriptor.surfacedProps,
+            descriptor.enumOptions,
+            descriptor.defaultProps,
+          )
+        : [],
     [descriptor, props],
   );
   const propDefaults = useMemo(() => propDefaultsFrom(props), [props]);

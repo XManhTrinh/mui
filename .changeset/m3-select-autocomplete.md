@@ -1,0 +1,5 @@
+---
+'@vkieu/mui': minor
+---
+
+Add `Select` and `Autocomplete`, M3's exposed dropdown menus (Compose's `ExposedDropdownMenuBox`, read-only and editable). Both have the Text field's look (filled or outlined, floating label, supporting text, errors, a leading icon and an arrow that turns over while open) and the Menu's list (sections, descriptions, icons, trailing text, a check on chosen options). Single or multiple selection with `maxSelections`; `Select` lists several choices in the field and can open as a bottom sheet (`presentation="sheet"` or `"auto"` for phones), and `Autocomplete` shows them as input chips. `Autocomplete` filters ignoring case and accents (`filter` replaces it), loads options from a server with `items`, `onInputChange` and `loading`, and keeps free text with `allowsCustomValue`. Forms get `name` (a hidden native select for `Select`) and validation as in Text field. Also exports `SelectItem`, `SelectSection`, `AutocompleteItem`, `AutocompleteSection`, the `SelectKey` and `AutocompleteKey` types, and `matchesSearch` / `normalizeSearch`. `PhoneField`'s country list now uses the same list.

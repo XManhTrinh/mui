@@ -18,25 +18,23 @@ import {
   useComboBox,
   useFocusRing,
   useHover,
-  useListBox,
-  useListBoxSection,
   useLocale,
   useObjectRef,
-  useOption,
   usePopover,
 } from 'react-aria';
 import {
-  Item,
-  Section,
   useComboBoxState,
   useOverlayTriggerState,
-  type ComboBoxState,
-  type Node,
+  type Key,
   type OverlayTriggerState,
 } from 'react-stately';
 import { useControlledState } from 'react-stately/useControlledState';
+import {
+  AutocompleteItem,
+  AutocompleteSection,
+  OptionList,
+} from '../../components/select/option-list';
 import { TextField } from '../../components/text-field/TextField';
-import { menuStyles } from '../../components/menu/menu-styles';
 import { BottomSheet } from '../../components/sheet/BottomSheet';
 import { Overlay } from '../../primitives/Overlay';
 import { usePresence } from '../../primitives/use-presence';
@@ -491,7 +489,7 @@ interface CountrySection {
 }
 
 /** Item keys are `<section>:<country>`, since priority countries are also in the full list. */
-const countryFromKey = (key: string | number) => String(key).split(':')[1] as PhoneCountry;
+const countryFromKey = (key: Key) => String(key).split(':')[1] as PhoneCountry;
 
 /**
  * The search field and the country list, as a combobox: the search keeps focus while the
@@ -521,17 +519,25 @@ function CountryList({
   const state = useComboBoxState<CountrySection>({
     items: sections,
     children: (section) => (
-      <Section
+      <AutocompleteSection
         key={section.key}
-        items={section.options}
         aria-label={section.key === 'priority' ? labels.suggested : labels.allCountries}
       >
-        {(option) => (
-          <Item key={`${section.key}:${option.country}`} textValue={option.name}>
+        {section.options.map((option) => (
+          <AutocompleteItem
+            key={`${section.key}:${option.country}`}
+            textValue={option.name}
+            leadingIcon={
+              renderFlag ? (
+                <span className={styles.flag()}>{renderFlag(option.country)}</span>
+              ) : undefined
+            }
+            trailing={<span className={styles.dial()}>{dialCode(option.country)}</span>}
+          >
             {option.name}
-          </Item>
-        )}
-      </Section>
+          </AutocompleteItem>
+        ))}
+      </AutocompleteSection>
     ),
     inputValue: query,
     onInputChange: setQuery,
@@ -572,7 +578,6 @@ function CountryList({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- run on mount only.
   }, []);
 
-  const isEmpty = sections.every((section) => section.options.length === 0);
   return (
     <div ref={wrapperRef} className="flex min-h-0 flex-1 flex-col">
       <div className={styles.searchRow()}>
@@ -586,137 +591,15 @@ function CountryList({
           />
         </div>
       </div>
-      {isEmpty ? (
-        <p role="status" className={styles.empty()}>
-          {labels.noResults}
-        </p>
-      ) : null}
-      <CountryListBox
+      <OptionList
         listBoxProps={listBoxProps}
-        listBoxRef={listBoxRef}
         state={state}
-        country={country}
-        renderFlag={renderFlag}
-        styles={styles}
-        hidden={isEmpty}
+        listBoxRef={listBoxRef}
+        emptyLabel={labels.noResults}
+        isChosen={(key) => countryFromKey(key) === country}
+        embedded
+        classNames={{ list: styles.list() }}
       />
     </div>
-  );
-}
-
-function CountryListBox({
-  listBoxProps,
-  listBoxRef,
-  state,
-  country,
-  renderFlag,
-  styles,
-  hidden,
-}: {
-  listBoxProps: ReturnType<typeof useComboBox>['listBoxProps'];
-  listBoxRef: RefObject<HTMLUListElement | null>;
-  state: ComboBoxState<CountrySection>;
-  country: PhoneCountry | undefined;
-  renderFlag: ((country: PhoneCountry) => ReactNode) | undefined;
-  styles: Styles;
-  hidden: boolean;
-}) {
-  const { listBoxProps: props } = useListBox(listBoxProps, state, listBoxRef);
-  const sections = [...state.collection];
-  return (
-    <ul {...props} ref={listBoxRef} hidden={hidden} className={styles.list()}>
-      {sections.map((section, index) => (
-        <CountrySectionGroup
-          key={section.key}
-          section={section}
-          state={state}
-          country={country}
-          renderFlag={renderFlag}
-          styles={styles}
-          divided={index > 0}
-        />
-      ))}
-    </ul>
-  );
-}
-
-function CountrySectionGroup({
-  section,
-  state,
-  country,
-  renderFlag,
-  styles,
-  divided,
-}: {
-  section: Node<CountrySection>;
-  state: ComboBoxState<CountrySection>;
-  country: PhoneCountry | undefined;
-  renderFlag: ((country: PhoneCountry) => ReactNode) | undefined;
-  styles: Styles;
-  divided: boolean;
-}) {
-  const { itemProps, groupProps } = useListBoxSection({
-    'aria-label': section['aria-label'],
-  });
-  return (
-    <li {...itemProps}>
-      {divided ? <div role="presentation" className={styles.divider()} /> : null}
-      <ul {...groupProps}>
-        {[...state.collection.getChildren!(section.key)].map((item) => (
-          <CountryItem
-            key={item.key}
-            item={item}
-            state={state}
-            isChosen={countryFromKey(item.key) === country}
-            renderFlag={renderFlag}
-            styles={styles}
-          />
-        ))}
-      </ul>
-    </li>
-  );
-}
-
-function CountryItem({
-  item,
-  state,
-  isChosen,
-  renderFlag,
-  styles,
-}: {
-  item: Node<CountrySection>;
-  state: ComboBoxState<CountrySection>;
-  isChosen: boolean;
-  renderFlag: ((country: PhoneCountry) => ReactNode) | undefined;
-  styles: Styles;
-}) {
-  const ref = useRef<HTMLLIElement>(null);
-  const { optionProps, isFocused } = useOption({ key: item.key }, state, ref);
-  const { hoverProps, isHovered } = useHover({});
-  const country = countryFromKey(item.key);
-  // The library's M3 menu item: same height, colours, selected shape and focus ring.
-  const menu = menuStyles({ variant: 'standard' });
-  return (
-    <li
-      {...mergeProps(optionProps, hoverProps)}
-      ref={ref}
-      aria-selected={isChosen}
-      className={menu.item()}
-      data-focus-visible={isFocused || undefined}
-      data-hovered={isHovered || undefined}
-      data-selected={isChosen || undefined}
-    >
-      {renderFlag ? (
-        <span aria-hidden="true" className={menu.icon({ class: styles.flag() })}>
-          {renderFlag(country)}
-        </span>
-      ) : null}
-      <span className={menu.text()}>
-        <span className="truncate">{item.rendered}</span>
-      </span>
-      <span aria-hidden="true" className={menu.trailing({ class: styles.optionDial() })}>
-        {dialCode(country)}
-      </span>
-    </li>
   );
 }

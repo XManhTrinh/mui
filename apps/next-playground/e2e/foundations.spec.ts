@@ -277,3 +277,26 @@ test.describe('PhoneField', () => {
     expect(errors).toEqual([]);
   });
 });
+
+test.describe('Select and Autocomplete', () => {
+  test('server-render their chosen values before hydration', async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    await page.goto('/select');
+    await expect(page.getByRole('button', { name: /Sort by/ })).toContainText('Price, low to high');
+    await expect(page.getByRole('combobox', { name: 'City' })).toHaveValue('London');
+    await context.close();
+  });
+
+  test('hydrate without errors and open their menus', async ({ page }) => {
+    const errors = collectConsoleErrors(page);
+    await page.goto('/select');
+    await page.getByRole('button', { name: /Sort by/ }).click();
+    await expect(page.getByRole('listbox')).toBeVisible();
+    await page.getByRole('option', { name: 'Newest first' }).click();
+    await expect(page.getByRole('button', { name: /Sort by/ })).toContainText('Newest first');
+    await page.getByRole('combobox', { name: 'City' }).fill('syd');
+    await expect(page.getByRole('option', { name: 'Sydney' })).toBeVisible();
+    expect(errors).toEqual([]);
+  });
+});

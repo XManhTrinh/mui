@@ -231,6 +231,30 @@ export {
   type TextFieldProps,
 } from './components/text-field/TextField';
 export {
+  Select,
+  type SelectClassNames,
+  type SelectKey,
+  type SelectLabels,
+  type SelectPresentation,
+  type SelectProps,
+} from './components/select/Select';
+export {
+  AutocompleteItem,
+  AutocompleteSection,
+  SelectItem,
+  SelectSection,
+  type OptionItemProps,
+  type OptionSectionProps,
+} from './components/select/option-list';
+export {
+  Autocomplete,
+  type AutocompleteClassNames,
+  type AutocompleteKey,
+  type AutocompleteLabels,
+  type AutocompleteProps,
+} from './components/autocomplete/Autocomplete';
+export { matchesSearch, normalizeSearch } from './utils/search';
+export {
   textFieldStyles,
   type TextFieldStyleProps,
   type TextFieldVariant,
