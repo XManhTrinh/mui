@@ -2,7 +2,7 @@ import { Button, Card } from '@vkieu/mui';
 import { CodeBlock } from '@vkieu/mui/vk';
 import type { ReactElement } from 'react';
 import { ComponentGallery } from '../components/gallery';
-import { Showcase } from '../components/home/showcase';
+import { ExpressiveShowcase } from '../components/home/expressive-showcase';
 import {
   AccessibilityIcon,
   CodeIcon,
@@ -125,37 +125,59 @@ export default async function HomePage() {
   );
 
   return (
-    <div className="mx-auto flex max-w-6xl flex-col gap-20">
-      {/* Hero */}
-      <section className="relative overflow-hidden rounded-corner-extra-large bg-gradient-to-b from-primary-container to-surface px-6 py-16 text-center medium:px-12 medium:py-24">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -end-16 -top-16 size-64 rounded-full bg-primary/10 motion-safe:animate-pulse"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -bottom-20 -start-10 size-56 rounded-full bg-tertiary/10"
-        />
-        <div className="relative mx-auto flex max-w-3xl flex-col items-center gap-6">
-          <span className="rounded-corner-full bg-primary-container px-4 py-1 text-label-large text-on-primary-container">
-            M3 Expressive — May 2025
-          </span>
-          <h1 className="text-display-small text-on-surface medium:text-display-large">
-            Material Design 3 for React
-          </h1>
-          <p className="max-w-2xl text-body-large text-on-surface-variant">
-            Tailwind v4, zero runtime config, full dark mode, RTL out of the box.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <Button variant="filled" size="lg" href="/getting-started">
+    <div className="mx-auto flex w-full max-w-[88rem] flex-col gap-20">
+      {/* Hero — 2-card split, slightly wider than the max-w-6xl content below */}
+      <section
+        aria-label="Hero"
+        className="grid min-h-[380px] grid-cols-1 gap-4 medium:grid-cols-2"
+      >
+        {/* Left: text card */}
+        <Card
+          variant="filled"
+          className="flex flex-col justify-center gap-8 p-8 medium:p-12"
+        >
+          <div className="flex flex-col gap-4">
+            <span className="w-fit rounded-corner-full bg-primary-container px-4 py-1 text-label-large text-on-primary-container">
+              M3 Expressive — May 2025
+            </span>
+            <h1 className="text-display-small text-on-surface medium:text-display-medium">
+              Material Design 3 for React
+            </h1>
+            <p className="max-w-sm text-body-large text-on-surface-variant">
+              Material Design 3 is Google&apos;s open-source design system for building
+              beautiful, usable products.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Button variant="filled" size="md" href="/getting-started">
               Get started
             </Button>
-            <Button variant="outlined" size="lg" href="https://github.com/XManhTrinh/mui">
+            <Button variant="outlined" size="md" href="https://github.com/XManhTrinh/mui">
               GitHub
             </Button>
           </div>
-        </div>
+        </Card>
+
+        {/* Right: video card — Card already clips to rounded corners */}
+        <Card variant="outlined" className="min-h-[280px] p-0">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="h-full w-full object-cover"
+            aria-hidden="true"
+          >
+            <source
+              src="https://storage.googleapis.com/material-io-design/m3/assets/16x9_Homepage_Hero_050825.mp4"
+              type="video/mp4"
+            />
+          </video>
+        </Card>
       </section>
+
+      {/* Everything below is constrained to max-w-6xl */}
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-20">
 
       {/* Stat cards */}
       <section aria-label="At a glance" className="grid grid-cols-2 gap-4 medium:grid-cols-4">
@@ -167,19 +189,8 @@ export default async function HomePage() {
         ))}
       </section>
 
-      {/* Live showcase */}
-      <section className="flex flex-col gap-6">
-        <div className="flex flex-col gap-2">
-          <h2 className="text-headline-medium text-on-surface">See it in action</h2>
-          <p className="max-w-2xl text-body-large text-on-surface-variant">
-            Real components, themed by semantic tokens. Switch themes and modes anywhere in the
-            docs.
-          </p>
-        </div>
-        <Card variant="outlined" className="p-4 medium:p-6">
-          <Showcase />
-        </Card>
-      </section>
+      {/* Expressive components showcase */}
+      <ExpressiveShowcase />
 
       {/* Built right — feature grid */}
       <section className="flex flex-col gap-6">
@@ -256,6 +267,8 @@ export default async function HomePage() {
         </div>
         <ComponentGallery groupHeadingTag="h3" />
       </section>
+
+      </div>{/* end max-w-6xl */}
     </div>
   );
 }

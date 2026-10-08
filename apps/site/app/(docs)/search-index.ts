@@ -5,8 +5,17 @@ export interface SearchEntry {
   href: string;
 }
 
-/** The guide pages, with the summaries the search shows. */
+/**
+ * The guide pages plus the components gallery index, with the summaries the search shows.
+ * (Individual component pages are added to the index from `COMPONENT_PAGES` in the root
+ * layout; this list is the non-component destinations.)
+ */
 export const GUIDE_ENTRIES: SearchEntry[] = [
+  {
+    title: 'Components',
+    summary: 'Browse every component by category, each with live examples and a full props table.',
+    href: '/components',
+  },
   {
     title: 'Getting started',
     summary: 'Install the library with or without Tailwind, load the font, add icons and routing.',

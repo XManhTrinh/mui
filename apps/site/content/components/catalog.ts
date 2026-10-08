@@ -91,6 +91,11 @@ export interface ComponentMeta {
   whenNotToUse?: string;
   /** Marks a component whose source/story flags it as preview. */
   stability?: 'preview';
+  /**
+   * Marks one of the M3 Expressive (May 2025) components — new or substantially updated with
+   * expressive shape, motion and emphasis. Drives the "Expressive" chip in the gallery.
+   */
+  expressive?: boolean;
 }
 
 /** Every component's metadata, in display order. */
@@ -103,6 +108,7 @@ export const COMPONENT_META: ComponentMeta[] = [
     summary: 'Five variants and five sizes for text actions, with a toggle form and a press morph.',
     propsComponents: ['Button'],
     playground: 'full',
+    expressive: true,
     specs: {
       sizes: ['xs', 'sm', 'md', 'lg', 'xl'],
       shape: 'rounded-corner-full',
@@ -120,6 +126,7 @@ export const COMPONENT_META: ComponentMeta[] = [
     summary: 'A compact icon-only action; requires an accessible name.',
     propsComponents: ['IconButton'],
     playground: 'full',
+    expressive: true,
     specs: {
       sizes: ['xs', 'sm', 'md', 'lg', 'xl'],
       shape: 'rounded-corner-full',
@@ -136,6 +143,7 @@ export const COMPONENT_META: ComponentMeta[] = [
     summary: 'Groups buttons as a unit; the connected variant replaces segmented buttons.',
     propsComponents: ['ButtonGroup'],
     playground: 'full',
+    expressive: true,
     specs: {
       sizes: ['xs', 'sm', 'md', 'lg', 'xl'],
       variants: ['standard', 'connected'],
@@ -152,6 +160,7 @@ export const COMPONENT_META: ComponentMeta[] = [
     summary: 'A primary action beside a trailing button that opens a menu of related actions.',
     propsComponents: ['SplitButton'],
     playground: 'full',
+    expressive: true,
     specs: {
       sizes: ['xs', 'sm', 'md', 'lg', 'xl'],
       variants: ['filled', 'elevated', 'tonal', 'outlined'],
@@ -167,6 +176,7 @@ export const COMPONENT_META: ComponentMeta[] = [
     summary: "A screen's single most important action, as an icon or an extended label.",
     propsComponents: ['Fab', 'ExtendedFab'],
     playground: 'full',
+    expressive: true,
     specs: {
       sizes: ['default', 'medium', 'large'],
       shape: 'rounded-corner-large',
@@ -183,6 +193,7 @@ export const COMPONENT_META: ComponentMeta[] = [
     summary: 'A FAB that opens a stack of related actions above it.',
     propsComponents: ['FabMenu', 'FabMenuItem'],
     playground: 'full',
+    expressive: true,
     specs: {
       shape: 'rounded-corner-large',
       elevation: 'level3',
@@ -250,6 +261,7 @@ export const COMPONENT_META: ComponentMeta[] = [
     summary: 'Chooses a value or a range on a continuous or stepped scale, in five sizes.',
     propsComponents: ['Slider', 'RangeSlider'],
     playground: 'full',
+    expressive: true,
     specs: {
       sizes: ['xs', 'sm', 'md', 'lg', 'xl'],
     },
@@ -377,6 +389,7 @@ export const COMPONENT_META: ComponentMeta[] = [
       'A scrollable row of items that resize along keylines: multi-browse, uncontained or hero.',
     propsComponents: ['Carousel'],
     playground: 'showcase',
+    expressive: true,
     specs: {
       variants: ['multi-browse', 'uncontained', 'hero'],
       shape: 'rounded-corner-extra-large',
@@ -435,6 +448,7 @@ export const COMPONENT_META: ComponentMeta[] = [
       'Top-level destinations along the start edge, collapsed or expanded, in medium windows.',
     propsComponents: ['NavigationRail', 'NavigationRailItem'],
     playground: 'showcase',
+    expressive: true,
     related: ['navigation-bar', 'tabs'],
     whenNotToUse: 'In compact windows use a Navigation bar; for in-page sections use Tabs.',
   },
@@ -446,6 +460,7 @@ export const COMPONENT_META: ComponentMeta[] = [
     summary: '3–5 destinations along the bottom of compact and medium windows, stacked or inline.',
     propsComponents: ['NavigationBar', 'NavigationBarItem'],
     playground: 'showcase',
+    expressive: true,
     related: ['navigation-rail', 'tabs'],
     whenNotToUse: 'For more than five destinations use a Navigation rail or drawer.',
   },
@@ -502,6 +517,7 @@ export const COMPONENT_META: ComponentMeta[] = [
       'Docked and floating toolbars of related actions, with an optional FAB and scroll collapse.',
     propsComponents: ['DockedToolbar', 'FloatingToolbar', 'ToolbarFab'],
     playground: 'showcase',
+    expressive: true,
     specs: {
       variants: ['docked', 'floating'],
     },
@@ -528,6 +544,7 @@ export const COMPONENT_META: ComponentMeta[] = [
     summary: 'Linear and circular indicators, determinate or indeterminate, flat or wavy.',
     propsComponents: ['LinearProgressIndicator', 'CircularProgressIndicator'],
     playground: 'full',
+    expressive: true,
     specs: {
       variants: ['linear', 'circular'],
     },
@@ -542,6 +559,7 @@ export const COMPONENT_META: ComponentMeta[] = [
     summary: 'An Expressive shape that morphs while it rotates; replaces the spinning circle.',
     propsComponents: ['LoadingIndicator'],
     playground: 'full',
+    expressive: true,
     specs: {
       variants: ['default', 'contained'],
       shape: 'rounded-corner-full',

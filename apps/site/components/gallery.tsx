@@ -46,6 +46,7 @@ export function ComponentGallery({ groupHeadingTag: GroupHeading = 'h2' }: Compo
                   href={`/components/${page.slug}`}
                   title={page.title}
                   summary={page.summary}
+                  expressive={page.expressive}
                 />
               </li>
             ))}
@@ -60,10 +61,12 @@ function GalleryCard({
   href,
   title,
   summary,
+  expressive,
 }: {
   href: string;
   title: string;
   summary: string;
+  expressive?: boolean;
 }): ReactElement {
   return (
     <Link
@@ -71,7 +74,14 @@ function GalleryCard({
       className="state-layer focus-ring group/card flex h-full flex-col gap-2 rounded-corner-large border border-outline-variant bg-surface-container-low p-5 transition-[box-shadow,border-color] duration-200 hover:border-outline hover:shadow-elevation-2 motion-reduce:transition-none"
     >
       <div className="flex items-center justify-between gap-2">
-        <span className="text-title-medium text-on-surface">{title}</span>
+        <div className="flex min-w-0 items-center gap-2">
+          <span className="text-title-medium text-on-surface">{title}</span>
+          {expressive ? (
+            <span className="shrink-0 rounded-corner-full bg-tertiary-container px-2 py-0.5 text-label-small text-on-tertiary-container">
+              Expressive
+            </span>
+          ) : null}
+        </div>
         <span
           aria-hidden="true"
           className="inline-flex size-5 shrink-0 text-on-surface-variant transition-transform duration-200 [&>svg]:size-full group-hover/card:translate-x-0.5 rtl:group-hover/card:-translate-x-0.5 motion-reduce:transition-none"
