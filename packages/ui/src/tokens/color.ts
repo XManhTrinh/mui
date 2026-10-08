@@ -64,9 +64,40 @@ export type ColorRole = (typeof COLOR_ROLES)[number];
 export const SCHEME_VARIANTS = ['tonal-spot', 'neutral', 'vibrant', 'expressive'] as const;
 export type SchemeVariant = (typeof SCHEME_VARIANTS)[number];
 
+/**
+ * The six tonal palettes an M3 scheme is built from: the "core colours" of Material Theme
+ * Builder. Every colour role takes its tone from one of them.
+ */
+export const PALETTE_NAMES = [
+  'primary',
+  'secondary',
+  'tertiary',
+  'error',
+  'neutral',
+  'neutralVariant',
+] as const;
+export type PaletteName = (typeof PALETTE_NAMES)[number];
+
+/**
+ * Where a palette comes from: a scheme variant (that palette from that variant of the same
+ * seed) or a hex colour (a palette built from its hue and chroma, as Material Theme Builder
+ * does for a core colour).
+ */
+export type PaletteSource = SchemeVariant | `#${string}`;
+
+/** Per-palette sources; any palette left out comes from the theme's own `variant`. */
+export type ThemePalettes = Partial<Record<PaletteName, PaletteSource>>;
+
 export interface ThemeSeed {
   seed: string;
   variant: SchemeVariant;
+  /**
+   * Takes some palettes from elsewhere, e.g. `{ neutral: 'tonal-spot', neutralVariant:
+   * 'tonal-spot' }` for vivid accents on calm surfaces, or `{ tertiary: '#00A07A' }` for a
+   * brand's own tertiary colour. Roles still take their tones from the M3 spec, so contrast
+   * is unchanged.
+   */
+  palettes?: ThemePalettes;
 }
 
 export const BUILT_IN_THEMES = {

@@ -1,4 +1,5 @@
 import { CodeBlock } from '@vkieu/mui/vk';
+import { PalettesDemo } from '../../../examples/theming/palettes-demo';
 import { ThemeSwitcherDemo } from '../../../examples/theming/theme-switcher-demo';
 import { readExampleSource } from '../../../lib/example-source';
 import { highlightSource } from '../../../lib/highlight';
@@ -44,7 +45,30 @@ const CLI_SNIPPET = `# Generate a static CSS theme (light, dark and system for e
 npx @vkieu/mui theme --seed "#0B57D0" --name acme --out acme-theme.css
 
 # Options: --variant tonal-spot|neutral|vibrant|expressive (default tonal-spot),
+#          --palette <name>=<source> (repeatable, see Mixing palettes),
 #          --contrast standard,medium,high (default all), --out <file> (else stdout).`;
+
+const PALETTES_SNIPPET = `import { createTheme } from '@vkieu/mui';
+
+// Vivid accents on calm, nearly neutral surfaces.
+const blue = createTheme({
+  name: 'blue',
+  seed: '#1877F2',
+  variant: 'vibrant',
+  palettes: { neutral: 'tonal-spot', neutralVariant: 'tonal-spot' },
+});
+
+// A brand's own tertiary colour, from a hex.
+const lotus = createTheme({
+  name: 'lotus',
+  seed: '#D63A7A',
+  variant: 'vibrant',
+  palettes: { tertiary: '#00A07A' },
+});
+
+// The CLI takes the same option:
+// npx @vkieu/mui theme --name blue --seed "#1877F2" --variant vibrant \\
+//   --palette neutral=tonal-spot --palette neutral-variant=tonal-spot`;
 
 const TOKENS_SNIPPET = `/* Override tokens in CSS: globally on :root or per theme on [data-theme="…"]. */
 :root {
@@ -67,6 +91,7 @@ import { DEFAULT_THEME_STATE, ThemeScript } from '@vkieu/mui';
 
 export default async function ThemingPage() {
   const demoSource = await readExampleSource('theming/theme-switcher-demo.tsx');
+  const palettesDemoSource = await readExampleSource('theming/palettes-demo.tsx');
   const [
     demoHtml,
     useThemeHtml,
@@ -74,6 +99,8 @@ export default async function ThemingPage() {
     scopeHtml,
     createThemeHtml,
     cliHtml,
+    palettesHtml,
+    palettesDemoHtml,
     tokensHtml,
     scriptHtml,
   ] = await Promise.all([
@@ -83,6 +110,8 @@ export default async function ThemingPage() {
     highlightSource(SCOPE_SNIPPET, 'tsx'),
     highlightSource(CREATE_THEME_SNIPPET, 'tsx'),
     highlightSource(CLI_SNIPPET, 'bash'),
+    highlightSource(PALETTES_SNIPPET, 'tsx'),
+    highlightSource(palettesDemoSource, 'tsx'),
     highlightSource(TOKENS_SNIPPET, 'css'),
     highlightSource(SCRIPT_SNIPPET, 'tsx'),
   ]);
@@ -221,6 +250,37 @@ export default async function ThemingPage() {
           <code className="text-on-surface">theme</code>.
         </p>
         <CodeBlock code={CLI_SNIPPET} html={cliHtml} lang="bash" title="Terminal" />
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="text-headline-small text-on-surface">Mixing palettes</h2>
+        <p className="text-body-large text-on-surface-variant">
+          An M3 scheme is built from six tonal palettes, the core colours of Material Theme Builder:{' '}
+          <code className="text-on-surface">primary</code>,{' '}
+          <code className="text-on-surface">secondary</code>,{' '}
+          <code className="text-on-surface">tertiary</code>,{' '}
+          <code className="text-on-surface">error</code>,{' '}
+          <code className="text-on-surface">neutral</code> and{' '}
+          <code className="text-on-surface">neutralVariant</code>. The{' '}
+          <code className="text-on-surface">palettes</code> option takes any of them from another
+          variant of the same seed, or from a hex colour. Every role still takes its tone from the
+          M3 spec for the theme&apos;s own variant, so text keeps its contrast.
+        </p>
+        <p className="text-body-large text-on-surface-variant">
+          A common use is vivid accents on calm surfaces:{' '}
+          <code className="text-on-surface">vibrant</code> tints the surfaces too, which can be
+          strong in dark mode, so take the neutral palettes from{' '}
+          <code className="text-on-surface">tonal-spot</code>. A hex neutral keeps its own chroma,
+          so pick a greyish one; a variant source is the easy way to calm surfaces.
+        </p>
+        <PalettesDemo />
+        <CodeBlock code={PALETTES_SNIPPET} html={palettesHtml} lang="tsx" title="palettes" />
+        <CodeBlock
+          code={palettesDemoSource}
+          html={palettesDemoHtml}
+          lang="tsx"
+          title="palettes-demo.tsx"
+        />
       </section>
 
       <section className="flex flex-col gap-4">

@@ -1,4 +1,9 @@
-import { CONTRAST_LEVEL_NAMES, type ContrastLevel, type SchemeVariant } from '../tokens/color';
+import {
+  CONTRAST_LEVEL_NAMES,
+  type ContrastLevel,
+  type SchemeVariant,
+  type ThemePalettes,
+} from '../tokens/color';
 import { assertThemeName, generateThemeCss } from './css';
 
 export interface CreateThemeOptions {
@@ -8,6 +13,12 @@ export interface CreateThemeOptions {
   seed: string;
   /** Colour scheme variant. Defaults to `"tonal-spot"`. */
   variant?: SchemeVariant;
+  /**
+   * Takes some of the scheme's palettes from elsewhere: another variant of the same seed, or
+   * a hex colour. `{ neutral: 'tonal-spot', neutralVariant: 'tonal-spot' }` gives vivid
+   * accents on calm surfaces; `{ tertiary: '#00A07A' }` sets a brand's own tertiary colour.
+   */
+  palettes?: ThemePalettes;
   /** Contrast level(s) to generate. Defaults to all three. */
   contrast?: ContrastLevel | readonly ContrastLevel[];
 }
@@ -17,6 +28,7 @@ export interface ThemeDefinition {
   name: string;
   seed: string;
   variant: SchemeVariant;
+  palettes: ThemePalettes;
   contrast: readonly ContrastLevel[];
   /** Light, dark and system-mode CSS for each contrast level. */
   css: string;
@@ -30,11 +42,20 @@ export interface ThemeDefinition {
  * @example
  * const acme = createTheme({ name: 'acme', seed: '#0B57D0' });
  * <ThemeProvider themes={['baseline', acme]} defaultTheme="acme">…</ThemeProvider>
+ *
+ * // Vivid accents on calm, nearly neutral surfaces.
+ * createTheme({
+ *   name: 'blue',
+ *   seed: '#1877F2',
+ *   variant: 'vibrant',
+ *   palettes: { neutral: 'tonal-spot', neutralVariant: 'tonal-spot' },
+ * });
  */
 export function createTheme({
   name,
   seed,
   variant = 'tonal-spot',
+  palettes = {},
   contrast = CONTRAST_LEVEL_NAMES,
 }: CreateThemeOptions): ThemeDefinition {
   assertThemeName(name);
@@ -44,7 +65,8 @@ export function createTheme({
     name,
     seed,
     variant,
+    palettes,
     contrast: contrastLevels,
-    css: generateThemeCss(name, { seed, variant }, { contrastLevels }),
+    css: generateThemeCss(name, { seed, variant, palettes }, { contrastLevels }),
   };
 }

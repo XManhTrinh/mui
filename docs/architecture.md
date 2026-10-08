@@ -171,6 +171,7 @@ Each: light + dark × 3 contrast levels, generated at **build time** into static
 - `<ThemeScope theme mode contrast motion>` — theme a subtree; nestable. It writes all four attributes, inheriting the ones you don't set, and adds `text-on-surface`, which `className` can override. `useThemeScope()` reads the effective state.
 - Attribute fallbacks: a missing `data-contrast` behaves as `standard`, a missing `data-mode` as `light`, and a root without `data-theme` gets `baseline`.
 - `createTheme({ name, seed, variant, contrast })` — runtime custom theme. `contrast` takes one level or a list (default: all three).
+- `palettes` (on `createTheme`, `ThemeSeed` and the CLI's repeatable `--palette <name>=<source>`) takes any of the scheme's six palettes (`primary`, `secondary`, `tertiary`, `error`, `neutral`, `neutralVariant`) from another variant of the same seed or from a hex colour, as Material Theme Builder's core colours do (Mike, 2026-10-08; docs/plans/create-theme-palettes.md). Roles still take their tones from the theme's own variant, so contrast holds. Without `palettes`, output is byte-for-byte unchanged. The common case is vivid accents on calm surfaces: `variant: 'vibrant'` with `palettes: { neutral: 'tonal-spot', neutralVariant: 'tonal-spot' }`.
 - CLI: `npx @vkieu/mui theme --seed <hex> --name <name> [--variant] [--contrast] [--out]` → static CSS (no flash). The bin is `vkieu-mui`.
 
 ## 6. Motion system (M3 Expressive)

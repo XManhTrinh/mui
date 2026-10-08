@@ -2,11 +2,14 @@
 import { writeFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
 import { createTheme } from './theme/create-theme';
+import { parsePalettes, toKebabCase } from './theme/parse-palettes';
 import {
   CONTRAST_LEVEL_NAMES,
+  PALETTE_NAMES,
   SCHEME_VARIANTS,
   type ContrastLevel,
   type SchemeVariant,
+  type ThemePalettes,
 } from './tokens/color';
 
 const USAGE = `Usage: npx @vkieu/mui theme --seed <hex> --name <name> [options]
@@ -18,6 +21,11 @@ Options:
   --seed <hex>          Seed colour, e.g. "#0B57D0" (required)
   --name <name>         Theme name for data-theme, lowercase kebab-case (required)
   --variant <variant>   ${SCHEME_VARIANTS.join(' | ')} (default: tonal-spot)
+  --palette <name>=<source>
+                        Takes one palette from elsewhere; repeatable. <name> is
+                        ${PALETTE_NAMES.map(toKebabCase).join(', ')};
+                        <source> is a variant or a hex colour, e.g.
+                        --palette neutral=tonal-spot --palette tertiary=#00A07A
   --contrast <levels>   Comma-separated: ${CONTRAST_LEVEL_NAMES.join(',')} (default: all)
   --out <file>          Write to a file instead of stdout
   -h, --help            Show this message
@@ -34,6 +42,7 @@ const { positionals, values } = parseArgs({
     seed: { type: 'string' },
     name: { type: 'string' },
     variant: { type: 'string', default: 'tonal-spot' },
+    palette: { type: 'string', multiple: true, default: [] },
     contrast: { type: 'string', default: CONTRAST_LEVEL_NAMES.join(',') },
     out: { type: 'string' },
     help: { type: 'boolean', short: 'h' },
@@ -57,19 +66,28 @@ for (const level of contrast) {
   }
 }
 
+let palettes: ThemePalettes = {};
+try {
+  palettes = parsePalettes(values.palette);
+} catch (error) {
+  fail(error instanceof Error ? error.message : String(error));
+}
+
 let css: string;
 try {
   css = createTheme({
     name: values.name,
     seed: values.seed,
     variant: values.variant as SchemeVariant,
+    palettes,
     contrast: contrast as ContrastLevel[],
   }).css;
 } catch (error) {
   fail(error instanceof Error ? error.message : String(error));
 }
 
-const output = `/* @vkieu/mui theme "${values.name}" from ${values.seed} (${values.variant}). */\n\n${css}\n`;
+const paletteNote = values.palette.length > 0 ? `, palettes ${values.palette.join(' ')}` : '';
+const output = `/* @vkieu/mui theme "${values.name}" from ${values.seed} (${values.variant}${paletteNote}). */\n\n${css}\n`;
 if (values.out) {
   await writeFile(values.out, output);
   process.stderr.write(`Wrote ${values.out}\n`);
