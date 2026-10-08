@@ -220,6 +220,33 @@ export const COMPONENT_META: ComponentMeta[] = [
       'For a yes/no choice use a Checkbox or Switch; for picking one of a few options use a Radio group.',
   },
   {
+    slug: 'phone-field',
+    title: 'Phone field',
+    group: 'Inputs & selection',
+    railGroup: 'inputs',
+    summary:
+      'A phone number with a searchable country picker; formats as typed and reports E.164. Not an M3 component (@vkieu/mui/vk).',
+    propsComponents: ['PhoneField'],
+    playground: 'full',
+    vk: true,
+    specs: {
+      variants: ['outlined', 'filled'],
+      shape: 'rounded-corner-extra-small',
+    },
+    related: ['text-field', 'pin-input'],
+    whenNotToUse:
+      'For a number whose country never varies and needs no checking, a Text field with type="tel" is enough.',
+    keywords: [
+      'telephone',
+      'mobile',
+      'tel',
+      'country code',
+      'dialling code',
+      'international',
+      'E.164',
+    ],
+  },
+  {
     slug: 'pin-input',
     title: 'PIN input',
     group: 'Inputs & selection',

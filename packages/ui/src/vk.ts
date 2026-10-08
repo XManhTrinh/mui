@@ -61,3 +61,26 @@ export {
   type PinInputType,
   type SanitizePinOptions,
 } from './vk/pin-input/sanitize-pin';
+export {
+  PhoneField,
+  type PhoneFieldClassNames,
+  type PhoneFieldLabels,
+  type PhoneFieldProps,
+} from './vk/phone-field/PhoneField';
+export {
+  phoneFieldStyles,
+  type PhoneFieldStyleProps,
+  type PhoneFieldVariant,
+} from './vk/phone-field/phone-field-styles';
+export {
+  dialCode,
+  formatPhone,
+  isPhoneCountry,
+  PHONE_COUNTRIES,
+  phoneCountry,
+  phoneProblem,
+  readPhone,
+  type PhoneCountry,
+  type ReadPhone,
+} from './vk/phone-field/phone';
+export { countryOptions, matchesCountry, type CountryOption } from './vk/phone-field/countries';

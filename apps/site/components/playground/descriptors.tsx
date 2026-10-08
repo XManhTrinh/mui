@@ -26,7 +26,7 @@ import {
   Tabs,
   TextField,
 } from '@vkieu/mui';
-import { Avatar, avatarShapes, PinInput, Skeleton, SkeletonGroup } from '@vkieu/mui/vk';
+import { Avatar, avatarShapes, PhoneField, PinInput, Skeleton, SkeletonGroup } from '@vkieu/mui/vk';
 import { createElement, type ComponentType, type ReactElement } from 'react';
 import { AddIcon, EditIcon, SendIcon, StarIcon } from '../icons';
 
@@ -83,6 +83,7 @@ const RadioAny = loose(Radio);
 const ListItemAny = loose(ListItem);
 const AvatarAny = loose(Avatar);
 const PinInputAny = loose(PinInput);
+const PhoneFieldAny = loose(PhoneField);
 const SkeletonAny = loose(Skeleton);
 const TabAny = loose(Tab);
 
@@ -196,6 +197,26 @@ export const PLAYGROUND_DESCRIPTORS: Record<string, PlaygroundDescriptor> = {
     surfacedProps: ['variant', 'disabled'],
     initialState: { variant: 'filled' },
     codeSlots: { label: '"Label"' },
+  },
+  'phone-field': {
+    component: 'PhoneField',
+    importFrom: '@vkieu/mui/vk',
+    render: (props) =>
+      createElement(PhoneFieldAny, {
+        ...props,
+        label: 'Phone',
+        defaultCountry: 'GB',
+        priorityCountries: ['GB', 'US', 'AU', 'VN'],
+        errorMessage: 'Enter a valid phone number',
+      }),
+    defaultProps: { variant: 'outlined', invalid: false, disabled: false, required: false },
+    surfacedProps: ['variant', 'invalid', 'disabled', 'required'],
+    initialState: { variant: 'outlined' },
+    codeSlots: {
+      label: '"Phone"',
+      defaultCountry: '"GB"',
+      priorityCountries: "{['GB', 'US', 'AU', 'VN']}",
+    },
   },
   'pin-input': {
     component: 'PinInput',

@@ -258,3 +258,22 @@ test.describe('PinInput', () => {
     expect(errors).toEqual([]);
   });
 });
+
+test.describe('PhoneField', () => {
+  test('server-renders its country and formatted number before hydration', async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    await page.goto('/phone-field');
+    await expect(page.getByRole('button', { name: 'Country: Vietnam (+84)' })).toBeVisible();
+    await expect(page.getByLabel('Phone', { exact: true })).toHaveValue('0912 345 678');
+    await context.close();
+  });
+
+  test('hydrates without errors and opens its country list', async ({ page }) => {
+    const errors = collectConsoleErrors(page);
+    await page.goto('/phone-field');
+    await page.getByRole('button', { name: /^Country/ }).click();
+    await expect(page.getByRole('listbox')).toBeVisible();
+    expect(errors).toEqual([]);
+  });
+});

@@ -23,6 +23,15 @@ describe('searchPages', () => {
     );
   });
 
+  it('finds the phone field by the words people use for it', () => {
+    for (const query of ['telephone', 'country code', 'mobile']) {
+      expect(
+        searchPages(entries, query).map((entry) => entry.href),
+        query,
+      ).toContain('/components/phone-field');
+    }
+  });
+
   it('ranks title matches before summary and keyword matches', () => {
     const results = searchPages(entries, 'text field');
     expect(results[0]?.href).toBe('/components/text-field');

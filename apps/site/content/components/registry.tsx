@@ -18,6 +18,7 @@ import { LoadingIndicatorBody } from './loading-indicator';
 import { MenuBody } from './menu';
 import { NavigationBarBody } from './navigation-bar';
 import { NavigationRailBody } from './navigation-rail';
+import { PhoneFieldBody } from './phone-field';
 import { PickerDialogBody } from './picker-dialog';
 import { PinInputBody } from './pin-input';
 import { PrimitivesBody } from './primitives';
@@ -73,6 +74,7 @@ const BODIES: Record<string, ComponentType> = {
   'fab-menu': FabMenuBody,
   'text-field': TextFieldBody,
   'pin-input': PinInputBody,
+  'phone-field': PhoneFieldBody,
   checkbox: CheckboxBody,
   'radio-group': RadioGroupBody,
   switch: SwitchBody,
@@ -131,6 +133,7 @@ export const COMPONENT_SLOTS: Record<string, string[]> = {
     'counter',
   ],
   PinInput: ['root', 'label', 'boxes', 'box', 'separator', 'supportingText', 'errorText'],
+  PhoneField: ['root', 'country', 'input', 'picker', 'supportingText', 'errorText'],
   Checkbox: ['root', 'control', 'label', 'box'],
   RadioGroup: ['root', 'label', 'options', 'supportingText', 'errorText'],
   Radio: ['root', 'control', 'label', 'ring', 'dot'],
