@@ -96,6 +96,11 @@ export interface ComponentMeta {
    * expressive shape, motion and emphasis. Drives the "Expressive" chip in the gallery.
    */
   expressive?: boolean;
+  /**
+   * Marks a VK component: a library addition that is NOT part of Material Design 3, shipped
+   * from the `@vkieu/mui/vk` entry point. Drives the "VK" chip in the gallery.
+   */
+  vk?: boolean;
 }
 
 /** Every component's metadata, in display order. */
@@ -406,6 +411,7 @@ export const COMPONENT_META: ComponentMeta[] = [
       'A picture with an initials or icon fallback, badges, 35 Expressive shapes and groups. Not an M3 component (@vkieu/mui/vk).',
     propsComponents: ['Avatar', 'AvatarGroup'],
     playground: 'full',
+    vk: true,
     specs: {
       sizes: ['xs', 'sm', 'md', 'lg', 'xl', '2xl'],
       shape: 'rounded-corner-full',
@@ -576,6 +582,7 @@ export const COMPONENT_META: ComponentMeta[] = [
       'A placeholder in the shape of loading content, pure CSS with pulse or shimmer. Not an M3 component (@vkieu/mui/vk).',
     propsComponents: ['Skeleton', 'SkeletonGroup'],
     playground: 'full',
+    vk: true,
     specs: {
       shape: 'rounded-corner-small',
       variants: ['rectangle', 'text', 'circle'],

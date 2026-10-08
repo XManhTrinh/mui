@@ -47,6 +47,7 @@ export function ComponentGallery({ groupHeadingTag: GroupHeading = 'h2' }: Compo
                   title={page.title}
                   summary={page.summary}
                   expressive={page.expressive}
+                  vk={page.vk}
                 />
               </li>
             ))}
@@ -62,11 +63,13 @@ function GalleryCard({
   title,
   summary,
   expressive,
+  vk,
 }: {
   href: string;
   title: string;
   summary: string;
   expressive?: boolean;
+  vk?: boolean;
 }): ReactElement {
   return (
     <Link
@@ -79,6 +82,11 @@ function GalleryCard({
           {expressive ? (
             <span className="shrink-0 rounded-corner-full bg-tertiary-container px-2 py-0.5 text-label-small text-on-tertiary-container">
               Expressive
+            </span>
+          ) : null}
+          {vk ? (
+            <span className="shrink-0 rounded-corner-full bg-secondary-container px-2 py-0.5 text-label-small text-on-secondary-container">
+              VK
             </span>
           ) : null}
         </div>
