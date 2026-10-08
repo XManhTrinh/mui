@@ -133,7 +133,7 @@ export function RailFlyout({
       inert={!open ? true : undefined}
       onPointerEnter={onPointerEnter}
       onPointerLeave={onPointerLeave}
-      className="absolute top-0 start-full z-20 flex h-full flex-col overflow-x-hidden overflow-y-auto rounded-e-corner-large bg-surface-container shadow-[2px_0_8px_0_color-mix(in_srgb,var(--md-sys-color-shadow)_20%,transparent)] transition-[width,opacity] duration-[var(--md-sys-motion-spring-spatial-default-duration)] ease-[var(--md-sys-motion-spring-spatial-default-easing)] will-change-[width] rtl:shadow-[-2px_0_8px_0_color-mix(in_srgb,var(--md-sys-color-shadow)_20%,transparent)] motion-reduce:transition-none data-[open=false]:pointer-events-none data-[open=false]:w-0 data-[open=false]:opacity-0 data-[open=false]:duration-[var(--md-sys-motion-spring-spatial-fast-duration)] data-[open=false]:ease-[var(--md-sys-motion-spring-spatial-fast-easing)] data-[open=true]:w-52 data-[open=true]:opacity-100"
+      className="absolute top-0 start-full z-20 flex h-full flex-col overflow-x-hidden overflow-y-auto rounded-e-corner-large bg-surface-container shadow-[2px_0_8px_0_color-mix(in_srgb,var(--md-sys-color-shadow)_20%,transparent)] transition-[width,opacity] duration-[var(--md-sys-motion-spring-spatial-default-duration)] ease-[var(--md-sys-motion-spring-spatial-default-easing)] will-change-[width] rtl:shadow-[-2px_0_8px_0_color-mix(in_srgb,var(--md-sys-color-shadow)_20%,transparent)] motion-reduce:transition-none data-[open=false]:pointer-events-none data-[open=false]:w-0 data-[open=false]:opacity-0 data-[open=false]:duration-[var(--md-sys-motion-spring-spatial-fast-duration)] data-[open=false]:ease-[var(--md-sys-motion-spring-spatial-fast-easing)] data-[open=true]:w-58 data-[open=true]:opacity-100"
     >
       {/* 1px divider on the inline-START (rail) edge — an element, not a panel border. */}
       <span
@@ -141,12 +141,12 @@ export function RailFlyout({
         className="pointer-events-none absolute inset-y-0 start-0 w-px bg-outline-variant"
       />
       {group && (
-        // Fixed 208px width so the content doesn't reflow while the panel's width animates —
+        // Fixed 232px width (room for every name beside its chip) so the content doesn't reflow while the panel's width animates —
         // it's revealed from the rail edge under overflow-x-hidden (no seam). Keyed by group
         // so the content re-runs a quick fade on group switch. Snaps under reduced motion.
         <div
           key={group.id}
-          className="flex w-52 shrink-0 flex-col will-change-[opacity] motion-safe:animate-[drawer-fade-in_150ms_ease-out]"
+          className="flex w-58 shrink-0 flex-col will-change-[opacity] motion-safe:animate-[drawer-fade-in_150ms_ease-out]"
         >
           <p className="px-4 pt-5 pb-3 text-label-small uppercase text-on-surface-variant">
             {group.railLabel}
@@ -161,11 +161,12 @@ export function RailFlyout({
                     href={href}
                     aria-current={active ? 'page' : undefined}
                     onClick={onNavigate}
-                    // The chips follow the name, and wrap under it when the 208px pane is full.
-                    className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-corner-large px-3 py-2.5 text-body-medium text-on-surface-variant outline-none transition-colors hover:bg-on-surface/8 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary aria-[current=page]:bg-secondary-container aria-[current=page]:text-body-medium-emphasized aria-[current=page]:text-on-secondary-container motion-reduce:transition-none"
+                    // Compact chips sit at the end of the row, where M3's navigation drawer
+                    // puts a badge label.
+                    className="flex items-center gap-2 rounded-corner-full px-3 py-2.5 text-body-medium text-on-surface-variant outline-none transition-colors hover:bg-on-surface/8 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary aria-[current=page]:bg-secondary-container aria-[current=page]:text-body-medium-emphasized aria-[current=page]:text-on-secondary-container motion-reduce:transition-none"
                   >
-                    <span>{page.title}</span>
-                    <PageChips expressive={page.expressive} vk={page.vk} />
+                    <span className="min-w-0 flex-1 truncate">{page.title}</span>
+                    <PageChips expressive={page.expressive} vk={page.vk} compact />
                   </Link>
                 </li>
               );

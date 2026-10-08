@@ -144,7 +144,7 @@ export function DocsShell({
           transitioning the inline-start margin as the pinned drawer pushes content. */}
       <div
         className={`flex min-h-dvh min-w-0 flex-col transition-[margin-inline-start] duration-[var(--md-sys-motion-spring-spatial-default-duration)] ease-[var(--md-sys-motion-spring-spatial-default-easing)] motion-reduce:transition-none ${
-          pinnedPanel ? 'medium:ms-[304px]' : 'medium:ms-24'
+          pinnedPanel ? 'medium:ms-[328px]' : 'medium:ms-24'
         }`}
       >
         {/* Medium and wider: section links (inline at large / overflow menu below), search, settings. */}

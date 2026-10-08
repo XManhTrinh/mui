@@ -49,15 +49,9 @@ function DrawerLink({
       {icon != null && (
         <span className="inline-flex size-6 shrink-0 [&>svg]:size-full">{icon}</span>
       )}
-      {chips ? (
-        // A name with chips wraps them under it rather than cutting the name short.
-        <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
-          <span>{children}</span>
-          {chips}
-        </span>
-      ) : (
-        <span className="min-w-0 truncate">{children}</span>
-      )}
+      <span className="min-w-0 flex-1 truncate">{children}</span>
+      {/* At the end of the row, where M3's navigation drawer puts a badge label. */}
+      {chips}
     </a>
   );
 }
@@ -116,7 +110,7 @@ function AccordionSection({
                   onNavigate={onNavigate}
                   chips={
                     page.expressive || page.vk ? (
-                      <PageChips expressive={page.expressive} vk={page.vk} />
+                      <PageChips expressive={page.expressive} vk={page.vk} compact />
                     ) : undefined
                   }
                 >

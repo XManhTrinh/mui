@@ -19,16 +19,38 @@ test.describe('Navigation rail flyout (overlay, non-detail page)', () => {
     await expect(trigger).toHaveAttribute('aria-expanded', 'true');
     const flyout = page.getByRole('navigation', { name: 'Actions' });
     await expect(flyout).toBeVisible();
-    await expect(flyout.getByRole('link', { name: 'Button Expressive', exact: true })).toBeVisible();
+    await expect(
+      flyout.getByRole('link', { name: 'Button Expressive', exact: true }),
+    ).toBeVisible();
   });
 
   test('links show Expressive and VK chips, which are part of their names', async ({ page }) => {
     await page.getByRole('link', { name: 'Inputs', exact: true }).hover();
     const flyout = page.getByRole('navigation', { name: 'Inputs & selection' });
     await expect(flyout.getByRole('link', { name: 'Phone field VK', exact: true })).toBeVisible();
-    await expect(flyout.getByRole('link', { name: 'Slider Expressive', exact: true })).toBeVisible();
+    await expect(
+      flyout.getByRole('link', { name: 'Slider Expressive', exact: true }),
+    ).toBeVisible();
     // An M3 component that M3 Expressive didn't change has no chip.
     await expect(flyout.getByRole('link', { name: 'Select', exact: true })).toBeVisible();
+  });
+
+  test('every name fits beside its chip, even emphasised as the current page', async ({ page }) => {
+    for (const slug of [
+      'progress',
+      'button-group',
+      'navigation-rail',
+      'date-picker',
+      'phone-field',
+    ]) {
+      await page.goto(`/components/${slug}`);
+      const names = page.locator('nav[data-pinned] li a > span:first-child');
+      await expect(names.first()).toBeVisible();
+      const cut = await names.evaluateAll((spans) =>
+        spans.filter((span) => span.scrollWidth > span.clientWidth).map((span) => span.textContent),
+      );
+      expect(cut, slug).toEqual([]);
+    }
   });
 
   test('focus opens the panel; Escape closes it and restores focus', async ({ page }) => {
@@ -122,11 +144,10 @@ test.describe('Pinned second menu on component pages', () => {
       'data-current',
       'true',
     );
-    // Content is pushed right of the rail (96) + panel (280).
+    // Content is pushed right of the rail (96) + panel (232) = 328px.
     const main = page.locator('#main-content');
     const mainBox = await main.boundingBox();
-    // Inset = rail (96) + drawer (208) = 304px.
-    expect(mainBox!.x).toBeGreaterThanOrEqual(300);
+    expect(mainBox!.x).toBeGreaterThanOrEqual(324);
   });
 
   test('hovering another group previews it, then reverts to the pinned group on leave', async ({
@@ -153,10 +174,9 @@ test.describe('Pinned second menu on component pages', () => {
     await expect(page).toHaveURL(/\/components\/icon-button(\?|$)/);
     // The same drawer stays open and becomes pinned with the new child active.
     await expect(flyout).toBeVisible();
-    await expect(flyout.getByRole('link', { name: 'Icon button Expressive', exact: true })).toHaveAttribute(
-      'aria-current',
-      'page',
-    );
+    await expect(
+      flyout.getByRole('link', { name: 'Icon button Expressive', exact: true }),
+    ).toHaveAttribute('aria-current', 'page');
     // The content margin glides (~300ms) from rail-only to rail+drawer; wait for it to settle.
     await page.waitForTimeout(450);
     const mainBox = await page.locator('#main-content').boundingBox();
