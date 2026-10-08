@@ -29,6 +29,26 @@ const allow = (from, to) => ({
   allow: { to: { element: { types: { anyOf: to } } } },
 });
 
+/**
+ * Tailwind's default type utilities. The docs site uses only the M3 type scale
+ * (`text-body-large`, `text-title-medium-emphasized`, …) and `font-brand` / `font-plain`, as
+ * consumers should, so these are rejected in its class strings. The library itself may set
+ * exact Compose values inside its component styles.
+ */
+const DEFAULT_TYPE_UTILITY = String.raw`(^|\s|:)(text-(xs|sm|base|lg|xl|[2-9]xl)|text-\[[0-9]|font-(thin|extralight|light|normal|medium|semibold|bold|extrabold|black)|font-\[[0-9]|leading-|tracking-)`;
+const TYPE_SCALE_MESSAGE =
+  'Use an M3 type-scale role (text-body-large, text-title-medium-emphasized, …) and font-brand / font-plain, not Tailwind type utilities.';
+const typeScaleSelectors = [
+  'JSXAttribute[name.name=/^class(Name|Names)?$/]',
+  'CallExpression[callee.name="tv"]',
+].flatMap((scope) => [
+  { selector: `${scope} Literal[value=/${DEFAULT_TYPE_UTILITY}/]`, message: TYPE_SCALE_MESSAGE },
+  {
+    selector: `${scope} TemplateElement[value.raw=/${DEFAULT_TYPE_UTILITY}/]`,
+    message: TYPE_SCALE_MESSAGE,
+  },
+]);
+
 export default tseslint.config(
   {
     ignores: [
@@ -112,6 +132,7 @@ export default tseslint.config(
     // known third-party UI libraries and docs themes.
     files: ['apps/site/**/*.{ts,tsx}'],
     rules: {
+      'no-restricted-syntax': ['error', ...typeScaleSelectors],
       'no-restricted-imports': [
         'error',
         {

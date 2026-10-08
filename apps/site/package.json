@@ -7,7 +7,7 @@
     "build": "pnpm generate:props && next build --webpack",
     "preview": "sirv out --port 3000",
     "typecheck": "next typegen && tsc --noEmit",
-    "lint": "eslint --max-warnings 0 . --config ../../eslint.config.js",
+    "lint": "eslint --max-warnings 0 .",
     "test:e2e": "playwright test",
     "link-check": "tsx scripts/check-links.ts",
     "generate:props": "tsx scripts/generate-props.ts",

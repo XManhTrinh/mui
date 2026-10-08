@@ -72,7 +72,7 @@ export function GroupTrigger({
           {icon}
         </span>
       </span>
-      <span className="mt-[4px] max-w-full truncate text-center text-[12px] font-medium leading-4 tracking-[0.5px] text-on-surface-variant transition-colors duration-200 group-hover/trigger:text-secondary group-focus-visible/trigger:text-secondary group-data-[current=true]/trigger:text-secondary group-data-[open=true]/trigger:text-secondary motion-reduce:transition-none">
+      <span className="mt-[4px] max-w-full truncate text-center text-label-medium text-on-surface-variant transition-colors duration-200 group-hover/trigger:text-secondary group-focus-visible/trigger:text-secondary group-data-[current=true]/trigger:text-secondary group-data-[open=true]/trigger:text-secondary motion-reduce:transition-none">
         {group.railLabel}
       </span>
     </Link>
@@ -147,7 +147,7 @@ export function RailFlyout({
           key={group.id}
           className="flex w-52 shrink-0 flex-col will-change-[opacity] motion-safe:animate-[drawer-fade-in_150ms_ease-out]"
         >
-          <p className="px-4 pb-2 pt-4 text-[11px] font-medium uppercase leading-6 tracking-[0.5px] text-on-surface-variant">
+          <p className="px-4 pt-5 pb-3 text-label-small uppercase text-on-surface-variant">
             {group.railLabel}
           </p>
           <ul className="flex flex-col gap-0.5 px-2 pb-3">
@@ -160,7 +160,7 @@ export function RailFlyout({
                     href={href}
                     aria-current={active ? 'page' : undefined}
                     onClick={onNavigate}
-                    className="flex flex-col rounded-corner-full px-3 py-2.5 text-body-medium text-on-surface-variant outline-none transition-colors hover:bg-on-surface/8 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary aria-[current=page]:bg-secondary-container aria-[current=page]:font-medium aria-[current=page]:text-on-secondary-container motion-reduce:transition-none"
+                    className="flex flex-col rounded-corner-full px-3 py-2.5 text-body-medium text-on-surface-variant outline-none transition-colors hover:bg-on-surface/8 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary aria-[current=page]:bg-secondary-container aria-[current=page]:text-body-medium-emphasized aria-[current=page]:text-on-secondary-container motion-reduce:transition-none"
                   >
                     {page.title}
                   </Link>

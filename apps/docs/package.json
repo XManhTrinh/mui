@@ -6,7 +6,7 @@
     "dev": "storybook dev -p 6006",
     "build": "storybook build -o storybook-static --quiet",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint --max-warnings 0 . --config ../../eslint.config.js",
+    "lint": "eslint --max-warnings 0 .",
     "test:e2e": "playwright test"
   },
   "dependencies": {

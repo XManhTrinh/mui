@@ -40,7 +40,7 @@
     "build": "tsdown && tsx scripts/build-css.ts && tsx scripts/check-dist.ts",
     "prepare": "pnpm run generate && pnpm run build",
     "typecheck": "tsc -p tsconfig.json",
-    "lint": "eslint --max-warnings 0 . --config ../../eslint.config.js",
+    "lint": "eslint --max-warnings 0 .",
     "test": "vitest run"
   },
   "dependencies": {
