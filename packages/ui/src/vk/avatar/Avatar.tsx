@@ -19,16 +19,11 @@ const PersonIcon = () => (
   </svg>
 );
 
-/** Material Symbols `check`. */
-const CheckIcon = () => (
-  <svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true">
-    <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-  </svg>
-);
-
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 export type AvatarTone = 'auto' | 'primary' | 'secondary' | 'tertiary' | 'neutral';
 export type AvatarPresence = 'online' | 'away' | 'offline';
+/** A corner of the avatar, in logical directions (start and end mirror in right-to-left). */
+export type AvatarPlacement = 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end';
 
 /** `circle`, a rounded square, or an M3 Expressive shape by name (e.g. `Cookie12Sided`). */
 export type AvatarShape = 'circle' | 'rounded' | MaterialShapeName;
@@ -36,27 +31,27 @@ export type AvatarShape = 'circle' | 'rounded' | MaterialShapeName;
 /** Every avatar shape: `circle`, `rounded` and the 35 M3 Expressive shapes. */
 export const avatarShapes: readonly AvatarShape[] = ['circle', 'rounded', ...materialShapeNames];
 
-/** Words in the accessible name; override them for other languages. */
+/** Presence words in the accessible name; override them for other languages. */
 export interface AvatarLabels {
   online: string;
   away: string;
   offline: string;
-  verified: string;
 }
 
 const DEFAULT_LABELS: AvatarLabels = {
   online: 'online',
   away: 'away',
   offline: 'offline',
-  verified: 'verified',
 };
 
 export interface AvatarClassNames {
   root?: string;
+  /** The coloured shape behind the photo and fallback, e.g. `bg-green-600 text-white`. */
+  visual?: string;
   image?: string;
   fallback?: string;
   presence?: string;
-  verified?: string;
+  badge?: string;
 }
 
 interface AvatarOwnProps {
@@ -77,7 +72,13 @@ interface AvatarOwnProps {
   size?: AvatarSize;
   /** `circle`, `rounded` (a shape-scale corner for the size) or an M3 Expressive shape. @default "circle" */
   shape?: AvatarShape;
-  /** `auto` picks a stable container colour from `name`. @default "auto" */
+  /**
+   * `auto` hashes `name` into one of 12 colour slots, so a name keeps its colour. Each slot is
+   * a CSS variable pair, `--vk-avatar-tone-1` … `--vk-avatar-tone-12` with
+   * `--vk-avatar-on-tone-1` … `--vk-avatar-on-tone-12`, which takes any colour; by default the
+   * slots cycle through the primary, secondary, tertiary and neutral containers.
+   * @default "auto"
+   */
   tone?: AvatarTone;
   /**
    * A presence dot. Its colours default to M3 roles (online `primary`, away `tertiary`,
@@ -86,12 +87,11 @@ interface AvatarOwnProps {
    * or one avatar.
    */
   presence?: AvatarPresence;
-  /**
-   * A verified badge. Its colours default to `primary` / `on-primary` and can be overridden
-   * with `--vk-avatar-verified` and `--vk-avatar-on-verified`.
-   */
-  verified?: boolean;
-  /** Words for the presence and verified states in the accessible name. */
+  /** Where the presence dot sits. @default "bottom-end" */
+  presencePlacement?: AvatarPlacement;
+  /** Where the badge sits. @default "top-end" */
+  badgePlacement?: AvatarPlacement;
+  /** Words for the presence states in the accessible name. */
   labels?: Partial<AvatarLabels>;
   /** Separates the avatar from overlapping neighbours (set by AvatarGroup). */
   ring?: boolean;
@@ -99,6 +99,14 @@ interface AvatarOwnProps {
   className?: string;
   style?: CSSProperties;
 }
+
+/**
+ * A badge: any icon or short content (a check for "verified", a count, …), with its meaning
+ * in `badgeLabel` for the accessible name. Its colours default to `primary` / `on-primary`
+ * and can be overridden with `--vk-avatar-badge` and `--vk-avatar-on-badge`.
+ */
+type WithBadge = { badge: ReactNode; badgeLabel: string };
+type WithoutBadge = { badge?: undefined; badgeLabel?: undefined };
 
 type Named = { alt: string; decorative?: false };
 type Decorative = { decorative: true; alt?: undefined };
@@ -112,18 +120,21 @@ type Action = { onPress: () => void; href?: undefined };
  */
 export type AvatarProps = AvatarOwnProps &
   Omit<HTMLAttributes<HTMLElement>, keyof AvatarOwnProps | 'children' | 'onPress'> &
+  (WithBadge | WithoutBadge) &
   ((Static & (Named | Decorative)) | ((Link | Action) & Named));
 
-const AUTO_TONES = ['primary', 'secondary', 'tertiary', 'neutral'] as const;
+/** The number of colour slots `tone="auto"` hashes names into. */
+export const AVATAR_TONE_SLOTS = 12;
 
-/** A stable tone for a name (FNV-1a hash), so a person keeps their colour everywhere. */
-function toneFor(name: string): (typeof AUTO_TONES)[number] {
+/** A stable slot for a name (FNV-1a hash), so a person keeps their colour everywhere. */
+function toneSlotFor(name: string) {
   let hash = 0x811c9dc5;
   for (const char of name.normalize('NFC')) {
     hash ^= char.codePointAt(0) ?? 0;
     hash = Math.imul(hash, 0x01000193);
   }
-  return AUTO_TONES[(hash >>> 0) % AUTO_TONES.length] ?? 'neutral';
+  return `auto-${((hash >>> 0) % AVATAR_TONE_SLOTS) + 1}` as `auto-${
+    1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12}`;
 }
 
 const maskCache = new Map<MaterialShapeName, string>();
@@ -151,6 +162,7 @@ function shapeMask(shape: MaterialShapeName): string {
  *
  * @example
  * <Avatar name="Nguyễn Văn An" src={user.photo} alt="Nguyễn Văn An" presence="online" />
+ * <Avatar name="Phở Sài Gòn" alt="Phở Sài Gòn" badge={<VerifiedIcon />} badgeLabel="verified" />
  */
 export function Avatar(props: AvatarProps) {
   const {
@@ -166,7 +178,10 @@ export function Avatar(props: AvatarProps) {
     shape: resolvedShape = 'circle',
     tone = 'auto',
     presence,
-    verified = false,
+    presencePlacement,
+    badge,
+    badgeLabel,
+    badgePlacement,
     labels,
     ring = false,
     classNames,
@@ -180,13 +195,16 @@ export function Avatar(props: AvatarProps) {
   } = props;
 
   const expressive = resolvedShape !== 'circle' && resolvedShape !== 'rounded';
+  const resolvedTone = tone === 'auto' ? toneSlotFor(name) : tone;
   const interactive = href !== undefined || onPress !== undefined;
   const styles = avatarStyles({
     size,
     shape: expressive ? 'expressive' : resolvedShape,
-    tone: tone === 'auto' ? toneFor(name) : tone,
+    tone: resolvedTone,
     interactive,
     ring,
+    presencePlacement,
+    badgePlacement,
     ...(presence && { presence }),
   });
   const maskStyle: CSSProperties | undefined = expressive
@@ -196,12 +214,16 @@ export function Avatar(props: AvatarProps) {
   const words = { ...DEFAULT_LABELS, ...labels };
   const accessibleName = decorative
     ? undefined
-    : [alt, presence && words[presence], verified && words.verified].filter(Boolean).join(', ');
+    : [alt, presence && words[presence], badge != null && badgeLabel].filter(Boolean).join(', ');
   const letters = initials ?? getInitials(name, locale);
 
   const layers = (
     <>
-      <span aria-hidden="true" className={styles.visual()} style={maskStyle}>
+      <span
+        aria-hidden="true"
+        className={styles.visual({ class: classNames?.visual })}
+        style={maskStyle}
+      >
         <span className={styles.fallback({ class: classNames?.fallback })}>
           {letters || icon || <PersonIcon />}
         </span>
@@ -216,9 +238,9 @@ export function Avatar(props: AvatarProps) {
       {presence ? (
         <span aria-hidden="true" className={styles.presence({ class: classNames?.presence })} />
       ) : null}
-      {verified ? (
-        <span aria-hidden="true" className={styles.verified({ class: classNames?.verified })}>
-          <CheckIcon />
+      {badge != null ? (
+        <span aria-hidden="true" className={styles.badge({ class: classNames?.badge })}>
+          {badge}
         </span>
       ) : null}
     </>
@@ -229,6 +251,7 @@ export function Avatar(props: AvatarProps) {
     'data-vk-avatar': '',
     'data-size': size,
     'data-shape': resolvedShape,
+    'data-tone': resolvedTone,
     ...(presence && { 'data-presence': presence }),
   };
 

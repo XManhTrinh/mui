@@ -9,7 +9,7 @@ import { highlightSource } from '../../lib/highlight';
 const EXAMPLES = [
   { file: 'avatar/avatar-fallbacks.tsx', title: 'Fallbacks and sizes', Example: AvatarFallbacks },
   { file: 'avatar/avatar-shapes.tsx', title: 'All 35 Expressive shapes', Example: AvatarShapes },
-  { file: 'avatar/avatar-badges.tsx', title: 'Presence and verified', Example: AvatarBadges },
+  { file: 'avatar/avatar-badges.tsx', title: 'Presence and badges', Example: AvatarBadges },
   { file: 'avatar/avatar-group.tsx', title: 'Groups', Example: AvatarGroupExample },
 ] as const;
 
@@ -71,7 +71,8 @@ export async function AvatarBody() {
             next to it. The types require one of the two.
           </li>
           <li>
-            Presence and verified join the name (&quot;Lan, online, verified&quot;); pass{' '}
+            Presence and the badge&apos;s <code className="text-on-surface">badgeLabel</code> join
+            the name (&quot;Lan, online, verified&quot;); pass{' '}
             <code className="text-on-surface">labels</code> to translate them.
           </li>
           <li>
@@ -90,22 +91,36 @@ export async function AvatarBody() {
         <h2 className="text-headline-small text-on-surface">Theming</h2>
         <ul className="flex flex-col gap-2 ps-5 text-body-large text-on-surface-variant [&>li]:list-disc">
           <li>
-            <code className="text-on-surface">tone=&quot;auto&quot;</code> picks a primary,
-            secondary, tertiary or neutral container from the name, so each name keeps the same
-            colour in every theme, mode and contrast level.
+            <code className="text-on-surface">tone=&quot;auto&quot;</code> hashes the name into one
+            of 12 colour slots, so a name keeps its colour. By default the slots cycle through the
+            primary, secondary, tertiary and neutral containers, so they follow every theme, mode
+            and contrast level. Give an app more colours by setting{' '}
+            <code className="text-on-surface">--vk-avatar-tone-1</code> …{' '}
+            <code className="text-on-surface">--vk-avatar-tone-12</code> and their{' '}
+            <code className="text-on-surface">--vk-avatar-on-tone-*</code> text colours (any colour:
+            a theme variable, hex, <code className="text-on-surface">oklch()</code>).
           </li>
           <li>
             Status colours default to M3 roles (online{' '}
             <code className="text-on-surface">primary</code>, away{' '}
             <code className="text-on-surface">tertiary</code>, offline an{' '}
-            <code className="text-on-surface">outline</code> ring, verified{' '}
+            <code className="text-on-surface">outline</code> ring, badge{' '}
             <code className="text-on-surface">primary</code>). Override them with{' '}
             <code className="text-on-surface">--vk-avatar-online</code>,{' '}
             <code className="text-on-surface">--vk-avatar-away</code>,{' '}
             <code className="text-on-surface">--vk-avatar-offline</code>,{' '}
-            <code className="text-on-surface">--vk-avatar-verified</code> and{' '}
-            <code className="text-on-surface">--vk-avatar-on-verified</code>, on{' '}
-            <code className="text-on-surface">:root</code>, a section or one avatar.
+            <code className="text-on-surface">--vk-avatar-badge</code> and{' '}
+            <code className="text-on-surface">--vk-avatar-on-badge</code>.
+          </li>
+          <li>
+            Set the variables on <code className="text-on-surface">:root</code>, a section or one
+            avatar, in CSS or with Tailwind (
+            <code className="text-on-surface">[--vk-avatar-tone-1:#16a34a]</code>). Tailwind classes
+            on the parts win too:{' '}
+            <code className="text-on-surface">
+              classNames=&#123;&#123; visual: &apos;bg-green-600 text-white&apos; &#125;&#125;
+            </code>
+            .
           </li>
           <li>
             Rounded squares take a corner from the shape scale for their size; Expressive shapes are

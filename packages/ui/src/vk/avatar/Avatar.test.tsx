@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { axeViolations } from '../../../test/axe';
-import { Avatar, avatarShapes } from './Avatar';
+import { Avatar, AVATAR_TONE_SLOTS, avatarShapes } from './Avatar';
 import { AvatarGroup } from './AvatarGroup';
 
 const visual = (root: Element) => root.firstElementChild as HTMLElement;
@@ -16,23 +16,55 @@ describe('Avatar', () => {
     expect(avatar).toHaveTextContent('NA');
   });
 
-  it('adds presence and verified to the name, with overridable words', () => {
+  it('adds presence and the badge label to the name, with overridable words', () => {
     render(
       <Avatar
         name="Lan"
         alt="Lan"
         presence="online"
-        verified
-        labels={{ online: 'đang hoạt động', verified: 'đã xác minh' }}
+        badge={<svg data-testid="check" />}
+        badgeLabel="đã xác minh"
+        labels={{ online: 'đang hoạt động' }}
       />,
     );
     expect(screen.getByRole('img', { name: 'Lan, đang hoạt động, đã xác minh' })).toBeVisible();
+    expect(screen.getByTestId('check')).toBeInTheDocument();
   });
 
-  it('takes its presence and verified colours from overridable variables', () => {
+  it('takes any content as a badge, with a required label', () => {
+    render(<Avatar name="Lan" alt="Lan" badge="3" badgeLabel="3 unread" />);
+    expect(screen.getByRole('img', { name: 'Lan, 3 unread' })).toHaveTextContent('3');
+    // @ts-expect-error a badge needs badgeLabel
+    render(<Avatar name="Lan" alt="Lan" badge="3" />);
+  });
+
+  it('places the presence dot and the badge in any logical corner', () => {
+    const { container } = render(
+      <Avatar
+        name="Lan"
+        alt="Lan"
+        presence="online"
+        badge="1"
+        badgeLabel="one"
+        presencePlacement="top-start"
+        badgePlacement="bottom-start"
+      />,
+    );
+    const [, presence, badge] = [...(container.firstElementChild?.children ?? [])];
+    expect(presence).toHaveClass('self-start', 'justify-self-start');
+    expect(badge).toHaveClass('self-end', 'justify-self-start');
+    const { container: defaults } = render(
+      <Avatar name="Lan" alt="Lan" presence="online" badge="1" badgeLabel="one" />,
+    );
+    const [, defaultPresence, defaultBadge] = [...(defaults.firstElementChild?.children ?? [])];
+    expect(defaultPresence).toHaveClass('self-end', 'justify-self-end');
+    expect(defaultBadge).toHaveClass('self-start', 'justify-self-end');
+  });
+
+  it('takes its presence and badge colours from overridable variables', () => {
     const { container } = render(
       <div>
-        <Avatar name="Lan" alt="Lan" presence="online" verified />
+        <Avatar name="Lan" alt="Lan" presence="online" badge="1" badgeLabel="one" />
         <Avatar name="Minh" alt="Minh" presence="away" />
         <Avatar name="An" alt="An" presence="offline" />
       </div>,
@@ -46,11 +78,9 @@ describe('Avatar', () => {
     expect(dot('offline').className).toContain(
       'var(--vk-avatar-offline,var(--md-sys-color-outline))',
     );
-    const verified = container.querySelector('[data-presence="online"]')?.children[2];
-    expect(verified?.className).toContain('var(--vk-avatar-verified,var(--md-sys-color-primary))');
-    expect(verified?.className).toContain(
-      'var(--vk-avatar-on-verified,var(--md-sys-color-on-primary))',
-    );
+    const badge = container.querySelector('[data-presence="online"]')?.children[2];
+    expect(badge?.className).toContain('var(--vk-avatar-badge,var(--md-sys-color-primary))');
+    expect(badge?.className).toContain('var(--vk-avatar-on-badge,var(--md-sys-color-on-primary))');
   });
 
   it('is hidden from assistive technology when decorative', () => {
@@ -99,21 +129,43 @@ describe('Avatar', () => {
     expect(img).toHaveClass('custom', 'object-cover');
   });
 
-  it('gives a name a stable container tone, and honours a fixed tone', () => {
-    const tones = (name: string) =>
-      visual(
-        render(<Avatar name={name} alt={name} />).container.firstElementChild as Element,
-      ).className.match(
-        /bg-(primary|secondary|tertiary)-container|bg-surface-container-highest/,
-      )?.[0];
-    expect(tones('Lan')).toBe(tones('Lan'));
-    const names = ['Lan', 'Minh', 'An', 'Bảo', 'Châu', 'Dũng', 'Hà', 'Khoa'];
-    expect(new Set(names.map(tones)).size).toBeGreaterThan(1);
+  it('hashes a name into one of 12 overridable colour slots', () => {
+    const slot = (name: string) =>
+      render(<Avatar name={name} alt={name} />).container.firstElementChild?.getAttribute(
+        'data-tone',
+      );
+    expect(slot('Lan')).toBe(slot('Lan'));
+    const names = Array.from({ length: 200 }, (_, index) => `Person ${index}`);
+    expect(new Set(names.map(slot))).toEqual(
+      new Set(Array.from({ length: AVATAR_TONE_SLOTS }, (_, index) => `auto-${index + 1}`)),
+    );
+    const { container } = render(<Avatar name="Lan" alt="Lan" />);
+    const tone = container.firstElementChild?.getAttribute('data-tone')?.replace('auto-', '');
+    expect(visual(container.firstElementChild as Element).className).toContain(
+      `var(--vk-avatar-tone-${tone},`,
+    );
+    expect(visual(container.firstElementChild as Element).className).toContain(
+      `var(--vk-avatar-on-tone-${tone},`,
+    );
+  });
+
+  it('honours a fixed tone', () => {
     const { container } = render(<Avatar name="Lan" alt="Lan" tone="tertiary" />);
+    expect(container.firstElementChild).toHaveAttribute('data-tone', 'tertiary');
     expect(visual(container.firstElementChild as Element)).toHaveClass(
       'bg-tertiary-container',
       'text-on-tertiary-container',
     );
+  });
+
+  it('lets Tailwind classes override the colours', () => {
+    const { container } = render(
+      <Avatar name="Lan" alt="Lan" classNames={{ visual: 'bg-green-600 text-white' }} />,
+    );
+    const shape = visual(container.firstElementChild as Element);
+    expect(shape).toHaveClass('bg-green-600', 'text-white');
+    expect(shape.className).not.toMatch(/bg-\[var\(--vk-avatar-tone/);
+    expect(shape.className).not.toMatch(/text-\[var\(--vk-avatar-on-tone/);
   });
 
   it('sizes from xs (24px) to 2xl (96px), each with a type-scale role', () => {
@@ -145,10 +197,12 @@ describe('Avatar', () => {
   });
 
   it('raises the badges above the photo and overlapping neighbours', () => {
-    const { container } = render(<Avatar name="Lan" alt="Lan" presence="online" verified />);
-    const [, presence, verified] = [...(container.firstElementChild?.children ?? [])];
+    const { container } = render(
+      <Avatar name="Lan" alt="Lan" presence="online" badge="1" badgeLabel="one" />,
+    );
+    const [, presence, badge] = [...(container.firstElementChild?.children ?? [])];
     expect(presence).toHaveClass('z-1');
-    expect(verified).toHaveClass('z-1');
+    expect(badge).toHaveClass('z-1');
   });
 
   it('becomes a named link with a touch target', () => {
@@ -186,7 +240,7 @@ describe('Avatar', () => {
   it('has no axe violations in its static, linked and badged forms', async () => {
     const { container } = render(
       <div>
-        <Avatar name="Lan" alt="Lan" presence="away" verified />
+        <Avatar name="Lan" alt="Lan" presence="away" badge="1" badgeLabel="one" />
         <Avatar name="Minh" alt="Minh's profile" href="/u/minh" />
         <Avatar name="An" decorative />
       </div>,

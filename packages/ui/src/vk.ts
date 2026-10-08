@@ -30,8 +30,10 @@ export {
 export {
   Avatar,
   avatarShapes,
+  AVATAR_TONE_SLOTS,
   type AvatarClassNames,
   type AvatarLabels,
+  type AvatarPlacement,
   type AvatarPresence,
   type AvatarProps,
   type AvatarShape,

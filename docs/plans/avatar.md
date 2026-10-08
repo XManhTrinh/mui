@@ -1,6 +1,6 @@
 # Plan: Avatar and AvatarGroup (`@vkieu/mui/vk`)
 
-Status: **approved by Mike, 2026-10-07; built on `feat/vk-avatar`, in review**
+Status: **built and merged (90f2b65), 2026-10-08; badge, placement and colour-slot changes on `feat/vk-avatar-badges`**
 
 ## Goal
 
@@ -33,10 +33,10 @@ shadcn's avatar (Radix) is `Avatar` + `AvatarImage` + `AvatarFallback`: it shows
 | 4 | Image | `src`, `srcSet`, `sizes`, `alt`; `loading="lazy"` and `decoding="async"` by default; an `image` slot takes any element instead (for example `next/image`), so apps keep their image optimisation |
 | 5 | Fallback order | Image → initials from `name` → `icon` (a person icon by default) |
 | 6 | Initials | `getInitials(name, locale)`: the first letters of the first and last words, split by grapheme (`Intl.Segmenter`) so diacritics stay attached ("Đỗ Ứng" → "ĐỨ"), upper-cased for the locale, one letter for one word. An `initials` prop overrides it |
-| 7 | Colour | `tone` = `auto` (default) picks from `primary-container`, `secondary-container`, `tertiary-container` and `surface-container-highest` (with their `on-*` text) by a stable hash of `name`; or a fixed tone. Never a raw colour, so it follows every theme, mode and contrast level |
+| 7 | Colour | `tone` = `auto` (default) hashes `name` into one of **12 colour slots**, each a CSS variable pair (`--vk-avatar-tone-N` / `--vk-avatar-on-tone-N`) that takes any colour; by default the slots cycle through `primary-container`, `secondary-container`, `tertiary-container` and `surface-container-highest` with their `on-*` text, so an app adds colours without code (Mike, 2026-10-08). Or a fixed tone. Tailwind classes on the parts (`classNames.visual`) win too |
 | 8 | Sizes | `size` = `xs` 24 · `sm` 32 · `md` 40 (default) · `lg` 56 · `xl` 72 · `2xl` 96, each with a type-scale role for the initials (from `label-small` to `headline-medium`). Consumer `size-*` classes still win through `cn()` |
 | 9 | Shape | `shape` = `circle` (default) \| `rounded` (shape-scale corner, scaled with size) \| any of the 35 M3 Expressive shapes (a CSS mask, so it scales). No other prop changes the shape (Mike, 2026-10-08: `kind` removed, the shape is chosen only with `shape`). `avatarShapes` lists them all |
-| 10 | Badges | `presence` = `online` | `away` | `offline` (a dot at the bottom end, outlined in `surface` so it reads on any background) and `verified` (a check badge at the top end), drawn in the avatar's grid cell (no positioned children), raised with `z-1` above the photo and above overlapping neighbours in a group. Both have text alternatives in the accessible name. Their colours default to M3 roles (online `primary`, away `tertiary`, offline an `outline` ring, verified `primary`) and are CSS variables (`--vk-avatar-online`, `--vk-avatar-away`, `--vk-avatar-offline`, `--vk-avatar-verified`, `--vk-avatar-on-verified`) that an app overrides on `:root`, a section or one avatar (Mike, 2026-10-08) |
+| 10 | Badges | `presence` = `online` \| `away` \| `offline`, and `badge`: any icon or short content with a required `badgeLabel` for the accessible name (Mike, 2026-10-08: replaces `verified`, which is an app meaning). `presencePlacement` (default `bottom-end`) and `badgePlacement` (default `top-end`) take any logical corner, mirrored in right-to-left. Drawn in the avatar's grid cell (no positioned children), raised with `z-1` above the photo and overlapping neighbours. Colours default to M3 roles and are CSS variables (`--vk-avatar-online`, `--vk-avatar-away`, `--vk-avatar-offline`, `--vk-avatar-badge`, `--vk-avatar-on-badge`) |
 | 11 | Interactive | With `href` or `onPress`, the avatar becomes a link or button using `ButtonBase` (state layer, focus ring) and `TouchTarget` (48px hit area for 24–40px avatars). A name is required by type in this form |
 | 12 | Accessibility | `alt` is required unless `decorative` (when the name is already written next to it, as in most lists). Badge meanings are part of the name ("Lan, online, verified") |
 | 13 | Group layout | `AvatarGroup` overlaps its avatars (overlap scaled with size), separates them with a `surface` ring (`ringColor` for avatars on other surfaces), `max` shows the first N and a "+N" avatar, and `spacing` = `overlap` (default) | `spaced`. Right-to-left mirrors the stacking |
@@ -51,7 +51,7 @@ import { Avatar, AvatarGroup } from '@vkieu/mui/vk';
 
 <Avatar name="Nguyễn Văn An" src={user.photo} alt="Nguyễn Văn An" size="lg" presence="online" />
 
-<Avatar shape="rounded" name="Phở Sài Gòn" src={business.logo} decorative verified />
+<Avatar shape="rounded" name="Phở Sài Gòn" src={business.logo} decorative badge={<VerifiedIcon />} badgeLabel="verified" />
 
 <Avatar name="Lan" href="/u/lan" alt="Lan's profile" size="sm" />
 

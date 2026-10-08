@@ -14,6 +14,10 @@ test.describe('Avatar visual regression', () => {
   }
 
   for (const mode of MODES) {
+    test(`tones · ${mode}`, async ({ page }) => {
+      await openStory(page, 'vk-avatar--tones', { mode });
+      await expect(page.getByTestId('tones')).toHaveScreenshot(`tones-${mode}.png`);
+    });
     test(`sizes · ${mode}`, async ({ page }) => {
       await openStory(page, 'vk-avatar--sizes', { mode });
       await expect(page.getByTestId('sizes')).toHaveScreenshot(`sizes-${mode}.png`);
@@ -111,6 +115,45 @@ test.describe('Avatar behaviour', () => {
       .poll(() => online.evaluate((el) => getComputedStyle(el).backgroundColor))
       .toBe('rgb(0, 128, 0)');
     expect(before).not.toBe('rgb(0, 128, 0)');
+  });
+
+  test('apps can recolour an auto slot with any colour, or override with classes', async ({
+    page,
+  }) => {
+    await openStory(page, 'vk-avatar--tones');
+    const slotColour = await page
+      .getByTestId('slot-override')
+      .locator(':scope > span')
+      .first()
+      .evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(slotColour).toBe('rgb(22, 163, 74)');
+    const classOverride = await page
+      .getByTestId('class-override')
+      .locator(':scope > span')
+      .first()
+      .evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(classOverride).toBe('rgb(14, 165, 233)');
+  });
+
+  test('badge and presence placements mirror in right-to-left', async ({ page }) => {
+    for (const dir of ['ltr', 'rtl'] as const) {
+      await openStory(page, 'vk-avatar--variants', { dir });
+      const avatar = page.getByTestId('placed');
+      const box = await avatar.boundingBox();
+      const presence = await avatar.locator(':scope > span').nth(1).boundingBox();
+      if (!box || !presence) throw new Error('missing avatar');
+      const atStart = dir === 'ltr' ? presence.x <= box.x + 1 : presence.x + presence.width >= box.x + box.width - 1;
+      expect(atStart, dir).toBe(true);
+      expect(presence.y).toBeLessThanOrEqual(box.y + 1);
+    }
+  });
+
+  test('every auto slot is used across names', async ({ page }) => {
+    await openStory(page, 'vk-avatar--tones');
+    const tones = await page.getByTestId('tones').locator('[data-tone]').evaluateAll((els) =>
+      els.map((el) => el.getAttribute('data-tone')),
+    );
+    expect(new Set(tones).size).toBeGreaterThan(6);
   });
 
   test('+N opens the full list', async ({ page }) => {
