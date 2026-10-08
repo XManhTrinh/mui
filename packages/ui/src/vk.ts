@@ -48,3 +48,16 @@ export {
 export { avatarGroupStyles, avatarStyles, type AvatarStyleProps } from './vk/avatar/avatar-styles';
 export { getInitials } from './vk/avatar/get-initials';
 export type { AvatarImageElementProps } from './vk/avatar/avatar-image';
+export { PinInput, type PinInputClassNames, type PinInputProps } from './vk/pin-input/PinInput';
+export {
+  pinInputStyles,
+  type PinInputCorner,
+  type PinInputSize,
+  type PinInputStyleProps,
+  type PinInputVariant,
+} from './vk/pin-input/pin-input-styles';
+export {
+  sanitizePin,
+  type PinInputType,
+  type SanitizePinOptions,
+} from './vk/pin-input/sanitize-pin';

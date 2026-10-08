@@ -273,3 +273,56 @@
     outline-offset: -1px;
   }
 }
+
+/*
+ * PinInput (`@vkieu/mui/vk`, not an M3 component; docs/plans/pin-input.md). The caret in the
+ * active box blinks like a text cursor; a wrong code shakes the row once, on the default
+ * spatial spring's duration. Under reduced motion the caret stays on and nothing shakes.
+ */
+@keyframes vk-pin-caret {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes vk-pin-shake {
+  0%,
+  100% {
+    translate: 0;
+  }
+  20% {
+    translate: -6px;
+  }
+  40% {
+    translate: 5px;
+  }
+  60% {
+    translate: -3px;
+  }
+  80% {
+    translate: 2px;
+  }
+}
+
+@utility vk-pin-caret {
+  animation: vk-pin-caret 1s linear infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+  @media (forced-colors: active) {
+    background-color: CanvasText;
+  }
+}
+
+@utility vk-pin-shake {
+  animation: vk-pin-shake var(--md-sys-motion-spring-spatial-default-duration)
+    var(--md-sys-motion-easing-standard);
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}

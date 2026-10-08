@@ -7,7 +7,7 @@ import { SearchIcon } from '../../components/icons';
 import { searchPages, type SearchEntry } from './search-index';
 
 /**
- * Searches the documentation pages by title and summary: a library `SearchBar` whose
+ * Searches the documentation pages by title, summary and keywords: a library `SearchBar` whose
  * expanded view lists the matches as a library `List`. Choosing one navigates to it.
  */
 export function DocsSearch({

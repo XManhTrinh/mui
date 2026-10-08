@@ -26,7 +26,7 @@ import {
   Tabs,
   TextField,
 } from '@vkieu/mui';
-import { Avatar, avatarShapes, Skeleton, SkeletonGroup } from '@vkieu/mui/vk';
+import { Avatar, avatarShapes, PinInput, Skeleton, SkeletonGroup } from '@vkieu/mui/vk';
 import { createElement, type ComponentType, type ReactElement } from 'react';
 import { AddIcon, EditIcon, SendIcon, StarIcon } from '../icons';
 
@@ -82,6 +82,7 @@ const LoadingIndicatorAny = loose(LoadingIndicator);
 const RadioAny = loose(Radio);
 const ListItemAny = loose(ListItem);
 const AvatarAny = loose(Avatar);
+const PinInputAny = loose(PinInput);
 const SkeletonAny = loose(Skeleton);
 const TabAny = loose(Tab);
 
@@ -195,6 +196,54 @@ export const PLAYGROUND_DESCRIPTORS: Record<string, PlaygroundDescriptor> = {
     surfacedProps: ['variant', 'disabled'],
     initialState: { variant: 'filled' },
     codeSlots: { label: '"Label"' },
+  },
+  'pin-input': {
+    component: 'PinInput',
+    importFrom: '@vkieu/mui/vk',
+    render: (props) =>
+      createElement(PinInputAny, {
+        ...props,
+        label: 'Code',
+        errorMessage: "That code didn't work.",
+      }),
+    defaultProps: {
+      variant: 'outlined',
+      size: 'medium',
+      corner: 'extra-small',
+      length: 6,
+      type: 'numeric',
+      mask: false,
+      otp: true,
+      invalid: false,
+      disabled: false,
+    },
+    surfacedProps: [
+      'variant',
+      'size',
+      'corner',
+      'length',
+      'type',
+      'mask',
+      'otp',
+      'invalid',
+      'disabled',
+    ],
+    initialState: { variant: 'outlined', size: 'medium', length: 6 },
+    enumOptions: {
+      corner: [
+        'none',
+        'extra-small',
+        'small',
+        'medium',
+        'large',
+        'large-increased',
+        'extra-large',
+        'extra-large-increased',
+        'extra-extra-large',
+        'full',
+      ],
+    },
+    codeSlots: { label: '"Code"' },
   },
   checkbox: {
     component: 'Checkbox',

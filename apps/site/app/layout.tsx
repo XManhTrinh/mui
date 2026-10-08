@@ -33,6 +33,7 @@ const SEARCH_ENTRIES: SearchEntry[] = [
     title: page.title,
     summary: page.summary,
     href: `/components/${page.slug}`,
+    ...(page.keywords && { keywords: page.keywords }),
   })),
 ];
 

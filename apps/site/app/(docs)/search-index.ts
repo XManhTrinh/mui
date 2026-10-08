@@ -3,6 +3,8 @@ export interface SearchEntry {
   title: string;
   summary: string;
   href: string;
+  /** Other words this page is found by, after title and summary matches. */
+  keywords?: string[];
 }
 
 /**
@@ -48,7 +50,7 @@ export const GUIDE_ENTRIES: SearchEntry[] = [
   },
 ];
 
-/** Pages matching a query on their title (first) or summary, at most `limit` of them. */
+/** Pages matching a query on their title (first), summary or keywords, at most `limit` of them. */
 export function searchPages(entries: SearchEntry[], query: string, limit = 8): SearchEntry[] {
   const q = query.trim().toLowerCase();
   if (!q) return entries.slice(0, limit);
@@ -56,5 +58,11 @@ export function searchPages(entries: SearchEntry[], query: string, limit = 8): S
   const bySummary = entries.filter(
     (entry) => !byTitle.includes(entry) && entry.summary.toLowerCase().includes(q),
   );
-  return [...byTitle, ...bySummary].slice(0, limit);
+  const byKeyword = entries.filter(
+    (entry) =>
+      !byTitle.includes(entry) &&
+      !bySummary.includes(entry) &&
+      (entry.keywords ?? []).some((keyword) => keyword.toLowerCase().includes(q)),
+  );
+  return [...byTitle, ...bySummary, ...byKeyword].slice(0, limit);
 }

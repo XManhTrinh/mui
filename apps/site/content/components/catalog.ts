@@ -19,13 +19,7 @@ export type ComponentGroup =
  * `group`) splits into `feedback` and `pickers` here.
  */
 export type RailGroupId =
-  | 'actions'
-  | 'inputs'
-  | 'containment'
-  | 'navigation'
-  | 'feedback'
-  | 'pickers'
-  | 'primitives';
+  'actions' | 'inputs' | 'containment' | 'navigation' | 'feedback' | 'pickers' | 'primitives';
 
 export interface RailGroup {
   id: RailGroupId;
@@ -89,6 +83,8 @@ export interface ComponentMeta {
   related?: string[];
   /** A short "when not to use" note. */
   whenNotToUse?: string;
+  /** Other words people search for, e.g. "OTP" for the PIN input. Matched by the site search. */
+  keywords?: string[];
   /** Marks a component whose source/story flags it as preview. */
   stability?: 'preview';
   /**
@@ -222,6 +218,34 @@ export const COMPONENT_META: ComponentMeta[] = [
     related: ['checkbox', 'radio-group', 'slider'],
     whenNotToUse:
       'For a yes/no choice use a Checkbox or Switch; for picking one of a few options use a Radio group.',
+  },
+  {
+    slug: 'pin-input',
+    title: 'PIN input',
+    group: 'Inputs & selection',
+    railGroup: 'inputs',
+    summary:
+      'One box per character for verification codes, PINs and vouchers, with paste and one-time-code autofill. Not an M3 component (@vkieu/mui/vk).',
+    propsComponents: ['PinInput'],
+    playground: 'full',
+    vk: true,
+    specs: {
+      sizes: ['small', 'medium', 'large'],
+      variants: ['outlined', 'filled'],
+      shape: 'rounded-corner-extra-small',
+    },
+    related: ['text-field'],
+    whenNotToUse:
+      'For anything of variable or longer length (passwords, recovery keys, phone numbers), use a Text field.',
+    keywords: [
+      'OTP',
+      'one-time code',
+      'verification code',
+      'two-factor',
+      '2FA',
+      'passcode',
+      'code input',
+    ],
   },
   {
     slug: 'checkbox',

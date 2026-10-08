@@ -15,6 +15,16 @@ test.describe('Docs shell', () => {
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Slider/);
   });
 
+  test('finds a component by a keyword that is not in its title', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/getting-started');
+    await page.getByRole('combobox', { name: 'Search documentation' }).click();
+    const dialog = page.getByRole('dialog', { name: 'Search documentation' });
+    await dialog.getByRole('searchbox').fill('otp');
+    await dialog.getByRole('row', { name: /^PIN input/ }).click();
+    await expect(page).toHaveURL(/\/components\/pin-input(\?|$)/);
+  });
+
   test('Enter opens the best match; no match says so', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/getting-started');

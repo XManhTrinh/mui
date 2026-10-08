@@ -233,3 +233,28 @@ test.describe('Avatar', () => {
     ).toEqual([]);
   });
 });
+
+test.describe('PinInput', () => {
+  test('server-renders its boxes and value before hydration', async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    await page.goto('/pin-input');
+    const code = page.getByTestId('code');
+    await expect(code.locator('[data-state]')).toHaveCount(6);
+    await expect(code.locator('[data-filled]')).toHaveCount(3);
+    await expect(page.getByLabel('6-digit code')).toHaveValue('123');
+    await context.close();
+  });
+
+  test('hydrates without errors and takes typing', async ({ page }) => {
+    const errors = collectConsoleErrors(page);
+    await page.goto('/pin-input');
+    const input = page.getByLabel('6-digit code');
+    await input.click();
+    await input.press('End');
+    await page.keyboard.type('456');
+    await expect(input).toHaveValue('123456');
+    await expect(page.getByTestId('code')).toHaveAttribute('data-complete', 'true');
+    expect(errors).toEqual([]);
+  });
+});

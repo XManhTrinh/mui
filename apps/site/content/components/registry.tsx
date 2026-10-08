@@ -19,6 +19,7 @@ import { MenuBody } from './menu';
 import { NavigationBarBody } from './navigation-bar';
 import { NavigationRailBody } from './navigation-rail';
 import { PickerDialogBody } from './picker-dialog';
+import { PinInputBody } from './pin-input';
 import { PrimitivesBody } from './primitives';
 import { ProgressBody } from './progress';
 import { RadioGroupBody } from './radio-group';
@@ -71,6 +72,7 @@ const BODIES: Record<string, ComponentType> = {
   fab: FabBody,
   'fab-menu': FabMenuBody,
   'text-field': TextFieldBody,
+  'pin-input': PinInputBody,
   checkbox: CheckboxBody,
   'radio-group': RadioGroupBody,
   switch: SwitchBody,
@@ -128,6 +130,7 @@ export const COMPONENT_SLOTS: Record<string, string[]> = {
     'errorText',
     'counter',
   ],
+  PinInput: ['root', 'label', 'boxes', 'box', 'separator', 'supportingText', 'errorText'],
   Checkbox: ['root', 'control', 'label', 'box'],
   RadioGroup: ['root', 'label', 'options', 'supportingText', 'errorText'],
   Radio: ['root', 'control', 'label', 'ring', 'dot'],
