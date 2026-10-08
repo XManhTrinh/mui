@@ -101,6 +101,30 @@ test.describe('Select behaviour', () => {
     await expect(page.getByTestId('value')).toHaveText('near');
   });
 
+  test('one press outside closes the menu and leaves the field', async ({ page }) => {
+    await openStory(page, 'components-select--interactive');
+    const field = page.getByRole('button', { name: /Sort by/ });
+    const root = page.getByTestId('interactive').locator('[data-field-state]').first();
+    await field.click();
+    await expect(page.getByRole('listbox')).toBeVisible();
+    await page.mouse.click(700, 500);
+    await expect(page.getByRole('listbox')).toBeHidden();
+    await expect(field).not.toBeFocused();
+    await expect(root).not.toHaveAttribute('data-focused');
+    // Escape still hands focus back, and so does pressing the field to close it.
+    await field.click();
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('listbox')).toBeHidden();
+    await expect(field).toBeFocused();
+    await field.click();
+    await expect(page.getByRole('listbox')).toBeVisible();
+    // While open, the field is inert behind the menu, so press where it is.
+    const box = (await root.boundingBox())!;
+    await page.mouse.click(box.x + box.width / 2, box.y + 28);
+    await expect(page.getByRole('listbox')).toBeHidden();
+    await expect(field).toBeFocused();
+  });
+
   test('Escape closes without changing the value', async ({ page }) => {
     await openStory(page, 'components-select--interactive');
     await page.getByRole('button', { name: /Sort by/ }).click();

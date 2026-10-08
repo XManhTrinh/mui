@@ -3,6 +3,7 @@ import type { ReactElement } from 'react';
 import { GALLERY_RAIL_GROUPS, pagesInRailGroup } from '../content/components/catalog';
 import { ArrowForwardIcon } from './icons';
 import { GROUP_ICONS } from './nav/group-icons';
+import { PageChips } from './page-chips';
 
 export interface ComponentGalleryProps {
   /**
@@ -79,16 +80,7 @@ function GalleryCard({
       <div className="flex items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-2">
           <span className="text-title-medium text-on-surface">{title}</span>
-          {expressive ? (
-            <span className="shrink-0 rounded-corner-full bg-tertiary-container px-2 py-0.5 text-label-small text-on-tertiary-container">
-              Expressive
-            </span>
-          ) : null}
-          {vk ? (
-            <span className="shrink-0 rounded-corner-full bg-secondary-container px-2 py-0.5 text-label-small text-on-secondary-container">
-              VK
-            </span>
-          ) : null}
+          <PageChips expressive={expressive} vk={vk} />
         </div>
         <span
           aria-hidden="true"

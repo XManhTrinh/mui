@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import type { PointerEvent, ReactNode, Ref } from 'react';
 import { pagesInRailGroup, type RailGroup } from '../../content/components/catalog';
+import { PageChips } from '../page-chips';
 
 export interface GroupTriggerProps {
   group: RailGroup;
@@ -160,9 +161,11 @@ export function RailFlyout({
                     href={href}
                     aria-current={active ? 'page' : undefined}
                     onClick={onNavigate}
-                    className="flex flex-col rounded-corner-full px-3 py-2.5 text-body-medium text-on-surface-variant outline-none transition-colors hover:bg-on-surface/8 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary aria-[current=page]:bg-secondary-container aria-[current=page]:text-body-medium-emphasized aria-[current=page]:text-on-secondary-container motion-reduce:transition-none"
+                    // The chips follow the name, and wrap under it when the 208px pane is full.
+                    className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-corner-large px-3 py-2.5 text-body-medium text-on-surface-variant outline-none transition-colors hover:bg-on-surface/8 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary aria-[current=page]:bg-secondary-container aria-[current=page]:text-body-medium-emphasized aria-[current=page]:text-on-secondary-container motion-reduce:transition-none"
                   >
-                    {page.title}
+                    <span>{page.title}</span>
+                    <PageChips expressive={page.expressive} vk={page.vk} />
                   </Link>
                 </li>
               );

@@ -36,14 +36,11 @@ export const phoneFieldStyles = tv({
       '[transition-timing-function:var(--md-sys-motion-spring-effects-fast-easing),var(--md-sys-motion-spring-spatial-fast-easing)]',
       'origin-top-left rtl:origin-top-right starting:scale-90 starting:opacity-0 data-exiting:scale-90 data-exiting:opacity-0',
     ],
-    sheetContent: 'flex min-h-0 flex-1 flex-col',
-    searchRow: 'flex shrink-0 items-center gap-[8px] px-[12px] pt-[12px] pb-[8px]',
-    search: [
-      'h-[48px] w-full rounded-corner-full bg-surface-container-highest ps-[44px] pe-[16px]',
-      'text-body-large text-on-surface placeholder:text-on-surface-variant outline-none',
-      'focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-primary',
-    ],
-    searchIcon: 'pointer-events-none absolute ms-[12px] size-[24px] text-on-surface-variant',
+    // In the sheet, 8px from the screen's edges in all (4px here + the rows' 4px), as Select's.
+    sheetContent: 'flex min-h-0 flex-1 flex-col px-[4px]',
+    // The search is the M3 search bar's field (`searchBarStyles`: 56px, full corners,
+    // `surface-container-high`), inset by the menu panel's 4px padding like the list below.
+    searchRow: 'flex shrink-0 p-[4px]',
     // The shared option list (Select and Autocomplete's), inside the picker's own panel.
     list: 'min-h-0 flex-1 px-[4px] pb-[8px]',
   },

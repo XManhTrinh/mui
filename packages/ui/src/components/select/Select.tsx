@@ -183,6 +183,10 @@ export function Select<T extends object, M extends SelectionMode = 'single'>(
   const state = useSelectState<T, M>(ariaProps);
   const triggerRef = useObjectRef(triggerRefProp);
   const containerRef = useRef<HTMLDivElement>(null);
+  // Set by a press outside the menu and the field: the focus the menu hands back to the
+  // field on closing (WAI-ARIA, right after Escape or a choice) is let go, so one press
+  // outside leaves the field, as it does any other field.
+  const releaseFocusRef = useRef(false);
   const listBoxRef = useRef<HTMLUListElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
   const {
@@ -199,6 +203,7 @@ export function Select<T extends object, M extends SelectionMode = 'single'>(
   // `useSelect`'s trigger props are React Aria button props; `useButton` makes them DOM props.
   const { buttonProps } = useButton(triggerProps, triggerRef);
   const { focusProps, isFocusVisible, isFocused } = useFocusRing();
+  const fieldButtonProps = mergeProps(buttonProps, focusProps);
   const { hoverProps, isHovered } = useHover({ isDisabled: disabled });
 
   const isCompact = useSyncExternalStore(
@@ -260,6 +265,7 @@ export function Select<T extends object, M extends SelectionMode = 'single'>(
           // A press anywhere on the field (not only its text) opens it, like Compose.
           if (disabled || triggerRef.current?.contains(event.target as Node)) return;
           event.preventDefault();
+          releaseFocusRef.current = false;
           triggerRef.current?.focus();
           state.toggle();
         }}
@@ -279,7 +285,22 @@ export function Select<T extends object, M extends SelectionMode = 'single'>(
           {...(form && { form })}
         />
         <button
-          {...mergeProps(buttonProps, focusProps)}
+          {...fieldButtonProps}
+          onFocus={(event) => {
+            fieldButtonProps.onFocus?.(event);
+            if (!releaseFocusRef.current) return;
+            releaseFocusRef.current = false;
+            triggerRef.current?.blur();
+          }}
+          // Using the field again means it's wanted, whatever came before.
+          onPointerDown={(event) => {
+            releaseFocusRef.current = false;
+            fieldButtonProps.onPointerDown?.(event);
+          }}
+          onKeyDown={(event) => {
+            releaseFocusRef.current = false;
+            fieldButtonProps.onKeyDown?.(event);
+          }}
           ref={triggerRef}
           type="button"
           className={cn(
@@ -311,7 +332,14 @@ export function Select<T extends object, M extends SelectionMode = 'single'>(
           <div className="flex min-h-0 flex-1 flex-col px-[8px] pb-[16px]">{list}</div>
         </BottomSheet>
       ) : (
-        <OptionPopover state={state} triggerRef={containerRef} popoverRef={popoverRef}>
+        <OptionPopover
+          state={state}
+          triggerRef={containerRef}
+          popoverRef={popoverRef}
+          onPressOutside={() => {
+            releaseFocusRef.current = true;
+          }}
+        >
           {list}
         </OptionPopover>
       )}

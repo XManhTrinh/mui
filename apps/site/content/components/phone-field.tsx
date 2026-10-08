@@ -99,6 +99,11 @@ export async function PhoneFieldBody() {
             <code className="text-on-surface">error</code> when the number is invalid.
           </li>
           <li>
+            The search is the M3 search bar&apos;s field: 56px, full corners,{' '}
+            <code className="text-on-surface">surface-container-high</code>, and the focus ring for
+            keyboard focus only.
+          </li>
+          <li>
             The list is the one Select and Autocomplete use: the M3 menu&apos;s{' '}
             <code className="text-on-surface">surface-container-low</code> panel at elevation 2,
             with the chosen country in <code className="text-on-surface">tertiary-container</code>{' '}

@@ -10,6 +10,7 @@ import {
 import { DOCS_SECTIONS } from '../../app/(docs)/sections';
 import { ExpandMoreIcon, WidgetsIcon } from '../icons';
 import { GROUP_ICONS } from './group-icons';
+import { PageChips } from '../page-chips';
 
 function currentRailGroup(pathname: string): RailGroupId | null {
   const match = pathname.match(/^\/components\/([^/]+)/);
@@ -27,12 +28,15 @@ function DrawerLink({
   icon,
   active,
   onNavigate,
+  chips,
   children,
 }: {
   href: string;
   icon?: ReactNode;
   active: boolean;
   onNavigate: () => void;
+  /** Shown after the name (the "Expressive" / "VK" chips). */
+  chips?: ReactNode;
   children: ReactNode;
 }) {
   return (
@@ -42,8 +46,18 @@ function DrawerLink({
       onClick={onNavigate}
       className="flex items-center gap-3 rounded-full px-4 py-2.5 text-label-large text-on-surface-variant outline-none transition-colors hover:bg-on-surface/8 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary aria-[current=page]:bg-secondary-container aria-[current=page]:text-on-secondary-container motion-reduce:transition-none"
     >
-      {icon != null && <span className="inline-flex size-6 shrink-0 [&>svg]:size-full">{icon}</span>}
-      <span className="min-w-0 truncate">{children}</span>
+      {icon != null && (
+        <span className="inline-flex size-6 shrink-0 [&>svg]:size-full">{icon}</span>
+      )}
+      {chips ? (
+        // A name with chips wraps them under it rather than cutting the name short.
+        <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+          <span>{children}</span>
+          {chips}
+        </span>
+      ) : (
+        <span className="min-w-0 truncate">{children}</span>
+      )}
     </a>
   );
 }
@@ -96,7 +110,16 @@ function AccordionSection({
             const href = `/components/${page.slug}`;
             return (
               <li key={page.slug}>
-                <DrawerLink href={href} active={pathname === href} onNavigate={onNavigate}>
+                <DrawerLink
+                  href={href}
+                  active={pathname === href}
+                  onNavigate={onNavigate}
+                  chips={
+                    page.expressive || page.vk ? (
+                      <PageChips expressive={page.expressive} vk={page.vk} />
+                    ) : undefined
+                  }
+                >
                   {page.title}
                 </DrawerLink>
               </li>
@@ -113,13 +136,7 @@ function AccordionSection({
  * (each an in-place accordion of component links). Rendered inside the modal
  * `NavigationRail`. Every link calls `onNavigate` to dismiss the drawer on activation.
  */
-export function DrawerNav({
-  pathname,
-  onNavigate,
-}: {
-  pathname: string;
-  onNavigate: () => void;
-}) {
+export function DrawerNav({ pathname, onNavigate }: { pathname: string; onNavigate: () => void }) {
   const current = currentRailGroup(pathname);
   return (
     <div className="flex flex-col gap-1 px-3 pb-4">

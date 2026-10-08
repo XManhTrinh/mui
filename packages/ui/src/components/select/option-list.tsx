@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -275,12 +276,15 @@ export function OptionPopover({
   triggerRef,
   popoverRef,
   isNonModal = false,
+  onPressOutside,
   children,
 }: {
   state: OverlayTriggerState;
   triggerRef: RefObject<HTMLElement | null>;
   popoverRef: RefObject<HTMLDivElement | null>;
   isNonModal?: boolean;
+  /** A press outside the menu and the field closes it (modal menus only). */
+  onPressOutside?: (() => void) | undefined;
   children: ReactNode;
 }) {
   const { isPresent, isExiting, exitProps } = usePresence(state.isOpen);
@@ -294,6 +298,7 @@ export function OptionPopover({
         isNonModal={isNonModal}
         isExiting={isExiting}
         exitProps={exitProps}
+        onPressOutside={onPressOutside}
       >
         {children}
       </PopoverBody>
@@ -308,6 +313,7 @@ function PopoverBody({
   isNonModal,
   isExiting,
   exitProps,
+  onPressOutside,
   children,
 }: {
   state: OverlayTriggerState;
@@ -316,6 +322,7 @@ function PopoverBody({
   isNonModal: boolean;
   isExiting: boolean;
   exitProps: ReturnType<typeof usePresence>['exitProps'];
+  onPressOutside: (() => void) | undefined;
   children: ReactNode;
 }) {
   const { popoverProps, underlayProps, placement } = usePopover(
@@ -327,11 +334,32 @@ function PopoverBody({
   useLayoutEffect(() => {
     setWidth(triggerRef.current?.getBoundingClientRect().width);
   }, [triggerRef]);
+  // React Aria makes the page around a modal popover inert, so a press outside lands on
+  // `<body>` whatever is under it; its position tells a press on the field from one away.
+  // Listened to in the capture phase: the popover stops the press once it has closed.
+  useEffect(() => {
+    if (isNonModal || !onPressOutside) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (popoverRef.current?.contains(event.target as globalThis.Node)) return;
+      const field = triggerRef.current?.getBoundingClientRect();
+      const onField =
+        field !== undefined &&
+        event.clientX >= field.left &&
+        event.clientX <= field.right &&
+        event.clientY >= field.top &&
+        event.clientY <= field.bottom;
+      if (!onField) onPressOutside();
+    };
+    document.addEventListener('pointerdown', onPointerDown, true);
+    return () => document.removeEventListener('pointerdown', onPointerDown, true);
+  }, [isNonModal, onPressOutside, popoverRef, triggerRef]);
   const menu = menuStyles();
 
   return (
     <>
-      {isNonModal ? null : <div {...underlayProps} className="fixed inset-0" />}
+      {isNonModal ? null : (
+        <div {...underlayProps} className="fixed inset-0" />
+      )}
       <div
         {...popoverProps}
         ref={popoverRef}

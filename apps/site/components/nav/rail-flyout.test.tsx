@@ -92,7 +92,9 @@ describe('RailFlyout', () => {
         onPointerLeave={noop}
       />,
     );
-    await userEvent.click(screen.getByRole('link', { name: 'FAB' }));
+    // The chip is part of the link's name, so it's announced too ("FAB Expressive" in a
+    // browser, which spaces flex items; jsdom doesn't apply layout).
+    await userEvent.click(screen.getByRole('link', { name: /^FAB\s?Expressive$/ }));
     expect(onNavigate).toHaveBeenCalled();
   });
 
