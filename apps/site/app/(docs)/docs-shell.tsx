@@ -37,15 +37,6 @@ function isActive(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-/**
- * Frosted-glass surface for the sticky top bars: a translucent `surface-container` with a
- * backdrop blur so scrolled content blurs behind the bar. Falls back to an opaque
- * `surface-container` where `backdrop-filter` is unsupported, and forces opaque + no blur
- * when the user requests reduced transparency. Token-based (no raw colours).
- */
-const GLASS_BAR =
-  'bg-surface-container supports-[backdrop-filter]:bg-[color-mix(in_srgb,var(--md-sys-color-surface-container)_72%,transparent)] supports-[backdrop-filter]:backdrop-blur-lg supports-[backdrop-filter]:backdrop-saturate-150 [@media(prefers-reduced-transparency:reduce)]:bg-surface-container! [@media(prefers-reduced-transparency:reduce)]:backdrop-blur-none!';
-
 /** The three compact bottom-bar destinations, defined independently of `DOCS_SECTIONS`. */
 const BOTTOM_DESTINATIONS: { href: string; label: string; icon: ReactElement }[] = [
   { href: '/', label: 'Home', icon: <HomeIcon /> },
@@ -160,8 +151,11 @@ export function DocsShell({
         <TopAppBar
           variant="small"
           titleAlign="center"
+          // M3: an opaque `surface` bar that turns `surface-container` once content scrolls
+          // under it. (A translucent, blurred bar flashed as dark content passed beneath.)
+          scrollBehavior="pinned"
           className="sticky top-0 z-20 hidden medium:flex"
-          classNames={{ root: 'bg-transparent', row: GLASS_BAR, actions: 'min-w-0 pe-4' }}
+          classNames={{ actions: 'min-w-0 pe-4' }}
           // Section links centered in the middle column; search anchored at the inline-end.
           title={
             <div className="flex min-w-0 items-center justify-center gap-1">
@@ -182,8 +176,8 @@ export function DocsShell({
         />
         {/* Compact: the search fills the bar between the drawer button and the settings. */}
         <SearchAppBar
+          scrollBehavior="pinned"
           className="sticky top-0 z-20 medium:hidden"
-          classNames={{ root: GLASS_BAR }}
           navigationIcon={
             <IconButton
               icon={<MenuIcon />}
@@ -208,9 +202,7 @@ export function DocsShell({
             href={destination.href}
             icon={destination.icon}
             selected={
-              destination.href === '/'
-                ? pathname === '/'
-                : isActive(pathname, destination.href)
+              destination.href === '/' ? pathname === '/' : isActive(pathname, destination.href)
             }
           >
             {destination.label}
