@@ -4,9 +4,10 @@ import { tv, type VariantProps } from '../../utils/tv';
  * PhoneField (`@vkieu/mui/vk`, not an M3 component; docs/plans/phone-field.md). The number
  * is the library's TextField; the country field beside it uses the same text field tokens
  * (56px, outline or filled container, `on-surface`, 2px `primary` when focused, `error`
- * when invalid, 38% / 12% when disabled). The picker's list follows the M3 menu: a
- * `surface-container` panel at elevation 2 with 48px items, `secondary-container` for the
- * chosen country and state layers for hover and keyboard focus.
+ * when invalid, 38% / 12% when disabled). The picker's list is the library's M3 menu: its
+ * panel colour (`surface-container-low`) and elevation, and its item styles from
+ * `menuStyles` (44px items, `tertiary-container` for the chosen country, state layers and
+ * the inset focus ring), so the two can't drift apart.
  */
 
 /** Variant definitions for {@link PhoneField}. */
@@ -29,7 +30,7 @@ export const phoneFieldStyles = tv({
     popover: 'z-(--md-sys-z-menu)',
     panel: [
       'flex w-[320px] max-w-[calc(100vw-32px)] flex-col overflow-hidden',
-      'rounded-corner-large bg-surface-container shadow-elevation-2',
+      'rounded-corner-large bg-surface-container-low shadow-elevation-2',
       'max-h-[min(440px,var(--visual-viewport-height,100vh))]',
       'scale-none opacity-100 [transition-property:opacity,scale]',
       '[transition-duration:var(--md-sys-motion-spring-effects-fast-duration),var(--md-sys-motion-spring-spatial-fast-duration)]',
@@ -47,14 +48,8 @@ export const phoneFieldStyles = tv({
     list: 'min-h-0 flex-1 overflow-y-auto px-[4px] pb-[8px] outline-none',
     heading: 'px-[12px] pt-[8px] pb-[4px] text-label-medium text-on-surface-variant',
     divider: 'mx-[12px] my-[4px] h-px bg-outline-variant',
-    option: [
-      'group/option flex min-h-[48px] cursor-pointer items-center gap-[12px] rounded-corner-medium px-[12px]',
-      'text-body-large text-on-surface outline-none select-none state-layer',
-      'data-selected:bg-secondary-container data-selected:text-on-secondary-container',
-    ],
-    optionName: 'min-w-0 flex-1 truncate',
-    optionDial:
-      'shrink-0 text-body-medium text-on-surface-variant tabular-nums [direction:ltr] group-data-selected/option:text-on-secondary-container',
+    // The dialling code beside each country name, in the menu's trailing slot.
+    optionDial: 'tabular-nums [direction:ltr]',
     empty: 'px-[16px] py-[16px] text-body-medium text-on-surface-variant',
   },
   variants: {

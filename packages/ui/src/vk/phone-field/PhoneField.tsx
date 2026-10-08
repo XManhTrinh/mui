@@ -36,6 +36,7 @@ import {
 } from 'react-stately';
 import { useControlledState } from 'react-stately/useControlledState';
 import { TextField } from '../../components/text-field/TextField';
+import { menuStyles } from '../../components/menu/menu-styles';
 import { BottomSheet } from '../../components/sheet/BottomSheet';
 import { Overlay } from '../../primitives/Overlay';
 import { usePresence } from '../../primitives/use-presence';
@@ -693,23 +694,27 @@ function CountryItem({
   const { optionProps, isFocused } = useOption({ key: item.key }, state, ref);
   const { hoverProps, isHovered } = useHover({});
   const country = countryFromKey(item.key);
+  // The library's M3 menu item: same height, colours, selected shape and focus ring.
+  const menu = menuStyles({ variant: 'standard' });
   return (
     <li
       {...mergeProps(optionProps, hoverProps)}
       ref={ref}
       aria-selected={isChosen}
-      className={styles.option()}
+      className={menu.item()}
       data-focus-visible={isFocused || undefined}
       data-hovered={isHovered || undefined}
       data-selected={isChosen || undefined}
     >
       {renderFlag ? (
-        <span aria-hidden="true" className={styles.flag()}>
+        <span aria-hidden="true" className={menu.icon({ class: styles.flag() })}>
           {renderFlag(country)}
         </span>
       ) : null}
-      <span className={styles.optionName()}>{item.rendered}</span>
-      <span aria-hidden="true" className={styles.optionDial()}>
+      <span className={menu.text()}>
+        <span className="truncate">{item.rendered}</span>
+      </span>
+      <span aria-hidden="true" className={menu.trailing({ class: styles.optionDial() })}>
         {dialCode(country)}
       </span>
     </li>
