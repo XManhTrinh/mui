@@ -280,6 +280,34 @@ export const COMPONENT_META: ComponentMeta[] = [
     ],
   },
   {
+    slug: 'image-crop',
+    title: 'Image crop',
+    group: 'Inputs & selection',
+    railGroup: 'inputs',
+    summary:
+      'Frames a photo before upload: drag, pinch or zoom it behind a fixed frame, and get the crop in the original pixels. Not an M3 component (@vkieu/mui/vk).',
+    propsComponents: ['ImageCropDialog', 'ImageCropper'],
+    playground: 'showcase',
+    vk: true,
+    specs: {
+      shape: 'rounded-corner-medium',
+    },
+    related: ['dialog', 'slider', 'avatar'],
+    whenNotToUse:
+      'For photos shown as uploaded (attachments, documents, chat images), skip the crop and upload the file.',
+    keywords: [
+      'crop',
+      'cropper',
+      'avatar',
+      'profile picture',
+      'photo',
+      'image',
+      'upload',
+      'zoom',
+      'pan',
+    ],
+  },
+  {
     slug: 'phone-field',
     title: 'Phone field',
     group: 'Inputs & selection',

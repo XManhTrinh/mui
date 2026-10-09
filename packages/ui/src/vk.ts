@@ -84,3 +84,23 @@ export {
   type ReadPhone,
 } from './vk/phone-field/phone';
 export { countryOptions, matchesCountry, type CountryOption } from './vk/phone-field/countries';
+export {
+  ImageCropper,
+  type ImageCropperClassNames,
+  type ImageCropperLabels,
+  type ImageCropperProps,
+  type ImageCropResult,
+} from './vk/image-crop/ImageCropper';
+export {
+  ImageCropDialog,
+  type ImageCropDialogLabels,
+  type ImageCropDialogProps,
+} from './vk/image-crop/ImageCropDialog';
+export { imageCropStyles, type ImageCropStyleProps } from './vk/image-crop/image-crop-styles';
+export {
+  clampView,
+  coverScale,
+  cropRect,
+  type CropRect,
+  type CropView,
+} from './vk/image-crop/crop-geometry';

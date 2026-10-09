@@ -1,6 +1,6 @@
 # Plan: ImageCropDialog (`@vkieu/mui/vk`)
 
-Status: **approved by Mike on 2026-10-09** (built ourselves with no dependency; a square frame for avatars)
+Status: **approved by Mike on 2026-10-09 and built** (built ourselves with no dependency; a square frame for avatars). Built on the M3 `Dialog`'s new full-screen mode (`fullScreen="compact"`, `DialogHeader`).
 
 ## Goal
 
@@ -34,10 +34,10 @@ M3 has no image cropper, so it's a **`vk` component** (architecture decision #22
 | 6 | Zoom | From "the photo just covers the frame" (minimum) up to 4× that, or `maxZoom`. The photo can never leave a gap inside the frame: panning and zooming clamp to the photo's edges. |
 | 7 | Gestures | Drag with a mouse, pen or one finger; pinch with two fingers; the mouse wheel and trackpad pinch zoom around the pointer. `touch-action: none` only on the crop area, so the page still scrolls outside it. |
 | 8 | Keyboard | The crop area is one focusable element (`role="group"`, labelled "Photo position"): arrow keys move 10px (Shift for 50px), `+` and `-` zoom, and `0` resets. The zoom `Slider` with `−` and `+` icon buttons sits under it. Every action has a non-drag way to do it (WCAG 2.2 SC 2.5.7, dragging movements). |
-| 9 | Dialog | **Full-screen on compact windows** (the M3 full-screen dialog: a top bar with close, the title and the confirm action), and a **basic dialog** on medium and larger windows (about 560px wide, with Cancel and the confirm action at the bottom). One primary action: `confirmLabel`, for example "Save". |
-| 10 | Motion | Zoom and pan follow the pointer with no animation. Resetting and "snap back inside the frame" use the M3 **spatial spring** (`useM3Spring`). With reduced motion, they jump. |
-| 11 | States | `loading` (a skeleton in the frame while the image decodes), `error` (the image can't be decoded, with `errorMessage`, for example HEIC in Chrome; the confirm button is disabled), and `busy` (the app is uploading after confirm: the confirm button shows the loading indicator and the dialog can't be dismissed). |
-| 12 | Text | Every visible and accessible string is a prop with an English default (`title`, `confirmLabel`, `cancelLabel`, `zoomLabel`, `areaLabel`, `resetLabel`), so apps pass translated text. |
+| 9 | Dialog | **Full-screen on compact windows** (the M3 full-screen dialog: a top bar with close, the title and the confirm action), and a **basic dialog** on medium and larger windows (about 560px wide, with Cancel and the confirm action at the bottom). One primary action: `labels.confirm`, for example "Save". |
+| 10 | Motion | Zoom and pan follow the pointer with no animation, and are clamped as they happen, so nothing needs to snap back. Resetting (`0`) eases on the M3 **spatial spring** tokens (a CSS transition); with reduced motion it jumps. |
+| 11 | States | `loading` (a skeleton in the frame while the image decodes), `error` (the image can't be decoded, for example HEIC in Chrome: `labels.error` as an alert, and the confirm button is disabled), and `busy` (the app is uploading after confirm: the actions are disabled, a linear progress indicator shows `progress` or runs indeterminate, and the dialog can't be dismissed). |
+| 12 | Text | Every visible and accessible string has an English default in a `labels` prop (`title`, `confirm`, `cancel`, `close`, `busy`, `area`, `instructions`, `zoom`, `zoomIn`, `zoomOut`, `error`), as `PhoneField` does, so apps pass translated text. |
 | 13 | Right-to-left | The layout mirrors (actions and slider direction), and the photo doesn't. |
 | 14 | Forced colours | The frame ring uses `CanvasText`, and the dimmed outside keeps a visible edge. |
 | 15 | Server rendering | The dialog renders nothing until it's opened. `ImageCropper` renders its frame and skeleton on the server, with no layout shift. |
@@ -50,14 +50,14 @@ M3 has no image cropper, so it's a **`vk` component** (architecture decision #22
 import { ImageCropDialog } from '@vkieu/mui/vk';
 
 <ImageCropDialog
-  isOpen={file !== null}
+  open={file !== null}
   onOpenChange={(open) => !open && setFile(null)}
   src={objectUrl}
   aspect={1}
   guide="circle"
-  title={t('photo.cropTitle')}          // "Adjust your photo"
-  confirmLabel={t('photo.save')}        // "Save"
+  labels={{ title: t('photo.cropTitle'), confirm: t('photo.save') }}  // "Adjust your photo", "Save"
   busy={uploading}
+  progress={uploadProgress}             // 0–1, or leave out for indeterminate
   onConfirm={({ crop, naturalWidth, naturalHeight }) => upload(file, crop)}
 />
 ```
