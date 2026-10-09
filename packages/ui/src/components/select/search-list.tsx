@@ -59,7 +59,6 @@ export interface SearchListProps<T> {
   labels: { search: string; noResults: string; loading: string };
   loading: boolean;
   isBlocked: ((key: Node<T>['key']) => boolean) | undefined;
-  isChosen?: ((key: Node<T>['key']) => boolean) | undefined;
   /** In a sheet: no menu panel of its own. */
   embedded: boolean;
   classNames?: (OptionListClassNames & { search?: string }) | undefined;
@@ -84,7 +83,6 @@ export function SearchList<T>({
   labels,
   loading,
   isBlocked,
-  isChosen,
   embedded,
   classNames,
 }: SearchListProps<T>) {
@@ -156,7 +154,6 @@ export function SearchList<T>({
         loading={loading}
         loadingLabel={labels.loading}
         isBlocked={isBlocked}
-        isChosen={isChosen}
         classNames={classNames}
       />
     </div>

@@ -92,7 +92,6 @@ export function OptionList<T>({
   loading = false,
   loadingLabel,
   isBlocked,
-  isChosen,
   embedded = false,
   classNames,
 }: {
@@ -106,9 +105,7 @@ export function OptionList<T>({
   loadingLabel?: string;
   /** Options that can't be chosen right now (`maxSelections` reached). */
   isBlocked?: ((key: Key) => boolean) | undefined;
-  /** Which options show as chosen, when that isn't the list's own selection. */
-  isChosen?: ((key: Key) => boolean) | undefined;
-  /** Inside a surface of its own (PhoneField's picker): the list without the menu panel. */
+  /** Inside a surface of its own (a sheet, or the search list's panel): no menu panel. */
   embedded?: boolean;
   classNames?: OptionListClassNames | undefined;
 }) {
@@ -128,7 +125,7 @@ export function OptionList<T>({
   const first = nodes[0];
   const topKey = first?.type === 'section' && first.rendered ? null : itemKeys[0];
   const bottomKey = loading ? null : itemKeys.at(-1);
-  const itemOptions = { state, isBlocked, isChosen, topKey, bottomKey, classNames };
+  const itemOptions = { state, isBlocked, topKey, bottomKey, classNames };
 
   return (
     <div
@@ -163,7 +160,6 @@ export function OptionList<T>({
 interface ItemOptions<T> {
   state: ListState<T>;
   isBlocked: ((key: Key) => boolean) | undefined;
-  isChosen: ((key: Key) => boolean) | undefined;
   /** The item at the panel's top edge, if any. */
   topKey: Key | null | undefined;
   /** The item at the panel's bottom edge, if any. */
@@ -205,7 +201,6 @@ function OptionItem<T>({
   item,
   state,
   isBlocked,
-  isChosen,
   topKey,
   bottomKey,
   classNames,
@@ -216,7 +211,6 @@ function OptionItem<T>({
       key: item.key,
       // A blocked option is disabled; otherwise the collection's `disabledKeys` decide.
       ...(isBlocked?.(item.key) && { isDisabled: true }),
-      ...(isChosen && { isSelected: isChosen(item.key) }),
     },
     state,
     ref,
