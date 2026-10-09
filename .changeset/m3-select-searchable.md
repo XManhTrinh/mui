@@ -1,0 +1,5 @@
+---
+'@vkieu/mui': minor
+---
+
+`Select` gains `searchable`: a search at the top of its menu or sheet that filters long lists as you type (accent-insensitive by default; `filter` replaces it and receives the option's key; with `onSearchChange` the app filters `items` itself, e.g. on a server, with `loading`). The search is the M3 search bar's field at 48px; it takes focus in a menu, while a sheet shows the list first. Typing filters, the arrow keys move while focus stays in the search, Enter chooses, Escape clears the search and then closes, sections with no matches hide, and "No results" is announced; multiple selection keeps the list and the search open. `renderValue` sets what the field shows for the chosen option(s) (`SelectedOption`), while screen readers still hear their text. Select renders its hidden native select only for forms (`name`, `autoComplete`, `form` or native validation). `PhoneField`'s country field is now a searchable `Select` (its accessible name is the country and code, then "Country"; each country is listed once, with the priority countries first). `SearchBar`'s field fills the bar, so a consumer `h-*` on the bar resizes it.

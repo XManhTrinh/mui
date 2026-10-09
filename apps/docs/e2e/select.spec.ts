@@ -152,6 +152,77 @@ test.describe('Select behaviour', () => {
   });
 });
 
+test.describe('Select searchable', () => {
+  for (const mode of MODES) {
+    test(`menu with a search · ${mode}`, async ({ page }) => {
+      await openStory(page, 'components-select--searchable', { mode });
+      await page.getByRole('button', { name: /Country of residence/ }).click();
+      await expect(page.getByRole('searchbox', { name: 'Search' })).toBeFocused();
+      await page.keyboard.type('an');
+      await expect(page.getByRole('option', { name: 'France' })).toBeVisible();
+      await expect(page.getByRole('option', { name: 'Australia' })).toHaveCount(0);
+      await expect(page).toHaveScreenshot(`searchable-menu-${mode}.png`);
+    });
+  }
+
+  test('no results', async ({ page }) => {
+    await openStory(page, 'components-select--searchable');
+    await page.getByRole('button', { name: /Country of residence/ }).click();
+    await page.keyboard.type('zz');
+    await expect(page.getByRole('dialog').getByRole('status')).toHaveText('No results');
+    await expect(page).toHaveScreenshot('searchable-no-results.png');
+  });
+
+  test('phone sheet shows the list first; a tap on the search focuses it', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await openStory(page, 'components-select--searchable');
+    await page.getByRole('button', { name: /Country of residence/ }).click();
+    const search = page.getByRole('searchbox', { name: 'Search' });
+    await expect(page.getByRole('listbox')).toBeVisible();
+    await expect(search).not.toBeFocused();
+    await page.waitForTimeout(600);
+    await expect(page).toHaveScreenshot('searchable-sheet.png');
+    await search.click();
+    await expect(search).toBeFocused();
+    await page.keyboard.type('viet');
+    await page.getByRole('option', { name: 'Việt Nam' }).click();
+    await expect(page.getByTestId('value')).toHaveText('VN');
+  });
+
+  test('keyboard: type, move, choose; focus returns to the field', async ({ page }) => {
+    await openStory(page, 'components-select--searchable');
+    const field = page.getByRole('button', { name: /Country of residence/ });
+    await field.focus();
+    await page.keyboard.press('Enter');
+    const search = page.getByRole('searchbox', { name: 'Search' });
+    await expect(search).toBeFocused();
+    await page.keyboard.type('united');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    await expect(search).toBeFocused();
+    await expect(page.getByRole('option', { name: 'United States' })).toHaveAttribute(
+      'data-focus-visible',
+      'true',
+    );
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('dialog')).toBeHidden();
+    await expect(page.getByTestId('value')).toHaveText('US');
+    await expect(field).toBeFocused();
+  });
+
+  test('Escape clears the search, then closes', async ({ page }) => {
+    await openStory(page, 'components-select--searchable');
+    await page.getByRole('button', { name: /Country of residence/ }).click();
+    const search = page.getByRole('searchbox', { name: 'Search' });
+    await page.keyboard.type('fra');
+    await page.keyboard.press('Escape');
+    await expect(search).toHaveValue('');
+    await expect(page.getByRole('dialog')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('dialog')).toBeHidden();
+  });
+});
+
 test.describe('Select layout safety', () => {
   const overrides = ['none', 'fixed', 'absolute', 'sticky', 'static', 'overflowHidden', 'fullWidth', 'transform'];
   for (const override of overrides) {

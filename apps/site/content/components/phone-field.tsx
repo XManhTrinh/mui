@@ -67,14 +67,15 @@ export async function PhoneFieldBody() {
         <h2 className="text-headline-small text-on-surface">Keyboard &amp; screen reader</h2>
         <ul className="flex flex-col gap-2 ps-5 text-body-large text-on-surface-variant [&>li]:list-disc">
           <li>
-            The country button is named with the country and its code (&quot;Country: United Kingdom
-            (+44)&quot;) and opens a labelled dialog.
+            The country field is a searchable Select, named by the country and its code, then its
+            label (&quot;United Kingdom (+44) Country&quot;); it opens a dialog with the search and
+            the list.
           </li>
           <li>
-            In the list, the search field keeps focus: type a name, ISO code or dialling code
-            (&quot;viet&quot;, &quot;VN&quot;, &quot;84&quot;), move with the arrow keys, press
-            Enter to choose or Escape to close. Focus then returns to the country button, with the
-            number next.
+            The search keeps focus: type a name, ISO code or dialling code (&quot;viet&quot;,
+            &quot;VN&quot;, &quot;84&quot;), move with the arrow keys, press Enter to choose, or
+            Escape to clear the search and then close. Focus then returns to the country field, with
+            the number next; a press outside leaves it.
           </li>
           <li>
             The number uses <code className="text-on-surface">type=&quot;tel&quot;</code>, the phone
@@ -83,8 +84,10 @@ export async function PhoneFieldBody() {
             focus.
           </li>
           <li>
-            On compact windows the list opens in a bottom sheet; on larger ones, in a popover by the
-            button. The dial code and the number read left to right in right-to-left layouts.
+            On compact windows the list opens in a bottom sheet, showing the list first so the
+            keyboard doesn&apos;t cover it; on larger ones, in a menu under the field with the
+            search focused. The dial code and the number read left to right in right-to-left
+            layouts.
           </li>
         </ul>
       </section>
@@ -93,8 +96,8 @@ export async function PhoneFieldBody() {
         <h2 className="text-headline-small text-on-surface">Theming</h2>
         <ul className="flex flex-col gap-2 ps-5 text-body-large text-on-surface-variant [&>li]:list-disc">
           <li>
-            The country field uses the Text field&apos;s tokens in both variants: the{' '}
-            <code className="text-on-surface">outline</code> or filled container, 2px{' '}
+            The country field is a Select, so it has the Text field&apos;s tokens in both variants:
+            the <code className="text-on-surface">outline</code> or filled container, 2px{' '}
             <code className="text-on-surface">primary</code> when focused or open, and{' '}
             <code className="text-on-surface">error</code> when the number is invalid.
           </li>

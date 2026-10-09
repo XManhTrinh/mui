@@ -135,6 +135,13 @@ describe('Select', () => {
     expect(new FormData(form).get('sort')).toBe('high');
   });
 
+  it('renders its hidden native select only when a form needs it', () => {
+    const { container, rerender } = render(<Sort />);
+    expect(container.querySelector('select')).toBeNull();
+    rerender(<Sort name="sort" />);
+    expect(container.querySelector('select[name="sort"]')).not.toBeNull();
+  });
+
   it('announces an error', () => {
     render(<Sort invalid errorMessage="Choose an order" />);
     expect(screen.getByText('Choose an order')).toBeInTheDocument();
@@ -176,5 +183,149 @@ describe('Select', () => {
       </div>,
     );
     expect(await axeViolations(container)).toEqual([]);
+  });
+});
+
+const COUNTRIES = [
+  { code: 'GB', name: 'United Kingdom', region: 'Europe' },
+  { code: 'FR', name: 'France', region: 'Europe' },
+  { code: 'VN', name: 'Việt Nam', region: 'Asia' },
+  { code: 'JP', name: 'Japan', region: 'Asia' },
+  { code: 'US', name: 'United States', region: 'Americas' },
+];
+type Country = (typeof COUNTRIES)[number];
+
+function Countries(props: Partial<SelectProps<Country, 'single' | 'multiple'>>) {
+  return (
+    <Select label="Country" searchable items={COUNTRIES} {...props}>
+      {(country: Country) => <SelectItem key={country.code}>{country.name}</SelectItem>}
+    </Select>
+  );
+}
+
+const countryField = () => screen.getByRole('button', { name: /Country/ });
+const searchBox = () => screen.getByRole('searchbox', { name: 'Search' });
+
+describe('Select searchable', () => {
+  it('opens a dialog whose search has focus and filters, ignoring accents', async () => {
+    const onChange = vi.fn();
+    const { container } = render(<Countries onChange={onChange} />);
+    expect(countryField()).toHaveAttribute('aria-haspopup', 'dialog');
+    await userEvent.click(countryField());
+    expect(screen.getByRole('dialog', { name: 'Country' })).toBeInTheDocument();
+    expect(searchBox()).toHaveFocus();
+    await userEvent.keyboard('viet');
+    expect(screen.getAllByRole('option').map((option) => option.textContent)).toEqual(['Việt Nam']);
+    // The arrows move through the matches while focus stays in the search.
+    await userEvent.keyboard('{ArrowDown}');
+    expect(searchBox()).toHaveFocus();
+    expect(searchBox()).toHaveAttribute(
+      'aria-activedescendant',
+      screen.getByRole('option', { name: 'Việt Nam' }).id,
+    );
+    await userEvent.keyboard('{Enter}');
+    expect(onChange).toHaveBeenCalledWith('VN');
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument(), {
+      timeout: 1500,
+    });
+    expect(countryField()).toHaveTextContent('Việt Nam');
+    await waitFor(() => expect(countryField()).toHaveFocus());
+    expect(await axeViolations(container)).toEqual([]);
+  });
+
+  it('Escape clears the search, then closes; the search is fresh next time', async () => {
+    render(<Countries />);
+    await userEvent.click(countryField());
+    await userEvent.keyboard('fra');
+    expect(screen.getAllByRole('option')).toHaveLength(1);
+    await userEvent.keyboard('{Escape}');
+    expect(searchBox()).toHaveValue('');
+    expect(screen.getAllByRole('option')).toHaveLength(5);
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument(), {
+      timeout: 1500,
+    });
+    await userEvent.click(countryField());
+    expect(searchBox()).toHaveValue('');
+  });
+
+  it('closes on Escape with an option chosen, and keeps the choice', async () => {
+    const onChange = vi.fn();
+    render(<Countries defaultValue="FR" onChange={onChange} />);
+    await userEvent.click(countryField());
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument(), {
+      timeout: 1500,
+    });
+    expect(countryField()).toHaveTextContent('France');
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('hides sections with no matches and shows "No results" when nothing matches', async () => {
+    render(
+      <Select label="Country" searchable labels={{ noResults: 'Nothing found' }}>
+        <SelectSection title="Europe">
+          <SelectItem key="GB">United Kingdom</SelectItem>
+          <SelectItem key="FR">France</SelectItem>
+        </SelectSection>
+        <SelectSection title="Asia">
+          <SelectItem key="VN">Việt Nam</SelectItem>
+        </SelectSection>
+      </Select>,
+    );
+    await userEvent.click(countryField());
+    expect(screen.getByText('Asia')).toBeInTheDocument();
+    await userEvent.keyboard('fr');
+    expect(screen.getByText('Europe')).toBeInTheDocument();
+    expect(screen.queryByText('Asia')).not.toBeInTheDocument();
+    await userEvent.keyboard('zz');
+    expect(screen.getByRole('status')).toHaveTextContent('Nothing found');
+  });
+
+  it('keeps the dialog open and the search between several choices, up to maxSelections', async () => {
+    const onChange = vi.fn();
+    render(<Countries selectionMode="multiple" maxSelections={2} onChange={onChange} />);
+    await userEvent.click(countryField());
+    await userEvent.keyboard('united');
+    await userEvent.click(screen.getByRole('option', { name: 'United Kingdom' }));
+    await userEvent.click(screen.getByRole('option', { name: 'United States' }));
+    expect(onChange).toHaveBeenLastCalledWith(['GB', 'US']);
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(searchBox()).toHaveValue('united');
+    await userEvent.clear(searchBox());
+    expect(screen.getByRole('option', { name: 'Japan' })).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  it('leaves filtering to the app when it handles onSearchChange', async () => {
+    const onSearchChange = vi.fn();
+    render(<Countries onSearchChange={onSearchChange} />);
+    await userEvent.click(countryField());
+    await userEvent.keyboard('jap');
+    expect(onSearchChange).toHaveBeenLastCalledWith('jap');
+    expect(screen.getAllByRole('option')).toHaveLength(5);
+  });
+
+  it('opens a sheet showing the list first, without focusing the search', async () => {
+    render(<Countries presentation="sheet" />);
+    await userEvent.click(countryField());
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+    expect(searchBox()).not.toHaveFocus();
+  });
+});
+
+describe('Select renderValue', () => {
+  it('shows the rendered value while screen readers and forms keep the option', () => {
+    const { container } = render(
+      <form>
+        <Countries
+          name="country"
+          defaultValue="GB"
+          renderValue={(selected) => selected.map((option) => `+${option.key}`).join(' ')}
+        />
+      </form>,
+    );
+    expect(countryField()).toHaveAccessibleName(/United Kingdom/);
+    expect(screen.getByText('+GB')).toHaveAttribute('aria-hidden', 'true');
+    expect(container.querySelector('select[name="country"]')).toHaveValue('GB');
   });
 });

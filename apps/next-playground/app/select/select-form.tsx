@@ -20,6 +20,18 @@ export function SelectForm() {
         <SelectItem key="low">Price, low to high</SelectItem>
         <SelectItem key="high">Price, high to low</SelectItem>
       </Select>
+      <Select
+        label="Currency"
+        name="currency"
+        searchable
+        presentation="auto"
+        defaultValue="GBP"
+        renderValue={([chosen]) => chosen?.key}
+      >
+        <SelectItem key="GBP">Pound sterling</SelectItem>
+        <SelectItem key="USD">US dollar</SelectItem>
+        <SelectItem key="VND">Vietnamese đồng</SelectItem>
+      </Select>
       <Autocomplete label="City" name="city" defaultItems={CITIES} defaultValue="ldn">
         {(city) => <AutocompleteItem key={city.id}>{city.name}</AutocompleteItem>}
       </Autocomplete>

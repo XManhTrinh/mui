@@ -264,7 +264,7 @@ test.describe('PhoneField', () => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();
     await page.goto('/phone-field');
-    await expect(page.getByRole('button', { name: 'Country: Vietnam (+84)' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Vietnam (+84) Country' })).toBeVisible();
     await expect(page.getByLabel('Phone', { exact: true })).toHaveValue('0912 345 678');
     await context.close();
   });
@@ -272,7 +272,7 @@ test.describe('PhoneField', () => {
   test('hydrates without errors and opens its country list', async ({ page }) => {
     const errors = collectConsoleErrors(page);
     await page.goto('/phone-field');
-    await page.getByRole('button', { name: /^Country/ }).click();
+    await page.getByRole('button', { name: /Country$/ }).click();
     await expect(page.getByRole('listbox')).toBeVisible();
     expect(errors).toEqual([]);
   });
@@ -285,6 +285,10 @@ test.describe('Select and Autocomplete', () => {
     await page.goto('/select');
     await expect(page.getByRole('button', { name: /Sort by/ })).toContainText('Price, low to high');
     await expect(page.getByRole('combobox', { name: 'City' })).toHaveValue('London');
+    // A searchable Select with renderValue: the code shows, the name is in the field's name.
+    const currency = page.getByRole('button', { name: /Currency/ });
+    await expect(currency).toContainText('GBP');
+    await expect(currency).toHaveAccessibleName(/Pound sterling/);
     await context.close();
   });
 
@@ -297,6 +301,11 @@ test.describe('Select and Autocomplete', () => {
     await expect(page.getByRole('button', { name: /Sort by/ })).toContainText('Newest first');
     await page.getByRole('combobox', { name: 'City' }).fill('syd');
     await expect(page.getByRole('option', { name: 'Sydney' })).toBeVisible();
+    await page.keyboard.press('Escape');
+    await page.getByRole('button', { name: /Currency/ }).click();
+    await page.getByRole('searchbox', { name: 'Search' }).fill('dong');
+    await page.getByRole('option', { name: 'Vietnamese đồng' }).click();
+    await expect(page.getByRole('button', { name: /Currency/ })).toContainText('VND');
     expect(errors).toEqual([]);
   });
 });

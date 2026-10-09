@@ -1,6 +1,7 @@
 import { ExampleViewer } from '../../components/example-viewer';
 import { SelectBasic } from '../../examples/select/select-basic';
 import { SelectMultiple } from '../../examples/select/select-multiple';
+import { SelectSearchable } from '../../examples/select/select-searchable';
 import { SelectVariants } from '../../examples/select/select-variants';
 import { readExampleSource } from '../../lib/example-source';
 import { highlightSource } from '../../lib/highlight';
@@ -13,6 +14,11 @@ const EXAMPLES = [
     Example: SelectVariants,
   },
   { file: 'select-multiple.tsx', title: 'Several choices', Example: SelectMultiple },
+  {
+    file: 'select-searchable.tsx',
+    title: 'A long list, with a search',
+    Example: SelectSearchable,
+  },
 ];
 
 /** Select page body: purpose, examples, accessibility and differences from Compose. */
@@ -124,6 +130,18 @@ export async function SelectBody() {
             <code className="text-on-surface">maxSelections</code> are disabled until one is
             removed.
           </li>
+          <li>
+            A <code className="text-on-surface">searchable</code> field opens a dialog named by its
+            label. Its search is a combobox: typing filters the options, ↑ / ↓ move through them
+            while focus stays in the search, Enter chooses, and Escape clears the search, then
+            closes. In a menu the search takes focus; a sheet shows the list first, so the keyboard
+            doesn&apos;t cover it, and a tap on the search starts typing. &quot;No results&quot; is
+            announced.
+          </li>
+          <li>
+            With <code className="text-on-surface">renderValue</code> the field shows what you
+            render (a code, a flag), while screen readers still hear the chosen options&apos; text.
+          </li>
         </ul>
       </section>
 
@@ -147,6 +165,15 @@ export async function SelectBody() {
           <li>
             Multiple selection and <code className="text-on-surface">maxSelections</code>, which
             Compose&apos;s exposed dropdown doesn&apos;t have.
+          </li>
+          <li>
+            <code className="text-on-surface">searchable</code>: M3 doesn&apos;t define a search
+            inside a menu, so it&apos;s built from M3 parts. The search is the M3 search bar&apos;s
+            field at 48px, M3&apos;s minimum touch target, rather than the bar&apos;s 56px, so it
+            doesn&apos;t dominate the 44px rows; it filters ignoring case and accents, and{' '}
+            <code className="text-on-surface">filter</code> or{' '}
+            <code className="text-on-surface">onSearchChange</code> (for server results) replace
+            that. A searchable menu is at least 280px wide, room to type.
           </li>
         </ul>
       </section>

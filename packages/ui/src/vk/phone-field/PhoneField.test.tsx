@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
@@ -6,13 +6,14 @@ import { axeViolations } from '../../../test/axe';
 import { PhoneField } from './PhoneField';
 
 const number = () => screen.getByRole('textbox', { name: /Phone/ }) as HTMLInputElement;
-const countryButton = () => screen.getByRole('button', { name: /^Country/ });
+// The country field is a Select: named by its value, then its label (React Aria).
+const countryButton = () => screen.getByRole('button', { name: /Country$/ });
 
 describe('PhoneField', () => {
   it('starts on the default country and formats as it reports E.164', async () => {
     const onChange = vi.fn();
     render(<PhoneField label="Phone" defaultCountry="GB" locale="en" onChange={onChange} />);
-    expect(countryButton()).toHaveAccessibleName('Country: United Kingdom (+44)');
+    expect(countryButton()).toHaveAccessibleName('United Kingdom (+44) Country');
     expect(countryButton()).toHaveTextContent('+44');
     await userEvent.type(number(), '07400123456');
     expect(number()).toHaveValue('07400 123456');
@@ -61,21 +62,24 @@ describe('PhoneField', () => {
       'Australia+61',
       'Vietnam+84',
     ]);
-    const search = screen.getByRole('combobox', { name: 'Search countries' });
+    const search = screen.getByRole('searchbox', { name: 'Search countries' });
     expect(search).toHaveFocus();
     await userEvent.type(search, 'viet');
     expect(within(screen.getByRole('listbox')).getAllByRole('option')).toHaveLength(1);
     await userEvent.keyboard('{ArrowDown}{Enter}');
-    // The picker closes (its sheet animates out) and focus returns to the number.
-    const button = screen.getByRole('button', { name: /^Country/, hidden: true });
-    expect(button).toHaveAttribute('aria-expanded', 'false');
-    expect(button).toHaveAccessibleName('Country: Vietnam (+84)');
+    // The list closes (its menu animates out) and focus returns to the country field.
+    await waitFor(() => expect(screen.queryByRole('listbox')).not.toBeInTheDocument(), {
+      timeout: 1500,
+    });
+    expect(countryButton()).toHaveAttribute('aria-expanded', 'false');
+    expect(countryButton()).toHaveAccessibleName('Vietnam (+84) Country');
+    await waitFor(() => expect(countryButton()).toHaveFocus());
   });
 
   it('finds countries by dialling code and says when nothing matches', async () => {
     render(<PhoneField label="Phone" defaultCountry="GB" locale="en" />);
     await userEvent.click(countryButton());
-    const search = screen.getByRole('combobox', { name: 'Search countries' });
+    const search = screen.getByRole('searchbox', { name: 'Search countries' });
     await userEvent.type(search, '+61');
     const names = within(screen.getByRole('listbox'))
       .getAllByRole('option')
@@ -88,7 +92,7 @@ describe('PhoneField', () => {
 
   it('names countries in the page language', async () => {
     render(<PhoneField label="Phone" defaultCountry="GB" locale="vi" />);
-    expect(countryButton()).toHaveAccessibleName('Country: Vương quốc Anh (+44)');
+    expect(countryButton()).toHaveAccessibleName('Vương quốc Anh (+44) Country');
   });
 
   it('flags an invalid number when the field loses focus', async () => {

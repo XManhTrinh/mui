@@ -1,44 +1,11 @@
 'use client';
 
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useSyncExternalStore,
-  type CSSProperties,
-  type ReactNode,
-  type Ref,
-  type RefObject,
-} from 'react';
-import {
-  DismissButton,
-  mergeProps,
-  useButton,
-  useComboBox,
-  useFocusRing,
-  useHover,
-  useLocale,
-  useObjectRef,
-  usePopover,
-} from 'react-aria';
-import {
-  useComboBoxState,
-  useOverlayTriggerState,
-  type Key,
-  type OverlayTriggerState,
-} from 'react-stately';
+import { useMemo, useState, type CSSProperties, type ReactNode, type Ref } from 'react';
+import { useLocale, useObjectRef } from 'react-aria';
 import { useControlledState } from 'react-stately/useControlledState';
-import {
-  AutocompleteItem,
-  AutocompleteSection,
-  OptionList,
-} from '../../components/select/option-list';
-import { searchBarStyles } from '../../components/search/search-styles';
+import { SelectItem, SelectSection } from '../../components/select/option-list';
+import { Select } from '../../components/select/Select';
 import { TextField } from '../../components/text-field/TextField';
-import { BottomSheet } from '../../components/sheet/BottomSheet';
-import { Overlay } from '../../primitives/Overlay';
-import { usePresence } from '../../primitives/use-presence';
 import { cn } from '../../utils/cn';
 import { splitDataAttributes } from '../../utils/split-data-attributes';
 import { countryOptions, matchesCountry, type CountryOption } from './countries';
@@ -54,7 +21,7 @@ import { phoneFieldStyles, type PhoneFieldVariant } from './phone-field-styles';
 
 /** Words the field shows or announces; override them for other languages. */
 export interface PhoneFieldLabels {
-  /** The country button's name, e.g. "Country". */
+  /** The country field's name, e.g. "Country". */
   country: string;
   /** The search field in the country list. */
   search: string;
@@ -79,11 +46,11 @@ const DEFAULT_LABELS: PhoneFieldLabels = {
 
 export interface PhoneFieldClassNames {
   root?: string;
-  /** The country button. */
+  /** The country field (a searchable `Select`). */
   country?: string;
   /** The number's TextField root. */
   input?: string;
-  /** The country list's panel (popover) or sheet content. */
+  /** The country list's surface. */
   picker?: string;
   supportingText?: string;
   errorText?: string;
@@ -104,7 +71,7 @@ interface PhoneFieldOwnProps {
   onCountryChange?: (country: PhoneCountry) => void;
   /** Listed first, in this order, e.g. an app's main markets. */
   priorityCountries?: readonly PhoneCountry[];
-  /** A flag (or any icon) for a country, shown in the button and the list. None by default. */
+  /** A flag (or any icon) for a country, shown in the country field and the list. None by default. */
   renderFlag?: (country: PhoneCountry) => ReactNode;
   /** Locale for country names. @default the React Aria locale */
   locale?: string;
@@ -136,37 +103,15 @@ type PhoneFieldLabel = { label: string } | { label?: undefined; 'aria-label': st
 
 export type PhoneFieldProps = PhoneFieldOwnProps & PhoneFieldLabel;
 
-const MEDIUM_WINDOW = '(min-width: 600px)';
-
-function subscribeToWindow(onChange: () => void) {
-  const query = window.matchMedia(MEDIUM_WINDOW);
-  query.addEventListener('change', onChange);
-  return () => query.removeEventListener('change', onChange);
-}
-
-/** Material Symbols `arrow_drop_down`. */
-const ArrowIcon = ({ className }: { className: string }) => (
-  <svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true" className={className}>
-    <path d="M480-360 280-560h400L480-360Z" />
-  </svg>
-);
-
-/** Material Symbols `search`. */
-const SearchIcon = () => (
-  <svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true">
-    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
-  </svg>
-);
-
 /**
  * A phone number field with a country picker: people choose their country (or a pasted or
  * autofilled `+…` number picks it), type the number in their country's usual format, and
  * the field reports one E.164 value (`+447911123456`).
  *
  * **Not an M3 component** (a `vk` component, see docs/plans/phone-field.md). The number is
- * the library's `TextField`; the country field beside it uses the same tokens, and opens a
- * searchable list (an M3-style popover on medium and larger windows, a bottom sheet on
- * compact ones). Country names come from `Intl.DisplayNames` in the page's language, and the
+ * the library's `TextField`; the country field beside it is a searchable `Select`
+ * (`presentation="auto"`: the M3 menu on medium and larger windows, a bottom sheet on
+ * compact ones) showing the dialling code. Country names come from `Intl.DisplayNames` in the page's language, and the
  * phone rules from `libphonenumber-js` (Google's phone data).
  *
  * @example
@@ -230,8 +175,6 @@ export function PhoneField(props: PhoneFieldProps) {
   const [checkedInvalid, setCheckedInvalid] = useState(false);
 
   const numberRef = useObjectRef(inputRef);
-  const countryRef = useRef<HTMLButtonElement>(null);
-  const picker = useOverlayTriggerState({});
 
   // A key for the priority countries, so an inline array doesn't rebuild the list.
   const priorityKey = priorityCountries.join(',');
@@ -239,7 +182,20 @@ export function PhoneField(props: PhoneFieldProps) {
     () => countryOptions(locale, priorityKey ? (priorityKey.split(',') as PhoneCountry[]) : []),
     [locale, priorityKey],
   );
-  const current = country ? options.all.find((option) => option.country === country) : undefined;
+  // Each country once, keyed by its ISO code: the priority countries first, then the rest by
+  // name. While searching, a match shows in whichever group holds it.
+  const sections = useMemo(() => {
+    const priority = new Set(options.priority.map((option) => option.country));
+    const rest = options.all.filter((option) => !priority.has(option.country));
+    return [
+      { key: 'priority', label: labels.suggested, options: options.priority },
+      { key: 'all', label: labels.allCountries, options: rest },
+    ].filter((section) => section.options.length > 0);
+  }, [options, labels.suggested, labels.allCountries]);
+  const byCountry = useMemo(
+    () => new Map<string, CountryOption>(options.all.map((option) => [option.country, option])),
+    [options],
+  );
 
   const update = (nextValue: string) => {
     setShown(nextValue);
@@ -264,8 +220,6 @@ export function PhoneField(props: PhoneFieldProps) {
     const read = readPhone(text, next);
     setText(read.formatted);
     update(read.value);
-    // Focus returns to the country button, as for any dialog (WAI-ARIA); the number is next.
-    picker.close();
   };
 
   const isInvalid = invalid ?? checkedInvalid;
@@ -282,18 +236,63 @@ export function PhoneField(props: PhoneFieldProps) {
       data-disabled={disabled || undefined}
       data-country={country}
     >
-      <CountryButton
-        buttonRef={countryRef}
-        picker={picker}
-        option={current}
-        country={country}
-        label={labels.country}
-        renderFlag={renderFlag}
-        isInvalid={isInvalid}
-        isDisabled={disabled || Boolean(readOnly)}
+      {/* The country field is a searchable Select: a menu on larger windows, a sheet on
+          phones. Focus returns to it after a choice; the number is next. */}
+      <Select
+        aria-label={labels.country}
+        variant={variant}
+        searchable
+        presentation="auto"
+        value={country ?? null}
+        onChange={(key) => {
+          if (key !== null) chooseCountry(key as PhoneCountry);
+        }}
+        // By name (any accents), ISO code or dialling code ("viet", "VN", "84").
+        filter={(_text, search, key) => {
+          const option = byCountry.get(String(key));
+          return option !== undefined && matchesCountry(option, search);
+        }}
+        renderValue={([chosen]) =>
+          chosen ? (
+            <span className="inline-flex items-center gap-[8px]">
+              {renderFlag ? (
+                <span className={styles.flag()}>{renderFlag(chosen.key as PhoneCountry)}</span>
+              ) : null}
+              <span className={styles.dial()}>{dialCode(chosen.key as PhoneCountry)}</span>
+            </span>
+          ) : null
+        }
+        placeholder="+"
+        disabled={disabled || Boolean(readOnly)}
+        invalid={isInvalid}
+        labels={{ search: labels.search, noResults: labels.noResults }}
         className={styles.country({ class: classNames?.country })}
-        styles={styles}
-      />
+        classNames={{
+          value: styles.countryValue(),
+          ...(classNames?.picker && { list: classNames.picker }),
+        }}
+      >
+        {sections.map((section) => (
+          <SelectSection key={section.key} aria-label={section.label}>
+            {section.options.map((option) => (
+              <SelectItem
+                key={option.country}
+                // The dialling code is part of its text, so the field's name and typeahead
+                // include it ("United Kingdom (+44)").
+                textValue={`${option.name} (${option.dial})`}
+                leadingIcon={
+                  renderFlag ? (
+                    <span className={styles.flag()}>{renderFlag(option.country)}</span>
+                  ) : undefined
+                }
+                trailing={<span className={styles.dial()}>{option.dial}</span>}
+              >
+                {option.name}
+              </SelectItem>
+            ))}
+          </SelectSection>
+        ))}
+      </Select>
       <TextField
         variant={variant}
         {...(label !== undefined ? { label } : { 'aria-label': ariaLabel ?? labels.country })}
@@ -320,300 +319,6 @@ export function PhoneField(props: PhoneFieldProps) {
         }}
       />
       {name ? <input type="hidden" name={name} value={value} /> : null}
-      <CountryPicker
-        picker={picker}
-        triggerRef={countryRef}
-        options={options}
-        country={country}
-        onChoose={chooseCountry}
-        labels={labels}
-        renderFlag={renderFlag}
-        className={classNames?.picker}
-        styles={styles}
-      />
-    </div>
-  );
-}
-
-type Styles = ReturnType<typeof phoneFieldStyles>;
-
-function CountryButton({
-  buttonRef,
-  picker,
-  option,
-  country,
-  label,
-  renderFlag,
-  isInvalid,
-  isDisabled,
-  className,
-  styles,
-}: {
-  buttonRef: RefObject<HTMLButtonElement | null>;
-  picker: OverlayTriggerState;
-  option: CountryOption | undefined;
-  country: PhoneCountry | undefined;
-  label: string;
-  renderFlag: ((country: PhoneCountry) => ReactNode) | undefined;
-  isInvalid: boolean;
-  isDisabled: boolean;
-  className: string;
-  styles: Styles;
-}) {
-  const { buttonProps } = useButton({ onPress: picker.toggle, isDisabled }, buttonRef);
-  const { focusProps, isFocusVisible } = useFocusRing();
-  const { hoverProps, isHovered } = useHover({ isDisabled });
-  const name = option ? `${label}: ${option.name} (${option.dial})` : label;
-  return (
-    <button
-      {...mergeProps(buttonProps, focusProps, hoverProps)}
-      ref={buttonRef}
-      type="button"
-      aria-label={name}
-      aria-haspopup="dialog"
-      aria-expanded={picker.isOpen}
-      className={cn('group/country', className)}
-      data-focused={isFocusVisible || undefined}
-      data-hovered={(isHovered && !isDisabled) || undefined}
-      data-open={picker.isOpen || undefined}
-      data-invalid={isInvalid || undefined}
-      data-disabled={isDisabled || undefined}
-    >
-      {country && renderFlag ? (
-        <span aria-hidden="true" className={styles.flag()}>
-          {renderFlag(country)}
-        </span>
-      ) : null}
-      <span aria-hidden="true" className={styles.dial()}>
-        {country ? dialCode(country) : '+'}
-      </span>
-      <ArrowIcon className={styles.arrow()} />
-    </button>
-  );
-}
-
-function CountryPicker({
-  picker,
-  triggerRef,
-  ...listProps
-}: {
-  picker: OverlayTriggerState;
-  triggerRef: RefObject<HTMLButtonElement | null>;
-} & Omit<CountryListProps, 'onClose'>) {
-  const isMediumWindow = useSyncExternalStore(
-    subscribeToWindow,
-    () => window.matchMedia(MEDIUM_WINDOW).matches,
-    () => true,
-  );
-  const { isPresent, isExiting, exitProps } = usePresence(picker.isOpen);
-  if (!isMediumWindow) {
-    return (
-      <BottomSheet
-        open={picker.isOpen}
-        onOpenChange={(open) => (open ? picker.open() : picker.close())}
-        aria-label={listProps.labels.country}
-        skipPartiallyExpanded
-      >
-        <div className={listProps.styles.sheetContent({ class: listProps.className })}>
-          <CountryList {...listProps} onClose={picker.close} />
-        </div>
-      </BottomSheet>
-    );
-  }
-  if (!isPresent) return null;
-  return (
-    <Overlay isExiting={isExiting}>
-      <CountryPopover
-        picker={picker}
-        triggerRef={triggerRef}
-        isExiting={isExiting}
-        exitProps={exitProps}
-        listProps={listProps}
-      />
-    </Overlay>
-  );
-}
-
-function CountryPopover({
-  picker,
-  triggerRef,
-  isExiting,
-  exitProps,
-  listProps,
-}: {
-  picker: OverlayTriggerState;
-  triggerRef: RefObject<HTMLButtonElement | null>;
-  isExiting: boolean;
-  exitProps: ReturnType<typeof usePresence>['exitProps'];
-  listProps: Omit<CountryListProps, 'onClose'>;
-}) {
-  const popoverRef = useRef<HTMLDivElement>(null);
-  const { popoverProps, underlayProps } = usePopover(
-    { triggerRef, popoverRef, placement: 'bottom start', offset: 4 },
-    picker,
-  );
-  const styles = listProps.styles;
-  return (
-    <>
-      <div {...underlayProps} className="fixed inset-0" />
-      <div {...popoverProps} ref={popoverRef} className={styles.popover()}>
-        <DismissButton onDismiss={picker.close} />
-        <div
-          {...exitProps}
-          role="dialog"
-          aria-label={listProps.labels.country}
-          data-exiting={isExiting || undefined}
-          className={styles.panel({ class: listProps.className })}
-        >
-          <CountryList {...listProps} onClose={picker.close} />
-        </div>
-        <DismissButton onDismiss={picker.close} />
-      </div>
-    </>
-  );
-}
-
-interface CountryListProps {
-  options: { priority: CountryOption[]; all: CountryOption[] };
-  country: PhoneCountry | undefined;
-  onChoose: (country: PhoneCountry) => void;
-  onClose: () => void;
-  labels: PhoneFieldLabels;
-  renderFlag: ((country: PhoneCountry) => ReactNode) | undefined;
-  className: string | undefined;
-  styles: Styles;
-}
-
-interface CountrySection {
-  key: 'priority' | 'all';
-  options: CountryOption[];
-}
-
-/** Item keys are `<section>:<country>`, since priority countries are also in the full list. */
-const countryFromKey = (key: Key) => String(key).split(':')[1] as PhoneCountry;
-
-/**
- * The search field and the country list, as a combobox: the search keeps focus while the
- * arrow keys move through the list, Enter chooses, and Escape closes.
- */
-function CountryList({
-  options,
-  country,
-  onChoose,
-  onClose,
-  labels,
-  renderFlag,
-  styles,
-}: CountryListProps) {
-  const [query, setQuery] = useState('');
-  const sections = useMemo<CountrySection[]>(() => {
-    const all = options.all.filter((option) => matchesCountry(option, query));
-    // While searching, the full list alone, so no country shows twice.
-    return query.trim() || options.priority.length === 0
-      ? [{ key: 'all', options: all }]
-      : [
-          { key: 'priority', options: options.priority },
-          { key: 'all', options: all },
-        ];
-  }, [options, query]);
-
-  const state = useComboBoxState<CountrySection>({
-    items: sections,
-    children: (section) => (
-      <AutocompleteSection
-        key={section.key}
-        aria-label={section.key === 'priority' ? labels.suggested : labels.allCountries}
-      >
-        {section.options.map((option) => (
-          <AutocompleteItem
-            key={`${section.key}:${option.country}`}
-            textValue={option.name}
-            leadingIcon={
-              renderFlag ? (
-                <span className={styles.flag()}>{renderFlag(option.country)}</span>
-              ) : undefined
-            }
-            trailing={<span className={styles.dial()}>{dialCode(option.country)}</span>}
-          >
-            {option.name}
-          </AutocompleteItem>
-        ))}
-      </AutocompleteSection>
-    ),
-    inputValue: query,
-    onInputChange: setQuery,
-    selectedKey: null,
-    onSelectionChange: (key) => {
-      if (key !== null) onChoose(countryFromKey(key));
-    },
-    defaultFilter: () => true,
-    allowsEmptyCollection: true,
-    menuTrigger: 'focus',
-    shouldCloseOnBlur: false,
-    onOpenChange: (isOpen) => {
-      if (!isOpen) onClose();
-    },
-  });
-
-  const inputRef = useRef<HTMLInputElement>(null);
-  const listBoxRef = useRef<HTMLUListElement>(null);
-  // The combobox hides everything outside its input and popup from assistive technology,
-  // so the popup is this wrapper (search and list), in the popover and the bottom sheet.
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const { inputProps, listBoxProps } = useComboBox(
-    {
-      'aria-label': labels.search,
-      inputRef,
-      listBoxRef,
-      popoverRef: wrapperRef,
-      inputValue: query,
-    },
-    state,
-  );
-
-  // The list is the picker's whole content, so it opens with the picker.
-  useEffect(() => {
-    inputRef.current?.focus();
-    state.open(null, 'manual');
-    // Opening once on mount; the picker closes the list.
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- run on mount only.
-  }, []);
-
-  const search = searchBarStyles({ hasLeading: true });
-  const { focusProps: searchFocusProps, isFocusVisible: isSearchFocusVisible } = useFocusRing({
-    within: true,
-    isTextInput: true,
-  });
-
-  return (
-    <div ref={wrapperRef} className="flex min-h-0 flex-1 flex-col">
-      <div className={styles.searchRow()}>
-        {/* The M3 search bar's field (SearchBar): keyboard focus draws its inset ring. */}
-        <div
-          {...searchFocusProps}
-          data-focus-visible={isSearchFocusVisible || undefined}
-          className={search.field()}
-        >
-          <span className={search.leading()}>
-            <SearchIcon />
-          </span>
-          <input
-            {...inputProps}
-            ref={inputRef}
-            className={search.input()}
-            placeholder={labels.search}
-          />
-        </div>
-      </div>
-      <OptionList
-        listBoxProps={listBoxProps}
-        state={state}
-        listBoxRef={listBoxRef}
-        emptyLabel={labels.noResults}
-        isChosen={(key) => countryFromKey(key) === country}
-        embedded
-        classNames={{ list: styles.list() }}
-      />
     </div>
   );
 }

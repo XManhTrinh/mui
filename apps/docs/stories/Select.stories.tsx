@@ -133,6 +133,61 @@ export const Sheet: Story = {
   ),
 };
 
+const COUNTRIES = [
+  ['AU', 'Australia'],
+  ['AT', 'Austria'],
+  ['BE', 'Belgium'],
+  ['CA', 'Canada'],
+  ['CZ', 'Czechia'],
+  ['DK', 'Denmark'],
+  ['FI', 'Finland'],
+  ['FR', 'France'],
+  ['DE', 'Germany'],
+  ['IE', 'Ireland'],
+  ['IT', 'Italy'],
+  ['JP', 'Japan'],
+  ['NL', 'Netherlands'],
+  ['NZ', 'New Zealand'],
+  ['NO', 'Norway'],
+  ['PL', 'Poland'],
+  ['SG', 'Singapore'],
+  ['KR', 'South Korea'],
+  ['ES', 'Spain'],
+  ['SE', 'Sweden'],
+  ['TW', 'Taiwan'],
+  ['TH', 'Thailand'],
+  ['GB', 'United Kingdom'],
+  ['US', 'United States'],
+  ['VN', 'Việt Nam'],
+].map(([code, name]) => ({ code: code!, name: name! }));
+
+/**
+ * `searchable`: a search at the top of the menu (or, with `presentation="auto"`, the sheet
+ * on phones) filters a long list as you type.
+ */
+export const Searchable: Story = {
+  render: function Render() {
+    const [country, setCountry] = useState<SelectKey | null>(null);
+    return (
+      <div className="flex flex-col gap-4 bg-surface p-4" style={{ minHeight: 560 }} data-testid="searchable">
+        <Select
+          label="Country of residence"
+          searchable
+          presentation="auto"
+          items={COUNTRIES}
+          value={country}
+          onChange={setCountry}
+        >
+          {(item) => <SelectItem key={item.code}>{item.name}</SelectItem>}
+        </Select>
+        <p className="text-body-medium text-on-surface-variant">
+          Value: <output data-testid="value">{country ?? '(none)'}</output>
+        </p>
+      </div>
+    );
+  },
+};
+
 /** Vietnamese labels, as an app passes them. */
 export const Vietnamese: Story = {
   render: () => (

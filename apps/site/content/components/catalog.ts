@@ -225,7 +225,7 @@ export const COMPONENT_META: ComponentMeta[] = [
     group: 'Inputs & selection',
     railGroup: 'inputs',
     summary:
-      'An exposed dropdown menu: a field that opens a menu of options. One or several choices, sections, a sheet on phones.',
+      'An exposed dropdown menu: a field that opens a menu of options. One or several choices, sections, a search for long lists, a sheet on phones.',
     propsComponents: ['Select', 'SelectItem'],
     playground: 'full',
     specs: {
@@ -244,6 +244,8 @@ export const COMPONENT_META: ComponentMeta[] = [
       'exposed dropdown menu',
       'options',
       'combobox',
+      'searchable select',
+      'select with search',
     ],
   },
   {

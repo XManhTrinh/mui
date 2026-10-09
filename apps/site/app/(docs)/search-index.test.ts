@@ -38,6 +38,12 @@ describe('searchPages', () => {
       expect(hrefs, query).toContain('/components/select');
       expect(hrefs, query).toContain('/components/autocomplete');
     }
+    for (const query of ['searchable select', 'select with search']) {
+      expect(
+        searchPages(entries, query).map((entry) => entry.href),
+        query,
+      ).toContain('/components/select');
+    }
     for (const query of ['combobox', 'typeahead', 'multi-select']) {
       expect(
         searchPages(entries, query).map((entry) => entry.href),

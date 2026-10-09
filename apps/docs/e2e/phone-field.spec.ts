@@ -23,7 +23,7 @@ test.describe('PhoneField visual regression', () => {
     test(`open picker · ${mode}`, async ({ page }) => {
       await page.setViewportSize({ width: 800, height: 700 });
       await openStory(page, 'vk-phonefield--interactive', { mode });
-      await page.getByRole('button', { name: /^Country/ }).click();
+      await page.getByRole('button', { name: /Country$/ }).click();
       await expect(page.getByRole('listbox')).toBeVisible();
       await expect(page).toHaveScreenshot(`picker-popover-${mode}.png`);
     });
@@ -32,7 +32,7 @@ test.describe('PhoneField visual regression', () => {
   test('open picker · phone bottom sheet', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await openStory(page, 'vk-phonefield--interactive');
-    await page.getByRole('button', { name: /^Country/ }).click();
+    await page.getByRole('button', { name: /Country$/ }).click();
     await expect(page.getByRole('listbox')).toBeVisible();
     await page.waitForTimeout(600);
     await expect(page).toHaveScreenshot('picker-sheet.png');
@@ -86,15 +86,15 @@ test.describe('PhoneField behaviour', () => {
   }) => {
     await page.setViewportSize({ width: 800, height: 700 });
     await openStory(page, 'vk-phonefield--interactive');
-    await page.getByRole('button', { name: /^Country/ }).click();
-    const search = page.getByRole('combobox', { name: 'Search countries' });
+    await page.getByRole('button', { name: /Country$/ }).click();
+    const search = page.getByRole('searchbox', { name: 'Search countries' });
     await expect(search).toBeFocused();
     await search.fill('viet');
     await page.keyboard.press('ArrowDown');
     await page.keyboard.press('Enter');
     await expect(page.getByRole('listbox')).toBeHidden();
     await expect(page.getByTestId('country')).toHaveText('VN');
-    await expect(page.getByRole('button', { name: /^Country/ })).toBeFocused();
+    await expect(page.getByRole('button', { name: /Country$/ })).toBeFocused();
     await page.keyboard.press('Tab');
     await expect(page.getByLabel('Phone (optional)')).toBeFocused();
   });
@@ -102,7 +102,7 @@ test.describe('PhoneField behaviour', () => {
   test('Escape closes the picker without changing the country', async ({ page }) => {
     await page.setViewportSize({ width: 800, height: 700 });
     await openStory(page, 'vk-phonefield--interactive');
-    await page.getByRole('button', { name: /^Country/ }).click();
+    await page.getByRole('button', { name: /Country$/ }).click();
     await expect(page.getByRole('listbox')).toBeVisible();
     await page.keyboard.press('Escape');
     await expect(page.getByRole('listbox')).toBeHidden();
@@ -127,9 +127,11 @@ test.describe('PhoneField layout safety', () => {
         }) => {
           await openStory(page, 'vk-phonefield--layout-override', { dir }, { override, transformedAncestor });
           const field = page.getByTestId('target');
-          const country = field.getByRole('button', { name: /^Country/ });
-          expect(await country.evaluate((el) => (el as HTMLElement).offsetHeight)).toBe(56);
-          expect(await country.evaluate((el) => getComputedStyle(el).position)).toBe('static');
+          const country = field.getByRole('button', { name: /Country$/ });
+          // The country field (a Select): its 56px container, laid out in the flow.
+          const container = country.locator('xpath=ancestor::div[@data-field-state][1]/div[1]');
+          expect(await container.evaluate((el) => (el as HTMLElement).offsetHeight)).toBe(56);
+          expect(await container.evaluate((el) => getComputedStyle(el).position)).toBe('relative');
           const input = page.getByLabel('Phone');
           await input.fill('07400123456');
           await expect(input).toHaveValue('07400 123456');

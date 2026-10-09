@@ -277,12 +277,15 @@ export function OptionPopover({
   popoverRef,
   isNonModal = false,
   onPressOutside,
+  minWidth = 0,
   children,
 }: {
   state: OverlayTriggerState;
   triggerRef: RefObject<HTMLElement | null>;
   popoverRef: RefObject<HTMLDivElement | null>;
   isNonModal?: boolean;
+  /** The least width, when the field is narrower (a searchable menu needs room to type). */
+  minWidth?: number;
   /** A press outside the menu and the field closes it (modal menus only). */
   onPressOutside?: (() => void) | undefined;
   children: ReactNode;
@@ -299,6 +302,7 @@ export function OptionPopover({
         isExiting={isExiting}
         exitProps={exitProps}
         onPressOutside={onPressOutside}
+        minWidth={minWidth}
       >
         {children}
       </PopoverBody>
@@ -314,12 +318,14 @@ function PopoverBody({
   isExiting,
   exitProps,
   onPressOutside,
+  minWidth,
   children,
 }: {
   state: OverlayTriggerState;
   triggerRef: RefObject<HTMLElement | null>;
   popoverRef: RefObject<HTMLDivElement | null>;
   isNonModal: boolean;
+  minWidth: number;
   isExiting: boolean;
   exitProps: ReturnType<typeof usePresence>['exitProps'];
   onPressOutside: (() => void) | undefined;
@@ -357,13 +363,11 @@ function PopoverBody({
 
   return (
     <>
-      {isNonModal ? null : (
-        <div {...underlayProps} className="fixed inset-0" />
-      )}
+      {isNonModal ? null : <div {...underlayProps} className="fixed inset-0" />}
       <div
         {...popoverProps}
         ref={popoverRef}
-        style={{ ...popoverProps.style, ...(width !== undefined && { minWidth: width }) }}
+        style={{ ...popoverProps.style, minWidth: Math.max(width ?? 0, minWidth) }}
         className={cn(menu.popover(), 'flex max-w-[min(560px,calc(100vw-32px))] flex-col')}
       >
         {isNonModal ? null : <DismissButton onDismiss={state.close} />}

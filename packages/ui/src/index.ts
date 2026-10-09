@@ -233,6 +233,7 @@ export {
 export {
   Select,
   type SelectClassNames,
+  type SelectedOption,
   type SelectKey,
   type SelectLabels,
   type SelectPresentation,
