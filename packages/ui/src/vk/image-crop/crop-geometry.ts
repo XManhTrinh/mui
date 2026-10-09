@@ -100,11 +100,17 @@ export function zoomTo(
 
 /**
  * The part of the photo inside the frame, in natural pixels: integers inside the photo,
- * with exactly the frame's aspect ratio after rounding (within one pixel).
+ * with exactly `aspect` after rounding (within one pixel). Pass the crop's own `aspect`:
+ * the frame is measured in whole screen pixels, so its ratio is only close (a 3:1 frame
+ * 340px wide measures 113px tall), and that error grows with the photo's size.
  */
-export function cropRect(view: CropView, natural: Size, frame: Size): CropRect {
+export function cropRect(
+  view: CropView,
+  natural: Size,
+  frame: Size,
+  aspect: number = frame.width / frame.height,
+): CropRect {
   const scale = coverScale(natural, frame) * view.zoom;
-  const aspect = frame.width / frame.height;
   // At least one pixel, however far a tiny photo is zoomed.
   let width = Math.min(natural.width, Math.max(1, Math.round(frame.width / scale)));
   let height = Math.max(1, Math.round(width / aspect));

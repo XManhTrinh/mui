@@ -108,6 +108,22 @@ describe('cropRect', () => {
     }
   });
 
+  it('keeps the exact aspect when the measured frame is rounded to whole pixels', () => {
+    // A 3:1 frame 340px wide on a phone measures 113px tall (3.009:1).
+    const cover = { width: 1800, height: 900 };
+    const rect = cropRect(INITIAL_VIEW, cover, { width: 340, height: 113 }, 3);
+    expect(rect).toEqual({ x: 0, y: 150, width: 1800, height: 600 });
+    for (const zoom of [1.3, 2.2, 4]) {
+      const zoomed = cropRect(
+        { zoom, offset: { x: 0, y: 0 } },
+        cover,
+        { width: 340, height: 113 },
+        3,
+      );
+      expect(Math.abs(zoomed.width - zoomed.height * 3)).toBeLessThanOrEqual(3);
+    }
+  });
+
   it('stays inside very large and very small photos', () => {
     for (const natural of [
       { width: 8000, height: 6000 },

@@ -202,11 +202,11 @@ export function ImageCropper({
       return;
     }
     onCropChange({
-      crop: cropRect(shown, natural, frame),
+      crop: cropRect(shown, natural, frame, aspect),
       naturalWidth: natural.width,
       naturalHeight: natural.height,
     });
-  }, [ready, shown, natural, frame, onCropChange]);
+  }, [ready, shown, natural, frame, aspect, onCropChange]);
 
   // The mouse wheel and trackpad pinch zoom around the pointer. React's wheel listener is
   // passive, so the page would scroll too; this one can prevent that.
