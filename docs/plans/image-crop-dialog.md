@@ -1,6 +1,6 @@
 # Plan: ImageCropDialog (`@vkieu/mui/vk`)
 
-Status: **draft, for Mike's approval** (2026-10-09)
+Status: **approved by Mike on 2026-10-09** (built ourselves with no dependency; a square frame for avatars)
 
 ## Goal
 
@@ -30,7 +30,7 @@ M3 has no image cropper, so it's a **`vk` component** (architecture decision #22
 | 2 | Dependencies | **None.** Pan, pinch and zoom are built on pointer events and the `Slider` (react-aria), about 300 lines. Crop libraries (`react-easy-crop`, `react-image-crop`) bring their own styling and focus handling, which would have to be overridden to meet the theming and accessibility bar. |
 | 3 | Input | `src`: an object URL or a URL. Opening a picked `File` is the app's job (`URL.createObjectURL`), so the component works with any picker. The image is drawn in an `<img>`, so the browser applies EXIF orientation (`image-orientation: from-image`). The rectangle is in **oriented** pixels, and the docs tell servers to auto-rotate before cropping (`sharp().rotate()`). |
 | 4 | Output | `onConfirm({ x, y, width, height })` in the oriented image's natural pixels, as integers clamped inside the image. Also `naturalWidth` and `naturalHeight`, so the server can check the rectangle against the file it receives. |
-| 5 | Frame | `aspect` (default `1`), plus `shape`: `'circle'` (an avatar, default) or `'rect'` with the M3 `medium` corner. Outside the frame, the photo is dimmed with `scrim` at the M3 scrim opacity, so the frame reads clearly in every theme and contrast level. The frame edge is a 2px `outline-variant` ring, and `outline` in high contrast. |
+| 5 | Frame | `aspect` (default `1`), a square-cornered frame (Mike, 2026-10-09: avatars are framed and stored as the full square), plus `guide`: `'circle'` draws a thin dashed circle inside the frame, showing what a round avatar displays, or `'none'` (default). Outside the frame, the photo is dimmed with `scrim` at the M3 scrim opacity, so the frame reads clearly in every theme and contrast level. The frame edge is a 2px `outline-variant` ring, and `outline` in high contrast. |
 | 6 | Zoom | From "the photo just covers the frame" (minimum) up to 4× that, or `maxZoom`. The photo can never leave a gap inside the frame: panning and zooming clamp to the photo's edges. |
 | 7 | Gestures | Drag with a mouse, pen or one finger; pinch with two fingers; the mouse wheel and trackpad pinch zoom around the pointer. `touch-action: none` only on the crop area, so the page still scrolls outside it. |
 | 8 | Keyboard | The crop area is one focusable element (`role="group"`, labelled "Photo position"): arrow keys move 10px (Shift for 50px), `+` and `-` zoom, and `0` resets. The zoom `Slider` with `−` and `+` icon buttons sits under it. Every action has a non-drag way to do it (WCAG 2.2 SC 2.5.7, dragging movements). |
@@ -54,7 +54,7 @@ import { ImageCropDialog } from '@vkieu/mui/vk';
   onOpenChange={(open) => !open && setFile(null)}
   src={objectUrl}
   aspect={1}
-  shape="circle"
+  guide="circle"
   title={t('photo.cropTitle')}          // "Adjust your photo"
   confirmLabel={t('photo.save')}        // "Save"
   busy={uploading}
@@ -91,11 +91,11 @@ apps/site/                     page, playground, examples, catalog entry (Inputs
   - Escape and Cancel close it, except while `busy`;
   - focus moves into the dialog and returns to the opener.
 - **Axe** in every story, light and dark.
-- **Visual regression** across the six themes × light/dark × contrast levels: circle and rect, loading, error, busy, full-screen at phone width and basic at desktop width, right-to-left and forced colours.
+- **Visual regression** across the six themes × light/dark × contrast levels: with and without the circle guide, loading, error, busy, full-screen at phone width and basic at desktop width, right-to-left and forced colours.
 - **Next.js:** `ImageCropper` server-renders, and the dialog hydrates without errors.
 - `pnpm typecheck`, `pnpm lint`, `pnpm test` and the Playwright checks pass.
 
 ## Questions for Mike
 
-1. **No dependency** (decision 2): build it on the library's own pieces rather than `react-easy-crop`. Default: build it ourselves.
-2. **Avatar frame:** a circle (as on Facebook and Instagram), and the stored photo is the full square, so a later square display still works. Default: circle.
+1. **No dependency** (decision 2): built on the library's own pieces (Mike, 2026-10-09).
+2. **Avatar frame:** the full square, with an optional circle guide (Mike, 2026-10-09).
