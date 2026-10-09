@@ -4,8 +4,10 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogHeader,
   DialogTitle,
   DialogTrigger,
+  TextField,
 } from '@vkieu/mui';
 import { DeleteIcon } from './icons';
 
@@ -117,6 +119,70 @@ export const Alert: Story = {
                 Reset
               </Button>
             </DialogActions>
+          </>
+        )}
+      </Dialog>
+    </DialogTrigger>
+  ),
+};
+
+/** Full screen on compact windows, a basic dialog on larger ones. */
+export const FullScreenCompact: Story = {
+  render: () => (
+    <DialogTrigger>
+      <Button variant="tonal">Edit name</Button>
+      <Dialog fullScreen="compact" data-testid="dialog">
+        {({ close }) => (
+          <>
+            <DialogHeader
+              closeLabel="Close"
+              action={
+                <Button variant="text" onPress={close}>
+                  Save
+                </Button>
+              }
+            >
+              Edit name
+            </DialogHeader>
+            <DialogContent>
+              <TextField label="Name" defaultValue="Lan Nguyen" className="w-full" />
+            </DialogContent>
+            <DialogActions>
+              <Button variant="text" onPress={close}>
+                Cancel
+              </Button>
+              <Button variant="text" onPress={close}>
+                Save
+              </Button>
+            </DialogActions>
+          </>
+        )}
+      </Dialog>
+    </DialogTrigger>
+  ),
+};
+
+/** Always full screen. */
+export const FullScreen: Story = {
+  render: () => (
+    <DialogTrigger>
+      <Button variant="tonal">New event</Button>
+      <Dialog fullScreen="always" data-testid="dialog">
+        {({ close }) => (
+          <>
+            <DialogHeader
+              closeLabel="Close"
+              action={
+                <Button variant="text" onPress={close}>
+                  Save
+                </Button>
+              }
+            >
+              New event
+            </DialogHeader>
+            <DialogContent>
+              <TextField label="Title" className="w-full" />
+            </DialogContent>
           </>
         )}
       </Dialog>

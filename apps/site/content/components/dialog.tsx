@@ -1,21 +1,24 @@
 import { ExampleViewer } from '../../components/example-viewer';
 import { DialogAlert } from '../../examples/dialog/dialog-alert';
 import { DialogBasic } from '../../examples/dialog/dialog-basic';
+import { DialogFullScreen } from '../../examples/dialog/dialog-full-screen';
 import { DialogScrollable } from '../../examples/dialog/dialog-scrollable';
 import { readExampleSource } from '../../lib/example-source';
 import { highlightSource } from '../../lib/highlight';
 
-/** Dialog page body: the flat parts, basic, alert and scrollable-content dialogs. */
+/** Dialog page body: the flat parts, basic, alert, scrollable and full-screen dialogs. */
 export async function DialogBody() {
-  const [basic, alert, scrollable] = await Promise.all([
+  const [basic, alert, scrollable, fullScreen] = await Promise.all([
     readExampleSource('dialog/dialog-basic.tsx'),
     readExampleSource('dialog/dialog-alert.tsx'),
     readExampleSource('dialog/dialog-scrollable.tsx'),
+    readExampleSource('dialog/dialog-full-screen.tsx'),
   ]);
-  const [basicHtml, alertHtml, scrollableHtml] = await Promise.all([
+  const [basicHtml, alertHtml, scrollableHtml, fullScreenHtml] = await Promise.all([
     highlightSource(basic),
     highlightSource(alert),
     highlightSource(scrollable),
+    highlightSource(fullScreen),
   ]);
 
   return (
@@ -37,6 +40,14 @@ export async function DialogBody() {
           <code className="text-on-surface">DialogTitle</code>,{' '}
           <code className="text-on-surface">DialogContent</code> and{' '}
           <code className="text-on-surface">DialogActions</code>.
+        </p>
+        <p className="text-body-large text-on-surface-variant">
+          On compact windows, a task with several fields or a form is clearer as a{' '}
+          <strong className="text-on-surface">full-screen dialog</strong>:{' '}
+          <code className="text-on-surface">fullScreen=&quot;compact&quot;</code> fills the window
+          below 600px and stays a basic dialog above it. Give it a{' '}
+          <code className="text-on-surface">DialogHeader</code>, which holds the close button, the
+          headline and the confirming action in full screen.
         </p>
       </section>
 
@@ -66,6 +77,14 @@ export async function DialogBody() {
         >
           <DialogScrollable />
         </ExampleViewer>
+        <ExampleViewer
+          title="Full screen on compact windows"
+          code={fullScreen}
+          html={fullScreenHtml}
+          fileName="dialog-full-screen.tsx"
+        >
+          <DialogFullScreen />
+        </ExampleViewer>
       </section>
 
       <section className="flex flex-col gap-3">
@@ -89,6 +108,12 @@ export async function DialogBody() {
           <li>
             Long content scrolls inside the panel; when the actions don&apos;t fit on one line they
             stack with the confirming action (last) on top.
+          </li>
+          <li>
+            In full screen, the header&apos;s close button (named by{' '}
+            <code className="text-on-surface">closeLabel</code>) closes the dialog and Escape still
+            works. The hidden <code className="text-on-surface">DialogActions</code> are out of the
+            accessibility tree, so each action is announced once.
           </li>
         </ul>
       </section>
@@ -114,7 +139,13 @@ export async function DialogBody() {
           <li>
             Moved to the components layer because its core is the{' '}
             <code className="text-on-surface">Overlay</code> primitive and React Aria hooks.
-            Full-screen dialogs are deferred.
+          </li>
+          <li>
+            Compose has no full-screen dialog component; the full-screen type follows the M3 dialog
+            spec: <code className="text-on-surface">surface</code> with no corners or elevation, a
+            64px header (the small top app bar&apos;s height) with a{' '}
+            <code className="text-on-surface">title-large</code> headline, and the panel sliding up
+            48px as it fades in.
           </li>
         </ul>
       </section>

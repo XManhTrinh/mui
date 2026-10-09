@@ -423,14 +423,22 @@ export const COMPONENT_META: ComponentMeta[] = [
     group: 'Containment & overlays',
     railGroup: 'containment',
     summary:
-      'A modal surface for a focused task or a decision, with flat title, content and actions.',
-    propsComponents: ['Dialog', 'DialogTrigger', 'DialogTitle', 'DialogContent', 'DialogActions'],
+      'A modal surface for a focused task or a decision, with flat title, content and actions, or full screen on compact windows.',
+    propsComponents: [
+      'Dialog',
+      'DialogTrigger',
+      'DialogTitle',
+      'DialogHeader',
+      'DialogContent',
+      'DialogActions',
+    ],
     playground: 'showcase',
     specs: {
       shape: 'rounded-corner-extra-large',
       elevation: 'level3',
     },
     related: ['sheets', 'menu', 'snackbar'],
+    keywords: ['modal', 'full screen', 'fullscreen', 'popup', 'confirm'],
     whenNotToUse:
       'For a brief, non-blocking message use a Snackbar; for content that need not interrupt use a Sheet.',
   },

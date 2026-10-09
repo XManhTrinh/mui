@@ -15,6 +15,16 @@ test.describe('Dialog visual regression', () => {
     }
   }
 
+  for (const mode of MODES) {
+    test(`full screen · phone · ${mode}`, async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 760 });
+      await openStory(page, 'components-dialog--full-screen-compact', { mode });
+      await page.getByRole('button', { name: 'Edit name' }).click();
+      await settle(page);
+      await expect(page).toHaveScreenshot(`full-screen-phone-${mode}.png`);
+    });
+  }
+
   test('long content · rtl', async ({ page }) => {
     await page.setViewportSize({ width: 420, height: 700 });
     await openStory(page, 'components-dialog--long-content', { dir: 'rtl' });
@@ -94,5 +104,41 @@ test.describe('Dialog behaviour', () => {
     const accept = (await page.getByRole('button', { name: /Accept/ }).boundingBox())!;
     const decline = (await page.getByRole('button', { name: /Decline/ }).boundingBox())!;
     expect(accept.y).toBeLessThan(decline.y);
+  });
+
+  test('full screen on a phone: fills the window, header carries close and the action', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 760 });
+    await openStory(page, 'components-dialog--full-screen-compact');
+    const trigger = page.getByRole('button', { name: 'Edit name' });
+    await trigger.click();
+    const dialog = page.getByRole('dialog', { name: 'Edit name' });
+    await settle(page);
+    const box = (await dialog.boundingBox())!;
+    expect(box).toMatchObject({ x: 0, y: 0, width: 390, height: 760 });
+    expect(await dialog.evaluate((el) => getComputedStyle(el).borderTopLeftRadius)).toBe('0px');
+    // One Save (the header's); the DialogActions row is hidden.
+    await expect(dialog.getByRole('button', { name: 'Save' })).toHaveCount(1);
+    await expect(dialog.getByRole('button', { name: 'Cancel' })).toHaveCount(0);
+    const close = dialog.getByRole('button', { name: 'Close' });
+    const target = (await close.locator('[data-touch-target]').boundingBox())!;
+    expect(target.width).toBeGreaterThanOrEqual(48);
+    expect(target.height).toBeGreaterThanOrEqual(48);
+    await close.click();
+    await expect(dialog).toHaveCount(0);
+    await expect(trigger).toBeFocused();
+  });
+
+  test('full screen "compact" stays a basic dialog on larger windows', async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 760 });
+    await openStory(page, 'components-dialog--full-screen-compact');
+    await page.getByRole('button', { name: 'Edit name' }).click();
+    const dialog = page.getByRole('dialog', { name: 'Edit name' });
+    await settle(page);
+    expect((await dialog.boundingBox())!.width).toBeLessThanOrEqual(560);
+    expect(await dialog.evaluate((el) => getComputedStyle(el).borderTopLeftRadius)).toBe('28px');
+    await expect(dialog.getByRole('button', { name: 'Close' })).toHaveCount(0);
+    await expect(dialog.getByRole('button', { name: 'Cancel' })).toBeVisible();
   });
 });

@@ -6,7 +6,15 @@ import { axeViolations } from '../../../test/axe';
 import { ThemeScope } from '../../theme/ThemeScope';
 import { Button } from '../button/Button';
 import { IconButton } from '../icon-button/IconButton';
-import { Dialog, DialogActions, DialogContent, DialogTitle, DialogTrigger } from './Dialog';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  type DialogFullScreen,
+} from './Dialog';
 
 const gone = (name: string) =>
   waitFor(() => expect(screen.queryByRole('dialog', { name })).not.toBeInTheDocument(), {
@@ -163,6 +171,92 @@ describe('Dialog', () => {
   it('has no axe violations when open', async () => {
     const { baseElement } = render(<DeleteDialog />);
     await userEvent.click(screen.getByRole('button', { name: 'Delete' }));
+    expect(await axeViolations(baseElement)).toEqual([]);
+  });
+});
+
+describe('Dialog full screen', () => {
+  function EditDialog({
+    fullScreen,
+    onSave,
+  }: {
+    fullScreen: DialogFullScreen;
+    onSave?: () => void;
+  }) {
+    return (
+      <DialogTrigger>
+        <Button>Edit name</Button>
+        <Dialog fullScreen={fullScreen} data-testid="panel">
+          {({ close }) => (
+            <>
+              <DialogHeader
+                closeLabel="Close"
+                action={
+                  <Button variant="text" onPress={onSave}>
+                    Save
+                  </Button>
+                }
+              >
+                Edit name
+              </DialogHeader>
+              <DialogContent>Name field</DialogContent>
+              <DialogActions data-testid="actions">
+                <Button variant="text" onPress={close}>
+                  Cancel
+                </Button>
+              </DialogActions>
+            </>
+          )}
+        </Dialog>
+      </DialogTrigger>
+    );
+  }
+
+  it('fills the window with a header of close, headline and action', async () => {
+    const onSave = vi.fn();
+    render(<EditDialog fullScreen="always" onSave={onSave} />);
+    await userEvent.click(screen.getByRole('button', { name: 'Edit name' }));
+    const panel = screen.getByRole('dialog', { name: 'Edit name' });
+    expect(panel).toHaveAttribute('data-full-screen', 'always');
+    expect(panel).toHaveClass('size-full', 'bg-surface', 'rounded-none');
+    expect(screen.getByRole('heading', { name: 'Edit name' })).toHaveClass('text-title-large');
+    expect(screen.getByTestId('actions')).toHaveClass('hidden');
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+    expect(onSave).toHaveBeenCalledOnce();
+  });
+
+  it('closes from the header and restores focus to the trigger', async () => {
+    render(<EditDialog fullScreen="always" />);
+    const trigger = screen.getByRole('button', { name: 'Edit name' });
+    await userEvent.click(trigger);
+    await userEvent.click(screen.getByRole('button', { name: 'Close' }));
+    await gone('Edit name');
+    // React Aria restores focus in an animation frame after the dialog unmounts.
+    await waitFor(() => expect(trigger).toHaveFocus());
+  });
+
+  it('is full screen only on compact windows with "compact"', async () => {
+    render(<EditDialog fullScreen="compact" />);
+    await userEvent.click(screen.getByRole('button', { name: 'Edit name' }));
+    const panel = screen.getByRole('dialog', { name: 'Edit name' });
+    expect(panel).toHaveAttribute('data-full-screen', 'compact');
+    expect(panel).toHaveClass('max-medium:size-full', 'rounded-corner-extra-large');
+    expect(screen.getByRole('button', { name: 'Close' })).toHaveClass('medium:hidden');
+    expect(screen.getByTestId('actions')).toHaveClass('max-medium:hidden');
+  });
+
+  it('is a plain title without close or action when never full screen', async () => {
+    render(<EditDialog fullScreen="never" />);
+    await userEvent.click(screen.getByRole('button', { name: 'Edit name' }));
+    expect(screen.getByRole('heading', { name: 'Edit name' })).toHaveClass('text-headline-small');
+    expect(screen.queryByRole('button', { name: 'Close' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Save' })).not.toBeInTheDocument();
+    expect(screen.getByRole('dialog')).not.toHaveAttribute('data-full-screen');
+  });
+
+  it('has no axe violations in full screen', async () => {
+    const { baseElement } = render(<EditDialog fullScreen="always" />);
+    await userEvent.click(screen.getByRole('button', { name: 'Edit name' }));
     expect(await axeViolations(baseElement)).toEqual([]);
   });
 });

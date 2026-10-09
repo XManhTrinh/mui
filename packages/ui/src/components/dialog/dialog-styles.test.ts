@@ -10,7 +10,9 @@ import { dialogStyles } from './dialog-styles';
 describe('dialogStyles', () => {
   const classes = collectClasses(
     [false, true].flatMap((hasIcon) =>
-      Object.values(dialogStyles({ hasIcon })).map((slot) => slot()),
+      (['never', 'always', 'compact'] as const).flatMap((fullScreen) =>
+        Object.values(dialogStyles({ hasIcon, fullScreen })).map((slot) => slot()),
+      ),
     ),
   );
 

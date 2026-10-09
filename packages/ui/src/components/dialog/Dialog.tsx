@@ -24,7 +24,23 @@ import { Overlay } from '../../primitives/Overlay';
 import { TriggerContext, type TriggerContextValue } from '../../primitives/TriggerContext';
 import { usePresence } from '../../primitives/use-presence';
 import { cn } from '../../utils/cn';
+import { IconButton } from '../icon-button/IconButton';
 import { dialogStyles } from './dialog-styles';
+
+/** Material Symbols "close" (Apache-2.0). */
+function CloseIcon() {
+  return (
+    <svg viewBox="0 -960 960 960" fill="currentColor">
+      <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+    </svg>
+  );
+}
+
+/**
+ * When a dialog fills the window (the M3 full-screen dialog): `never`, `always`, or
+ * `compact` for windows narrower than 600px only, the M3 recommendation.
+ */
+export type DialogFullScreen = 'never' | 'always' | 'compact';
 
 interface DialogTriggerContextValue {
   state: OverlayTriggerState;
@@ -37,11 +53,15 @@ const DialogTriggerContext = createContext<DialogTriggerContextValue | null>(nul
 interface DialogPartsContextValue {
   titleProps: DOMAttributes<HTMLElement>;
   hasIcon: boolean;
+  fullScreen: DialogFullScreen;
+  close: () => void;
 }
 
 const DialogPartsContext = createContext<DialogPartsContextValue>({
   titleProps: {},
   hasIcon: false,
+  fullScreen: 'never',
+  close: () => undefined,
 });
 
 export interface DialogTriggerProps {
@@ -105,8 +125,13 @@ export interface DialogProps
   dismissable?: boolean;
   /** Prevents Escape from closing the dialog. */
   keyboardDismissDisabled?: boolean;
-  /** Icon above the title (which is then centred). Decorative. */
+  /** Icon above the title (which is then centred). Decorative. Not shown in full screen. */
   icon?: ReactNode;
+  /**
+   * Fills the window, with a `DialogHeader` holding the close button, title and confirming
+   * action instead of `DialogActions`. `compact` does so only below 600px. @default "never"
+   */
+  fullScreen?: DialogFullScreen;
   children?: ReactNode | ((props: DialogRenderProps) => ReactNode);
   classNames?: DialogClassNames;
   style?: CSSProperties;
@@ -162,6 +187,7 @@ function DialogModal({
   dismissable,
   keyboardDismissDisabled,
   icon,
+  fullScreen = 'never',
   children,
   className,
   classNames,
@@ -184,8 +210,8 @@ function DialogModal({
     panelRef,
   );
   const { dialogProps, titleProps } = useDialog({ ...rest, role }, panelRef);
-  const hasIcon = icon !== undefined && icon !== null;
-  const styles = dialogStyles({ hasIcon });
+  const hasIcon = fullScreen !== 'always' && icon !== undefined && icon !== null;
+  const styles = dialogStyles({ hasIcon, fullScreen });
   const exiting = isExiting || undefined;
 
   return (
@@ -202,12 +228,18 @@ function DialogModal({
             ref={panelRef}
             style={style}
             data-exiting={exiting}
+            data-full-screen={fullScreen === 'never' ? undefined : fullScreen}
             className={styles.panel({ class: cn(classNames?.panel, className) })}
           >
             <TriggerContext value={null}>
-              <DialogPartsContext value={{ titleProps, hasIcon }}>
+              <DialogPartsContext value={{ titleProps, hasIcon, fullScreen, close: state.close }}>
                 {hasIcon && (
-                  <span aria-hidden="true" className={styles.icon({ class: classNames?.icon })}>
+                  <span
+                    aria-hidden="true"
+                    className={styles.icon({
+                      class: cn(fullScreen === 'compact' && 'max-medium:hidden', classNames?.icon),
+                    })}
+                  >
                     {icon}
                   </span>
                 )}
@@ -223,7 +255,10 @@ function DialogModal({
 
 export type DialogTitleProps = ComponentPropsWithRef<'h2'>;
 
-/** The dialog's headline; it also names the dialog for assistive tech. */
+/**
+ * The dialog's headline; it also names the dialog for assistive tech. In a dialog that can
+ * be full screen, use `DialogHeader` instead.
+ */
 export function DialogTitle({ className, ...props }: DialogTitleProps) {
   const { titleProps, hasIcon } = useContext(DialogPartsContext);
   return (
@@ -234,19 +269,82 @@ export function DialogTitle({ className, ...props }: DialogTitleProps) {
   );
 }
 
+export interface DialogHeaderClassNames {
+  root?: string;
+  close?: string;
+  title?: string;
+}
+
+export interface DialogHeaderProps extends Omit<ComponentPropsWithRef<'div'>, 'title'> {
+  /** The headline; it names the dialog. */
+  children: ReactNode;
+  /** Accessible name of the close button. */
+  closeLabel: string;
+  /** The confirming action, usually a text `Button` ("Save"). Shown in full screen only. */
+  action?: ReactNode;
+  classNames?: DialogHeaderClassNames;
+}
+
+/**
+ * The headline of a dialog that can be full screen. In full screen it is the M3 full-screen
+ * dialog's header: a close icon button, the headline and the confirming action. Otherwise
+ * it is a plain `DialogTitle`, and the dialog's `DialogActions` carry the actions.
+ *
+ * @example
+ * <Dialog fullScreen="compact">
+ *   <DialogHeader closeLabel="Close" action={<Button variant="text" onPress={save}>Save</Button>}>
+ *     Edit name
+ *   </DialogHeader>
+ *   <DialogContent>…</DialogContent>
+ *   <DialogActions>…</DialogActions>
+ * </Dialog>
+ */
+export function DialogHeader({
+  children,
+  closeLabel,
+  action,
+  className,
+  classNames,
+  ...props
+}: DialogHeaderProps) {
+  const { titleProps, hasIcon, fullScreen, close } = useContext(DialogPartsContext);
+  const styles = dialogStyles({ hasIcon, fullScreen });
+  return (
+    <div {...props} className={styles.header({ class: cn(classNames?.root, className) })}>
+      {fullScreen !== 'never' && (
+        <IconButton
+          icon={<CloseIcon />}
+          aria-label={closeLabel}
+          onPress={close}
+          className={styles.headerButton({ class: classNames?.close })}
+        />
+      )}
+      <h2 {...titleProps} className={styles.title({ class: classNames?.title })}>
+        {children}
+      </h2>
+      {fullScreen !== 'never' && action !== undefined && (
+        <div className={styles.headerButton()}>{action}</div>
+      )}
+    </div>
+  );
+}
+
 export type DialogContentProps = ComponentPropsWithRef<'div'>;
 
 /** The dialog's supporting text or content; scrolls when the dialog is too tall. */
 export function DialogContent({ className, ...props }: DialogContentProps) {
-  return <div {...props} className={dialogStyles().content({ class: className })} />;
+  const { fullScreen } = useContext(DialogPartsContext);
+  return <div {...props} className={dialogStyles({ fullScreen }).content({ class: className })} />;
 }
 
 export type DialogActionsProps = ComponentPropsWithRef<'div'>;
 
 /**
  * Row of actions at the end of the dialog, 8px apart. Put the confirming action last:
- * when the actions do not fit on one line they stack with it on top.
+ * when the actions do not fit on one line they stack with it on top. Hidden while the
+ * dialog is full screen, where `DialogHeader` carries the confirming action.
  */
 export function DialogActions({ className, ...props }: DialogActionsProps) {
-  return <div {...props} className={dialogStyles().actions({ class: className })} />;
+  const { fullScreen } = useContext(DialogPartsContext);
+  return <div {...props} className={dialogStyles({ fullScreen }).actions({ class: className })} />;
 }
