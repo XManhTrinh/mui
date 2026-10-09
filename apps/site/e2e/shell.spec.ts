@@ -2,6 +2,19 @@ import { expect, test } from '@playwright/test';
 
 /** The docs shell: page search, display settings and the direction switch. */
 test.describe('Docs shell', () => {
+  test("the top bar's search is 48px, and opens over itself at that height", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/getting-started');
+    const input = page.getByRole('combobox', { name: 'Search documentation' });
+    // The pill fills the bar: one height, set on the bar.
+    const pill = input.locator('..');
+    expect((await pill.boundingBox())!.height).toBe(48);
+    await input.click();
+    const dialog = page.getByRole('dialog', { name: 'Search documentation' });
+    const field = dialog.getByRole('searchbox').locator('..');
+    await expect.poll(async () => (await field.boundingBox())!.height).toBe(48);
+  });
+
   test('search finds a component page and opens it', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/getting-started');

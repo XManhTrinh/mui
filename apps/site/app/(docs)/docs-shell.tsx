@@ -167,10 +167,8 @@ export function DocsShell({
             <DocsSearch
               entries={searchEntries}
               view="docked"
-              className="h-10 w-[260px] min-w-0 max-w-full shrink"
-              // Condense the pill: the library's field + icon slots are h-[56px]/size-[48px];
-              // override them so the docked search is a compact 40px bar inside the top bar.
-              classNames={{ field: 'h-10', leading: 'size-10', trailing: 'size-10' }}
+              // 48px (M3's minimum touch target) in the 64px bar; the field fills the bar.
+              className="h-12 w-[260px] min-w-0 max-w-full shrink"
             />
           }
         />

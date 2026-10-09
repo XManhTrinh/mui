@@ -38,9 +38,10 @@ export const phoneFieldStyles = tv({
     ],
     // In the sheet, 8px from the screen's edges in all (4px here + the rows' 4px), as Select's.
     sheetContent: 'flex min-h-0 flex-1 flex-col px-[4px]',
-    // The search is the M3 search bar's field (`searchBarStyles`: 56px, full corners,
-    // `surface-container-high`), inset by the menu panel's 4px padding like the list below.
-    searchRow: 'flex shrink-0 p-[4px]',
+    // The search is the M3 search bar's field (`searchBarStyles`: full corners,
+    // `surface-container-high`), 48px (M3's minimum touch target; 56px dominates 44px rows),
+    // inset by the menu panel's 4px padding like the list below.
+    searchRow: 'flex h-[56px] shrink-0 p-[4px]',
     // The shared option list (Select and Autocomplete's), inside the picker's own panel.
     list: 'min-h-0 flex-1 px-[4px] pb-[8px]',
   },

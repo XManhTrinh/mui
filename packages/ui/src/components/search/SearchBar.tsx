@@ -97,6 +97,7 @@ interface BarRect {
   right: number;
   bottom: number;
   width: number;
+  height: number;
   rtl: boolean;
 }
 
@@ -164,6 +165,7 @@ export function SearchBar(props: SearchBarProps) {
       right: box.right,
       bottom: box.bottom,
       width: box.width,
+      height: box.height,
       rtl: getComputedStyle(root).direction === 'rtl',
     });
   }, [state.isOpen, rootRef]);
@@ -419,7 +421,10 @@ function SearchView({
           style={{ top: rect.top, left: rect.left, width: rect.width }}
           className={styles.dockedPanel({ class: classNames?.view })}
         >
-          {field(contentRef)}
+          {/* The docked field opens over the bar at the bar's own height. */}
+          <div style={{ height: rect.height }} className="flex shrink-0">
+            {field(contentRef)}
+          </div>
           {children != null && (
             <div
               ref={contentRef}

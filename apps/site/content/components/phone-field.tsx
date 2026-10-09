@@ -99,7 +99,8 @@ export async function PhoneFieldBody() {
             <code className="text-on-surface">error</code> when the number is invalid.
           </li>
           <li>
-            The search is the M3 search bar&apos;s field: 56px, full corners,{' '}
+            The search is the M3 search bar&apos;s field at 48px (M3&apos;s minimum touch target, so
+            it doesn&apos;t dominate the 44px rows), with full corners,{' '}
             <code className="text-on-surface">surface-container-high</code>, and the focus ring for
             keyboard focus only.
           </li>

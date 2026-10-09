@@ -31,11 +31,12 @@ const contentFade = [
 /** Variant definitions for {@link SearchBar}; extend them to add variants. */
 export const searchBarStyles = tv({
   slots: {
+    // The bar's height is set here alone (56px, Compose's); a consumer `h-*` resizes it.
     root: 'flex h-[56px] w-[360px] max-w-[min(720px,100%)] shrink-0',
-    // The pill holding the icons and the input.
+    // The pill holding the icons and the input fills the bar.
     // Keyboard focus in the input draws Compose's inset focus ring around the pill.
     field:
-      'focus-ring-inset flex h-[56px] w-full min-w-0 items-center rounded-corner-full text-on-surface',
+      'focus-ring-inset flex h-full w-full min-w-0 items-center rounded-corner-full text-on-surface',
     leading:
       'ms-[4px] flex size-[48px] shrink-0 items-center justify-center text-on-surface [&>svg]:size-[24px]',
     trailing:
@@ -78,7 +79,8 @@ export const searchBarStyles = tv({
       'data-exiting:[transition-timing-function:var(--md-sys-motion-spring-spatial-default-easing)]',
     ],
     fullScreenHeader: [
-      'absolute start-0 top-[8px] w-full',
+      // Compose's full-screen field is 56px whatever the bar's size.
+      'absolute start-0 top-[8px] h-[56px] w-full',
       'starting:start-(--m3-search-start) starting:top-(--m3-search-top) starting:w-(--m3-search-width)',
       'data-exiting:start-(--m3-search-start) data-exiting:top-(--m3-search-top) data-exiting:w-(--m3-search-width)',
       '[transition-property:inset-inline-start,top,width]',

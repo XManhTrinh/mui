@@ -39,8 +39,13 @@ describe('SearchBar', () => {
     expect(input).toHaveAttribute('aria-expanded', 'false');
     expect(input).toHaveClass('text-body-large', 'placeholder:text-on-surface-variant');
     const field = input.parentElement!;
-    expect(field).toHaveClass('h-[56px]', 'rounded-corner-full', 'bg-surface-container-high');
-    expect(screen.getByTestId('search')).toHaveClass('w-[360px]', 'max-w-[min(720px,100%)]');
+    // The bar sets the height once; the pill fills it, so a consumer `h-*` resizes both.
+    expect(field).toHaveClass('h-full', 'rounded-corner-full', 'bg-surface-container-high');
+    expect(screen.getByTestId('search')).toHaveClass(
+      'h-[56px]',
+      'w-[360px]',
+      'max-w-[min(720px,100%)]',
+    );
     expect(input.previousElementSibling).toHaveClass('ms-[4px]', 'size-[48px]', 'text-on-surface');
     expect(await axeViolations(container)).toEqual([]);
   });
