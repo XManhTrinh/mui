@@ -1,6 +1,6 @@
 # Plan: EmptyState (`@vkieu/mui/vk`)
 
-Status: **proposed, waiting for Mike's approval** (2026-10-10)
+Status: **approved by Mike on 2026-10-10 and built**
 
 ## Goal
 
@@ -116,6 +116,6 @@ The profile's no posts and no photos cards and the home page's feed box and empt
 
 ## Questions for Mike
 
-1. **Name:** `EmptyState` (recommended), covering empty, no results and couldn't load.
-2. **Defaults:** `variant="plain"`, `size="md"`, `tone="secondary"` and `shape="circle"`, so VKIEU passes `variant="filled"` where it wants a card. Or should the default be `filled`?
-3. **Expressive shapes:** allow any of the 35 M3 shapes for the icon container (recommended, shared with `Avatar`), or keep it to a circle?
+1. **Name:** `EmptyState`, covering empty, no results and couldn't load (Mike, 2026-10-10).
+2. **Defaults:** `variant="plain"` (Mike asked for a suggestion; whether to sit in a card is the page's choice, as in Polaris), `size="md"`, `tone="secondary"`, `shape="circle"`.
+3. **Expressive shapes:** all 35 M3 shapes for the icon container, shared with `Avatar` (Mike, 2026-10-10).

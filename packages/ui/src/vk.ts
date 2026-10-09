@@ -104,3 +104,16 @@ export {
   type CropRect,
   type CropView,
 } from './vk/image-crop/crop-geometry';
+export {
+  EmptyState,
+  type EmptyStateClassNames,
+  type EmptyStateProps,
+  type EmptyStateShape,
+  type EmptyStateVariant,
+} from './vk/empty-state/EmptyState';
+export {
+  emptyStateStyles,
+  type EmptyStateSize,
+  type EmptyStateStyleProps,
+  type EmptyStateTone,
+} from './vk/empty-state/empty-state-styles';

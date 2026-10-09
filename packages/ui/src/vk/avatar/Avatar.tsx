@@ -1,12 +1,8 @@
 import type { CSSProperties, HTMLAttributes, ReactElement, ReactNode } from 'react';
 import { ButtonBase, type ButtonBaseProps } from '../../primitives/ButtonBase';
 import { TouchTarget } from '../../primitives/TouchTarget';
-import {
-  MaterialShapes,
-  materialShapeNames,
-  type MaterialShapeName,
-} from '../../shapes/material-shapes';
-import { polygonToPath } from '../../shapes/path';
+import { materialShapeMask } from '../../shapes/mask';
+import { materialShapeNames, type MaterialShapeName } from '../../shapes/material-shapes';
 import { cn } from '../../utils/cn';
 import { AvatarImage, type AvatarImageElementProps } from './avatar-image';
 import { avatarStyles } from './avatar-styles';
@@ -137,20 +133,6 @@ function toneSlotFor(name: string) {
     1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12}`;
 }
 
-const maskCache = new Map<MaterialShapeName, string>();
-
-/** The Expressive shape as a CSS mask; it scales with the avatar. */
-function shapeMask(shape: MaterialShapeName): string {
-  let mask = maskCache.get(shape);
-  if (!mask) {
-    const path = polygonToPath(MaterialShapes[shape]);
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1" overflow="visible"><path d="${path}"/></svg>`;
-    mask = `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
-    maskCache.set(shape, mask);
-  }
-  return mask;
-}
-
 /**
  * A small picture that stands for an account, with initials or an icon when there is no photo.
  * **Not an M3 component** (a `vk` component, see docs/plans/avatar.md): it fits the avatar
@@ -208,7 +190,7 @@ export function Avatar(props: AvatarProps) {
     ...(presence && { presence }),
   });
   const maskStyle: CSSProperties | undefined = expressive
-    ? { maskImage: shapeMask(resolvedShape as MaterialShapeName) }
+    ? { maskImage: materialShapeMask(resolvedShape as MaterialShapeName) }
     : undefined;
 
   const words = { ...DEFAULT_LABELS, ...labels };

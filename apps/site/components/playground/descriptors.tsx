@@ -30,9 +30,17 @@ import {
   Tabs,
   TextField,
 } from '@vkieu/mui';
-import { Avatar, avatarShapes, PhoneField, PinInput, Skeleton, SkeletonGroup } from '@vkieu/mui/vk';
+import {
+  Avatar,
+  avatarShapes,
+  EmptyState,
+  PhoneField,
+  PinInput,
+  Skeleton,
+  SkeletonGroup,
+} from '@vkieu/mui/vk';
 import { createElement, type ComponentType, type ReactElement } from 'react';
-import { AddIcon, EditIcon, SendIcon, StarIcon } from '../icons';
+import { AddIcon, DynamicFeedIcon, EditIcon, SendIcon, StarIcon } from '../icons';
 
 export interface PlaygroundDescriptor {
   /** Public component name as imported from '@vkieu/mui', e.g. 'Button'. */
@@ -93,6 +101,7 @@ const SelectItemAny = loose(SelectItem);
 const AutocompleteAny = loose(Autocomplete);
 const AutocompleteItemAny = loose(AutocompleteItem);
 const SkeletonAny = loose(Skeleton);
+const EmptyStateAny = loose(EmptyState);
 const TabAny = loose(Tab);
 
 /** A no-op change handler so controlled inputs driven by the panel don't warn in preview. */
@@ -547,6 +556,43 @@ export const PLAYGROUND_DESCRIPTORS: Record<string, PlaygroundDescriptor> = {
       corner: ['default', 'none', 'extra-small', 'small', 'medium', 'large', 'extra-large', 'full'],
       tone: ['highest', 'high'],
     },
+  },
+  'empty-state': {
+    component: 'EmptyState',
+    importFrom: '@vkieu/mui/vk',
+    render: ({ actions, ...props }) =>
+      createElement(EmptyStateAny, {
+        ...props,
+        icon: createElement(DynamicFeedIcon),
+        className: 'w-full max-w-md',
+        ...(actions === true && {
+          actions: createElement(ButtonAny, { variant: 'tonal' }, 'Create a post'),
+        }),
+      }),
+    defaultProps: {
+      variant: 'plain',
+      size: 'md',
+      tone: 'secondary',
+      shape: 'circle',
+      actions: false,
+    },
+    surfacedProps: ['variant', 'size', 'tone', 'shape', 'title', 'description', 'actions'],
+    initialState: {
+      variant: 'filled',
+      title: 'No posts yet',
+      description: 'Posts you share will appear here.',
+    },
+    enumOptions: {
+      variant: ['plain', 'filled', 'elevated', 'outlined'],
+      size: ['sm', 'md', 'lg'],
+      tone: ['primary', 'secondary', 'tertiary', 'neutral', 'error'],
+      shape: [
+        'circle',
+        ...avatarShapes.filter((shape) => shape !== 'circle' && shape !== 'rounded'),
+      ],
+    },
+    codeImports: ["import { DynamicFeedIcon } from './icons';"],
+    codeSlots: { icon: '<DynamicFeedIcon />' },
   },
   avatar: {
     component: 'Avatar',

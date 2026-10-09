@@ -739,6 +739,36 @@ export const COMPONENT_META: ComponentMeta[] = [
       'When the shape of the coming content is unknown, or a whole page is loading, use the Loading indicator.',
   },
   {
+    slug: 'empty-state',
+    title: 'Empty state',
+    group: 'Feedback & pickers',
+    railGroup: 'feedback',
+    summary:
+      "Fills a region with nothing to show: no posts yet, no results, coming soon, or couldn't load with a retry. Not an M3 component (@vkieu/mui/vk).",
+    propsComponents: ['EmptyState'],
+    playground: 'full',
+    vk: true,
+    specs: {
+      shape: 'rounded-full',
+      variants: ['plain', 'filled', 'elevated', 'outlined'],
+    },
+    related: ['card', 'skeleton', 'snackbar'],
+    whenNotToUse:
+      'While content loads, use a Skeleton; for feedback about an action, a Snackbar; for a form field, helper text.',
+    keywords: [
+      'empty',
+      'empty state',
+      'no results',
+      'no data',
+      'blank',
+      'zero state',
+      'nothing here',
+      'placeholder',
+      'error state',
+      'retry',
+    ],
+  },
+  {
     slug: 'date-picker',
     title: 'Date picker',
     group: 'Feedback & pickers',
