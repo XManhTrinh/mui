@@ -48,6 +48,24 @@ test.describe('Alert visual regression', () => {
   });
 });
 
+test.describe('Alert layout', () => {
+  test('the icon centres on the first line, with or without a title', async ({ page }) => {
+    await openStory(page, 'vk-alert--with-actions');
+    for (const alert of await page.locator('[data-tone]').all()) {
+      const icon = await alert.locator('svg').first().boundingBox();
+      const line = await alert
+        .locator('p, [class*="text-body-medium"]')
+        .first()
+        .evaluate((el) => {
+          const box = el.getBoundingClientRect();
+          return box.top + parseFloat(getComputedStyle(el).lineHeight) / 2;
+        });
+      expect(icon).not.toBeNull();
+      expect(Math.abs((icon?.y ?? 0) + (icon?.height ?? 0) / 2 - line)).toBeLessThan(1);
+    }
+  });
+});
+
 test.describe('Alert actions', () => {
   test('text buttons on a tonal alert take its readable content colour', async ({ page }) => {
     await openStory(page, 'vk-alert--with-actions');

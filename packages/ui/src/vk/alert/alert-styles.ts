@@ -19,7 +19,8 @@ export const alertStyles = tv({
       'transition-opacity starting:opacity-0 duration-(--md-sys-motion-spring-effects-default-duration) ease-(--md-sys-motion-spring-effects-default-easing) motion-reduce:transition-none',
       'outline-none forced-colors:border-[CanvasText] forced-colors:text-[CanvasText]',
     ],
-    icon: 'mt-[2px] inline-flex size-[20px] shrink-0 items-center justify-center [&>svg]:size-full forced-colors:text-[CanvasText]',
+    // 20px, the first line's height (title-small and body-medium), so it centres on that line.
+    icon: 'inline-flex size-[20px] shrink-0 items-center justify-center [&>svg]:size-full forced-colors:text-[CanvasText]',
     body: 'flex min-w-0 flex-1 flex-col gap-[12px] @[480px]:flex-row @[480px]:items-center',
     text: 'flex min-w-0 flex-1 flex-col gap-[2px]',
     title: 'text-title-small',
