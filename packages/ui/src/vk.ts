@@ -117,3 +117,19 @@ export {
   type EmptyStateStyleProps,
   type EmptyStateTone,
 } from './vk/empty-state/empty-state-styles';
+export { Tag, type TagClassNames, type TagProps } from './vk/tag/Tag';
+export { TagGroup, type TagGroupProps } from './vk/tag/TagGroup';
+export { tagGroupStyles, tagStyles, type TagStyleProps } from './vk/tag/tag-styles';
+export {
+  TAG_SHAPES,
+  TAG_SIZES,
+  TAG_TONES,
+  TAG_VARIANTS,
+  tagTokens,
+  type TagColorTokens,
+  type TagShape,
+  type TagSize,
+  type TagSizeTokens,
+  type TagTone,
+  type TagVariant,
+} from './vk/tag/tag-tokens';

@@ -582,6 +582,25 @@ export const COMPONENT_META: ComponentMeta[] = [
     whenNotToUse: 'For a status that needs a label and context, use a Chip or inline text.',
   },
   {
+    slug: 'tag',
+    title: 'Tag',
+    group: 'Containment & overlays',
+    railGroup: 'containment',
+    summary:
+      'A small, static label for a status or category: Sold, Open now, Featured. Tonal, filled or outlined, in M3 and success and warning tones. Not an M3 component (@vkieu/mui/vk).',
+    propsComponents: ['Tag', 'TagGroup'],
+    playground: 'full',
+    vk: true,
+    specs: {
+      shape: 'rounded-corner-full',
+      variants: ['tonal', 'filled', 'outlined'],
+    },
+    related: ['badge', 'chips'],
+    whenNotToUse:
+      'For something pressable use a chip; for a count on an icon or avatar use a Badge.',
+    keywords: ['tag', 'label', 'status', 'pill', 'lozenge', 'category', 'chip', 'badge', 'token'],
+  },
+  {
     slug: 'divider',
     title: 'Divider',
     group: 'Containment & overlays',

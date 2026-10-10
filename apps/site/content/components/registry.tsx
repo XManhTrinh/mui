@@ -31,6 +31,7 @@ import { RadioGroupBody } from './radio-group';
 import { SearchBody } from './search';
 import { SheetsBody } from './sheets';
 import { SkeletonBody } from './skeleton';
+import { TagBody } from './tag';
 import { SliderBody } from './slider';
 import { SnackbarBody } from './snackbar';
 import { SplitButtonBody } from './split-button';
@@ -107,6 +108,7 @@ const BODIES: Record<string, ComponentType> = {
   progress: ProgressBody,
   'loading-indicator': LoadingIndicatorBody,
   skeleton: SkeletonBody,
+  tag: TagBody,
   'empty-state': EmptyStateBody,
   'date-picker': DatePickerBody,
   'time-picker': TimePickerBody,
@@ -143,6 +145,7 @@ export const COMPONENT_SLOTS: Record<string, string[]> = {
   PinInput: ['root', 'label', 'boxes', 'box', 'separator', 'supportingText', 'errorText'],
   PhoneField: ['root', 'country', 'input', 'picker', 'supportingText', 'errorText'],
   EmptyState: ['root', 'media', 'icon', 'title', 'description', 'actions'],
+  Tag: ['root', 'dot', 'icon', 'label'],
   ImageCropDialog: ['root', 'area', 'image', 'frame', 'controls', 'slider'],
   ImageCropper: ['root', 'area', 'image', 'frame', 'controls', 'slider'],
   Select: [

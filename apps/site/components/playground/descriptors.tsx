@@ -38,6 +38,7 @@ import {
   PinInput,
   Skeleton,
   SkeletonGroup,
+  Tag,
 } from '@vkieu/mui/vk';
 import { createElement, type ComponentType, type ReactElement } from 'react';
 import { AddIcon, DynamicFeedIcon, EditIcon, SendIcon, StarIcon } from '../icons';
@@ -102,6 +103,7 @@ const AutocompleteAny = loose(Autocomplete);
 const AutocompleteItemAny = loose(AutocompleteItem);
 const SkeletonAny = loose(Skeleton);
 const EmptyStateAny = loose(EmptyState);
+const TagAny = loose(Tag);
 const TabAny = loose(Tab);
 
 /** A no-op change handler so controlled inputs driven by the panel don't warn in preview. */
@@ -566,6 +568,21 @@ export const PLAYGROUND_DESCRIPTORS: Record<string, PlaygroundDescriptor> = {
       corner: ['default', 'none', 'extra-small', 'small', 'medium', 'large', 'extra-large', 'full'],
       tone: ['highest', 'high'],
     },
+  },
+  tag: {
+    component: 'Tag',
+    importFrom: '@vkieu/mui/vk',
+    render: (props) => createElement(TagAny, props, 'Open now'),
+    defaultProps: { variant: 'tonal', tone: 'neutral', size: 'md', shape: 'full', dot: false },
+    surfacedProps: ['variant', 'tone', 'size', 'shape', 'dot'],
+    initialState: { tone: 'success', dot: true },
+    enumOptions: {
+      variant: ['tonal', 'filled', 'outlined'],
+      tone: ['neutral', 'primary', 'secondary', 'tertiary', 'error', 'success', 'warning'],
+      size: ['sm', 'md', 'lg'],
+      shape: ['full', 'rounded'],
+    },
+    codeChildren: 'Open now',
   },
   'empty-state': {
     component: 'EmptyState',

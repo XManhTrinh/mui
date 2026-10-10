@@ -1,9 +1,11 @@
+import { Tag } from '@vkieu/mui/vk';
+
 /**
- * The "Expressive" and "VK" chips beside a component's name, in the gallery and the side
- * navigation. Expressive is `tertiary-container`, VK `primary-container`, so neither blends
- * into the navigation's current-page `secondary-container`. `compact` (the side navigation)
- * shows Expressive as "M3E", the short name for M3 Expressive, while screen readers still
- * hear "Expressive" and a pointer shows the full name.
+ * The "Expressive" and "VK" tags beside a component's name, in the gallery and the side
+ * navigation. Expressive is tertiary, VK primary, so neither blends into the navigation's
+ * current-page `secondary-container`. `compact` (the side navigation) shows Expressive as
+ * "M3E", the short name for M3 Expressive; screen readers still hear "Expressive" and a
+ * pointer shows the full name.
  */
 export function PageChips({
   expressive,
@@ -18,27 +20,20 @@ export function PageChips({
   return (
     <span className="inline-flex shrink-0 items-center gap-1">
       {expressive ? (
-        <span
-          title={compact ? 'M3 Expressive' : undefined}
-          className="rounded-corner-full bg-tertiary-container px-2 py-0.5 text-label-small text-on-tertiary-container"
-        >
-          {compact ? (
-            <>
-              <span aria-hidden="true">M3E</span>
-              <span className="sr-only">Expressive</span>
-            </>
-          ) : (
-            'Expressive'
-          )}
-        </span>
+        compact ? (
+          <Tag size="sm" tone="tertiary" fullLabel="Expressive" title="M3 Expressive">
+            M3E
+          </Tag>
+        ) : (
+          <Tag size="sm" tone="tertiary">
+            Expressive
+          </Tag>
+        )
       ) : null}
       {vk ? (
-        <span
-          title={compact ? 'VK: not part of Material 3' : undefined}
-          className="rounded-corner-full bg-primary-container px-2 py-0.5 text-label-small text-on-primary-container"
-        >
+        <Tag size="sm" tone="primary" {...(compact && { title: 'VK: not part of Material 3' })}>
           VK
-        </span>
+        </Tag>
       ) : null}
     </span>
   );
