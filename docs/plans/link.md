@@ -1,6 +1,6 @@
 # Plan: Link (`@vkieu/mui/vk`)
 
-Status: **proposed, waiting for Mike's approval** (2026-10-10)
+Status: **approved by Mike on 2026-10-10**
 
 ## Goal
 
@@ -58,5 +58,5 @@ The terms and privacy links at sign-up and on the username screen, the links in 
 
 ## Questions for Mike
 
-1. **Name:** `Link`.
-2. **Default:** `inline` (underlined) in running text, `standalone` elsewhere.
+1. **Name:** `Link` (Mike, 2026-10-10).
+2. **Default:** `inline` (underlined) in running text, `standalone` elsewhere (Mike, 2026-10-10).

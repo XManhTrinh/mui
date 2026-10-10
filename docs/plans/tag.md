@@ -1,6 +1,6 @@
 # Plan: Tag (`@vkieu/mui/vk`)
 
-Status: **proposed, waiting for Mike's approval** (2026-10-10)
+Status: **approved by Mike on 2026-10-10**
 
 ## Goal
 
@@ -44,7 +44,7 @@ First consumers: the docs site's `PageChips` (Expressive / M3E and VK, in the si
 | 1 | Where | `packages/ui/src/vk/tag/`, exported from `@vkieu/mui/vk` |
 | 2 | Parts | `Tag` (one label) and `TagGroup` (several, as a list) |
 | 3 | `variant` | `tonal` (default: the tone's container role and on-container content), `filled` (the tone's role and on-role content, for strong emphasis such as "Sold"), `outlined` (no container; a 1px border and content in the tone's colour, the quietest) |
-| 4 | `tone` (M3 colour roles) | `neutral` (default), `primary`, `secondary`, `tertiary`, `error`. M3 has no success or warning roles, so consumers add their own through the component tokens (decision 9), as VKIEU does for its green "Open now" |
+| 4 | `tone` (M3 colour roles) | `neutral` (default), `primary`, `secondary`, `tertiary`, `error`, and `success` and `warning` from the theme's custom colours (docs/plans/custom-colors.md) |
 | 5 | `size` | `sm` (20px, `label-small`, 14px icon, 6px side padding), `md` (default, 24px, `label-medium`, 16px icon, 8px), `lg` (32px, `label-large`, 18px icon, 12px). `lg` matches a chip's height, so a tag can sit in a row of chips without looking interactive (it has no border state layer, no hover, no focus) |
 | 6 | `shape` | `full` (default, a pill) or `rounded`: the shape scale by size, `extra-small` (4px) for `sm`, `small` (8px) for `md` and `lg`, matching the chips' corners |
 | 7 | Short form | `fullLabel`: the visible label is short ("M3E"), screen readers hear `fullLabel` ("Expressive") instead, and a pointer shows it as the native `title`. The visible text is `aria-hidden` and `fullLabel` is visually hidden text, so it reads the same in every screen reader |
@@ -66,7 +66,7 @@ import { Tag, TagGroup } from '@vkieu/mui/vk';
 <Tag>Draft</Tag>                                          // tonal, neutral, md, pill
 <Tag tone="error" variant="filled">Sold</Tag>
 <Tag tone="tertiary" icon={<StarIcon />}>Featured</Tag>
-<Tag dot className="[--vk-tag-dot:var(--vk-success)]">Open now</Tag>
+<Tag dot tone="success">Open now</Tag>
 <Tag size="sm" tone="tertiary" fullLabel="Expressive">M3E</Tag>
 <Tag variant="outlined" shape="rounded" maxWidth="12rem">Vietnamese groceries</Tag>
 
@@ -114,10 +114,10 @@ apps/site/                     page (with a "Tag, Badge or Chip?" section), exam
 
 ## In VKIEU, once it's built
 
-The legal page's "Draft" label becomes `<Tag tone="tertiary">`. VKIEU defines `--vk-success` and `--vk-warning` (next to its avatar colours, with a contrast test) for statuses M3 has no role for, and uses them through the tag's tokens.
+The legal page's "Draft" label becomes `<Tag tone="tertiary">`; statuses like "Open now" use `tone="success"`.
 
 ## Questions for Mike
 
-1. **Name:** `Tag` and `TagGroup`.
-2. **Defaults:** `tonal`, `neutral`, `md`, pill (`full`).
-3. **Tones:** M3's roles only (neutral, primary, secondary, tertiary, error), with success and warning added by consumers through tokens (recommended, so the library never invents colours M3 doesn't have). Or should the library ship `success` and `warning` tones with its own generated colours?
+1. **Name:** `Tag` and `TagGroup` (Mike, 2026-10-10).
+2. **Defaults:** `tonal`, `neutral`, `md`, pill (Mike, 2026-10-10).
+3. **Tones:** success and warning ship in the library as M3 custom colours (Mike, 2026-10-10; docs/plans/custom-colors.md).

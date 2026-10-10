@@ -1,6 +1,6 @@
 # Plan: Alert (`@vkieu/mui/vk`)
 
-Status: **proposed, waiting for Mike's approval** (2026-10-10)
+Status: **approved by Mike on 2026-10-10**
 
 ## Goal
 
@@ -28,7 +28,7 @@ M3 Expressive has no persistent message component: the M2 banner isn't part of i
 |---|---|---|
 | 1 | Where | `packages/ui/src/vk/alert/`, exported from `@vkieu/mui/vk` |
 | 2 | Anatomy | A leading icon (by tone, replaceable), an optional title, the message, optional actions (up to two `Button`s, text or tonal) and an optional close `IconButton` |
-| 3 | `tone` | `error` (default for forms: `error-container`), `info` (`secondary-container`), `neutral` (`surface-container-highest`). M3 has no success or warning roles; consumers add them through tokens, as for `Tag` |
+| 3 | `tone` | `error` (default for forms: `error-container`), `info` (`secondary-container`), `success` and `warning` (the theme's custom colours, docs/plans/custom-colors.md), and `neutral` (`surface-container-highest`) |
 | 4 | `variant` | `tonal` (default, the container colour) or `outlined` (the surface, a 1px border in the tone's colour), for quieter notices |
 | 5 | Semantics | `error` is `role="alert"` (read at once); the others are `role="status"` (polite). The title is plain text, or a heading with `titleAs` |
 | 6 | Focus | `focusOnMount` moves focus to the alert after a failed submit, as WCAG asks for errors that block progress, and forms can pass a ref instead |
@@ -66,4 +66,4 @@ Unit (tones, variants, roles, close, actions, focus on mount), axe, contrast for
 ## Questions for Mike
 
 1. **Name:** `Alert` (Mike, 2026-10-10), as in Material UI, Bootstrap, Ant Design and Chakra, and matching its `alert` and `status` roles. In Apple's and Android's vocabulary an "alert" is a modal dialog; here that's `Dialog role="alertdialog"`, and the docs and TSDoc say so.
-2. **Tones:** error, info and neutral from M3's roles, with success and warning through tokens.
+2. **Tones:** error, info, success, warning and neutral, with success and warning from the theme's custom colours (Mike, 2026-10-10).
