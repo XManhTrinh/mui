@@ -533,6 +533,35 @@ export const COMPONENT_META: ComponentMeta[] = [
       'For top-level navigation use a Navigation rail or bar; for tabular data use a table.',
   },
   {
+    slug: 'list-detail-layout',
+    title: 'List-detail layout',
+    group: 'Containment & overlays',
+    railGroup: 'containment',
+    summary:
+      "M3's list-detail canonical layout: one pane at a time on phones, the list beside the open item from 840px. For settings, an inbox or a dashboard. Not an M3 component (@vkieu/mui/vk).",
+    propsComponents: ['ListDetailLayout'],
+    playground: 'showcase',
+    vk: true,
+    specs: {
+      variants: ['plain', 'filled'],
+      shape: 'rounded-corner-large',
+    },
+    related: ['list', 'navigation-rail', 'sheets'],
+    whenNotToUse:
+      "For a few peer views use Tabs; for a short task that doesn't need its own URL, a Dialog.",
+    keywords: [
+      'list detail',
+      'list-detail',
+      'master detail',
+      'two pane',
+      'split view',
+      'canonical layout',
+      'settings',
+      'inbox',
+      'adaptive layout',
+    ],
+  },
+  {
     slug: 'carousel',
     title: 'Carousel',
     group: 'Containment & overlays',

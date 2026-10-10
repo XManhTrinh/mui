@@ -20,6 +20,7 @@ import { MenuBody } from './menu';
 import { NavigationBarBody } from './navigation-bar';
 import { NavigationRailBody } from './navigation-rail';
 import { EmptyStateBody } from './empty-state';
+import { ListDetailLayoutBody } from './list-detail-layout';
 import { AlertBody } from './alert';
 import { ImageCropBody } from './image-crop';
 import { LinkBody } from './link';
@@ -114,6 +115,7 @@ const BODIES: Record<string, ComponentType> = {
   link: LinkBody,
   alert: AlertBody,
   'empty-state': EmptyStateBody,
+  'list-detail-layout': ListDetailLayoutBody,
   'date-picker': DatePickerBody,
   'time-picker': TimePickerBody,
   'picker-dialog': PickerDialogBody,
@@ -149,6 +151,7 @@ export const COMPONENT_SLOTS: Record<string, string[]> = {
   PinInput: ['root', 'label', 'boxes', 'box', 'separator', 'supportingText', 'errorText'],
   PhoneField: ['root', 'country', 'input', 'picker', 'supportingText', 'errorText'],
   EmptyState: ['root', 'media', 'icon', 'title', 'description', 'actions'],
+  ListDetailLayout: ['root', 'list', 'detail', 'back'],
   Tag: ['root', 'dot', 'icon', 'label'],
   Link: ['root', 'icon'],
   Alert: ['root', 'icon', 'title', 'message', 'actions', 'close'],

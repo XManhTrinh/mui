@@ -1,6 +1,6 @@
 # Plan: ListDetailLayout (`@vkieu/mui/vk`)
 
-Status: **approved by Mike on 2026-10-10**
+Status: **approved by Mike on 2026-10-10 and built**
 
 ## Goal
 
@@ -59,7 +59,7 @@ import { ListDetailLayout } from '@vkieu/mui/vk';
   back={<IconButton href="/settings" aria-label={t('back')} icon={<ArrowBackIcon />} />}
   list={
     <List aria-label={t('title')} selectedKeys={['profile']}>
-      <ListItem id="profile" href="/settings/profile" supportingText={t('profile.summary')}>
+      <ListItem key="profile" href="/settings/profile" supportingText={t('profile.summary')}>
         {t('profile.title')}
       </ListItem>
       {/* Account, Preferences, Privacy, Legal */}
@@ -107,6 +107,14 @@ apps/site/                       page, playground, examples (settings, inbox), c
 ## In VKIEU, once it's built
 
 `/settings` and every `/settings/*` route render through one settings layout that passes `active` from the route, with Profile as the default detail on `/settings`. The messaging inbox and the business dashboard reuse it when they're built.
+
+## Built
+
+- **The root is the client part** (`ListDetailFrame.tsx`) instead of a separate focus hook: it holds the ref for focus and turns the transition on after the first paint. The panes and their content still render on the server.
+- **Focus follows the pane that's showing, both ways:** opening an item focuses the detail pane, and Back focuses the list pane. It moves one frame after the change, because a press handler can blur the pressed (now hidden) list item after the effect runs.
+- **The transition turns on after the first paint** (`data-animate` set on the element), so a page load never animates, with or without server rendering. It's added only under `motion-safe:`, so no breakpoint rule can outrank reduced motion.
+- **Docs site:** listed under **Containment** (with Card, Dialog, Sheets and List) rather than a new Layout group, with search keywords, the page, a settings example and an inbox example (`listAs="section"`, `filled`, `listWidth`).
+- **Tests:** 11 unit tests (landmarks, panes per `active`, widths, the back slot, variants, the transition switch, focus in single-pane and two-pane mode, overrides, axe) and 62 Playwright checks (two panes in the six themes × light and dark, filled at medium and high contrast, every window size class, the 360/412px widths and 24px spacer, right-to-left, forced colours, phone open and Back with focus, focus kept on expanded, the transition and reduced motion, no animation on load, and the layout-safety matrix).
 
 ## Questions for Mike
 
