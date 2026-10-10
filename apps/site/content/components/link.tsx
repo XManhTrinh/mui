@@ -1,18 +1,21 @@
 import { ExampleViewer } from '../../components/example-viewer';
 import { LinkInText } from '../../examples/link/link-in-text';
+import { LinkPlain } from '../../examples/link/link-plain';
 import { LinkStandalone } from '../../examples/link/link-standalone';
 import { readExampleSource } from '../../lib/example-source';
 import { highlightSource } from '../../lib/highlight';
 
 /** Link page body: when to use it, examples, accessibility and tokens. */
 export async function LinkBody() {
-  const [inText, standalone] = await Promise.all([
+  const [inText, standalone, plain] = await Promise.all([
     readExampleSource('link/link-in-text.tsx'),
     readExampleSource('link/link-standalone.tsx'),
+    readExampleSource('link/link-plain.tsx'),
   ]);
-  const [inTextHtml, standaloneHtml] = await Promise.all([
+  const [inTextHtml, standaloneHtml, plainHtml] = await Promise.all([
     highlightSource(inText),
     highlightSource(standalone),
+    highlightSource(plain),
   ]);
 
   return (
@@ -53,6 +56,14 @@ export async function LinkBody() {
           fileName="link-standalone.tsx"
         >
           <LinkStandalone />
+        </ExampleViewer>
+        <ExampleViewer
+          title="Around a logo or a photo tile"
+          code={plain}
+          html={plainHtml}
+          fileName="link-plain.tsx"
+        >
+          <LinkPlain />
         </ExampleViewer>
       </section>
 

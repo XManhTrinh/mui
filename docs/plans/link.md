@@ -22,7 +22,7 @@ M3 has no link component (its buttons cover actions, and text links are left to 
 |---|---|---|
 | 1 | Where | `packages/ui/src/vk/link/`, exported from `@vkieu/mui/vk` |
 | 2 | Rendering | React Aria's `useLink` on an `<a>`, so it routes through `RouterProvider` (Next.js, React Router) like every other library link, and `data-hovered`, `data-pressed` and `data-focus-visible` drive its states |
-| 3 | `variant` | `inline` (default: underlined, for links inside running text, as WCAG 1.4.1 asks when colour alone would mark them) and `standalone` (no underline at rest, underlined on hover and focus, for links on their own line or in a list) |
+| 3 | `variant` | `inline` (default: underlined, for links inside running text, as WCAG 1.4.1 asks when colour alone would mark them), `standalone` (no underline at rest, underlined on hover and focus, for links on their own line or in a list) and `plain` (Mike, 2026-10-10: never underlined or filled, for a link around a logo or a photo tile; only the focus ring, and its content can react to the link's hover through `group-data-hovered/link:`). A link never gets a button's state-layer background |
 | 4 | Colour | `primary` by default; `tone="inherit"` takes the surrounding text colour, for links on coloured containers (`on-primary-container`, an error banner) where `primary` would lack contrast. Visited links aren't styled, as in M3 |
 | 5 | Type | Inherits the surrounding type role by default; `size` (`small`, `medium`, `large`) sets `label-*` for standalone links that stand alone |
 | 6 | Underline | `underline-offset` and thickness from tokens, so it clears Vietnamese diacritics below the line (ạ, ặ, ụ) |

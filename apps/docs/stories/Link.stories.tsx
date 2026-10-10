@@ -34,6 +34,15 @@ export const Variants: Story = {
       <Link variant="standalone" size="medium" href="#see-all">
         See all friends
       </Link>
+      <Link variant="plain" tone="inherit" href="#lan" className="flex w-24 flex-col gap-1 text-on-surface">
+        <span
+          aria-hidden="true"
+          className="flex aspect-square items-center justify-center rounded-corner-medium bg-tertiary-container text-headline-small text-on-tertiary-container"
+        >
+          NL
+        </span>
+        <span className="text-label-large group-data-hovered/link:underline">Nguyễn Thị Lan</span>
+      </Link>
       <p className="rounded-corner-medium bg-primary-container p-4 text-body-medium text-on-primary-container">
         On a coloured container, links take the text colour:{' '}
         <Link tone="inherit" href="#help">

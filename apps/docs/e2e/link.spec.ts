@@ -48,6 +48,17 @@ test.describe('Link interaction', () => {
     expect(await link.evaluate((el) => getComputedStyle(el).textDecorationLine)).toBe('underline');
   });
 
+  test('a plain link never fills on hover; its content underlines instead', async ({ page }) => {
+    await openStory(page, 'vk-link--variants');
+    const tile = page.getByRole('link', { name: 'Nguyễn Thị Lan' });
+    await tile.hover();
+    await expect(tile).toHaveAttribute('data-hovered', 'true');
+    expect(await tile.evaluate((el) => getComputedStyle(el).backgroundImage)).toBe('none');
+    expect(await tile.evaluate((el) => getComputedStyle(el).textDecorationLine)).toBe('none');
+    const name = tile.getByText('Nguyễn Thị Lan');
+    expect(await name.evaluate((el) => getComputedStyle(el).textDecorationLine)).toBe('underline');
+  });
+
   test('presses with any layout class, in both directions', async ({ page }) => {
     for (const override of ['none', 'fixed', 'absolute', 'transform']) {
       for (const dir of ['ltr', 'rtl'] as const) {

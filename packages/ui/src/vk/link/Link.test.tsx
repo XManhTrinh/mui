@@ -28,6 +28,19 @@ describe('Link', () => {
     expect(link).toHaveClass('no-underline', 'data-hovered:underline', 'text-label-medium');
   });
 
+  it('never underlines or fills a plain link, and lets its content react to hover', async () => {
+    render(
+      <Link variant="plain" tone="inherit" href="/@lan">
+        <span className="group-data-hovered/link:underline">Lan</span>
+      </Link>,
+    );
+    const link = screen.getByRole('link', { name: 'Lan' });
+    expect(link).toHaveClass('no-underline', 'group/link');
+    expect(link.className).not.toMatch(/data-hovered:underline|state-layer|bg-/);
+    await userEvent.hover(link);
+    expect(link).toHaveAttribute('data-hovered', 'true');
+  });
+
   it('takes the surrounding colour with tone="inherit"', () => {
     render(
       <Link tone="inherit" href="/@lan">

@@ -27,7 +27,12 @@ export interface LinkProps extends Omit<
 > {
   /** The link text. */
   children: ReactNode;
-  /** `inline` (underlined, for links in running text) or `standalone`. @default "inline" */
+  /**
+   * `inline` (underlined, for links in running text), `standalone` (underlined on hover, for a
+   * link on its own line) or `plain` (never underlined or filled, for a logo or a photo tile;
+   * its content can style itself from the link's state with `group-data-hovered/link:`).
+   * @default "inline"
+   */
   variant?: LinkVariant;
   /** `primary`, or `inherit` the surrounding text colour (on coloured containers). @default "primary" */
   tone?: LinkTone;
@@ -56,6 +61,7 @@ export interface LinkProps extends Omit<
  * @example
  * <p>I agree to the <Link href="/legal/terms" external>Terms of service</Link>.</p>
  * <Link variant="standalone" size="medium" href="/forgot-password">Forgot password?</Link>
+ * <Link variant="plain" href="/" aria-label="Home"><Logo /></Link>
  */
 export function Link({
   children,

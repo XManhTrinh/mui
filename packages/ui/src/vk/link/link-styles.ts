@@ -26,6 +26,10 @@ export const linkStyles = tv({
       standalone: {
         root: 'no-underline data-hovered:underline data-focus-visible:underline data-pressed:underline',
       },
+      // A link around non-text content (a logo, a photo tile): no underline and no background
+      // in any state, only the focus ring. Its content can react to the link's
+      // `data-hovered` / `data-pressed` through `group-data-*` (e.g. underline a name).
+      plain: { root: 'group/link no-underline' },
     },
     tone: {
       primary: { root: 'text-[var(--vk-link-color,var(--md-sys-color-primary))]' },

@@ -601,7 +601,7 @@ export const PLAYGROUND_DESCRIPTORS: Record<string, PlaygroundDescriptor> = {
     defaultProps: { variant: 'inline', tone: 'primary', size: 'inherit', external: false },
     surfacedProps: ['variant', 'tone', 'size', 'external'],
     enumOptions: {
-      variant: ['inline', 'standalone'],
+      variant: ['inline', 'standalone', 'plain'],
       tone: ['primary', 'inherit'],
       size: ['inherit', 'small', 'medium', 'large'],
     },
