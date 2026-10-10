@@ -45,7 +45,8 @@ export const GUIDE_ENTRIES: SearchEntry[] = [
   },
   {
     title: 'Next.js',
-    summary: 'App Router and Pages Router setup, client boundaries and the Next.js helpers.',
+    summary:
+      'App Router and Pages Router setup, client boundaries, the Next.js helpers and asking before leaving unsaved changes.',
     href: '/nextjs',
   },
 ];

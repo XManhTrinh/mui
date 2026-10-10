@@ -52,6 +52,25 @@ export default function Document() {
   );
 }`;
 
+const GUARD_SNIPPET = `'use client';
+import { Button, Dialog, DialogActions, DialogTitle } from '@vkieu/mui';
+import { useNavigationGuard } from '@vkieu/mui/next';
+import { useState } from 'react';
+
+export function UnsavedChanges({ dirty }: { dirty: boolean }) {
+  const [leaving, setLeaving] = useState<(() => void) | null>(null);
+  useNavigationGuard({ when: dirty, onAttempt: (proceed) => setLeaving(() => proceed) });
+  return (
+    <Dialog open={leaving !== null} onOpenChange={(open) => !open && setLeaving(null)} role="alertdialog">
+      <DialogTitle>Discard your changes?</DialogTitle>
+      <DialogActions>
+        <Button variant="text" onPress={() => setLeaving(null)}>Keep editing</Button>
+        <Button variant="text" onPress={() => leaving?.()}>Discard</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}`;
+
 const APP_SNIPPET = `// pages/_app.tsx
 import { ThemeProvider } from '@vkieu/mui';
 
@@ -64,10 +83,11 @@ export default function App({ Component, pageProps }) {
 }`;
 
 export default async function NextjsPage() {
-  const [appRouterHtml, documentHtml, appHtml] = await Promise.all([
+  const [appRouterHtml, documentHtml, appHtml, guardHtml] = await Promise.all([
     highlightSource(APP_ROUTER_SNIPPET, 'tsx'),
     highlightSource(DOCUMENT_SNIPPET, 'tsx'),
     highlightSource(APP_SNIPPET, 'tsx'),
+    highlightSource(GUARD_SNIPPET, 'tsx'),
   ]);
 
   return (
@@ -89,7 +109,9 @@ export default async function NextjsPage() {
           <code className="text-on-surface">CookieReader</code> and{' '}
           <code className="text-on-surface">GetThemeFromCookiesOptions</code>),{' '}
           <code className="text-on-surface">NextRouterProvider</code> (with{' '}
-          <code className="text-on-surface">NextRouterProviderProps</code>), and re-exports{' '}
+          <code className="text-on-surface">NextRouterProviderProps</code>),{' '}
+          <code className="text-on-surface">useNavigationGuard</code> and{' '}
+          <code className="text-on-surface">useGuardedNavigate</code>, and re-exports{' '}
           <code className="text-on-surface">themeAttributes</code> and the{' '}
           <code className="text-on-surface">ThemeState</code> type. Note:{' '}
           <code className="text-on-surface">ThemeScript</code> is not here — it comes from{' '}
@@ -170,6 +192,23 @@ export default async function NextjsPage() {
             router’s <code className="text-on-surface">push</code>.
           </li>
         </ul>
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="text-headline-small text-on-surface">Leaving with unsaved changes</h2>
+        <p className="text-body-large text-on-surface-variant">
+          <code className="text-on-surface">useNavigationGuard</code> asks before a page with
+          unsaved changes is left. While <code className="text-on-surface">when</code> is true,
+          library links inside <code className="text-on-surface">NextRouterProvider</code> call{' '}
+          <code className="text-on-surface">onAttempt</code> instead of navigating: show your own
+          confirm dialog and call <code className="text-on-surface">proceed()</code> if the person
+          leaves. Reloading or closing the tab shows the browser&apos;s own prompt. For navigation
+          in code, use <code className="text-on-surface">useGuardedNavigate()</code> instead of{' '}
+          <code className="text-on-surface">router.push</code>. Plain{' '}
+          <code className="text-on-surface">next/link</code> elements and the browser&apos;s Back
+          and Forward buttons aren&apos;t covered: the App Router gives no way to stop them.
+        </p>
+        <CodeBlock code={GUARD_SNIPPET} html={guardHtml} lang="tsx" title="unsaved-changes.tsx" />
       </section>
 
       <section className="flex flex-col gap-4">

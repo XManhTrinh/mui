@@ -32,8 +32,17 @@ export default async function ComponentPage({ params }: PageParams) {
   const { slug } = await params;
   const page = COMPONENT_PAGE_MAP[slug];
   if (!page) notFound();
-  const { title, summary, propsComponents, Body, playground, specs, related, whenNotToUse, stability } =
-    page;
+  const {
+    title,
+    summary,
+    propsComponents,
+    Body,
+    playground,
+    specs,
+    related,
+    whenNotToUse,
+    stability,
+  } = page;
 
   // Read every component's generated props JSON at build time; a missing file is skipped.
   const tables = await Promise.all(

@@ -1,6 +1,6 @@
 # Plan: navigation guard (`@vkieu/mui/next`)
 
-Status: **draft, waiting for Mike's approval**
+Status: **approved by Mike on 2026-10-10 and built**
 
 ## Goal
 
@@ -44,7 +44,8 @@ packages/ui/src/next/navigation-guard.tsx     the context, useNavigationGuard, u
 packages/ui/src/next/NextRouterProvider.tsx   checks the guards before router.push
 packages/ui/src/next/navigation-guard.test.tsx
 apps/site/                                    a "Leaving with unsaved changes" section on the
-                                              Next.js guide page, with an example
+                                              Next.js guide page, with an example, and the guide's
+                                              search summary
 .changeset/                                   minor: adds useNavigationGuard and useGuardedNavigate
 ```
 
@@ -59,5 +60,5 @@ apps/site/                                    a "Leaving with unsaved changes" s
 
 ## Questions for Mike
 
-1. **Name:** `useNavigationGuard` (and `useGuardedNavigate`).
-2. **Back and Forward:** not covered (the App Router can't stop them), with reload and close covered by the browser's prompt. The settings forms accept that.
+1. **Name:** `useNavigationGuard` (and `useGuardedNavigate`) (Mike, 2026-10-10).
+2. **Back and Forward:** not covered (the App Router can't stop them), with reload and close covered by the browser's prompt (Mike, 2026-10-10).
