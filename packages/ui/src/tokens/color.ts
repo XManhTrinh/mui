@@ -2,7 +2,8 @@
  * M3 colour roles, built-in themes and contrast levels.
  *
  * Role names are the kebab-case form of the `MaterialDynamicColors` methods in
- * `@material/material-color-utilities`. They become `--md-sys-color-<role>` CSS
+ * `@material/material-color-utilities`, plus the custom-colour roles (`success`,
+ * `warning`; see {@link CUSTOM_COLOR_ROLES}). They become `--md-sys-color-<role>` CSS
  * variables and `bg-<role>` / `text-<role>` / … Tailwind utilities.
  */
 
@@ -56,9 +57,36 @@ export const COLOR_ROLES = [
   'shadow',
   'scrim',
   'surface-tint',
+  'success',
+  'on-success',
+  'success-container',
+  'on-success-container',
+  'warning',
+  'on-warning',
+  'warning-container',
+  'on-warning-container',
 ] as const;
 
 export type ColorRole = (typeof COLOR_ROLES)[number];
+
+/**
+ * Colours M3 has no key colour for, generated the way Material Theme Builder makes "custom
+ * colours": each gets colour, on-colour, container and on-container roles, with the error
+ * roles' tone rules (so the same contrast as error), harmonised toward the theme's seed.
+ */
+export const CUSTOM_COLORS = ['success', 'warning'] as const;
+export type CustomColorName = (typeof CUSTOM_COLORS)[number];
+
+/** The four roles of each custom colour. */
+export const CUSTOM_COLOR_ROLES = COLOR_ROLES.filter((role) =>
+  CUSTOM_COLORS.some((name) => role.includes(name)),
+);
+
+/** The default custom colours; only their hue and chroma matter, not their lightness. */
+export const DEFAULT_CUSTOM_COLORS: Readonly<Record<CustomColorName, `#${string}`>> = {
+  success: '#1E8E3E',
+  warning: '#F9AB00',
+};
 
 /** Scheme variants supported by the 2025 colour spec. */
 export const SCHEME_VARIANTS = ['tonal-spot', 'neutral', 'vibrant', 'expressive'] as const;
@@ -98,6 +126,14 @@ export interface ThemeSeed {
    * is unchanged.
    */
   palettes?: ThemePalettes;
+  /** The success and warning colours; each defaults to {@link DEFAULT_CUSTOM_COLORS}. */
+  customColors?: Partial<Record<CustomColorName, `#${string}`>>;
+  /**
+   * Turns each custom colour's hue up to 15° toward the seed, as Material Theme Builder
+   * does, so it belongs to the theme. `false` keeps a brand's exact status colours.
+   * @default true
+   */
+  harmonize?: boolean;
 }
 
 export const BUILT_IN_THEMES = {

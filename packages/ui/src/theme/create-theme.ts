@@ -1,6 +1,7 @@
 import {
   CONTRAST_LEVEL_NAMES,
   type ContrastLevel,
+  type CustomColorName,
   type SchemeVariant,
   type ThemePalettes,
 } from '../tokens/color';
@@ -19,6 +20,13 @@ export interface CreateThemeOptions {
    * accents on calm surfaces; `{ tertiary: '#00A07A' }` sets a brand's own tertiary colour.
    */
   palettes?: ThemePalettes;
+  /**
+   * The success and warning colours (docs/plans/custom-colors.md); each defaults to a green
+   * and an amber. Only hue and chroma matter: the tones follow M3's error roles.
+   */
+  customColors?: Partial<Record<CustomColorName, `#${string}`>>;
+  /** Turns the custom colours' hues toward the seed, as Material Theme Builder does. @default true */
+  harmonize?: boolean;
   /** Contrast level(s) to generate. Defaults to all three. */
   contrast?: ContrastLevel | readonly ContrastLevel[];
 }
@@ -29,6 +37,8 @@ export interface ThemeDefinition {
   seed: string;
   variant: SchemeVariant;
   palettes: ThemePalettes;
+  customColors: Partial<Record<CustomColorName, `#${string}`>>;
+  harmonize: boolean;
   contrast: readonly ContrastLevel[];
   /** Light, dark and system-mode CSS for each contrast level. */
   css: string;
@@ -50,12 +60,17 @@ export interface ThemeDefinition {
  *   variant: 'vibrant',
  *   palettes: { neutral: 'tonal-spot', neutralVariant: 'tonal-spot' },
  * });
+ *
+ * // A brand's own status colours, at their exact hues.
+ * createTheme({ name: 'shop', seed: '#0B57D0', customColors: { success: '#0B8043' }, harmonize: false });
  */
 export function createTheme({
   name,
   seed,
   variant = 'tonal-spot',
   palettes = {},
+  customColors = {},
+  harmonize = true,
   contrast = CONTRAST_LEVEL_NAMES,
 }: CreateThemeOptions): ThemeDefinition {
   assertThemeName(name);
@@ -66,7 +81,13 @@ export function createTheme({
     seed,
     variant,
     palettes,
+    customColors,
+    harmonize,
     contrast: contrastLevels,
-    css: generateThemeCss(name, { seed, variant, palettes }, { contrastLevels }),
+    css: generateThemeCss(
+      name,
+      { seed, variant, palettes, customColors, harmonize },
+      { contrastLevels },
+    ),
   };
 }

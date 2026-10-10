@@ -2,7 +2,7 @@
 import { writeFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
 import { createTheme } from './theme/create-theme';
-import { parsePalettes, toKebabCase } from './theme/parse-palettes';
+import { parseCustomColors, parsePalettes, toKebabCase } from './theme/parse-palettes';
 import {
   CONTRAST_LEVEL_NAMES,
   PALETTE_NAMES,
@@ -26,6 +26,10 @@ Options:
                         ${PALETTE_NAMES.map(toKebabCase).join(', ')};
                         <source> is a variant or a hex colour, e.g.
                         --palette neutral=tonal-spot --palette tertiary=#00A07A
+  --custom <name>=<hex>  Sets the success or warning colour; repeatable, e.g.
+                        --custom success=#0B8043 --custom warning=#E37400
+  --no-harmonize        Keeps the custom colours' exact hues (by default they turn
+                        toward the seed, as in Material Theme Builder)
   --contrast <levels>   Comma-separated: ${CONTRAST_LEVEL_NAMES.join(',')} (default: all)
   --out <file>          Write to a file instead of stdout
   -h, --help            Show this message
@@ -43,6 +47,8 @@ const { positionals, values } = parseArgs({
     name: { type: 'string' },
     variant: { type: 'string', default: 'tonal-spot' },
     palette: { type: 'string', multiple: true, default: [] },
+    custom: { type: 'string', multiple: true, default: [] },
+    'no-harmonize': { type: 'boolean', default: false },
     contrast: { type: 'string', default: CONTRAST_LEVEL_NAMES.join(',') },
     out: { type: 'string' },
     help: { type: 'boolean', short: 'h' },
@@ -73,6 +79,13 @@ try {
   fail(error instanceof Error ? error.message : String(error));
 }
 
+let customColors = {};
+try {
+  customColors = parseCustomColors(values.custom);
+} catch (error) {
+  fail(error instanceof Error ? error.message : String(error));
+}
+
 let css: string;
 try {
   css = createTheme({
@@ -80,6 +93,8 @@ try {
     seed: values.seed,
     variant: values.variant as SchemeVariant,
     palettes,
+    customColors,
+    harmonize: !values['no-harmonize'],
     contrast: contrast as ContrastLevel[],
   }).css;
 } catch (error) {

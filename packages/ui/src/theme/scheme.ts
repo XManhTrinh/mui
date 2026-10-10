@@ -1,4 +1,5 @@
 import {
+  Blend,
   DynamicScheme,
   Hct,
   MaterialDynamicColors,
@@ -14,10 +15,14 @@ import {
 import {
   COLOR_ROLES,
   CONTRAST_LEVELS,
+  CUSTOM_COLORS,
+  CUSTOM_COLOR_ROLES,
+  DEFAULT_CUSTOM_COLORS,
   PALETTE_NAMES,
   SCHEME_VARIANTS,
   type ColorRole,
   type ContrastLevel,
+  type CustomColorName,
   type PaletteName,
   type PaletteSource,
   type SchemeVariant,
@@ -94,7 +99,7 @@ function variantScheme(
 }
 
 function createScheme(
-  { seed, variant, palettes }: ThemeSeed,
+  { seed, variant, palettes }: Pick<ThemeSeed, 'seed' | 'variant' | 'palettes'>,
   isDark: boolean,
   contrast: ContrastLevel,
 ): DynamicScheme {
@@ -127,14 +132,76 @@ function createScheme(
   });
 }
 
-/** Resolves every M3 colour role to a hex value using the 2025 colour spec. */
+/** The same scheme with another palette in the error slot. */
+function withErrorPalette(scheme: DynamicScheme, palette: TonalPalette): DynamicScheme {
+  return new DynamicScheme({
+    sourceColorHct: scheme.sourceColorHct,
+    variant: scheme.variant,
+    isDark: scheme.isDark,
+    contrastLevel: scheme.contrastLevel,
+    specVersion: scheme.specVersion,
+    platform: scheme.platform,
+    primaryPalette: scheme.primaryPalette,
+    secondaryPalette: scheme.secondaryPalette,
+    tertiaryPalette: scheme.tertiaryPalette,
+    neutralPalette: scheme.neutralPalette,
+    neutralVariantPalette: scheme.neutralVariantPalette,
+    errorPalette: palette,
+  });
+}
+
+/**
+ * A custom colour's four roles (docs/plans/custom-colors.md): its tonal palette, harmonised
+ * toward the seed unless turned off, takes the error roles' tone rules, so it has the
+ * contrast M3 guarantees for error in every mode and at every contrast level.
+ */
+function customColorRoles(
+  scheme: DynamicScheme,
+  name: CustomColorName,
+  color: string,
+  harmonize: boolean,
+): Partial<Record<ColorRole, string>> {
+  assertHexColor(color);
+  const argb = argbFromHex(color);
+  const palette = TonalPalette.fromInt(
+    harmonize ? Blend.harmonize(argb, scheme.sourceColorHct.toInt()) : argb,
+  );
+  const custom = withErrorPalette(scheme, palette);
+  const tone = (color: DynamicColor) => hexFromArgb(color.getArgb(custom));
+  return {
+    [name]: tone(dynamicColors.error()),
+    [`on-${name}`]: tone(dynamicColors.onError()),
+    [`${name}-container`]: tone(dynamicColors.errorContainer()),
+    [`on-${name}-container`]: tone(dynamicColors.onErrorContainer()),
+  };
+}
+
+const isCustomRole = (role: ColorRole) =>
+  (CUSTOM_COLOR_ROLES as readonly ColorRole[]).includes(role);
+
+/** Resolves every colour role to a hex value using the 2025 colour spec. */
 export function generateSchemeColors(
   seed: ThemeSeed,
   isDark: boolean,
   contrast: ContrastLevel,
 ): Record<ColorRole, string> {
   const scheme = createScheme(seed, isDark, contrast);
-  return Object.fromEntries(
-    COLOR_ROLES.map((role) => [role, hexFromArgb(roleColor(role).getArgb(scheme))]),
-  ) as Record<ColorRole, string>;
+  const colors: Partial<Record<ColorRole, string>> = Object.fromEntries(
+    COLOR_ROLES.filter((role) => !isCustomRole(role)).map((role) => [
+      role,
+      hexFromArgb(roleColor(role).getArgb(scheme)),
+    ]),
+  );
+  for (const name of CUSTOM_COLORS) {
+    Object.assign(
+      colors,
+      customColorRoles(
+        scheme,
+        name,
+        seed.customColors?.[name] ?? DEFAULT_CUSTOM_COLORS[name],
+        seed.harmonize ?? true,
+      ),
+    );
+  }
+  return colors as Record<ColorRole, string>;
 }

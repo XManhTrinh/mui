@@ -46,6 +46,7 @@ npx @vkieu/mui theme --seed "#0B57D0" --name acme --out acme-theme.css
 
 # Options: --variant tonal-spot|neutral|vibrant|expressive (default tonal-spot),
 #          --palette <name>=<source> (repeatable, see Mixing palettes),
+#          --custom success|warning=<hex>, --no-harmonize (see Success and warning),
 #          --contrast standard,medium,high (default all), --out <file> (else stdout).`;
 
 const PALETTES_SNIPPET = `import { createTheme } from '@vkieu/mui';
@@ -69,6 +70,30 @@ const lotus = createTheme({
 // The CLI takes the same option:
 // npx @vkieu/mui theme --name blue --seed "#1877F2" --variant vibrant \\
 //   --palette neutral=tonal-spot --palette neutral-variant=tonal-spot`;
+
+const CUSTOM_COLORS_SNIPPET = `import { createTheme } from '@vkieu/mui';
+
+// Every theme has success and warning roles: a green and an amber, harmonised to the seed.
+<span className="bg-success-container text-on-success-container">Paid</span>;
+<span className="bg-warning-container text-on-warning-container">Payment pending</span>;
+
+// A brand's own status colours, at their exact hues.
+const shop = createTheme({
+  name: 'shop',
+  seed: '#0B57D0',
+  customColors: { success: '#0B8043', warning: '#E37400' },
+  harmonize: false,
+});
+
+// The CLI takes the same options:
+// npx @vkieu/mui theme --name shop --seed "#0B57D0" \\
+//   --custom success=#0B8043 --custom warning=#E37400 --no-harmonize`;
+
+/** The four roles of each custom colour, as live swatches in the current theme. */
+const CUSTOM_SWATCHES = [
+  ['success', 'bg-success text-on-success', 'bg-success-container text-on-success-container'],
+  ['warning', 'bg-warning text-on-warning', 'bg-warning-container text-on-warning-container'],
+] as const;
 
 const TOKENS_SNIPPET = `/* Override tokens in CSS: globally on :root or per theme on [data-theme="…"]. */
 :root {
@@ -100,6 +125,7 @@ export default async function ThemingPage() {
     createThemeHtml,
     cliHtml,
     palettesHtml,
+    customColorsHtml,
     palettesDemoHtml,
     tokensHtml,
     scriptHtml,
@@ -111,6 +137,7 @@ export default async function ThemingPage() {
     highlightSource(CREATE_THEME_SNIPPET, 'tsx'),
     highlightSource(CLI_SNIPPET, 'bash'),
     highlightSource(PALETTES_SNIPPET, 'tsx'),
+    highlightSource(CUSTOM_COLORS_SNIPPET, 'tsx'),
     highlightSource(palettesDemoSource, 'tsx'),
     highlightSource(TOKENS_SNIPPET, 'css'),
     highlightSource(SCRIPT_SNIPPET, 'tsx'),
@@ -280,6 +307,38 @@ export default async function ThemingPage() {
           html={palettesDemoHtml}
           lang="tsx"
           title="palettes-demo.tsx"
+        />
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="text-headline-small text-on-surface">Success and warning</h2>
+        <p className="text-body-large text-on-surface-variant">
+          M3 has no key colour for success or warning, so every theme adds them the way Material
+          Theme Builder makes custom colours: a green and an amber, turned slightly toward the seed
+          so they belong to the theme, each with <code className="text-on-surface">success</code>,{' '}
+          <code className="text-on-surface">on-success</code>,{' '}
+          <code className="text-on-surface">success-container</code> and{' '}
+          <code className="text-on-surface">on-success-container</code> roles (and the same for
+          warning). Their tones follow M3&apos;s error roles, so they have the same contrast in
+          every mode and at every contrast level.
+        </p>
+        <p className="text-body-large text-on-surface-variant">
+          <code className="text-on-surface">customColors</code> sets your own, and{' '}
+          <code className="text-on-surface">harmonize: false</code> keeps their exact hues.
+        </p>
+        <div className="grid gap-3 medium:grid-cols-2">
+          {CUSTOM_SWATCHES.map(([name, strong, container]) => (
+            <div key={name} className="flex overflow-hidden rounded-corner-medium text-label-large">
+              <span className={`flex-1 px-4 py-3 ${strong}`}>{name}</span>
+              <span className={`flex-1 px-4 py-3 ${container}`}>{name}-container</span>
+            </div>
+          ))}
+        </div>
+        <CodeBlock
+          code={CUSTOM_COLORS_SNIPPET}
+          html={customColorsHtml}
+          lang="tsx"
+          title="success and warning"
         />
       </section>
 
