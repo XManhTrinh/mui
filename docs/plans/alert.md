@@ -8,6 +8,10 @@ A message about the page or a form that stays until it's resolved: "That email a
 
 M3 Expressive has no persistent message component: the M2 banner isn't part of it, and snackbars disappear. So `Alert` is a **`vk` component** (architecture decision #22), built from M3 colour roles, the type scale, the shape scale, `Button` and `IconButton`.
 
+## Name
+
+`Alert` (Mike, 2026-10-10). Banner is the M2 and Polaris name, but suggests a full-width strip at the top of a page, while this is mostly inline (a form's error). For a decision that blocks the page, use `Dialog` with `role="alertdialog"`.
+
 ## When to use which
 
 | Use | When |
@@ -61,5 +65,5 @@ Unit (tones, variants, roles, close, actions, focus on mount), axe, contrast for
 
 ## Questions for Mike
 
-1. **Name:** `Alert` (or `Banner`).
+1. **Name:** `Alert` (Mike, 2026-10-10), as in Material UI, Bootstrap, Ant Design and Chakra, and matching its `alert` and `status` roles. In Apple's and Android's vocabulary an "alert" is a modal dialog; here that's `Dialog role="alertdialog"`, and the docs and TSDoc say so.
 2. **Tones:** error, info and neutral from M3's roles, with success and warning through tokens.
