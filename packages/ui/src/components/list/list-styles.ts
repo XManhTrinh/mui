@@ -63,6 +63,12 @@ export const listStyles = tv({
     // The drawn checkbox, radio button or switch of an item that is one. Decorative: the
     // item is the control, so the drawing only follows its state attributes.
     control: 'group/control inline-flex shrink-0 items-center justify-center',
+    // A link item's leading and trailing content: above the link's overlay, but only its
+    // controls take the pointer, so a press anywhere else reaches the link.
+    raised:
+      'pointer-events-none relative z-1 [&_a]:pointer-events-auto [&_button]:pointer-events-auto [&_input]:pointer-events-auto [&_select]:pointer-events-auto [&_textarea]:pointer-events-auto',
+    // A link item's anchor: its overlay covers the item, so the whole item is the link.
+    link: "outline-none after:absolute after:inset-0 after:content-['']",
   },
   variants: {
     variant: {

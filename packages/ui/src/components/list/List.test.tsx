@@ -440,18 +440,16 @@ describe('List (link items)', () => {
     );
     expect(screen.getByRole('list', { name: 'Settings' }).tagName).toBe('UL');
     expect(screen.getAllByRole('listitem')).toHaveLength(3);
-    const profile = screen.getByRole('link', { name: /Profile/ });
+    const profile = screen.getByRole('link', { name: 'Profile' });
     expect(profile.tagName).toBe('A');
     expect(profile).toHaveAttribute('href', '/settings');
+    expect(profile).toHaveAccessibleDescription('Name and photos');
     expect(profile).toHaveAttribute('aria-current', 'page');
-    expect(profile).toHaveAttribute('data-selected', 'true');
-    expect(profile).toHaveAttribute('data-shape', 'active');
-    expect(profile).toHaveAttribute('data-position', 'first');
-    expect(profile).toHaveClass(
-      'state-layer',
-      'data-selected:bg-secondary-container',
-      'bg-surface',
-    );
+    const item = profile.closest('li') as HTMLElement;
+    expect(item).toHaveAttribute('data-selected', 'true');
+    expect(item).toHaveAttribute('data-shape', 'active');
+    expect(item).toHaveAttribute('data-position', 'first');
+    expect(item).toHaveClass('state-layer', 'data-selected:bg-secondary-container', 'bg-surface');
 
     const account = screen.getByRole('link', { name: 'Account' });
     expect(account).not.toHaveAttribute('aria-current');
@@ -470,7 +468,7 @@ describe('List (link items)', () => {
     const terms = screen.getByText('Terms of service').closest('a') as HTMLElement;
     expect(terms).not.toHaveAttribute('href');
     expect(terms).toHaveAttribute('aria-disabled', 'true');
-    expect(terms).toHaveAttribute('data-disabled', 'true');
+    expect(terms.closest('li')).toHaveAttribute('data-disabled', 'true');
     expect(await axeViolations(container)).toEqual([]);
   });
 
@@ -524,5 +522,42 @@ describe('List (link items)', () => {
     await user.click(screen.getByRole('link', { name: 'Home' }));
     await user.keyboard('{/Control}');
     expect(navigate).not.toHaveBeenCalled();
+  });
+
+  it('keeps buttons in the trailing content out of the link', async () => {
+    const navigate = vi.fn();
+    const onConfirm = vi.fn();
+    render(
+      <RouterProvider navigate={navigate}>
+        <List aria-label="Requests">
+          <ListItem
+            key="lan"
+            href="/@lan"
+            supportingText="Wants to be friends"
+            trailing={
+              <button type="button" onClick={onConfirm}>
+                Confirm
+              </button>
+            }
+          >
+            Lan Trần
+          </ListItem>
+        </List>
+      </RouterProvider>,
+    );
+    const link = screen.getByRole('link', { name: 'Lan Trần' });
+    const confirm = screen.getByRole('button', { name: 'Confirm' });
+    expect(link).not.toContainElement(confirm);
+    await userEvent.click(confirm);
+    expect(onConfirm).toHaveBeenCalled();
+    expect(navigate).not.toHaveBeenCalled();
+    // The link, then the button: each its own Tab stop; the button's focus isn't the item's.
+    act(() => confirm.blur());
+    await userEvent.tab();
+    expect(link).toHaveFocus();
+    expect(link.closest('li')).toHaveAttribute('data-focus-visible', 'true');
+    await userEvent.tab();
+    expect(confirm).toHaveFocus();
+    expect(link.closest('li')).not.toHaveAttribute('data-focus-visible');
   });
 });

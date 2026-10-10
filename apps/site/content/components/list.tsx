@@ -123,7 +123,9 @@ export async function ListBody() {
             follows it, and the browser&apos;s link menu, status bar and new-tab clicks work. A
             plain click goes through the app&apos;s router (
             <code className="text-on-surface">NextRouterProvider</code>
-            ). <code className="text-on-surface">current</code> sets{' '}
+            ). The link is the headline, with an overlay over the whole item, so buttons in the
+            trailing content stay their own controls.{' '}
+            <code className="text-on-surface">current</code> sets{' '}
             <code className="text-on-surface">aria-current=&quot;page&quot;</code>.
           </li>
           <li>

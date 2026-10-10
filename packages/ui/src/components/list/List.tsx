@@ -16,6 +16,7 @@ import {
 import {
   mergeProps,
   useCheckbox,
+  useFocusRing,
   useGridList,
   useGridListItem,
   useHover,
@@ -245,6 +246,8 @@ function ItemContent({
   ids,
   control,
   controlPlacement,
+  headline,
+  sideClassName,
 }: {
   item: ListItemProps;
   styles: ReturnType<typeof listStyles>;
@@ -252,13 +255,17 @@ function ItemContent({
   ids?: ItemIds;
   control?: ReactNode;
   controlPlacement?: ControlPlacement;
+  /** Wraps the headline (a link item's anchor). */
+  headline?: (children: ReactNode) => ReactNode;
+  /** Classes for the leading and trailing content (a link item raises its controls). */
+  sideClassName?: string;
 }) {
   const leading = controlPlacement === 'leading' ? control : null;
   const trailing = controlPlacement === 'trailing' ? control : null;
   return (
     <>
       {(item.leading != null || leading != null) && (
-        <span className={styles.leading({ class: classNames?.leading })}>
+        <span className={styles.leading({ class: cn(sideClassName, classNames?.leading) })}>
           {leading}
           {item.leading}
         </span>
@@ -270,7 +277,7 @@ function ItemContent({
           </span>
         )}
         <span id={ids?.headline} className={styles.headline({ class: classNames?.headline })}>
-          {item.children}
+          {headline ? headline(item.children) : item.children}
         </span>
         {item.supportingText != null && (
           <span
@@ -282,7 +289,7 @@ function ItemContent({
         )}
       </span>
       {(item.trailing != null || trailing != null) && (
-        <span className={styles.trailing({ class: classNames?.trailing })}>
+        <span className={styles.trailing({ class: cn(sideClassName, classNames?.trailing) })}>
           {item.trailing}
           {trailing}
         </span>
@@ -323,15 +330,14 @@ function StaticList({
         );
         if (item.props.href != null) {
           return (
-            <li key={item.key ?? index} className="flex flex-col">
-              <LinkItem
-                item={item.props}
-                variant={variant}
-                classNames={classNames}
-                position={position(index, items.length)}
-                isDisabled={isDisabled}
-              />
-            </li>
+            <LinkItem
+              key={item.key ?? index}
+              item={item.props}
+              variant={variant}
+              classNames={classNames}
+              position={position(index, items.length)}
+              isDisabled={isDisabled}
+            />
           );
         }
         if (item.props.control != null) {
@@ -751,9 +757,12 @@ function listItems(children: ReactNode): ReactElement<ListItemProps>[] {
 }
 
 /**
- * A link item: one `<a>` styled as the list item, so the whole item is the link, with the
- * browser's own link behaviour. React Aria's `useLink` routes a plain click through the
- * `RouterProvider`; a disabled item has no `href`.
+ * A link item: the item holds a real `<a>` on its headline, whose overlay covers the whole
+ * item, so the item is the link (the browser's link menu and modified clicks included)
+ * while buttons in its leading or trailing content stay separate controls, never nested in
+ * the link. The link is named by the headline and described by the overline and supporting
+ * text. React Aria's `useLink` routes a plain click through the `RouterProvider`; a disabled
+ * item has no `href`.
  */
 function LinkItem({
   item,
@@ -768,20 +777,23 @@ function LinkItem({
   position: string;
   isDisabled: boolean;
 }) {
-  const ref = useRef<HTMLAnchorElement>(null);
+  const itemRef = useRef<HTMLLIElement>(null);
+  const linkRef = useRef<HTMLAnchorElement>(null);
+  const { ids, naming } = useItemIds(item);
   const href = isDisabled ? undefined : item.href;
   const { linkProps, isPressed } = useLink(
     { href, target: item.target, isDisabled, elementType: 'a' },
-    ref,
+    linkRef,
   );
+  const { focusProps, isFocusVisible } = useFocusRing();
   const current = Boolean(item.current);
   const { interactionProps, dataAttributes, state } = useM3Interaction(
     { isDisabled, isPressed, isSelected: current },
-    ref,
+    itemRef,
   );
   // Compose's shape precedence: pressed, then selected or focused (16px), then hovered (12px).
   const shape =
-    (isPressed && !isDisabled) || current || state.isFocusVisible
+    (isPressed && !isDisabled) || current || isFocusVisible
       ? 'active'
       : state.isHovered && !isDisabled
         ? 'hovered'
@@ -789,23 +801,41 @@ function LinkItem({
   const styles = itemStyles(item, variant, true);
   const rel = item.rel ?? (item.target === '_blank' ? 'noopener noreferrer' : undefined);
   return (
-    <a
-      {...mergeProps(linkProps, interactionProps)}
+    <li
+      {...interactionProps}
       {...dataAttributes}
-      ref={ref}
-      href={href}
-      target={item.target}
-      rel={rel}
-      download={item.download}
-      aria-label={item['aria-label']}
-      aria-current={current ? 'page' : undefined}
+      // The link's focus, not a control's in the trailing content, focuses the item.
+      data-focused={isFocusVisible || undefined}
+      data-focus-visible={isFocusVisible || undefined}
+      ref={itemRef}
       data-shape={shape}
       data-position={itemPosition}
-      className={styles.item({ class: cn(classNames?.item, item.className) })}
+      className={styles.item({ class: cn('relative', classNames?.item, item.className) })}
     >
       <span className={styles.cell()}>
-        <ItemContent item={item} styles={styles} classNames={classNames} />
+        <ItemContent
+          item={item}
+          styles={styles}
+          classNames={classNames}
+          ids={ids}
+          sideClassName={styles.raised()}
+          headline={(children) => (
+            <a
+              {...mergeProps(linkProps, focusProps)}
+              {...naming}
+              ref={linkRef}
+              href={href}
+              target={item.target}
+              rel={rel}
+              download={item.download}
+              aria-current={current ? 'page' : undefined}
+              className={styles.link()}
+            >
+              {children}
+            </a>
+          )}
+        />
       </span>
-    </a>
+    </li>
   );
 }

@@ -127,13 +127,17 @@ test.describe('List geometry and interaction', () => {
       'aria-current',
       'page',
     );
-    await notifications.hover();
-    await expect(notifications).toHaveAttribute('data-shape', 'hovered');
+    const item = page.getByRole('listitem').filter({ has: notifications });
+    // The overlay makes the whole item the link: hovering its far end still hovers it.
+    const box = await item.boundingBox();
+    if (!box) throw new Error('No item box');
+    await page.mouse.move(box.x + box.width - 8, box.y + box.height / 2);
+    await expect(item).toHaveAttribute('data-shape', 'hovered');
     await page.mouse.move(0, 0);
     await page.keyboard.press('Tab');
     await page.keyboard.press('Tab');
     await expect(notifications).toBeFocused();
-    await expect(notifications).toHaveAttribute('data-shape', 'active');
+    await expect(item).toHaveAttribute('data-shape', 'active');
     await page.keyboard.press('Enter');
     await expect(page).toHaveURL(/#notifications$/);
   });
