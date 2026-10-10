@@ -15,6 +15,7 @@
     "test": "turbo run test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "clean:cache": "node -e \"for (const path of ['.turbo', 'apps/site/.next']) require('node:fs').rmSync(path, { recursive: true, force: true })\"",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "turbo run build --filter=@vkieu/mui && changeset publish",
