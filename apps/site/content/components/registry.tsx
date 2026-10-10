@@ -21,6 +21,7 @@ import { NavigationBarBody } from './navigation-bar';
 import { NavigationRailBody } from './navigation-rail';
 import { EmptyStateBody } from './empty-state';
 import { ImageCropBody } from './image-crop';
+import { LinkBody } from './link';
 import { PhoneFieldBody } from './phone-field';
 import { SelectBody } from './select';
 import { PickerDialogBody } from './picker-dialog';
@@ -109,6 +110,7 @@ const BODIES: Record<string, ComponentType> = {
   'loading-indicator': LoadingIndicatorBody,
   skeleton: SkeletonBody,
   tag: TagBody,
+  link: LinkBody,
   'empty-state': EmptyStateBody,
   'date-picker': DatePickerBody,
   'time-picker': TimePickerBody,
@@ -146,6 +148,7 @@ export const COMPONENT_SLOTS: Record<string, string[]> = {
   PhoneField: ['root', 'country', 'input', 'picker', 'supportingText', 'errorText'],
   EmptyState: ['root', 'media', 'icon', 'title', 'description', 'actions'],
   Tag: ['root', 'dot', 'icon', 'label'],
+  Link: ['root', 'icon'],
   ImageCropDialog: ['root', 'area', 'image', 'frame', 'controls', 'slider'],
   ImageCropper: ['root', 'area', 'image', 'frame', 'controls', 'slider'],
   Select: [

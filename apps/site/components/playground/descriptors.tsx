@@ -34,6 +34,7 @@ import {
   Avatar,
   avatarShapes,
   EmptyState,
+  Link,
   PhoneField,
   PinInput,
   Skeleton,
@@ -104,6 +105,7 @@ const AutocompleteItemAny = loose(AutocompleteItem);
 const SkeletonAny = loose(Skeleton);
 const EmptyStateAny = loose(EmptyState);
 const TagAny = loose(Tag);
+const LinkAny = loose(Link);
 const TabAny = loose(Tab);
 
 /** A no-op change handler so controlled inputs driven by the panel don't warn in preview. */
@@ -568,6 +570,20 @@ export const PLAYGROUND_DESCRIPTORS: Record<string, PlaygroundDescriptor> = {
       corner: ['default', 'none', 'extra-small', 'small', 'medium', 'large', 'extra-large', 'full'],
       tone: ['highest', 'high'],
     },
+  },
+  link: {
+    component: 'Link',
+    importFrom: '@vkieu/mui/vk',
+    render: (props) => createElement(LinkAny, { ...props, href: '#' }, 'Terms of service'),
+    defaultProps: { variant: 'inline', tone: 'primary', size: 'inherit', external: false },
+    surfacedProps: ['variant', 'tone', 'size', 'external'],
+    enumOptions: {
+      variant: ['inline', 'standalone'],
+      tone: ['primary', 'inherit'],
+      size: ['inherit', 'small', 'medium', 'large'],
+    },
+    codeSlots: { href: '"/legal/terms"' },
+    codeChildren: 'Terms of service',
   },
   tag: {
     component: 'Tag',

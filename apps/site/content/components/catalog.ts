@@ -612,6 +612,21 @@ export const COMPONENT_META: ComponentMeta[] = [
     whenNotToUse: 'When whitespace already groups content, a divider adds visual noise.',
   },
   {
+    slug: 'link',
+    title: 'Link',
+    group: 'Navigation',
+    railGroup: 'navigation',
+    summary:
+      'Navigation written as text: in a sentence, as a name, or on its own line. Underlined in text, routed like every library link, with new-tab handling. Not an M3 component (@vkieu/mui/vk).',
+    propsComponents: ['Link'],
+    playground: 'full',
+    vk: true,
+    related: ['button', 'list'],
+    whenNotToUse:
+      "For a section's or dialog's action use a text Button; for a whole card or row, a Card or ListItem with href.",
+    keywords: ['link', 'anchor', 'hyperlink', 'text link', 'href', 'url', 'external link'],
+  },
+  {
     slug: 'navigation-rail',
     title: 'Navigation rail',
     group: 'Navigation',

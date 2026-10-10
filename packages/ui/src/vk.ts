@@ -133,3 +133,11 @@ export {
   type TagTone,
   type TagVariant,
 } from './vk/tag/tag-tokens';
+export { Link, type LinkClassNames, type LinkLabels, type LinkProps } from './vk/link/Link';
+export {
+  linkStyles,
+  type LinkSize,
+  type LinkStyleProps,
+  type LinkTone,
+  type LinkVariant,
+} from './vk/link/link-styles';
