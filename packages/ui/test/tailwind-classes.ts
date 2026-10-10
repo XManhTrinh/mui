@@ -27,7 +27,11 @@ export async function nonLiteralClasses(
   return classes.filter((c) => !sources.some((source) => source.includes(c)));
 }
 
-/** Classes that Tailwind plus the M3 stylesheet do not generate a rule for. */
+/**
+ * Classes that Tailwind plus the M3 stylesheet do not generate a rule for. Named group and
+ * peer markers (`group/control`) have no rule of their own: other recipes' variants select
+ * them, so they are skipped.
+ */
 export async function uncompiledClasses(classes: string[]): Promise<string[]> {
   const compiler = await compile(`@import 'tailwindcss';\n@import './styles.css';`, {
     base: stylesDir,
@@ -35,5 +39,5 @@ export async function uncompiledClasses(classes: string[]): Promise<string[]> {
   });
   const css = compiler.build(classes);
   const escape = (c: string) => c.replace(/[^a-zA-Z0-9_-]/g, (ch) => `\\${ch}`);
-  return classes.filter((c) => !css.includes(`.${escape(c)}`));
+  return classes.filter((c) => !/^(group|peer)\/[\w-]+$/.test(c) && !css.includes(`.${escape(c)}`));
 }

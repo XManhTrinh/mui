@@ -34,6 +34,22 @@ test.describe('List visual regression', () => {
     await expect(page.getByTestId('static')).toHaveScreenshot('standard.png');
   });
 
+  for (const mode of MODES) {
+    test(`toggles · ${mode}`, async ({ page }) => {
+      await openStory(page, 'components-list--toggles', { mode });
+      await expect(page.getByTestId('toggles')).toHaveScreenshot(`toggles-${mode}.png`);
+    });
+    test(`radio list · ${mode}`, async ({ page }) => {
+      await openStory(page, 'components-list--radio-list', { mode });
+      await expect(page.getByTestId('radio-list')).toHaveScreenshot(`radio-list-${mode}.png`);
+    });
+  }
+
+  test('toggles · rtl', async ({ page }) => {
+    await openStory(page, 'components-list--toggles', { dir: 'rtl' });
+    await expect(page.getByTestId('toggles')).toHaveScreenshot('toggles-rtl.png');
+  });
+
   test('selection · rtl', async ({ page }) => {
     await openStory(page, 'components-list--selection', { dir: 'rtl' });
     await expect(page.getByTestId('selection')).toHaveScreenshot('selection-rtl.png');
@@ -94,6 +110,30 @@ test.describe('List geometry and interaction', () => {
     await home.click();
     await expect(home).toHaveAttribute('aria-selected', 'true');
     await expect.poll(() => radius(home)).toEqual(['16px', '16px']);
+  });
+
+  test('switch items toggle from anywhere on the item, and radio lists choose with ↑ / ↓', async ({
+    page,
+  }) => {
+    await openStory(page, 'components-list--toggles');
+    const search = page.getByRole('switch', { name: 'Show my profile in search engines' });
+    await expect(search).toBeChecked();
+    await page.getByText('Search engines can list your profile').click();
+    await expect(search).not.toBeChecked();
+    await page.keyboard.press('Space');
+    await expect(search).toBeChecked();
+    await expect(page.getByRole('switch', { name: 'Read receipts' })).toBeDisabled();
+
+    await openStory(page, 'components-list--radio-list');
+    const dark = page.getByRole('radio', { name: 'Dark' });
+    await dark.focus();
+    await page.keyboard.press('ArrowDown');
+    await expect(page.getByRole('radio', { name: 'Match my device' })).toBeChecked();
+    const item = page.locator('label').filter({ hasText: 'Match my device' });
+    await expect(item).toHaveAttribute('data-shape', 'active');
+    await expect
+      .poll(() => item.evaluate((el) => getComputedStyle(el).backgroundColor))
+      .not.toBe('rgba(0, 0, 0, 0)');
   });
 });
 

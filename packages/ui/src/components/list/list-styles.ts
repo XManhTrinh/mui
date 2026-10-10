@@ -35,7 +35,7 @@ export const listStyles = tv({
     // The item's content grid (the grid cell of an interactive item).
     cell: 'grid w-full grid-cols-[auto_minmax(0,1fr)_auto] gap-x-[12px]',
     leading: [
-      'col-start-1 flex items-center text-title-medium text-on-surface-variant [&>svg]:size-[24px]',
+      'col-start-1 flex items-center gap-x-[12px] text-title-medium text-on-surface-variant [&>svg]:size-[24px]',
       'group-data-selected/list-item:text-on-secondary-container',
       'group-data-disabled/list-item:text-on-surface/38',
     ],
@@ -56,10 +56,13 @@ export const listStyles = tv({
       'group-data-disabled/list-item:text-on-surface/38',
     ],
     trailing: [
-      'col-start-3 flex items-center text-label-small text-on-surface-variant [&>svg]:size-[24px]',
+      'col-start-3 flex items-center gap-x-[12px] text-label-small text-on-surface-variant [&>svg]:size-[24px]',
       'group-data-selected/list-item:text-on-secondary-container',
       'group-data-disabled/list-item:text-on-surface/38',
     ],
+    // The drawn checkbox, radio button or switch of an item that is one. Decorative: the
+    // item is the control, so the drawing only follows its state attributes.
+    control: 'group/control inline-flex shrink-0 items-center justify-center',
   },
   variants: {
     variant: {
@@ -84,6 +87,11 @@ export const listStyles = tv({
       1: { item: 'min-h-[56px] items-center', cell: 'items-center' },
       2: { item: 'min-h-[72px] items-center', cell: 'items-center' },
       3: { item: 'min-h-[88px] items-start', cell: 'items-start' },
+    },
+    // Overrides the alignment that follows from the line count.
+    align: {
+      center: { item: 'items-center', cell: 'items-center' },
+      top: { item: 'items-start', cell: 'items-start' },
     },
   },
   compoundVariants: [

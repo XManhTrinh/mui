@@ -201,7 +201,17 @@ export const COMPONENT_SLOTS: Record<string, string[]> = {
   RichTooltip: ['root', 'title', 'text', 'actions', 'caret'],
   BottomSheet: ['scrim', 'panel', 'handle', 'content'],
   SideSheet: ['scrim', 'panel', 'header', 'title', 'content'],
-  List: ['root', 'item', 'leading', 'text', 'overline', 'headline', 'supporting', 'trailing'],
+  List: [
+    'root',
+    'item',
+    'leading',
+    'text',
+    'overline',
+    'headline',
+    'supporting',
+    'trailing',
+    'control',
+  ],
   Carousel: ['root', 'scroller', 'item', 'mask'],
   BadgedBox: ['root', 'anchor'],
   // Navigation. The rail/bar items both use `NavItemClassNames`; `Tab` exports no `*ClassNames`.

@@ -118,6 +118,70 @@ export const Selection: Story = {
   },
 };
 
+/** Switch and checkbox items: the whole item toggles; checked items take the selected colours. */
+export const Toggles: Story = {
+  render: function TogglesStory({ variant }) {
+    const [searchable, setSearchable] = useState(true);
+    return (
+      <div
+        className="flex w-[360px] flex-col gap-3 rounded-corner-extra-large bg-surface-container p-3"
+        data-testid="toggles"
+      >
+        <List aria-label="Privacy" variant={variant}>
+          <ListItem
+            key="search"
+            control="switch"
+            checked={searchable}
+            onCheckedChange={setSearchable}
+            supportingText="Search engines can list your profile"
+          >
+            Show my profile in search engines
+          </ListItem>
+          <ListItem key="online" control="switch" leading={<StarIcon />}>
+            Show when I&apos;m online
+          </ListItem>
+          <ListItem key="read" control="switch" switchIcons disabled>
+            Read receipts
+          </ListItem>
+        </List>
+        <List aria-label="Notify me about" variant={variant}>
+          <ListItem key="messages" control="checkbox" defaultChecked>
+            Messages
+          </ListItem>
+          <ListItem key="offers" control="checkbox" supportingText="Price drops and new offers">
+            Offers
+          </ListItem>
+        </List>
+      </div>
+    );
+  },
+};
+
+/** A radio list: one Tab stop, ↑ / ↓ choose; the chosen item takes the selected colours. */
+export const RadioList: Story = {
+  render: function RadioListStory({ variant }) {
+    const [theme, setTheme] = useState('dark');
+    return (
+      <div
+        className="w-[360px] rounded-corner-extra-large bg-surface-container p-3"
+        data-testid="radio-list"
+      >
+        <List aria-label="Theme" variant={variant} value={theme} onValueChange={setTheme}>
+          <ListItem key="light" value="light">
+            Light
+          </ListItem>
+          <ListItem key="dark" value="dark" supportingText="Easier on the eyes at night">
+            Dark
+          </ListItem>
+          <ListItem key="system" value="system">
+            Match my device
+          </ListItem>
+        </List>
+      </div>
+    );
+  },
+};
+
 /** Layout safety (architecture §10). */
 export const LayoutOverride: StoryObj<{
   override: LayoutOverrideName;

@@ -18,13 +18,13 @@ import { splitDataAttributes } from '../../utils/split-data-attributes';
 import { switchStyles } from './switch-styles';
 import { useRippleHold } from '../../primitives/use-m3-interaction';
 
-const CheckIcon = () => (
+export const CheckIcon = () => (
   <svg viewBox="0 -960 960 960" fill="currentColor">
     <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
   </svg>
 );
 
-const CloseIcon = () => (
+export const CloseIcon = () => (
   <svg viewBox="0 -960 960 960" fill="currentColor">
     <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
   </svg>
@@ -68,7 +68,7 @@ type SwitchLabel =
 export type SwitchProps = SwitchOwnProps & SwitchLabel;
 
 /** Thumb size and centre in px (Compose `ThumbNode`). */
-function thumbGeometry(selected: boolean, pressed: boolean, hasIcon: boolean) {
+export function thumbGeometry(selected: boolean, pressed: boolean, hasIcon: boolean) {
   const size = pressed ? 28 : selected || hasIcon ? 24 : 16;
   return { size, center: selected ? 36 : 16 };
 }
@@ -153,13 +153,39 @@ export function Switch({
       indicator={
         <>
           <span aria-hidden="true" {...stateAttributes} className={styles.stateLayer()} />
-          <span aria-hidden="true" className={styles.thumb({ class: classNames?.thumb })}>
-            {icon && <span className={styles.icon({ class: classNames?.icon })}>{icon}</span>}
-          </span>
+          <SwitchThumb
+            styles={styles}
+            icon={icon}
+            className={classNames?.thumb}
+            iconClassName={classNames?.icon}
+          />
         </>
       }
     >
       {children}
     </SelectionControl>
+  );
+}
+
+/**
+ * The thumb and its optional icon, placed by `--m3-thumb-size` and `--m3-thumb-center` on
+ * the track and styled from a `group/control` ancestor's state attributes. Shared with
+ * list items that are switches.
+ */
+export function SwitchThumb({
+  styles = switchStyles(),
+  icon,
+  className,
+  iconClassName,
+}: {
+  styles?: ReturnType<typeof switchStyles>;
+  icon?: ReactNode;
+  className?: string;
+  iconClassName?: string;
+}) {
+  return (
+    <span aria-hidden="true" className={styles.thumb({ class: className })}>
+      {icon && <span className={styles.icon({ class: iconClassName })}>{icon}</span>}
+    </span>
   );
 }

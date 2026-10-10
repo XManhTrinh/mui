@@ -227,12 +227,30 @@ export function Radio({
       classNames={classNames}
       style={style}
       indicator={
-        <span aria-hidden="true" className={styles.ring({ class: classNames?.ring })}>
-          <span className={styles.dot({ class: classNames?.dot })} />
-        </span>
+        <RadioRing styles={styles} className={classNames?.ring} dotClassName={classNames?.dot} />
       }
     >
       {children}
     </SelectionControl>
+  );
+}
+
+/**
+ * The drawn ring and dot, styled from a `group/control` ancestor's state attributes.
+ * Shared with list items that are radio buttons.
+ */
+export function RadioRing({
+  styles = radioStyles(),
+  className,
+  dotClassName,
+}: {
+  styles?: ReturnType<typeof radioStyles>;
+  className?: string;
+  dotClassName?: string;
+}) {
+  return (
+    <span aria-hidden="true" className={styles.ring({ class: className })}>
+      <span className={styles.dot({ class: dotClassName })} />
+    </span>
   );
 }
