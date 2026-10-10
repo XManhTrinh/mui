@@ -148,3 +148,14 @@ export {
   type AlertTone,
   type AlertVariant,
 } from './vk/alert/alert-styles';
+export {
+  ListDetailLayout,
+  type ListDetailLayoutClassNames,
+  type ListDetailLayoutProps,
+} from './vk/list-detail-layout/ListDetailLayout';
+export {
+  listDetailLayoutStyles,
+  type ListDetailLayoutActive,
+  type ListDetailLayoutStyleProps,
+  type ListDetailLayoutVariant,
+} from './vk/list-detail-layout/list-detail-layout-styles';
