@@ -1,21 +1,24 @@
 import { ExampleViewer } from '../../components/example-viewer';
 import { ListInteractive } from '../../examples/list/list-interactive';
+import { ListLinks } from '../../examples/list/list-links';
 import { ListRadio } from '../../examples/list/list-radio';
 import { ListStatic } from '../../examples/list/list-static';
 import { ListToggles } from '../../examples/list/list-toggles';
 import { readExampleSource } from '../../lib/example-source';
 import { highlightSource } from '../../lib/highlight';
 
-/** List page body: static, interactive, switch and checkbox, and radio lists. */
+/** List page body: static, link, interactive, switch and checkbox, and radio lists. */
 export async function ListBody() {
-  const [staticSrc, interactive, toggles, radio] = await Promise.all([
+  const [staticSrc, links, interactive, toggles, radio] = await Promise.all([
     readExampleSource('list/list-static.tsx'),
+    readExampleSource('list/list-links.tsx'),
     readExampleSource('list/list-interactive.tsx'),
     readExampleSource('list/list-toggles.tsx'),
     readExampleSource('list/list-radio.tsx'),
   ]);
-  const [staticHtml, interactiveHtml, togglesHtml, radioHtml] = await Promise.all([
+  const [staticHtml, linksHtml, interactiveHtml, togglesHtml, radioHtml] = await Promise.all([
     highlightSource(staticSrc),
+    highlightSource(links),
     highlightSource(interactive),
     highlightSource(toggles),
     highlightSource(radio),
@@ -51,6 +54,9 @@ export async function ListBody() {
         >
           <ListStatic />
         </ExampleViewer>
+        <ExampleViewer title="Links" code={links} html={linksHtml} fileName="list-links.tsx">
+          <ListLinks />
+        </ExampleViewer>
         <ExampleViewer
           title="Interactive list"
           code={interactive}
@@ -75,6 +81,12 @@ export async function ListBody() {
       <section className="flex flex-col gap-3">
         <h2 className="text-headline-small text-on-surface">Which list</h2>
         <ul className="flex flex-col gap-2 ps-5 text-body-large text-on-surface-variant [&>li]:list-disc">
+          <li>
+            Items that go to other pages (a settings menu, legal pages): link items (
+            <code className="text-on-surface">href</code>, with{' '}
+            <code className="text-on-surface">current</code> on the page being shown), in a list
+            without <code className="text-on-surface">onAction</code>.
+          </li>
           <li>
             An on/off setting that applies at once: a switch item (
             <code className="text-on-surface">control=&quot;switch&quot;</code>). Choosing several
@@ -105,10 +117,20 @@ export async function ListBody() {
         <h2 className="text-headline-small text-on-surface">Keyboard &amp; screen reader</h2>
         <ul className="flex flex-col gap-2 ps-5 text-body-large text-on-surface-variant [&>li]:list-disc">
           <li>
-            With <code className="text-on-surface">onAction</code>,{' '}
-            <code className="text-on-surface">selectionMode</code> or link items the list is a grid
-            list: ↑ / ↓ move between items, ← / → reach a trailing control (such as a switch), and
-            typeahead jumps by headline.
+            Link items in a list without <code className="text-on-surface">onAction</code> or{' '}
+            <code className="text-on-surface">selectionMode</code> are real links (
+            <code className="text-on-surface">&lt;a href&gt;</code>): each is a Tab stop, Enter
+            follows it, and the browser&apos;s link menu, status bar and new-tab clicks work. A
+            plain click goes through the app&apos;s router (
+            <code className="text-on-surface">NextRouterProvider</code>
+            ). <code className="text-on-surface">current</code> sets{' '}
+            <code className="text-on-surface">aria-current=&quot;page&quot;</code>.
+          </li>
+          <li>
+            With <code className="text-on-surface">onAction</code> or{' '}
+            <code className="text-on-surface">selectionMode</code> the list is a grid list: ↑ / ↓
+            move between items, ← / → reach a trailing control (such as a switch), and typeahead
+            jumps by headline.
           </li>
           <li>
             Press or Enter fires <code className="text-on-surface">onAction</code> with the
@@ -118,8 +140,8 @@ export async function ListBody() {
             <code className="text-on-surface">disabledKeys</code>).
           </li>
           <li>
-            Without those props the list is a plain <code className="text-on-surface">ul</code> that
-            nothing focuses.
+            Without those props the list is a plain <code className="text-on-surface">ul</code>;
+            only its link, switch and checkbox items take focus.
           </li>
           <li>
             A switch or checkbox item is one control: a native checkbox (with{' '}

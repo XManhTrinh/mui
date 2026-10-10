@@ -45,6 +45,13 @@ test.describe('List visual regression', () => {
     });
   }
 
+  for (const mode of MODES) {
+    test(`links · ${mode}`, async ({ page }) => {
+      await openStory(page, 'components-list--links', { mode });
+      await expect(page.getByTestId('links')).toHaveScreenshot(`links-${mode}.png`);
+    });
+  }
+
   test('toggles · rtl', async ({ page }) => {
     await openStory(page, 'components-list--toggles', { dir: 'rtl' });
     await expect(page.getByTestId('toggles')).toHaveScreenshot('toggles-rtl.png');
@@ -110,6 +117,25 @@ test.describe('List geometry and interaction', () => {
     await home.click();
     await expect(home).toHaveAttribute('aria-selected', 'true');
     await expect.poll(() => radius(home)).toEqual(['16px', '16px']);
+  });
+
+  test('link items are real anchors that morph on hover and focus', async ({ page }) => {
+    await openStory(page, 'components-list--links');
+    const notifications = page.getByRole('link', { name: 'Notifications' });
+    await expect(notifications).toHaveAttribute('href', '#notifications');
+    await expect(page.getByRole('link', { name: /Profile/ })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+    await notifications.hover();
+    await expect(notifications).toHaveAttribute('data-shape', 'hovered');
+    await page.mouse.move(0, 0);
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+    await expect(notifications).toBeFocused();
+    await expect(notifications).toHaveAttribute('data-shape', 'active');
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/#notifications$/);
   });
 
   test('switch items toggle from anywhere on the item, and radio lists choose with ↑ / ↓', async ({

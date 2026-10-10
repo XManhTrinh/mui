@@ -523,9 +523,18 @@ export const COMPONENT_META: ComponentMeta[] = [
     group: 'Containment & overlays',
     railGroup: 'containment',
     summary:
-      'Rows with headline, overline, supporting text and leading or trailing content; items can be switches, checkboxes or radio buttons.',
+      'Rows with headline, overline, supporting text and leading or trailing content; items can be links, switches, checkboxes or radio buttons.',
     propsComponents: ['List', 'ListItem'],
-    keywords: ['settings', 'switch item', 'checkbox item', 'radio list', 'toggle row', 'segmented'],
+    keywords: [
+      'settings',
+      'settings menu',
+      'link list',
+      'switch item',
+      'checkbox item',
+      'radio list',
+      'toggle row',
+      'segmented',
+    ],
     playground: 'full',
     specs: {
       variants: ['standard', 'segmented'],

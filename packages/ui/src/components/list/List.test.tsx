@@ -1,5 +1,6 @@
 import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { RouterProvider } from 'react-aria';
 import { describe, expect, it, vi } from 'vitest';
 import { axeViolations } from '../../../test/axe';
 import { Switch } from '../switch/Switch';
@@ -145,9 +146,9 @@ describe('List (interactive)', () => {
     expect(screen.getByRole('switch', { name: 'Wi-Fi on' })).toHaveFocus();
   });
 
-  it('renders link items', () => {
+  it('keeps link items in a list with onAction as grid rows', () => {
     render(
-      <List aria-label="Pages">
+      <List aria-label="Pages" onAction={() => {}}>
         <ListItem key="home" href="/home">
           Home
         </ListItem>
@@ -416,5 +417,112 @@ describe('List (item options)', () => {
     [a, b] = screen.getAllByRole('row') as [HTMLElement, HTMLElement];
     expect(a).toHaveAttribute('data-disabled');
     expect(b).toHaveAttribute('data-disabled');
+  });
+});
+
+describe('List (link items)', () => {
+  it('renders each link item as a real anchor in a plain list, routed on a plain click', async () => {
+    const navigate = vi.fn();
+    const { container } = render(
+      <RouterProvider navigate={navigate}>
+        <List variant="segmented" aria-label="Settings">
+          <ListItem key="profile" href="/settings" current supportingText="Name and photos">
+            Profile
+          </ListItem>
+          <ListItem key="account" href="/settings/account">
+            Account
+          </ListItem>
+          <ListItem key="terms" href="/legal/terms" disabled>
+            Terms of service
+          </ListItem>
+        </List>
+      </RouterProvider>,
+    );
+    expect(screen.getByRole('list', { name: 'Settings' }).tagName).toBe('UL');
+    expect(screen.getAllByRole('listitem')).toHaveLength(3);
+    const profile = screen.getByRole('link', { name: /Profile/ });
+    expect(profile.tagName).toBe('A');
+    expect(profile).toHaveAttribute('href', '/settings');
+    expect(profile).toHaveAttribute('aria-current', 'page');
+    expect(profile).toHaveAttribute('data-selected', 'true');
+    expect(profile).toHaveAttribute('data-shape', 'active');
+    expect(profile).toHaveAttribute('data-position', 'first');
+    expect(profile).toHaveClass(
+      'state-layer',
+      'data-selected:bg-secondary-container',
+      'bg-surface',
+    );
+
+    const account = screen.getByRole('link', { name: 'Account' });
+    expect(account).not.toHaveAttribute('aria-current');
+
+    // Each link is its own Tab stop, and Enter follows it through the router.
+    await userEvent.tab();
+    expect(profile).toHaveFocus();
+    await userEvent.tab();
+    expect(account).toHaveFocus();
+    await userEvent.keyboard('{Enter}');
+    expect(navigate).toHaveBeenLastCalledWith('/settings/account', undefined);
+    await userEvent.click(profile);
+    expect(navigate).toHaveBeenLastCalledWith('/settings', undefined);
+
+    // A disabled link item has no href, so it isn't a link at all.
+    const terms = screen.getByText('Terms of service').closest('a') as HTMLElement;
+    expect(terms).not.toHaveAttribute('href');
+    expect(terms).toHaveAttribute('aria-disabled', 'true');
+    expect(terms).toHaveAttribute('data-disabled', 'true');
+    expect(await axeViolations(container)).toEqual([]);
+  });
+
+  it('takes disabledKeys and the list-wide disabled', () => {
+    const { rerender } = render(
+      <List aria-label="Pages" disabledKeys={['b']}>
+        <ListItem key="a" href="/a">
+          A
+        </ListItem>
+        <ListItem key="b" href="/b">
+          B
+        </ListItem>
+      </List>,
+    );
+    expect(screen.getByRole('link', { name: 'A' })).toHaveAttribute('href', '/a');
+    expect(screen.getByText('B').closest('a')).not.toHaveAttribute('href');
+    rerender(
+      <List aria-label="Pages" disabled>
+        <ListItem key="a" href="/a">
+          A
+        </ListItem>
+      </List>,
+    );
+    expect(screen.getByText('A').closest('a')).not.toHaveAttribute('href');
+  });
+
+  it('opens new tabs safely, downloads, and leaves modified clicks to the browser', async () => {
+    const navigate = vi.fn();
+    render(
+      <RouterProvider navigate={navigate}>
+        <List aria-label="Links">
+          <ListItem key="help" href="https://example.com/help" target="_blank">
+            Help
+          </ListItem>
+          <ListItem key="report" href="/report.pdf" download="report.pdf">
+            Report
+          </ListItem>
+          <ListItem key="home" href="/home">
+            Home
+          </ListItem>
+        </List>
+      </RouterProvider>,
+    );
+    const help = screen.getByRole('link', { name: 'Help' });
+    expect(help).toHaveAttribute('target', '_blank');
+    expect(help).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(screen.getByRole('link', { name: 'Report' })).toHaveAttribute('download', 'report.pdf');
+    // Ctrl, as jsdom isn't a Mac (React Aria reads ⌘ there): a new tab, not the router.
+    const user = userEvent.setup();
+    await user.keyboard('{Control>}');
+    await user.click(screen.getByRole('link', { name: 'Home' }));
+    await user.keyboard('{/Control}');
+    expect(navigate).not.toHaveBeenCalled();
   });
 });

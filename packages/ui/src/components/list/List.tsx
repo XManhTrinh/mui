@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  Children,
   isValidElement,
   useId,
   useRef,
@@ -20,6 +19,7 @@ import {
   useGridList,
   useGridListItem,
   useHover,
+  useLink,
   useObjectRef,
   useRadio,
   useRadioGroup,
@@ -61,8 +61,19 @@ export interface ListItemProps {
   leading?: ReactNode;
   /** Trailing content: an icon, short text or a control (in an interactive list it gets focus with ← / →). */
   trailing?: ReactNode;
-  /** Makes the item a link (interactive lists). */
+  /**
+   * Makes the item a link. In a list without `onAction` or `selectionMode` the item is a
+   * real `<a>`: its own Tab stop, with the browser's link menu and modified clicks, routed
+   * through a `RouterProvider` (such as `NextRouterProvider`) on a plain click.
+   */
   href?: string;
+  /** Marks the link item for the page being shown: `aria-current="page"` and the selected colours. */
+  current?: boolean;
+  /** A link item's target; `_blank` adds `rel="noopener noreferrer"` unless `rel` is given. */
+  target?: string;
+  rel?: string;
+  /** Downloads the link item's file instead of opening it (optionally with a file name). */
+  download?: boolean | string;
   /** Plain-text version of the headline, for type-ahead and announcements. */
   textValue?: string;
   'aria-label'?: string;
@@ -170,7 +181,7 @@ export type ListProps = ListOwnProps & Naming;
  * </List>
  */
 export function List(props: ListProps) {
-  const items = Children.toArray(props.children).filter(isValidElement<ListItemProps>);
+  const items = listItems(props.children);
   if (
     props.value !== undefined ||
     props.defaultValue !== undefined ||
@@ -187,10 +198,9 @@ export function List(props: ListProps) {
     }
     return <RadioList {...props} items={items} />;
   }
+  // Links alone don't make a grid list: they render as real anchors in a plain list.
   const interactive =
-    props.onAction != null ||
-    (props.selectionMode != null && props.selectionMode !== 'none') ||
-    items.some((item) => item.props.href != null);
+    props.onAction != null || (props.selectionMode != null && props.selectionMode !== 'none');
   if (!interactive) return <StaticList {...props} items={items} />;
   if (items.some((item) => item.props.control != null)) {
     throw new Error(
@@ -297,6 +307,7 @@ function StaticList({
     'aria-labelledby'?: string;
   };
   const root = listStyles({ variant }).root({ class: cn(classNames?.root, className) });
+  const disabledKeySet = new Set<Key>(rest.disabledKeys ?? []);
   return (
     <ul
       {...data}
@@ -307,16 +318,32 @@ function StaticList({
       className={root}
     >
       {items.map((item, index) => {
+        const isDisabled = Boolean(
+          disabled || item.props.disabled || (item.key != null && disabledKeySet.has(item.key)),
+        );
+        if (item.props.href != null) {
+          return (
+            <li key={item.key ?? index} className="flex flex-col">
+              <LinkItem
+                item={item.props}
+                variant={variant}
+                classNames={classNames}
+                position={position(index, items.length)}
+                isDisabled={isDisabled}
+              />
+            </li>
+          );
+        }
         if (item.props.control != null) {
           return (
-            <li key={item.key}>
+            <li key={item.key ?? index}>
               <ToggleItem
                 item={item.props}
                 control={item.props.control}
                 variant={variant}
                 classNames={classNames}
                 position={position(index, items.length)}
-                listDisabled={disabled}
+                listDisabled={isDisabled}
               />
             </li>
           );
@@ -324,7 +351,7 @@ function StaticList({
         const styles = itemStyles(item.props, variant, false);
         return (
           <li
-            key={item.key}
+            key={item.key ?? index}
             data-shape="rest"
             data-position={position(index, items.length)}
             className={styles.item({ class: cn(classNames?.item, item.props.className) })}
@@ -556,7 +583,7 @@ function RadioList({
     >
       {items.map((item, index) => (
         <RadioItem
-          key={item.key}
+          key={item.key ?? index}
           item={item.props}
           state={state}
           variant={variant}
@@ -709,5 +736,76 @@ function SwitchTrack({ selected, icons }: { selected: boolean; icons?: boolean }
     >
       <SwitchThumb styles={styles} icon={icon} />
     </span>
+  );
+}
+
+/** The `ListItem` elements, flattened from arrays, with the keys they were given. */
+function listItems(children: ReactNode): ReactElement<ListItemProps>[] {
+  const items: ReactElement<ListItemProps>[] = [];
+  const visit = (node: ReactNode) => {
+    if (Array.isArray(node)) node.forEach(visit);
+    else if (isValidElement<ListItemProps>(node)) items.push(node);
+  };
+  visit(children);
+  return items;
+}
+
+/**
+ * A link item: one `<a>` styled as the list item, so the whole item is the link, with the
+ * browser's own link behaviour. React Aria's `useLink` routes a plain click through the
+ * `RouterProvider`; a disabled item has no `href`.
+ */
+function LinkItem({
+  item,
+  variant,
+  classNames,
+  position: itemPosition,
+  isDisabled,
+}: {
+  item: ListItemProps;
+  variant?: ListVariant;
+  classNames?: ListClassNames;
+  position: string;
+  isDisabled: boolean;
+}) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const href = isDisabled ? undefined : item.href;
+  const { linkProps, isPressed } = useLink(
+    { href, target: item.target, isDisabled, elementType: 'a' },
+    ref,
+  );
+  const current = Boolean(item.current);
+  const { interactionProps, dataAttributes, state } = useM3Interaction(
+    { isDisabled, isPressed, isSelected: current },
+    ref,
+  );
+  // Compose's shape precedence: pressed, then selected or focused (16px), then hovered (12px).
+  const shape =
+    (isPressed && !isDisabled) || current || state.isFocusVisible
+      ? 'active'
+      : state.isHovered && !isDisabled
+        ? 'hovered'
+        : 'rest';
+  const styles = itemStyles(item, variant, true);
+  const rel = item.rel ?? (item.target === '_blank' ? 'noopener noreferrer' : undefined);
+  return (
+    <a
+      {...mergeProps(linkProps, interactionProps)}
+      {...dataAttributes}
+      ref={ref}
+      href={href}
+      target={item.target}
+      rel={rel}
+      download={item.download}
+      aria-label={item['aria-label']}
+      aria-current={current ? 'page' : undefined}
+      data-shape={shape}
+      data-position={itemPosition}
+      className={styles.item({ class: cn(classNames?.item, item.className) })}
+    >
+      <span className={styles.cell()}>
+        <ItemContent item={item} styles={styles} classNames={classNames} />
+      </span>
+    </a>
   );
 }

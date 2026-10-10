@@ -118,6 +118,25 @@ export const Selection: Story = {
   },
 };
 
+/** Link items: real anchors, each a Tab stop; `current` marks the page being shown. */
+export const Links: Story = {
+  render: ({ variant }) => (
+    <div className="w-[360px] rounded-corner-extra-large bg-surface-container p-3" data-testid="links">
+      <List aria-label="Settings" variant={variant}>
+        <ListItem key="profile" href="#profile" current leading={<HomeIcon />} supportingText="Name, photos and bio">
+          Profile
+        </ListItem>
+        <ListItem key="notifications" href="#notifications" leading={<SendIcon />}>
+          Notifications
+        </ListItem>
+        <ListItem key="about" href="#about" leading={<StarIcon />} disabled>
+          About
+        </ListItem>
+      </List>
+    </div>
+  ),
+};
+
 /** Switch and checkbox items: the whole item toggles; checked items take the selected colours. */
 export const Toggles: Story = {
   render: function TogglesStory({ variant }) {

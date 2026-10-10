@@ -24,7 +24,7 @@ describe('component catalog invariants', () => {
     }
   });
 
-  it('lists each rail group\'s pages alphabetically by title', () => {
+  it("lists each rail group's pages alphabetically by title", () => {
     for (const group of RAIL_GROUPS) {
       const titles = pagesInRailGroup(group.id).map((meta) => meta.title);
       expect(titles, group.id).toEqual([...titles].sort((a, b) => a.localeCompare(b, 'en')));
