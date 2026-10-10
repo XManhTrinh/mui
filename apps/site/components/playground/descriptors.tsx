@@ -441,13 +441,23 @@ export const PLAYGROUND_DESCRIPTORS: Record<string, PlaygroundDescriptor> = {
   },
   list: {
     component: 'List',
+    // On a rounded surface, as a sheet or card would hold it: the segmented gaps show the
+    // surface, and its corners (16px item corners + 12px padding) follow the items'.
     render: (props) =>
       createElement(
-        ListAny,
-        { ...props, 'aria-label': 'Contacts', className: 'w-full max-w-sm bg-surface-container' },
-        createElement(ListItemAny, { key: 'one', supportingText: 'Supporting text' }, 'One line'),
-        createElement(ListItemAny, { key: 'two', supportingText: 'Supporting text' }, 'Two lines'),
-        createElement(ListItemAny, { key: 'three' }, 'Three'),
+        'div',
+        { className: 'w-full max-w-sm rounded-corner-extra-large bg-surface-container p-3' },
+        createElement(
+          ListAny,
+          { ...props, 'aria-label': 'Contacts' },
+          createElement(ListItemAny, { key: 'one', supportingText: 'Supporting text' }, 'One line'),
+          createElement(
+            ListItemAny,
+            { key: 'two', supportingText: 'Supporting text' },
+            'Two lines',
+          ),
+          createElement(ListItemAny, { key: 'three' }, 'Three'),
+        ),
       ),
     defaultProps: { variant: 'standard', selectionMode: 'none' },
     surfacedProps: ['variant', 'selectionMode'],

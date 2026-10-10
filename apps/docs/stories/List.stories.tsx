@@ -30,7 +30,7 @@ const Avatar = ({ letter }: { letter: string }) => (
 /** One-, two- and three-line items with leading and trailing content. */
 export const Static: Story = {
   render: ({ variant }) => (
-    <div className="w-[360px] bg-surface-container p-2" data-testid="static">
+    <div className="w-[360px] rounded-corner-extra-large bg-surface-container p-3" data-testid="static">
       <List aria-label="Contacts" variant={variant}>
         <ListItem key="a" leading={<HomeIcon />} trailing={<StarIcon />}>
           One line
@@ -62,7 +62,7 @@ export const Interactive: Story = {
   render: function InteractiveStory({ variant }) {
     const [last, setLast] = useState('');
     return (
-      <div className="flex w-[360px] flex-col gap-3 bg-surface-container p-2">
+      <div className="flex w-[360px] flex-col gap-3 rounded-corner-extra-large bg-surface-container p-3">
         <List
           aria-label="Mail"
           variant={variant}
@@ -99,7 +99,7 @@ export const Selection: Story = {
   render: function SelectionStory({ variant }) {
     const [selected, setSelected] = useState<Set<string | number> | 'all'>(new Set(['work']));
     return (
-      <div className="w-[360px] bg-surface-container p-2" data-testid="selection">
+      <div className="w-[360px] rounded-corner-extra-large bg-surface-container p-3" data-testid="selection">
         <List
           aria-label="Labels"
           variant={variant}

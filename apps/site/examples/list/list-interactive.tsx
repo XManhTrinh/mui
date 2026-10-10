@@ -12,7 +12,7 @@ import { DeleteIcon, HomeIcon, SendIcon, StarIcon } from '../../components/icons
 export function ListInteractive() {
   const [last, setLast] = useState('nothing');
   return (
-    <div className="flex w-full max-w-sm flex-col gap-3 bg-surface-container p-2">
+    <div className="flex w-full max-w-sm flex-col gap-3 rounded-corner-extra-large bg-surface-container p-3">
       <List aria-label="Mail" variant="segmented" onAction={(key) => setLast(String(key))}>
         <ListItem key="inbox" leading={<HomeIcon />} supportingText="3 new messages">
           Inbox

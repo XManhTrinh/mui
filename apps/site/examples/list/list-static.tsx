@@ -17,7 +17,7 @@ function Avatar({ letter }: { letter: string }) {
  */
 export function ListStatic() {
   return (
-    <div className="w-full max-w-sm bg-surface-container p-2">
+    <div className="w-full max-w-sm rounded-corner-extra-large bg-surface-container p-3">
       <List aria-label="Contacts" variant="segmented">
         <ListItem key="one" leading={<HomeIcon />} trailing={<StarIcon />}>
           One line
