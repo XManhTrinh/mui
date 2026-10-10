@@ -1,6 +1,6 @@
 # Plan: ListDetailLayout (`@vkieu/mui/vk`)
 
-Status: **draft, waiting for Mike's approval**
+Status: **approved by Mike on 2026-10-10**
 
 ## Goal
 
@@ -110,7 +110,7 @@ apps/site/                       page, playground, examples (settings, inbox), c
 
 ## Questions for Mike
 
-1. **Name:** `ListDetailLayout`, after M3's canonical layout.
-2. **Panes on medium windows (600–839px):** one pane at a time, as M3 recommends, so a tablet in portrait shows the list, then the section. Two panes start at 840px.
-3. **Default surface:** `variant="plain"` (panes on the page's surface, as the profile's columns are), with `"filled"` available. VKIEU's settings would use `plain`.
-4. **Motion:** the shared axis X transition between the list and the detail in single-pane mode, and none on expanded windows, where nothing moves.
+1. **Name:** `ListDetailLayout`, after M3's canonical layout (Mike, 2026-10-10).
+2. **Panes on medium windows (600–839px):** one pane at a time, as M3 recommends; two panes start at 840px (Mike, 2026-10-10).
+3. **Default surface:** `variant="plain"`, with `"filled"` available; VKIEU's settings use `plain` (Mike, 2026-10-10).
+4. **Motion:** the shared axis X transition between the list and the detail in single-pane mode, and none on expanded windows (Mike, 2026-10-10).
