@@ -31,6 +31,7 @@ import {
   TextField,
 } from '@vkieu/mui';
 import {
+  Alert,
   Avatar,
   avatarShapes,
   EmptyState,
@@ -106,6 +107,7 @@ const SkeletonAny = loose(Skeleton);
 const EmptyStateAny = loose(EmptyState);
 const TagAny = loose(Tag);
 const LinkAny = loose(Link);
+const AlertAny = loose(Alert);
 const TabAny = loose(Tab);
 
 /** A no-op change handler so controlled inputs driven by the panel don't warn in preview. */
@@ -570,6 +572,27 @@ export const PLAYGROUND_DESCRIPTORS: Record<string, PlaygroundDescriptor> = {
       corner: ['default', 'none', 'extra-small', 'small', 'medium', 'large', 'extra-large', 'full'],
       tone: ['highest', 'high'],
     },
+  },
+  alert: {
+    component: 'Alert',
+    importFrom: '@vkieu/mui/vk',
+    render: (props) =>
+      createElement(
+        'div',
+        { className: 'w-full max-w-md' },
+        createElement(
+          AlertAny,
+          { ...props, title: props.title === '' ? undefined : props.title },
+          "That email and password don't match.",
+        ),
+      ),
+    defaultProps: { tone: 'error', variant: 'tonal', title: '' },
+    surfacedProps: ['tone', 'variant', 'title'],
+    enumOptions: {
+      tone: ['error', 'info', 'success', 'warning', 'neutral'],
+      variant: ['tonal', 'outlined'],
+    },
+    codeChildren: "That email and password don't match.",
   },
   link: {
     component: 'Link',

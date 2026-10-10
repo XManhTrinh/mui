@@ -712,6 +712,34 @@ export const COMPONENT_META: ComponentMeta[] = [
     whenNotToUse: 'For the screen title and global actions use a Top app bar.',
   },
   {
+    slug: 'alert',
+    title: 'Alert',
+    group: 'Feedback & pickers',
+    railGroup: 'feedback',
+    summary:
+      "A message that stays until it's resolved: a form's error, a page's warning, a system notice. Error, info, success, warning and neutral, tonal or outlined. Not an M3 component (@vkieu/mui/vk).",
+    propsComponents: ['Alert'],
+    playground: 'full',
+    vk: true,
+    specs: {
+      shape: 'rounded-corner-medium',
+      variants: ['tonal', 'outlined'],
+    },
+    related: ['snackbar', 'dialog', 'empty-state'],
+    whenNotToUse:
+      'For brief feedback use a Snackbar; for one field, its error text; for a decision that blocks the page, a Dialog.',
+    keywords: [
+      'alert',
+      'banner',
+      'notice',
+      'message',
+      'error message',
+      'callout',
+      'warning',
+      'success',
+    ],
+  },
+  {
     slug: 'snackbar',
     title: 'Snackbar',
     group: 'Feedback & pickers',

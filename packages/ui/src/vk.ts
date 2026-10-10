@@ -141,3 +141,10 @@ export {
   type LinkTone,
   type LinkVariant,
 } from './vk/link/link-styles';
+export { Alert, type AlertClassNames, type AlertLabels, type AlertProps } from './vk/alert/Alert';
+export {
+  alertStyles,
+  type AlertStyleProps,
+  type AlertTone,
+  type AlertVariant,
+} from './vk/alert/alert-styles';
