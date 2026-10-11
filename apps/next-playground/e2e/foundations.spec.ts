@@ -209,14 +209,14 @@ test.describe('Avatar', () => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();
     await page.goto('/avatar');
-    const photo = page.getByRole('img', { name: 'Lan', exact: true }).locator('img');
+    const photo = page.getByRole('img', { name: 'Omar', exact: true }).locator('img');
     await expect(photo).toBeVisible();
     expect(
       await photo.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0),
     ).toBe(true);
-    await expect(page.getByRole('img', { name: 'An', exact: true })).toHaveText('NA');
+    await expect(page.getByRole('img', { name: 'Nora', exact: true })).toHaveText('NL');
     await expect(
-      page.getByRole('img', { name: 'Minh', exact: true }).getByText('LM'),
+      page.getByRole('img', { name: 'Priya', exact: true }).getByText('PS'),
     ).toBeVisible();
     await context.close();
   });
@@ -303,9 +303,9 @@ test.describe('Select and Autocomplete', () => {
     await expect(page.getByRole('option', { name: 'Sydney' })).toBeVisible();
     await page.keyboard.press('Escape');
     await page.getByRole('button', { name: /Currency/ }).click();
-    await page.getByRole('searchbox', { name: 'Search' }).fill('dong');
-    await page.getByRole('option', { name: 'Vietnamese đồng' }).click();
-    await expect(page.getByRole('button', { name: /Currency/ })).toContainText('VND');
+    await page.getByRole('searchbox', { name: 'Search' }).fill('euro');
+    await page.getByRole('option', { name: 'Euro' }).click();
+    await expect(page.getByRole('button', { name: /Currency/ })).toContainText('EUR');
     expect(errors).toEqual([]);
   });
 });

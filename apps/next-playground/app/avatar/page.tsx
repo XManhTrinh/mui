@@ -4,9 +4,9 @@ import { Avatar } from '@vkieu/mui/vk';
 export default function AvatarPage() {
   return (
     <main className="flex gap-4 p-6">
-      <Avatar data-testid="photo" name="Trần Thị Lan" alt="Lan" src="/avatar-photo.svg" size="lg" />
-      <Avatar data-testid="broken" name="Lê Minh" alt="Minh" src="/missing.png" size="lg" />
-      <Avatar data-testid="initials" name="Nguyễn Văn An" alt="An" size="lg" />
+      <Avatar data-testid="photo" name="Omar Haddad" alt="Omar" src="/avatar-photo.svg" size="lg" />
+      <Avatar data-testid="broken" name="Priya Shah" alt="Priya" src="/missing.png" size="lg" />
+      <Avatar data-testid="initials" name="Nora Lindqvist" alt="Nora" size="lg" />
     </main>
   );
 }

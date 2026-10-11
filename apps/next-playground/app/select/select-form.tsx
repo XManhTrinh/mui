@@ -3,7 +3,7 @@
 import { Autocomplete, AutocompleteItem, Select, SelectItem } from '@vkieu/mui';
 
 const CITIES = [
-  { id: 'hn', name: 'Hà Nội' },
+  { id: 'par', name: 'Paris' },
   { id: 'ldn', name: 'London' },
   { id: 'syd', name: 'Sydney' },
 ];
@@ -30,7 +30,7 @@ export function SelectForm() {
       >
         <SelectItem key="GBP">Pound sterling</SelectItem>
         <SelectItem key="USD">US dollar</SelectItem>
-        <SelectItem key="VND">Vietnamese đồng</SelectItem>
+        <SelectItem key="EUR">Euro</SelectItem>
       </Select>
       <Autocomplete label="City" name="city" defaultItems={CITIES} defaultValue="ldn">
         {(city) => <AutocompleteItem key={city.id}>{city.name}</AutocompleteItem>}
