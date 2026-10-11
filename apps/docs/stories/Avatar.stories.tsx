@@ -20,7 +20,14 @@ const CheckIcon = () => (
 );
 
 const SIZES: AvatarSize[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
-const PEOPLE = ['Nguyễn Văn An', 'Trần Thị Lan', 'Lê Minh', 'Phạm Bảo Châu', 'Đỗ Ứng', 'Hà Khoa'];
+const PEOPLE = [
+  'Nora Lindqvist',
+  'Omar Haddad',
+  'Priya Shah',
+  'Yuki Tanaka',
+  'Mateo Alvarez',
+  'Hannah Kim',
+];
 
 const meta = {
   title: 'VK/Avatar',
@@ -37,9 +44,16 @@ export const Sizes: Story = {
   render: () => (
     <div className="flex flex-col gap-4 bg-surface p-4" data-testid="sizes">
       {[
-        (size: AvatarSize) => <Avatar name="Nguyễn Văn An" alt="An" size={size} />,
-        (size: AvatarSize) => <Avatar name="Trần Thị Lan" alt="Lan" src={PHOTO} size={size} />,
-        (size: AvatarSize) => <Avatar shape="rounded" name="Phở Sài Gòn" alt="Phở Sài Gòn" size={size} />,
+        (size: AvatarSize) => <Avatar name="Nora Lindqvist" alt="Nora" size={size} />,
+        (size: AvatarSize) => <Avatar name="Omar Haddad" alt="Omar" src={PHOTO} size={size} />,
+        (size: AvatarSize) => (
+          <Avatar
+            shape="rounded"
+            name="Red Lantern Kitchen"
+            alt="Red Lantern Kitchen"
+            size={size}
+          />
+        ),
       ].map((row, index) => (
         <div key={index} className="flex items-end gap-4">
           {SIZES.map((size) => (
@@ -64,20 +78,20 @@ export const Variants: Story = {
         <Avatar shape="rounded" alt="Unknown" />
       </div>
       <div className="flex items-center gap-4">
-        <Avatar name="Lan" alt="Lan" size="lg" presence="online" />
-        <Avatar name="Minh" alt="Minh" size="lg" presence="away" />
-        <Avatar name="An" alt="An" size="lg" presence="offline" />
+        <Avatar name="Omar" alt="Omar" size="lg" presence="online" />
+        <Avatar name="Priya" alt="Priya" size="lg" presence="away" />
+        <Avatar name="Nora" alt="Nora" size="lg" presence="offline" />
         <Avatar
           shape="rounded"
-          name="Phở Sài Gòn"
-          alt="Phở Sài Gòn"
+          name="Red Lantern Kitchen"
+          alt="Red Lantern Kitchen"
           size="lg"
           badge={<CheckIcon />}
           badgeLabel="verified"
         />
         <Avatar
-          name="Lan"
-          alt="Lan"
+          name="Omar"
+          alt="Omar"
           src={PHOTO}
           size="lg"
           presence="online"
@@ -85,8 +99,8 @@ export const Variants: Story = {
           badgeLabel="verified"
         />
         <Avatar
-          name="Minh"
-          alt="Minh"
+          name="Priya"
+          alt="Priya"
           size="lg"
           presence="online"
           presencePlacement="top-start"
@@ -97,11 +111,16 @@ export const Variants: Story = {
         />
       </div>
       <div className="flex items-center gap-4">
-        <Avatar name="Lan" alt="Lan" size="xl" src={PHOTO} shape="Cookie12Sided" />
-        <Avatar name="Phở Sài Gòn" alt="Phở Sài Gòn" size="xl" shape="Cookie4Sided" />
-        <Avatar name="Minh" alt="Minh" size="xl" shape="Sunny" />
-        <Avatar name="An" alt="An" size="xl" shape="circle" />
-        <Avatar name="Bảo" alt="Bảo" size="xl" shape="rounded" />
+        <Avatar name="Omar" alt="Omar" size="xl" src={PHOTO} shape="Cookie12Sided" />
+        <Avatar
+          name="Red Lantern Kitchen"
+          alt="Red Lantern Kitchen"
+          size="xl"
+          shape="Cookie4Sided"
+        />
+        <Avatar name="Priya" alt="Priya" size="xl" shape="Sunny" />
+        <Avatar name="Nora" alt="Nora" size="xl" shape="circle" />
+        <Avatar name="Ben" alt="Ben" size="xl" shape="rounded" />
       </div>
     </div>
   ),
@@ -128,7 +147,7 @@ export const Tones: Story = {
       <div className="flex gap-3" style={GREEN_SLOTS}>
         <Avatar name="Person 7" alt="Slot override" data-testid="slot-override" />
         <Avatar
-          name="Lan"
+          name="Omar"
           alt="Class override"
           classNames={{ visual: 'bg-[#0ea5e9] text-[#ffffff]' }}
           data-testid="class-override"
@@ -143,7 +162,7 @@ export const BrokenImage: Story = {
   args: { decorative: true },
   render: () => (
     <div className="bg-surface p-4" data-testid="broken">
-      <Avatar name="Trần Thị Lan" alt="Lan" src="/does-not-exist.png" size="lg" />
+      <Avatar name="Omar Haddad" alt="Omar" src="/does-not-exist.png" size="lg" />
     </div>
   ),
 };
@@ -196,9 +215,15 @@ export const Interactive: Story = {
     const [count, setCount] = useState(0);
     return (
       <div className="flex items-center gap-4 bg-surface p-4" data-testid="interactive">
-        <Avatar name="Lan" alt="Lan's profile" size="xs" data-testid="xs" onPress={() => setCount((c) => c + 1)} />
-        <Avatar name="Minh" alt="Minh's profile" href="#minh" />
-        <Avatar name="An" alt="An's profile" size="xl" href="#an" />
+        <Avatar
+          name="Omar"
+          alt="Lan's profile"
+          size="xs"
+          data-testid="xs"
+          onPress={() => setCount((c) => c + 1)}
+        />
+        <Avatar name="Priya" alt="Minh's profile" href="#minh" />
+        <Avatar name="Nora" alt="An's profile" size="xl" href="#an" />
         <span data-testid="count">Pressed {count}</span>
       </div>
     );
@@ -217,7 +242,13 @@ export const LayoutOverride: StoryObj<{
       className={transformedAncestor ? 'translate-x-2' : undefined}
       style={{ minHeight: 200, width: 360 }}
     >
-      <Avatar data-testid="target" name="Lan" alt="Lan" presence="online" className={LAYOUT_OVERRIDES[override]} />
+      <Avatar
+        data-testid="target"
+        name="Omar"
+        alt="Omar"
+        presence="online"
+        className={LAYOUT_OVERRIDES[override]}
+      />
     </div>
   ),
 };

@@ -74,15 +74,15 @@ test.describe('Autocomplete behaviour', () => {
   test('typing filters, ignoring accents, and Enter chooses', async ({ page }) => {
     await openStory(page, 'components-autocomplete--interactive');
     const input = page.getByRole('combobox', { name: 'City' });
-    await input.fill('da nang');
+    await input.fill('zurich');
     await expect(page.getByRole('option')).toHaveCount(1);
     await page.keyboard.press('ArrowDown');
     // Focus stays in the input; the highlighted option shows the focus ring.
     await expect(page.getByRole('option')).toHaveAttribute('data-focus-visible', 'true');
     await page.keyboard.press('Enter');
     await expect(page.getByRole('listbox')).toBeHidden();
-    await expect(input).toHaveValue('Đà Nẵng');
-    await expect(page.getByTestId('value')).toHaveText('dn');
+    await expect(input).toHaveValue('Zürich');
+    await expect(page.getByTestId('value')).toHaveText('zrh');
     await expect(input).toBeFocused();
   });
 
@@ -102,10 +102,10 @@ test.describe('Autocomplete behaviour', () => {
     const input = page.getByRole('combobox', { name: /Cities/ });
     await input.fill('syd');
     await page.getByRole('option', { name: /Sydney/ }).click();
-    await expect(page.getByTestId('value')).toHaveText('hn, ldn, syd');
+    await expect(page.getByTestId('value')).toHaveText('zrh, ldn, syd');
     await expect(page.getByRole('listbox')).toBeVisible();
     await page.keyboard.press('Escape');
-    await page.getByRole('button', { name: 'Remove Hà Nội' }).click();
+    await page.getByRole('button', { name: 'Remove Zürich' }).click();
     await expect(page.getByTestId('value')).toHaveText('ldn, syd');
     await input.focus();
     await page.keyboard.press('Backspace');

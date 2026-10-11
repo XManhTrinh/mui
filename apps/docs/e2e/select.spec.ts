@@ -137,10 +137,10 @@ test.describe('Select behaviour', () => {
   test('multiple keeps the menu open and stops at maxSelections', async ({ page }) => {
     await openStory(page, 'components-select--multiple');
     await page.getByRole('button', { name: /Cuisines/ }).click();
-    await page.getByRole('option', { name: 'Bún chả' }).click();
+    await page.getByRole('option', { name: 'Grilled noodles' }).click();
     await expect(page.getByRole('listbox')).toBeVisible();
     await expect(page.getByTestId('value')).toHaveText('pho, banh-mi, cafe, bun');
-    await expect(page.getByRole('option', { name: 'Chè' })).toHaveAttribute('aria-disabled', 'true');
+    await expect(page.getByRole('option', { name: 'Dessert' })).toHaveAttribute('aria-disabled', 'true');
   });
 
   test('presentation auto opens a menu on larger windows', async ({ page }) => {
@@ -184,9 +184,9 @@ test.describe('Select searchable', () => {
     await expect(page).toHaveScreenshot('searchable-sheet.png');
     await search.click();
     await expect(search).toBeFocused();
-    await page.keyboard.type('viet');
-    await page.getByRole('option', { name: 'Việt Nam' }).click();
-    await expect(page.getByTestId('value')).toHaveText('VN');
+    await page.keyboard.type('thai');
+    await page.getByRole('option', { name: 'Thailand' }).click();
+    await expect(page.getByTestId('value')).toHaveText('TH');
   });
 
   test('keyboard: type, move, choose; focus returns to the field', async ({ page }) => {

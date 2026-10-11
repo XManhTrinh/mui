@@ -8,7 +8,9 @@ test.describe('Avatar visual regression', () => {
     for (const mode of MODES) {
       test(`variants · ${theme} · ${mode}`, async ({ page }) => {
         await openStory(page, 'vk-avatar--variants', { theme, mode });
-        await expect(page.getByTestId('variants')).toHaveScreenshot(`variants-${theme}-${mode}.png`);
+        await expect(page.getByTestId('variants')).toHaveScreenshot(
+          `variants-${theme}-${mode}.png`,
+        );
       });
     }
   }
@@ -31,7 +33,9 @@ test.describe('Avatar visual regression', () => {
   for (const contrast of ['medium', 'high'] as const) {
     test(`variants · contrast ${contrast}`, async ({ page }) => {
       await openStory(page, 'vk-avatar--variants', { contrast });
-      await expect(page.getByTestId('variants')).toHaveScreenshot(`variants-contrast-${contrast}.png`);
+      await expect(page.getByTestId('variants')).toHaveScreenshot(
+        `variants-contrast-${contrast}.png`,
+      );
     });
   }
 
@@ -61,14 +65,14 @@ test.describe('Avatar behaviour', () => {
     const img = page.getByTestId('broken').locator('img');
     await expect(img).toHaveAttribute('data-status', 'error');
     await expect(img).toBeHidden();
-    await expect(page.getByTestId('broken').getByText('TL')).toBeVisible();
+    await expect(page.getByTestId('broken').getByText('OH')).toBeVisible();
   });
 
   test('a loaded photo hides the initials beneath it', async ({ page }) => {
     await openStory(page, 'vk-avatar--sizes');
-    const photo = page.getByRole('img', { name: 'Lan' }).first();
+    const photo = page.getByRole('img', { name: 'Omar' }).first();
     await expect(photo.locator('img')).toHaveAttribute('data-status', 'loaded');
-    await expect(photo.getByText('TL')).toBeHidden();
+    await expect(photo.getByText('OH')).toBeHidden();
   });
 
   test('small interactive avatars keep a 48px touch target', async ({ page }) => {
@@ -142,7 +146,10 @@ test.describe('Avatar behaviour', () => {
       const box = await avatar.boundingBox();
       const presence = await avatar.locator(':scope > span').nth(1).boundingBox();
       if (!box || !presence) throw new Error('missing avatar');
-      const atStart = dir === 'ltr' ? presence.x <= box.x + 1 : presence.x + presence.width >= box.x + box.width - 1;
+      const atStart =
+        dir === 'ltr'
+          ? presence.x <= box.x + 1
+          : presence.x + presence.width >= box.x + box.width - 1;
       expect(atStart, dir).toBe(true);
       expect(presence.y).toBeLessThanOrEqual(box.y + 1);
     }
@@ -150,9 +157,10 @@ test.describe('Avatar behaviour', () => {
 
   test('every auto slot is used across names', async ({ page }) => {
     await openStory(page, 'vk-avatar--tones');
-    const tones = await page.getByTestId('tones').locator('[data-tone]').evaluateAll((els) =>
-      els.map((el) => el.getAttribute('data-tone')),
-    );
+    const tones = await page
+      .getByTestId('tones')
+      .locator('[data-tone]')
+      .evaluateAll((els) => els.map((el) => el.getAttribute('data-tone')));
     expect(new Set(tones).size).toBeGreaterThan(6);
   });
 

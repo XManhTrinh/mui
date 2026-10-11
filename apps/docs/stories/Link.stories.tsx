@@ -16,17 +16,17 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Inline in running text (with Vietnamese diacritics under the line), standalone, external. */
+/** Inline in running text (the underline clears accents below the line), standalone, external. */
 export const Variants: Story = {
   args: { href: '#', children: 'Link' },
   render: () => (
     <div data-testid="variants" className="flex w-[420px] flex-col gap-4 bg-surface p-4">
       <p className="text-body-large text-on-surface">
-        Tôi đồng ý với{' '}
-        <Link href="#terms" external labels={{ newTab: 'mở trong thẻ mới' }}>
-          Điều khoản dịch vụ
+        By creating an account you agree to the{' '}
+        <Link href="#terms" external labels={{ newTab: 'opens in a new tab' }}>
+          Terms of service
         </Link>{' '}
-        và <Link href="#privacy">Chính sách quyền riêng tư</Link>.
+        and <Link href="#privacy">Privacy policy</Link>.
       </p>
       <Link variant="standalone" size="large" href="#forgot">
         Forgot password?
@@ -41,7 +41,7 @@ export const Variants: Story = {
         >
           NL
         </span>
-        <span className="text-label-large group-data-hovered/link:underline">Nguyễn Thị Lan</span>
+        <span className="text-label-large group-data-hovered/link:underline">Nora Lindqvist</span>
       </Link>
       <p className="rounded-corner-medium bg-primary-container p-4 text-body-medium text-on-primary-container">
         On a coloured container, links take the text colour:{' '}

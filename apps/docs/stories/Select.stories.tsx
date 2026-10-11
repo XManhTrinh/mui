@@ -76,9 +76,9 @@ export const Sections: Story = {
       <Select label="Category" defaultOpen>
         <SelectSection title="Food">
           <SelectItem key="pho" leadingIcon={<StarIcon />}>
-            Phở and noodles
+            Noodles and soup
           </SelectItem>
-          <SelectItem key="banh-mi">Bánh mì</SelectItem>
+          <SelectItem key="banh-mi">Sandwiches</SelectItem>
         </SelectSection>
         <SelectSection title="Services">
           <SelectItem key="nails" trailing="128">
@@ -107,12 +107,12 @@ export const Multiple: Story = {
           maxSelections={4}
           supportingText="Up to four"
         >
-          <SelectItem key="pho">Phở</SelectItem>
-          <SelectItem key="banh-mi">Bánh mì</SelectItem>
-          <SelectItem key="cafe">Cà phê</SelectItem>
-          <SelectItem key="bun">Bún chả</SelectItem>
-          <SelectItem key="com">Cơm tấm</SelectItem>
-          <SelectItem key="che">Chè</SelectItem>
+          <SelectItem key="pho">Noodle soup</SelectItem>
+          <SelectItem key="banh-mi">Sandwiches</SelectItem>
+          <SelectItem key="cafe">Coffee</SelectItem>
+          <SelectItem key="bun">Grilled noodles</SelectItem>
+          <SelectItem key="com">Rice plates</SelectItem>
+          <SelectItem key="che">Dessert</SelectItem>
         </Select>
         <p className="text-body-medium text-on-surface-variant">
           Value: <output data-testid="value">{value.join(', ') || '(none)'}</output>
@@ -158,7 +158,6 @@ const COUNTRIES = [
   ['TH', 'Thailand'],
   ['GB', 'United Kingdom'],
   ['US', 'United States'],
-  ['VN', 'Việt Nam'],
 ].map(([code, name]) => ({ code: code!, name: name! }));
 
 /**
@@ -188,18 +187,18 @@ export const Searchable: Story = {
   },
 };
 
-/** Vietnamese labels, as an app passes them. */
-export const Vietnamese: Story = {
+/** Labels the app passes in. */
+export const CustomLabels: Story = {
   render: () => (
-    <div className="bg-surface p-4" data-testid="vietnamese">
+    <div className="bg-surface p-4" data-testid="custom-labels">
       <Select
-        label="Sắp xếp theo"
-        placeholder="Chọn cách sắp xếp"
-        labels={{ empty: 'Không có lựa chọn', loading: 'Đang tải', more: (count) => `+${count}` }}
+        label="Sort by"
+        placeholder="Choose an order"
+        labels={{ empty: 'Nothing to choose', loading: 'Loading', more: (count) => `+${count}` }}
       >
-        <SelectItem key="newest">Mới nhất</SelectItem>
-        <SelectItem key="low">Giá từ thấp đến cao</SelectItem>
-        <SelectItem key="high">Giá từ cao đến thấp</SelectItem>
+        <SelectItem key="newest">Newest first</SelectItem>
+        <SelectItem key="low">Price, low to high</SelectItem>
+        <SelectItem key="high">Price, high to low</SelectItem>
       </Select>
     </div>
   ),

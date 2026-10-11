@@ -52,23 +52,23 @@ export const Variants: Story = {
   ),
 };
 
-/** Country names follow the page language; here Vietnamese. */
-export const Vietnamese: Story = {
-  args: { label: 'Số điện thoại' },
+/** Labels the app passes in; country names follow the locale. */
+export const CustomLabels: Story = {
+  args: { label: 'Phone number' },
   render: () => (
-    <div className="flex flex-col gap-6 bg-surface p-4" data-testid="vietnamese">
+    <div className="flex flex-col gap-6 bg-surface p-4" data-testid="custom-labels">
       <PhoneField
-        label="Số điện thoại (không bắt buộc)"
+        label="Phone number (optional)"
         defaultCountry="VN"
         priorityCountries={PRIORITY}
-        locale="vi"
+        locale="en"
         labels={{
-          country: 'Quốc gia',
-          search: 'Tìm quốc gia',
-          noResults: 'Không tìm thấy quốc gia',
-          suggested: 'Quốc gia gợi ý',
-          allCountries: 'Tất cả quốc gia',
-          invalid: 'Nhập số điện thoại hợp lệ',
+          country: 'Country',
+          search: 'Search countries',
+          noResults: 'No countries found',
+          suggested: 'Suggested',
+          allCountries: 'All countries',
+          invalid: 'Enter a valid phone number',
         }}
       />
     </div>

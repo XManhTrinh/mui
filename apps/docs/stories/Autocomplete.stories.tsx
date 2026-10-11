@@ -29,9 +29,9 @@ interface City {
 }
 
 const CITIES: City[] = [
-  { id: 'hn', name: 'Hà Nội', country: 'Việt Nam' },
-  { id: 'hcm', name: 'Hồ Chí Minh', country: 'Việt Nam' },
-  { id: 'dn', name: 'Đà Nẵng', country: 'Việt Nam' },
+  { id: 'zrh', name: 'Zürich', country: 'Switzerland' },
+  { id: 'sp', name: 'São Paulo', country: 'Brazil' },
+  { id: 'mlg', name: 'Málaga', country: 'Spain' },
   { id: 'ldn', name: 'London', country: 'United Kingdom' },
   { id: 'bham', name: 'Birmingham', country: 'United Kingdom' },
   { id: 'syd', name: 'Sydney', country: 'Australia' },
@@ -83,7 +83,7 @@ export const Variants: Story = {
             variant={variant}
             label="City"
             defaultItems={CITIES}
-            defaultValue="hn"
+            defaultValue="zrh"
             disabled
           >
             {renderCity}
@@ -117,7 +117,7 @@ export const Sections: Story = {
 /** Multiple selection as input chips; Backspace in the empty input removes the last one. */
 export const Multiple: Story = {
   render: function Render() {
-    const [value, setValue] = useState<AutocompleteKey[]>(['hn', 'ldn']);
+    const [value, setValue] = useState<AutocompleteKey[]>(['zrh', 'ldn']);
     return (
       <div className="flex flex-col gap-4 bg-surface p-4" data-testid="multiple">
         <Autocomplete
@@ -173,19 +173,19 @@ export const Async: Story = {
   },
 };
 
-/** Free text with `allowsCustomValue`, and Vietnamese labels. */
-export const Vietnamese: Story = {
+/** Free text with `allowsCustomValue`, and labels the app passes in. */
+export const CustomLabels: Story = {
   render: () => (
-    <div className="bg-surface p-4" data-testid="vietnamese">
+    <div className="bg-surface p-4" data-testid="custom-labels">
       <Autocomplete
-        label="Thành phố"
+        label="City"
         defaultItems={CITIES}
         allowsCustomValue
         labels={{
-          noResults: 'Không có kết quả',
-          loading: 'Đang tải',
-          showOptions: 'Hiện lựa chọn',
-          remove: 'Xoá',
+          noResults: 'Nothing found',
+          loading: 'Loading',
+          showOptions: 'Show options',
+          remove: 'Remove',
         }}
       >
         {renderCity}

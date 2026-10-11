@@ -46,7 +46,7 @@ export const Sizes: Story = {
           variant="outlined"
           size={size}
           icon={<SearchOffIcon />}
-          title="No results for “phở”"
+          title="No results for “pasta”"
           description="Try another word, or check the spelling."
         />
       ))}

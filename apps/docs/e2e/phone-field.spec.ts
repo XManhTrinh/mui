@@ -38,9 +38,9 @@ test.describe('PhoneField visual regression', () => {
     await expect(page).toHaveScreenshot('picker-sheet.png');
   });
 
-  test('vietnamese', async ({ page }) => {
-    await openStory(page, 'vk-phonefield--vietnamese');
-    await expect(page.getByTestId('vietnamese')).toHaveScreenshot('vietnamese.png');
+  test('custom labels', async ({ page }) => {
+    await openStory(page, 'vk-phonefield--custom-labels');
+    await expect(page.getByTestId('custom-labels')).toHaveScreenshot('custom-labels.png');
   });
 
   test('flags', async ({ page }) => {

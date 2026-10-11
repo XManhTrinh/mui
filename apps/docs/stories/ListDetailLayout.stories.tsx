@@ -26,7 +26,7 @@ const ArrowBackIcon = () => (
 const SECTIONS = [
   { key: 'profile', title: 'Profile', summary: 'Name, photos, bio and languages' },
   { key: 'account', title: 'Account', summary: '@mai.tran · m•••@gmail.com' },
-  { key: 'preferences', title: 'Preferences', summary: 'Tiếng Việt · System theme' },
+  { key: 'preferences', title: 'Preferences', summary: 'English · System theme' },
   { key: 'privacy', title: 'Privacy', summary: 'Shown in search engines · 2 blocked' },
 ];
 
