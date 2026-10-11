@@ -32,7 +32,7 @@ export function LinkPlain() {
           NL
         </span>
         <span className="text-label-large group-data-hovered/link:underline group-data-focus-visible/link:underline">
-          Nguyễn Thị Lan
+          Nora Lindqvist
         </span>
       </Link>
     </div>

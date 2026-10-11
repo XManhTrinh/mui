@@ -274,7 +274,7 @@ export const PLAYGROUND_DESCRIPTORS: Record<string, PlaygroundDescriptor> = {
           label: 'City',
           errorMessage: 'Choose a city',
         },
-        createElement(AutocompleteItemAny, { key: 'hn' }, 'Hà Nội'),
+        createElement(AutocompleteItemAny, { key: 'hn' }, 'Paris'),
         createElement(AutocompleteItemAny, { key: 'ldn' }, 'London'),
         createElement(AutocompleteItemAny, { key: 'syd' }, 'Sydney'),
         createElement(AutocompleteItemAny, { key: 'hou' }, 'Houston'),
@@ -300,7 +300,7 @@ export const PLAYGROUND_DESCRIPTORS: Record<string, PlaygroundDescriptor> = {
     importMembers: ['AutocompleteItem'],
     codeSlots: { label: '"City"' },
     codeChildren:
-      '<AutocompleteItem key="hn">Hà Nội</AutocompleteItem>\n  <AutocompleteItem key="ldn">London</AutocompleteItem>\n  <AutocompleteItem key="syd">Sydney</AutocompleteItem>\n  <AutocompleteItem key="hou">Houston</AutocompleteItem>',
+      '<AutocompleteItem key="hn">Paris</AutocompleteItem>\n  <AutocompleteItem key="ldn">London</AutocompleteItem>\n  <AutocompleteItem key="syd">Sydney</AutocompleteItem>\n  <AutocompleteItem key="hou">Houston</AutocompleteItem>',
   },
   'phone-field': {
     component: 'PhoneField',
@@ -671,7 +671,7 @@ export const PLAYGROUND_DESCRIPTORS: Record<string, PlaygroundDescriptor> = {
         ...(badge !== '' && { badge, badgeLabel: String(badgeLabel || badge) }),
       }),
     defaultProps: {
-      name: 'Nguyễn Văn An',
+      name: 'Nora Lindqvist',
       size: 'md',
       shape: 'circle',
       tone: 'auto',
@@ -693,7 +693,7 @@ export const PLAYGROUND_DESCRIPTORS: Record<string, PlaygroundDescriptor> = {
       'badgePlacement',
     ],
     initialState: {
-      name: 'Nguyễn Văn An',
+      name: 'Nora Lindqvist',
       size: 'xl',
       shape: 'Cookie12Sided',
       presence: 'online',
@@ -708,7 +708,7 @@ export const PLAYGROUND_DESCRIPTORS: Record<string, PlaygroundDescriptor> = {
       presencePlacement: ['top-start', 'top-end', 'bottom-start', 'bottom-end'],
       badgePlacement: ['top-start', 'top-end', 'bottom-start', 'bottom-end'],
     },
-    codeSlots: { alt: '"Nguyễn Văn An"' },
+    codeSlots: { alt: '"Nora Lindqvist"' },
   },
   'loading-indicator': {
     component: 'LoadingIndicator',

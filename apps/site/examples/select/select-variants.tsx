@@ -13,11 +13,11 @@ export function SelectVariants() {
         <div key={variant} className="flex flex-col gap-6">
           <Select variant={variant} label="Category" placeholder="Any category">
             <SelectSection title="Food">
-              <SelectItem key="pho" trailing="64">
-                Phở and noodles
+              <SelectItem key="noodles" trailing="64">
+                Noodles and soup
               </SelectItem>
-              <SelectItem key="banh-mi" trailing="31">
-                Bánh mì
+              <SelectItem key="sandwiches" trailing="31">
+                Sandwiches
               </SelectItem>
             </SelectSection>
             <SelectSection title="Services">

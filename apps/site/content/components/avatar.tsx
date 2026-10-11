@@ -127,8 +127,8 @@ export async function AvatarBody() {
             masks, so they scale with the avatar.
           </li>
           <li>
-            Initials are whole graphemes in the locale&apos;s casing, so Vietnamese diacritics stay
-            with their letters (&quot;Đỗ Ứng&quot; → &quot;ĐỨ&quot;).
+            Initials are whole graphemes in the locale&apos;s casing, so accented letters stay with
+            their letters (&quot;Élodie Dubois&quot; → &quot;ÉD&quot;).
           </li>
         </ul>
       </section>

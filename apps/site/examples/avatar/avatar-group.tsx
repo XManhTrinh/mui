@@ -3,7 +3,14 @@
 import { Avatar, AvatarGroup } from '@vkieu/mui/vk';
 import { useState } from 'react';
 
-const PEOPLE = ['Nguyễn Văn An', 'Trần Thị Lan', 'Lê Minh', 'Phạm Bảo Châu', 'Đỗ Ứng', 'Hà Khoa'];
+const PEOPLE = [
+  'Nora Lindqvist',
+  'Omar Haddad',
+  'Priya Shah',
+  'Yuki Tanaka',
+  'Mateo Alvarez',
+  'Hannah Kim',
+];
 
 /**
  * Avatars overlap with a surface ring, and `max` turns the rest into "+N". The group is
@@ -14,7 +21,7 @@ export function AvatarGroupExample() {
   return (
     <div className="flex flex-col items-start gap-3">
       <AvatarGroup
-        label="Nguyễn Văn An, Trần Thị Lan and 4 others"
+        label="Nora Lindqvist, Omar Haddad and 4 others"
         max={3}
         onOverflowPress={() => setOpened((count) => count + 1)}
       >

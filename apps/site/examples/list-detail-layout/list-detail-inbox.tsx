@@ -6,9 +6,9 @@ import { useState } from 'react';
 import { ArrowBackIcon } from '../../components/icons';
 
 const MESSAGES = [
-  { key: 'lan', from: 'Lan Nguyễn', preview: 'See you at the market on Saturday!' },
-  { key: 'bep', from: 'Bếp Cô Mai', preview: 'Your order is ready to collect.' },
-  { key: 'an', from: 'An Lê', preview: 'Thanks for the recommendation.' },
+  { key: 'lan', from: 'Nora Lindqvist', preview: 'See you at the market on Saturday!' },
+  { key: 'bep', from: 'Corner Bakery', preview: 'Your order is ready to collect.' },
+  { key: 'an', from: 'Omar Haddad', preview: 'Thanks for the recommendation.' },
 ];
 
 /**

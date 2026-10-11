@@ -4,7 +4,7 @@ import { Autocomplete, AutocompleteItem, type AutocompleteKey } from '@vkieu/mui
 import { useState } from 'react';
 
 const TAGS = [
-  'Vietnamese',
+  'Italian',
   'Vegetarian',
   'Vegan',
   'Halal',
@@ -19,7 +19,7 @@ const TAGS = [
  * the empty field. The menu stays open between picks, and `maxSelections` caps the count.
  */
 export function AutocompleteMultiple() {
-  const [tags, setTags] = useState<AutocompleteKey[]>(['vietnamese', 'takeaway']);
+  const [tags, setTags] = useState<AutocompleteKey[]>(['italian', 'takeaway']);
   return (
     <Autocomplete
       variant="outlined"

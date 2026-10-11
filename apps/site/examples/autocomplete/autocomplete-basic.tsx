@@ -4,9 +4,9 @@ import { Autocomplete, AutocompleteItem, type AutocompleteKey } from '@vkieu/mui
 import { useState } from 'react';
 
 const CITIES = [
-  { id: 'hn', name: 'Hà Nội', country: 'Việt Nam' },
-  { id: 'hcm', name: 'Hồ Chí Minh', country: 'Việt Nam' },
-  { id: 'dn', name: 'Đà Nẵng', country: 'Việt Nam' },
+  { id: 'zrh', name: 'Zürich', country: 'Switzerland' },
+  { id: 'sp', name: 'São Paulo', country: 'Brazil' },
+  { id: 'mlg', name: 'Málaga', country: 'Spain' },
   { id: 'ldn', name: 'London', country: 'United Kingdom' },
   { id: 'bham', name: 'Birmingham', country: 'United Kingdom' },
   { id: 'syd', name: 'Sydney', country: 'Australia' },
@@ -15,8 +15,8 @@ const CITIES = [
 ];
 
 /**
- * Type to find an option in a long list. Matching ignores case and accents, so "da nang"
- * finds "Đà Nẵng"; the arrow keys move through the matches while focus stays in the field.
+ * Type to find an option in a long list. Matching ignores case and accents, so "zurich"
+ * finds "Zürich"; the arrow keys move through the matches while focus stays in the field.
  */
 export function AutocompleteBasic() {
   const [city, setCity] = useState<AutocompleteKey | null>(null);

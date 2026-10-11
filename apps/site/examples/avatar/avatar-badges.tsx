@@ -14,19 +14,19 @@ const CheckIcon = () => (
 export function AvatarBadges() {
   return (
     <div className="flex flex-wrap items-center gap-4">
-      <Avatar name="Trần Thị Lan" alt="Trần Thị Lan" size="lg" presence="online" />
-      <Avatar name="Lê Minh" alt="Lê Minh" size="lg" presence="away" />
-      <Avatar name="Đỗ Ứng" alt="Đỗ Ứng" size="lg" presence="offline" />
+      <Avatar name="Omar Haddad" alt="Omar Haddad" size="lg" presence="online" />
+      <Avatar name="Priya Shah" alt="Priya Shah" size="lg" presence="away" />
+      <Avatar name="Mateo Alvarez" alt="Mateo Alvarez" size="lg" presence="offline" />
       <Avatar
-        name="Nguyễn Văn An"
-        alt="Nguyễn Văn An"
+        name="Nora Lindqvist"
+        alt="Nora Lindqvist"
         size="lg"
         badge={<CheckIcon />}
         badgeLabel="verified"
       />
       <Avatar
-        name="Phạm Bảo Châu"
-        alt="Phạm Bảo Châu"
+        name="Yuki Tanaka"
+        alt="Yuki Tanaka"
         size="lg"
         presence="online"
         presencePlacement="top-start"

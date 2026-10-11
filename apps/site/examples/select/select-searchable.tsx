@@ -23,7 +23,7 @@ const REGIONS = [
       ['NZ', 'New Zealand'],
       ['SG', 'Singapore'],
       ['KR', 'South Korea'],
-      ['VN', 'Việt Nam'],
+      ['TH', 'Thailand'],
     ],
   },
   {
@@ -36,7 +36,7 @@ const REGIONS = [
 ];
 
 /**
- * A long list with a search at the top: typing filters it ("viet" finds "Việt Nam"), and
+ * A long list with a search at the top: typing filters it ("thai" finds "Thailand"), and
  * sections with no matches hide. With `presentation="auto"`, phones get a bottom sheet that
  * shows the list first; `renderValue` shows the chosen country's code in the field.
  */

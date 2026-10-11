@@ -10,11 +10,11 @@ interface Business {
 }
 
 const DIRECTORY: Business[] = [
-  { id: '1', name: 'Phở Hà Nội', area: 'Camden, London' },
-  { id: '2', name: 'Bánh Mì Bay', area: 'Holborn, London' },
-  { id: '3', name: 'Sài Gòn Nails', area: 'Bankstown, Sydney' },
-  { id: '4', name: 'Huế Kitchen', area: 'Footscray, Melbourne' },
-  { id: '5', name: 'Phở Bằng', area: 'Bellaire, Houston' },
+  { id: '1', name: 'Red Lantern Kitchen', area: 'Camden, London' },
+  { id: '2', name: 'Harbour Bakery', area: 'Holborn, London' },
+  { id: '3', name: 'Silver Nails', area: 'Bankstown, Sydney' },
+  { id: '4', name: 'Golden Kitchen', area: 'Footscray, Melbourne' },
+  { id: '5', name: 'Lantern House', area: 'Bellaire, Houston' },
 ];
 
 /** Stands in for a server search. */

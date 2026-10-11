@@ -8,10 +8,10 @@ import { Avatar } from '@vkieu/mui/vk';
 export function AvatarFallbacks() {
   return (
     <div className="flex flex-wrap items-end gap-4">
-      <Avatar name="Nguyễn Văn An" alt="Nguyễn Văn An" size="xs" />
-      <Avatar name="Trần Thị Lan" alt="Trần Thị Lan" size="sm" />
-      <Avatar name="Lê Minh" alt="Lê Minh" />
-      <Avatar name="Đỗ Ứng" alt="Đỗ Ứng" size="lg" />
+      <Avatar name="Nora Lindqvist" alt="Nora Lindqvist" size="xs" />
+      <Avatar name="Omar Haddad" alt="Omar Haddad" size="sm" />
+      <Avatar name="Priya Shah" alt="Priya Shah" />
+      <Avatar name="Mateo Alvarez" alt="Mateo Alvarez" size="lg" />
       <Avatar alt="No name" size="lg" />
       <Avatar alt="No name" size="lg" shape="rounded" />
     </div>

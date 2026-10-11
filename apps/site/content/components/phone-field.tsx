@@ -72,8 +72,8 @@ export async function PhoneFieldBody() {
             the list.
           </li>
           <li>
-            The search keeps focus: type a name, ISO code or dialling code (&quot;viet&quot;,
-            &quot;VN&quot;, &quot;84&quot;), move with the arrow keys, press Enter to choose, or
+            The search keeps focus: type a name, ISO code or dialling code (&quot;thai&quot;,
+            &quot;TH&quot;, &quot;66&quot;), move with the arrow keys, press Enter to choose, or
             Escape to clear the search and then close. Focus then returns to the country field, with
             the number next; a press outside leaves it.
           </li>

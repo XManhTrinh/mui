@@ -10,9 +10,9 @@ export function PhoneFieldVariants() {
           <PhoneField
             variant={variant}
             label="Phone"
-            defaultValue="+8491234"
+            defaultValue="+6681234"
             invalid
-            errorMessage="Enter a valid phone number for Vietnam"
+            errorMessage="Enter a valid phone number"
           />
         </div>
       ))}

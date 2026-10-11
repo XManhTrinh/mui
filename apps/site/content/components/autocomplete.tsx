@@ -34,8 +34,8 @@ export async function AutocompleteBody() {
           from a server. For a short list, use a <code className="text-on-surface">Select</code>.
         </p>
         <p className="text-body-large text-on-surface-variant">
-          Matching ignores case and accents by default (&quot;viet&quot; finds &quot;Việt
-          Nam&quot;), anywhere in the option&apos;s text;{' '}
+          Matching ignores case and accents by default (&quot;zurich&quot; finds
+          &quot;Zürich&quot;), anywhere in the option&apos;s text;{' '}
           <code className="text-on-surface">filter</code> replaces it. For server results, control{' '}
           <code className="text-on-surface">items</code> and{' '}
           <code className="text-on-surface">inputValue</code> and set{' '}

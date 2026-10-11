@@ -9,7 +9,7 @@ export function AvatarShapes() {
     <ul className="grid w-full grid-cols-3 gap-4 medium:grid-cols-6 expanded:grid-cols-8">
       {avatarShapes.map((shape) => (
         <li key={shape} className="flex flex-col items-center gap-2">
-          <Avatar name="Lê Minh" decorative size="lg" shape={shape} tone="primary" />
+          <Avatar name="Priya Shah" decorative size="lg" shape={shape} tone="primary" />
           <code className="text-label-small text-on-surface-variant">{shape}</code>
         </li>
       ))}
