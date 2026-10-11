@@ -127,7 +127,7 @@ export type SelectProps<T extends object, M extends SelectionMode = 'single'> = 
     searchable?: boolean;
     /**
      * With `searchable`: whether an option matches the search. Defaults to a match anywhere in
-     * its text, ignoring case and accents ("viet" finds "Việt Nam"). The option's `key` lets
+     * its text, ignoring case and accents ("thai" finds "Thailand"). The option's `key` lets
      * it match on more than its text, e.g. a country's ISO code.
      */
     filter?: (textValue: string, search: string, key: Key) => boolean;

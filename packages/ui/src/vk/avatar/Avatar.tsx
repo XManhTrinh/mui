@@ -143,8 +143,8 @@ function toneSlotFor(name: string) {
  * and 48px touch target.
  *
  * @example
- * <Avatar name="Nguyễn Văn An" src={user.photo} alt="Nguyễn Văn An" presence="online" />
- * <Avatar name="Phở Sài Gòn" alt="Phở Sài Gòn" badge={<VerifiedIcon />} badgeLabel="verified" />
+ * <Avatar name="Nora Lindqvist" src={user.photo} alt="Nora Lindqvist" presence="online" />
+ * <Avatar name="Red Lantern Kitchen" alt="Red Lantern Kitchen" badge={<VerifiedIcon />} badgeLabel="verified" />
  */
 export function Avatar(props: AvatarProps) {
   const {

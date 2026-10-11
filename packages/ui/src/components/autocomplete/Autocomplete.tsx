@@ -92,7 +92,7 @@ export type AutocompleteProps<T extends object, M extends SelectionMode = 'singl
     loading?: boolean;
     /**
      * Whether an option matches what was typed. Defaults to a match anywhere in its text,
-     * ignoring case and accents ("viet" finds "Việt Nam"). Not used with controlled `items`.
+     * ignoring case and accents ("zurich" finds "Zürich"). Not used with controlled `items`.
      */
     filter?: (textValue: string, inputValue: string) => boolean;
     labels?: Partial<AutocompleteLabels>;
