@@ -26,9 +26,7 @@ describe('url-state', () => {
   });
 
   it('ignores invalid values and unknown keys (falls back to defaults)', () => {
-    const params = new URLSearchParams(
-      'variant=nope&disabled=maybe&count=abc&label=ok&mystery=1',
-    );
+    const params = new URLSearchParams('variant=nope&disabled=maybe&count=abc&label=ok&mystery=1');
     const decoded = decodeState(params, controls);
     expect(decoded).toEqual({ label: 'ok' });
   });

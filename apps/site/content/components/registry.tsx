@@ -24,6 +24,9 @@ import { ListDetailLayoutBody } from './list-detail-layout';
 import { AlertBody } from './alert';
 import { ImageCropBody } from './image-crop';
 import { LinkBody } from './link';
+import { FileTriggerBody } from './file-trigger';
+import { SkipLinkBody } from './skip-link';
+import { ShapedIconBody } from './shaped-icon';
 import { PhoneFieldBody } from './phone-field';
 import { SelectBody } from './select';
 import { PickerDialogBody } from './picker-dialog';
@@ -113,6 +116,9 @@ const BODIES: Record<string, ComponentType> = {
   skeleton: SkeletonBody,
   tag: TagBody,
   link: LinkBody,
+  'file-trigger': FileTriggerBody,
+  'skip-link': SkipLinkBody,
+  'shaped-icon': ShapedIconBody,
   alert: AlertBody,
   'empty-state': EmptyStateBody,
   'list-detail-layout': ListDetailLayoutBody,
@@ -154,6 +160,7 @@ export const COMPONENT_SLOTS: Record<string, string[]> = {
   ListDetailLayout: ['root', 'list', 'detail', 'back'],
   Tag: ['root', 'dot', 'icon', 'label'],
   Link: ['root', 'icon'],
+  ShapedIcon: ['root', 'icon'],
   Alert: ['root', 'icon', 'title', 'message', 'actions', 'close'],
   ImageCropDialog: ['root', 'area', 'image', 'frame', 'controls', 'slider'],
   ImageCropper: ['root', 'area', 'image', 'frame', 'controls', 'slider'],

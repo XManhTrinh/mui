@@ -16,7 +16,9 @@ export function Footer() {
           @XManhTrinh
         </a>
       </p>
-      <p className="mt-1 text-body-small">MIT License · M3 Expressive · React 19 · Tailwind CSS v4</p>
+      <p className="mt-1 text-body-small">
+        MIT License · M3 Expressive · React 19 · Tailwind CSS v4
+      </p>
     </footer>
   );
 }

@@ -1,15 +1,22 @@
-import type { CSSProperties, HTMLAttributes, ReactNode, Ref } from 'react';
+import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { Card } from '../../components/card/Card';
 import type { CardVariant } from '../../components/card/card-styles';
-import { materialShapeMask } from '../../shapes/mask';
-import type { MaterialShapeName } from '../../shapes/material-shapes';
+import { ShapedIcon, type ShapedIconShape } from '../shaped-icon/ShapedIcon';
+import type { ShapedIconSize } from '../shaped-icon/shaped-icon-styles';
 import { emptyStateStyles, type EmptyStateSize, type EmptyStateTone } from './empty-state-styles';
 
 /** `plain` has no container; the others wrap it in a `Card` with the same variant. */
 export type EmptyStateVariant = 'plain' | CardVariant;
 
 /** `circle`, or an M3 Expressive shape by name (e.g. `Cookie9Sided`). */
-export type EmptyStateShape = 'circle' | MaterialShapeName;
+export type EmptyStateShape = ShapedIconShape;
+
+/** The icon's ShapedIcon size for each empty state size (40, 56 and 96px). */
+const ICON_SIZE: Readonly<Record<EmptyStateSize, ShapedIconSize>> = {
+  sm: 'sm',
+  md: 'md',
+  lg: 'xl',
+};
 
 export interface EmptyStateClassNames {
   root?: string;
@@ -78,11 +85,7 @@ export function EmptyState({
   classNames,
   ...rest
 }: EmptyStateProps) {
-  const expressive = shape !== 'circle';
-  const styles = emptyStateStyles({ size, tone, shape: expressive ? 'expressive' : 'circle' });
-  const mediaStyle: CSSProperties | undefined = expressive
-    ? { maskImage: materialShapeMask(shape) }
-    : undefined;
+  const styles = emptyStateStyles({ size });
   const root = styles.root({ class: [classNames?.root, className] });
   const state = {
     'data-variant': variant,
@@ -93,13 +96,14 @@ export function EmptyState({
 
   const content = (
     <>
-      <span
-        aria-hidden="true"
-        className={styles.media({ class: classNames?.media })}
-        style={mediaStyle}
+      <ShapedIcon
+        shape={shape}
+        size={ICON_SIZE[size]}
+        tone={tone}
+        classNames={{ root: classNames?.media, icon: classNames?.icon }}
       >
-        <span className={styles.icon({ class: classNames?.icon })}>{icon}</span>
-      </span>
+        {icon}
+      </ShapedIcon>
       <Title className={styles.title({ class: classNames?.title })}>{title}</Title>
       {description != null && (
         <p className={styles.description({ class: classNames?.description })}>{description}</p>

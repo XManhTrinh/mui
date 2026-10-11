@@ -38,6 +38,7 @@ import {
   Link,
   PhoneField,
   PinInput,
+  ShapedIcon,
   Skeleton,
   SkeletonGroup,
   Tag,
@@ -107,6 +108,7 @@ const SkeletonAny = loose(Skeleton);
 const EmptyStateAny = loose(EmptyState);
 const TagAny = loose(Tag);
 const LinkAny = loose(Link);
+const ShapedIconAny = loose(ShapedIcon);
 const AlertAny = loose(Alert);
 const TabAny = loose(Tab);
 
@@ -659,6 +661,24 @@ export const PLAYGROUND_DESCRIPTORS: Record<string, PlaygroundDescriptor> = {
     },
     codeImports: ["import { DynamicFeedIcon } from './icons';"],
     codeSlots: { icon: '<DynamicFeedIcon />' },
+  },
+  'shaped-icon': {
+    component: 'ShapedIcon',
+    importFrom: '@vkieu/mui/vk',
+    render: (props) => createElement(ShapedIconAny, props, createElement(StarIcon)),
+    defaultProps: { shape: 'circle', size: 'md', tone: 'secondary' },
+    surfacedProps: ['shape', 'size', 'tone'],
+    initialState: { shape: 'Cookie9Sided', size: 'lg', tone: 'primary' },
+    enumOptions: {
+      shape: [
+        'circle',
+        ...avatarShapes.filter((shape) => shape !== 'circle' && shape !== 'rounded'),
+      ],
+      size: ['sm', 'md', 'lg', 'xl'],
+      tone: ['primary', 'secondary', 'tertiary', 'neutral', 'error'],
+    },
+    codeImports: ["import { StarIcon } from './icons';"],
+    codeChildren: '<StarIcon />',
   },
   avatar: {
     component: 'Avatar',

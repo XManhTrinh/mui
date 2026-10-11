@@ -99,7 +99,8 @@ const FEATURES: Feature[] = [
   },
   {
     title: 'RTL ready',
-    description: 'Logical properties throughout, so layouts mirror correctly from one direction flag.',
+    description:
+      'Logical properties throughout, so layouts mirror correctly from one direction flag.',
     icon: <ExploreIcon />,
   },
   {
@@ -132,10 +133,7 @@ export default async function HomePage() {
         className="grid min-h-[380px] grid-cols-1 gap-4 medium:grid-cols-2"
       >
         {/* Left: text card */}
-        <Card
-          variant="filled"
-          className="flex flex-col justify-center gap-8 p-8 medium:p-12"
-        >
+        <Card variant="filled" className="flex flex-col justify-center gap-8 p-8 medium:p-12">
           <div className="flex flex-col gap-4">
             <span className="w-fit rounded-corner-full bg-primary-container px-4 py-1 text-label-large text-on-primary-container">
               M3 Expressive — May 2025
@@ -144,8 +142,8 @@ export default async function HomePage() {
               Material Design 3 for React
             </h1>
             <p className="max-w-sm text-body-large text-on-surface-variant">
-              Material Design 3 is Google&apos;s open-source design system for building
-              beautiful, usable products.
+              Material Design 3 is Google&apos;s open-source design system for building beautiful,
+              usable products.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -178,97 +176,96 @@ export default async function HomePage() {
 
       {/* Everything below is constrained to max-w-6xl */}
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-20">
-
-      {/* Stat cards */}
-      <section aria-label="At a glance" className="grid grid-cols-2 gap-4 medium:grid-cols-4">
-        {STATS.map((stat) => (
-          <Card key={stat.label} variant="filled" className="flex flex-col gap-1 p-5 text-center">
-            <span className="text-display-small text-on-surface">{stat.value}</span>
-            <span className="text-body-medium text-on-surface-variant">{stat.label}</span>
-          </Card>
-        ))}
-      </section>
-
-      {/* Expressive components showcase */}
-      <ExpressiveShowcase />
-
-      {/* Built right — feature grid */}
-      <section className="flex flex-col gap-6">
-        <div className="flex flex-col gap-2">
-          <h2 className="text-headline-medium text-on-surface">Built right</h2>
-          <p className="max-w-2xl text-body-large text-on-surface-variant">
-            The details that make the library dependable in production.
-          </p>
-        </div>
-        <ul className="grid grid-cols-1 gap-4 medium:grid-cols-2 large:grid-cols-3">
-          {FEATURES.map((feature) => (
-            <li
-              key={feature.title}
-              className="flex h-full flex-col gap-3 rounded-corner-large border border-outline-variant bg-surface-container-low p-5"
-            >
-              <span className="grid size-10 shrink-0 place-items-center rounded-corner-large bg-secondary-container text-on-secondary-container">
-                <span className="inline-flex size-6 [&>svg]:size-full">{feature.icon}</span>
-              </span>
-              <h3 className="text-title-medium text-on-surface">{feature.title}</h3>
-              <p className="text-body-medium text-on-surface-variant">{feature.description}</p>
-            </li>
+        {/* Stat cards */}
+        <section aria-label="At a glance" className="grid grid-cols-2 gap-4 medium:grid-cols-4">
+          {STATS.map((stat) => (
+            <Card key={stat.label} variant="filled" className="flex flex-col gap-1 p-5 text-center">
+              <span className="text-display-small text-on-surface">{stat.value}</span>
+              <span className="text-body-medium text-on-surface-variant">{stat.label}</span>
+            </Card>
           ))}
-        </ul>
-      </section>
+        </section>
 
-      {/* Quick start */}
-      <section className="flex flex-col gap-6">
-        <div className="flex flex-col gap-2">
-          <h2 className="text-headline-medium text-on-surface">Quick start</h2>
-          <p className="max-w-2xl text-body-large text-on-surface-variant">
-            Three steps to your first component. See the{' '}
-            <a
-              href="/getting-started"
-              className="rounded-sm text-primary underline underline-offset-2 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary"
-            >
-              full guide
-            </a>{' '}
-            for fonts, icons and routing.
-          </p>
-        </div>
-        <ol className="flex flex-col gap-4">
-          {QUICK_STEPS.map((step, index) => (
-            <li
-              key={step.title}
-              className="flex flex-col gap-3 rounded-corner-large border border-outline-variant bg-surface-container-low p-5"
-            >
-              <div className="flex items-center gap-3">
-                <span className="grid size-8 shrink-0 place-items-center rounded-corner-full bg-primary text-label-large text-on-primary">
-                  {index + 1}
+        {/* Expressive components showcase */}
+        <ExpressiveShowcase />
+
+        {/* Built right — feature grid */}
+        <section className="flex flex-col gap-6">
+          <div className="flex flex-col gap-2">
+            <h2 className="text-headline-medium text-on-surface">Built right</h2>
+            <p className="max-w-2xl text-body-large text-on-surface-variant">
+              The details that make the library dependable in production.
+            </p>
+          </div>
+          <ul className="grid grid-cols-1 gap-4 medium:grid-cols-2 large:grid-cols-3">
+            {FEATURES.map((feature) => (
+              <li
+                key={feature.title}
+                className="flex h-full flex-col gap-3 rounded-corner-large border border-outline-variant bg-surface-container-low p-5"
+              >
+                <span className="grid size-10 shrink-0 place-items-center rounded-corner-large bg-secondary-container text-on-secondary-container">
+                  <span className="inline-flex size-6 [&>svg]:size-full">{feature.icon}</span>
                 </span>
-                <h3 className="text-title-medium text-on-surface">{step.title}</h3>
-              </div>
-              <p className="text-body-medium text-on-surface-variant">{step.description}</p>
-              <CodeBlock
-                code={step.code}
-                html={stepHtml[index]}
-                lang={step.lang}
-                title={step.fileLabel}
-              />
-            </li>
-          ))}
-        </ol>
-      </section>
+                <h3 className="text-title-medium text-on-surface">{feature.title}</h3>
+                <p className="text-body-medium text-on-surface-variant">{feature.description}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-      {/* Browse components — shared gallery */}
-      <section className="flex flex-col gap-6">
-        <div className="flex flex-col gap-2">
-          <h2 className="text-headline-medium text-on-surface">Browse components</h2>
-          <p className="max-w-2xl text-body-large text-on-surface-variant">
-            {COMPONENT_PAGE_COUNT} components across {CATEGORY_COUNT} categories — each with live
-            examples, M3 specs and a full props reference, plus an interactive playground on
-            supported components.
-          </p>
-        </div>
-        <ComponentGallery groupHeadingTag="h3" />
-      </section>
+        {/* Quick start */}
+        <section className="flex flex-col gap-6">
+          <div className="flex flex-col gap-2">
+            <h2 className="text-headline-medium text-on-surface">Quick start</h2>
+            <p className="max-w-2xl text-body-large text-on-surface-variant">
+              Three steps to your first component. See the{' '}
+              <a
+                href="/getting-started"
+                className="rounded-sm text-primary underline underline-offset-2 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary"
+              >
+                full guide
+              </a>{' '}
+              for fonts, icons and routing.
+            </p>
+          </div>
+          <ol className="flex flex-col gap-4">
+            {QUICK_STEPS.map((step, index) => (
+              <li
+                key={step.title}
+                className="flex flex-col gap-3 rounded-corner-large border border-outline-variant bg-surface-container-low p-5"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="grid size-8 shrink-0 place-items-center rounded-corner-full bg-primary text-label-large text-on-primary">
+                    {index + 1}
+                  </span>
+                  <h3 className="text-title-medium text-on-surface">{step.title}</h3>
+                </div>
+                <p className="text-body-medium text-on-surface-variant">{step.description}</p>
+                <CodeBlock
+                  code={step.code}
+                  html={stepHtml[index]}
+                  lang={step.lang}
+                  title={step.fileLabel}
+                />
+              </li>
+            ))}
+          </ol>
+        </section>
 
-      </div>{/* end max-w-6xl */}
+        {/* Browse components — shared gallery */}
+        <section className="flex flex-col gap-6">
+          <div className="flex flex-col gap-2">
+            <h2 className="text-headline-medium text-on-surface">Browse components</h2>
+            <p className="max-w-2xl text-body-large text-on-surface-variant">
+              {COMPONENT_PAGE_COUNT} components across {CATEGORY_COUNT} categories — each with live
+              examples, M3 specs and a full props reference, plus an interactive playground on
+              supported components.
+            </p>
+          </div>
+          <ComponentGallery groupHeadingTag="h3" />
+        </section>
+      </div>
+      {/* end max-w-6xl */}
     </div>
   );
 }

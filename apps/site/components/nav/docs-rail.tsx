@@ -62,7 +62,9 @@ export function DocsRail({ settings }: { settings: ReactNode }) {
   // same `data-open` width transition — the first hover after load animates identically to
   // every later one (no `@starting-style` first-mount special case). It keeps showing the
   // last group's content while it closes, updating only to a new non-null group.
-  const [shownGroup, setShownGroup] = useState<RailGroupId>(() => displayedGroup ?? RAIL_GROUPS[0]!.id);
+  const [shownGroup, setShownGroup] = useState<RailGroupId>(
+    () => displayedGroup ?? RAIL_GROUPS[0]!.id,
+  );
   if (displayedGroup !== null && displayedGroup !== shownGroup) {
     setShownGroup(displayedGroup);
   }

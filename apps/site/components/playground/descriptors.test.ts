@@ -18,7 +18,10 @@ const fullPages = COMPONENT_META.filter((meta) => meta.playground === 'full');
 describe('playground descriptors', () => {
   it('every full-playground page has a descriptor keyed by its slug', () => {
     for (const meta of fullPages) {
-      expect(PLAYGROUND_DESCRIPTORS[meta.slug], `${meta.slug} is 'full' but has no descriptor`).toBeDefined();
+      expect(
+        PLAYGROUND_DESCRIPTORS[meta.slug],
+        `${meta.slug} is 'full' but has no descriptor`,
+      ).toBeDefined();
     }
   });
 

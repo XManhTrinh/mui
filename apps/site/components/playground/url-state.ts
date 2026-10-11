@@ -5,10 +5,7 @@ import type { ControlDef } from './controls-model';
  * `?variant=outlined&disabled=true&label=Save`. Empty / undefined values are dropped so the
  * query stays minimal.
  */
-export function encodeState(
-  values: Record<string, unknown>,
-  controls: ControlDef[],
-): string {
+export function encodeState(values: Record<string, unknown>, controls: ControlDef[]): string {
   const params = new URLSearchParams();
   for (const control of controls) {
     const value = values[control.name];

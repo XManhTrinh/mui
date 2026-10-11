@@ -65,14 +65,7 @@ export function ExpressiveShowcase() {
 
       {/* Bento-deck intro video */}
       <div className="overflow-hidden rounded-corner-extra-large bg-surface-container-low">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="w-full"
-          aria-hidden="true"
-        >
+        <video autoPlay muted loop playsInline className="w-full" aria-hidden="true">
           <source
             src="https://firebasestorage.googleapis.com/v0/b/design-spec/o/projects%2Fm3%2Fimages%2Fmpy2t3cm-00_Bento_Deck_Light_Purple.mp4?alt=media&token=b6d52685-b47f-4b89-88e1-1992330aa85a"
             type="video/mp4"

@@ -9,7 +9,8 @@ export function SpecsCard({ specs }: { specs: ComponentSpecs }) {
   const rows: [string, string][] = [];
   if (specs.sizes && specs.sizes.length > 0) rows.push(['Sizes', specs.sizes.join(', ')]);
   if (specs.shape) rows.push(['Shape', specs.shape]);
-  if (specs.variants && specs.variants.length > 0) rows.push(['Variants', specs.variants.join(', ')]);
+  if (specs.variants && specs.variants.length > 0)
+    rows.push(['Variants', specs.variants.join(', ')]);
   if (specs.elevation) rows.push(['Elevation', specs.elevation]);
   if (rows.length === 0) return null;
 

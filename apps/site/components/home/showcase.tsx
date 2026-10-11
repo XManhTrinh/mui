@@ -63,7 +63,9 @@ function Feedback() {
     <div className="relative flex min-h-[220px] flex-col gap-6 overflow-hidden rounded-corner-large bg-surface-container p-4">
       <Button
         variant="filled"
-        onPress={() => void snackbar.showSnackbar({ message: 'Photo saved', withDismissAction: true })}
+        onPress={() =>
+          void snackbar.showSnackbar({ message: 'Photo saved', withDismissAction: true })
+        }
       >
         Show snackbar
       </Button>

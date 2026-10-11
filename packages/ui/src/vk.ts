@@ -159,3 +159,24 @@ export {
   type ListDetailLayoutStyleProps,
   type ListDetailLayoutVariant,
 } from './vk/list-detail-layout/list-detail-layout-styles';
+export {
+  ShapedIcon,
+  type ShapedIconClassNames,
+  type ShapedIconProps,
+  type ShapedIconShape,
+} from './vk/shaped-icon/ShapedIcon';
+export {
+  shapedIconStyles,
+  type ShapedIconSize,
+  type ShapedIconStyleProps,
+  type ShapedIconTone,
+} from './vk/shaped-icon/shaped-icon-styles';
+export { SkipLink, type SkipLinkProps } from './vk/skip-link/SkipLink';
+export { skipLinkStyles, type SkipLinkStyleProps } from './vk/skip-link/skip-link-styles';
+export {
+  FileTrigger,
+  useFileTrigger,
+  type FileTriggerOptions,
+  type FileTriggerProps,
+  type FileTriggerResult,
+} from './vk/file-trigger/FileTrigger';
